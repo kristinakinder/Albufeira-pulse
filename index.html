@@ -137,7 +137,7 @@
                     <p id="popularSubtext" class="text-sm text-gray-300 drop-shadow">Click any category below to filter instantly.</p>
                 </div>
                 
-                <!-- Compact Direct Clickable Category Filter Bar (No Emojis, No Next Weekend) -->
+                <!-- Compact Direct Clickable Category Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
                     <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition">ALL EVENTS</button>
                     <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE TV</button>
@@ -199,7 +199,7 @@
         </section>
     </main>
 
-    <!-- LOGIN MODAL WITH REMEMBER ME -->
+    <!-- LOGIN / SIGN UP MODAL WITH CUSTOM USERNAME -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -208,7 +208,20 @@
             <h3 id="loginModalTitle" class="text-xl font-black text-white flex items-center gap-2">
                 <i data-lucide="user" class="text-miamiCyan"></i> Member Login
             </h3>
+
+            <!-- Auth Mode Toggle -->
+            <div class="grid grid-cols-2 gap-1 bg-black/50 p-1 rounded-xl border border-white/10">
+                <button type="button" id="tabSignIn" onclick="setAuthMode('signin')" class="py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition">Sign In</button>
+                <button type="button" id="tabSignUp" onclick="setAuthMode('signup')" class="py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition">Create Account</button>
+            </div>
+
             <div class="space-y-3">
+                <!-- Username field (shown when creating an account) -->
+                <div id="usernameFieldGroup" class="hidden">
+                    <label class="text-xs font-bold text-miamiCyan">Choose Your Username</label>
+                    <input type="text" id="signupUsername" placeholder="e.g. AlgarveExplorer" class="w-full bg-black/50 border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+
                 <div>
                     <label id="lblEmail" class="text-xs font-bold text-gray-400">Email Address</label>
                     <input type="email" id="loginEmail" placeholder="you@example.com" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
@@ -217,13 +230,39 @@
                     <label id="lblPass" class="text-xs font-bold text-gray-400">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-                <div class="flex items-center gap-2 pt-1">
+                <div id="rememberMeGroup" class="flex items-center gap-2 pt-1">
                     <input type="checkbox" id="rememberMe" checked class="w-4 h-4 accent-miamiCyan cursor-pointer rounded">
                     <label for="rememberMe" class="text-xs text-gray-300 cursor-pointer">Remember Me</label>
                 </div>
                 <p id="loginErrorMsg" class="text-xs text-miamiPink font-semibold hidden"></p>
-                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                <p id="loginInfoMsg" class="text-xs text-miamiCyan font-semibold hidden"></p>
+                <button id="authSubmitBtn" onclick="handleAuthSubmit()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
                     Sign In
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE / USERNAME SETTINGS MODAL -->
+    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-black text-white flex items-center gap-2">
+                <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Display Username</label>
+                    <input type="text" id="updateUsernameInput" placeholder="Enter your username" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <p id="profileMsg" class="text-xs text-miamiCyan font-semibold hidden"></p>
+                <button onclick="saveUsername()" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                    Save Username
+                </button>
+                <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2 rounded-xl text-xs transition">
+                    Sign Out
                 </button>
             </div>
         </div>
@@ -304,7 +343,9 @@
         let currentTown = 'Albufeira';
         let currentLang = 'en';
         let currentUser = null;
+        let currentDisplayName = '';
         let currentFilter = 'all';
+        let authMode = 'signin';
 
         const translations = {
             en: {
@@ -371,6 +412,38 @@
             renderForum();
         });
 
+        function setAuthMode(mode) {
+            authMode = mode;
+            const tabSignIn = document.getElementById('tabSignIn');
+            const tabSignUp = document.getElementById('tabSignUp');
+            const usernameGroup = document.getElementById('usernameFieldGroup');
+            const rememberGroup = document.getElementById('rememberMeGroup');
+            const title = document.getElementById('loginModalTitle');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const errorMsg = document.getElementById('loginErrorMsg');
+            const infoMsg = document.getElementById('loginInfoMsg');
+
+            errorMsg.classList.add('hidden');
+            infoMsg.classList.add('hidden');
+
+            if (mode === 'signup') {
+                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiPink text-white transition";
+                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
+                usernameGroup.classList.remove('hidden');
+                rememberGroup.classList.add('hidden');
+                title.innerHTML = `<i data-lucide="user-plus" class="text-miamiPink"></i> Create Account`;
+                submitBtn.innerText = "Create Account";
+            } else {
+                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition";
+                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
+                usernameGroup.classList.add('hidden');
+                rememberGroup.classList.remove('hidden');
+                title.innerHTML = `<i data-lucide="user" class="text-miamiCyan"></i> Member Login`;
+                submitBtn.innerText = "Sign In";
+            }
+            lucide.createIcons();
+        }
+
         async function checkUserSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session && session.user) {
@@ -382,32 +455,112 @@
                     .eq('id', currentUser.id)
                     .single();
 
-                const displayName = (profile && profile.full_name) ? profile.full_name : currentUser.email.split('@')[0];
+                const metaName = currentUser.user_metadata && currentUser.user_metadata.username;
+                currentDisplayName = (profile && profile.full_name) ? profile.full_name : (metaName || currentUser.email.split('@')[0]);
                 
                 const loginBtn = document.getElementById('loginBtn');
                 if (loginBtn) {
-                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${displayName}</span>`;
-                    loginBtn.setAttribute('onclick', 'handleLogout()');
+                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${currentDisplayName}</span>`;
+                    loginBtn.setAttribute('onclick', 'openProfileModal()');
                     lucide.createIcons();
                 }
             }
         }
 
-        async function handleLogin() {
+        async function handleAuthSubmit() {
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPass').value;
+            const username = document.getElementById('signupUsername').value.trim();
             const errorMsg = document.getElementById('loginErrorMsg');
+            const infoMsg = document.getElementById('loginInfoMsg');
             
             errorMsg.classList.add('hidden');
+            infoMsg.classList.add('hidden');
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) {
-                errorMsg.innerText = error.message;
+            if (!email || !password) {
+                errorMsg.innerText = "Please enter your email and password.";
                 errorMsg.classList.remove('hidden');
-            } else {
-                closeLoginModal();
-                location.reload();
+                return;
             }
+
+            if (authMode === 'signup') {
+                if (!username) {
+                    errorMsg.innerText = "Please choose a username.";
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: { username: username, full_name: username }
+                    }
+                });
+
+                if (error) {
+                    errorMsg.innerText = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else if (data.user) {
+                    await supabaseClient.from('profiles').upsert({
+                        id: data.user.id,
+                        full_name: username
+                    });
+
+                    if (data.session) {
+                        closeLoginModal();
+                        location.reload();
+                    } else {
+                        infoMsg.innerText = "Account created! Check your email to confirm your address, then sign in.";
+                        infoMsg.classList.remove('hidden');
+                    }
+                }
+            } else {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) {
+                    errorMsg.innerText = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else {
+                    closeLoginModal();
+                    location.reload();
+                }
+            }
+        }
+
+        function openProfileModal() {
+            document.getElementById('updateUsernameInput').value = currentDisplayName;
+            document.getElementById('profileMsg').classList.add('hidden');
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        async function saveUsername() {
+            const newName = document.getElementById('updateUsernameInput').value.trim();
+            const profileMsg = document.getElementById('profileMsg');
+            if (!newName || !currentUser) return;
+
+            await supabaseClient.auth.updateUser({
+                data: { username: newName, full_name: newName }
+            });
+
+            await supabaseClient.from('profiles').upsert({
+                id: currentUser.id,
+                full_name: newName
+            });
+
+            currentDisplayName = newName;
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) {
+                loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${newName}</span>`;
+                lucide.createIcons();
+            }
+
+            profileMsg.innerText = "Username updated!";
+            profileMsg.classList.remove('hidden');
+            setTimeout(() => closeProfileModal(), 800);
         }
 
         async function handleLogout() {
@@ -519,4 +672,181 @@
             if(filter === 'LIVE TV') activeBtnId = 'cat-btn-livetv';
             else if(filter === 'SPORTS') activeBtnId = 'cat-btn-sports';
             else if(filter === 'EXHIBITIONS') activeBtnId = 'cat-btn-exhibitions';
-            else if(filter === 'CLASSES') activeBtnId = 'cat
+            else if(filter === 'CLASSES') activeBtnId = 'cat-btn-classes';
+            else if(filter === 'DINING & DRINK') activeBtnId = 'cat-btn-dining';
+            else if(filter === 'HAPPY HOUR & SPECIALS') activeBtnId = 'cat-btn-happy';
+            else if(filter === 'SUNSET & NIGHTLIFE') activeBtnId = 'cat-btn-sunset';
+            else if(filter === 'LIVE MUSIC') activeBtnId = 'cat-btn-music';
+            else if(filter === 'MARKETS') activeBtnId = 'cat-btn-markets';
+
+            const activeBtn = document.getElementById(activeBtnId);
+            if(activeBtn) {
+                activeBtn.className = "cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition";
+            }
+
+            const grid = document.getElementById('eventsGrid');
+            let filtered = eventsData.filter(e => currentTown === 'All Algarve' || e.town === currentTown);
+
+            if (filter !== 'all') {
+                filtered = filtered.filter(e => e.category && e.category.toLowerCase().trim() === filter.toLowerCase().trim());
+            }
+
+            grid.innerHTML = filtered.map(e => `
+                <div class="bg-miamiCard/90 backdrop-blur-md border border-miamiPink/20 rounded-2xl overflow-hidden hover:border-miamiCyan/60 transition shadow-lg flex flex-col justify-between">
+                    ${e.poster_url ? `<div class="h-48 overflow-hidden relative"><img src="${e.poster_url}" alt="${e.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300"></div>` : ''}
+                    <div class="p-5 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs font-black bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full border border-miamiPink/30">${e.category}</span>
+                                <span class="text-xs text-miamiCyan font-semibold flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${e.town}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-1">${e.title}</h3>
+                            <p class="text-xs text-miamiCyan mb-3 font-semibold">📍 ${e.venue}</p>
+                            <p class="text-xs text-gray-300 mb-4">${e.description || e.desc || ''}</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center text-xs text-gray-400 border-t border-white/10 pt-3 mb-3">
+                                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-miamiPink"></i> ${e.date} (${e.time || '21:00'})</span>
+                                <span class="text-miamiPink font-bold"><span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
+                            </div>
+                            <button onclick="incrementGoing(${e.id})" class="w-full bg-white/5 hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                                ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function incrementGoing(id) {
+            const event = eventsData.find(e => e.id === id);
+            if (event) {
+                event.going += 1;
+                renderEvents(currentFilter);
+            }
+        }
+
+        function filterEvents(category) {
+            renderEvents(category);
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            let daysHtml = '';
+            for (let i = 1; i <= 30; i++) {
+                const hasEvent = eventsData.some(e => e.date && e.date.includes(`Nov ${i}`));
+                daysHtml += `
+                    <div class="aspect-square bg-black/50 border ${hasEvent ? 'border-miamiPink bg-miamiPink/10 cursor-pointer' : 'border-white/5'} rounded-xl p-2 flex flex-col justify-between transition">
+                        <span class="text-xs font-bold ${hasEvent ? 'text-miamiPink' : 'text-gray-500'}">${i}</span>
+                        ${hasEvent ? `<span class="text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center">${currentLang === 'pt' ? 'Evento' : 'Event'}</span>` : ''}
+                    </div>
+                `;
+            }
+            grid.innerHTML = daysHtml;
+        }
+
+        function renderDirectory() {
+            const grid = document.getElementById('directoryGrid');
+            const filtered = directoryData.filter(d => currentTown === 'All Algarve' || d.town === currentTown);
+            grid.innerHTML = filtered.map(d => `
+                <div class="bg-miamiCard/90 backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-base font-bold text-white">${d.name}</h3>
+                        <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating || '4.8 ⭐'}</span>
+                    </div>
+                    <p class="text-xs text-miamiPink font-semibold mb-2">${d.category}</p>
+                    <p class="text-xs text-gray-400 mb-4 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
+                    <div class="flex gap-2">
+                        <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${currentLang === 'pt' ? 'Abrir no Maps' : 'Open in Maps'}
+                        </a>
+                        <a href="tel:${d.phone}" class="bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
+                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderForum() {
+            const list = document.getElementById('forumList');
+            const filtered = forumData.filter(f => currentTown === 'All Algarve' || f.town === currentTown);
+            list.innerHTML = filtered.map(f => `
+                <div class="bg-miamiCard/90 backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:border-miamiPink/50 transition flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
+                        <h4 class="text-sm font-bold text-white mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
+                        <p class="text-xs text-gray-400 mt-1">${currentLang === 'pt' ? 'Iniciado por' : 'Started by'} <span class="text-gray-300 font-semibold">${f.author}</span></p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} ${currentLang === 'pt' ? 'respostas' : 'replies'}</span>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openModal() { document.getElementById('postModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('postModal').classList.add('hidden'); }
+        function openLoginModal() {
+            setAuthMode('signin');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+        function toggleFormType(type) {
+            const posterSec = document.getElementById('posterUploadSection');
+            if (type === 'business') {
+                posterSec.classList.add('hidden');
+                document.getElementById('titleLabel').innerText = 'Business Name';
+            } else {
+                posterSec.classList.remove('hidden');
+                document.getElementById('titleLabel').innerText = 'Event Title';
+            }
+        }
+
+        async function submitNewPost() {
+            const title = document.getElementById('inputTitle').value;
+            const town = document.getElementById('modalTown').value;
+            const category = document.getElementById('inputCategory').value;
+            const desc = document.getElementById('inputDesc').value;
+            const date = document.getElementById('inputDate').value || 'Nov 21, 2026';
+            const fileInput = document.getElementById('inputPoster');
+
+            if(!title) { alert('Please fill in the title.'); return; }
+
+            let posterUrl = 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=96';
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const filePath = `posters/${Date.now()}_${file.name}`;
+                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    .from('flyers-and-photos')
+                    .upload(filePath, file);
+
+                if (!uploadError) {
+                    const { data: publicUrlData } = supabaseClient.storage
+                        .from('flyers-and-photos')
+                        .getPublicUrl(filePath);
+                    posterUrl = publicUrlData.publicUrl;
+                }
+            }
+
+            const { error } = await supabaseClient.from('events').insert([{
+                town: town, title: title, date: date, time: '21:00',
+                category: category, venue: town === 'Albufeira' ? 'Oura Strip Venue' : 'Silves Historic Center',
+                going: 1, description: desc || 'User submitted event flyer.', poster_url: posterUrl, is_weekend: true
+            }]);
+
+            if (error) {
+                alert('Error publishing: ' + error.message + '\n(Make sure you are logged in!)');
+            } else {
+                closeModal();
+                fetchEvents(currentFilter);
+            }
+        }
+    </script>
+</body>
+</html>
