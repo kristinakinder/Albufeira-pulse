@@ -6,6 +6,8 @@
     <title>Albufeira Pulse | Town Event Calendar & Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JavaScript Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -30,7 +32,6 @@
         .animate-pulse-color {
             animation: pulseColor 3s infinite ease-in-out;
         }
-        /* Built-in Vector SVG Sunset & Palm Trees Exotic Holiday Background */
         body {
             background-color: #0B0F19;
             background-image: 
@@ -60,9 +61,8 @@
                 </div>
             </div>
 
-            <!-- Controls: Town Switcher, Language Switcher, Login & Post CTA -->
+            <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <!-- Town Switcher -->
                 <div class="flex items-center gap-2 bg-black/40 p-1.5 rounded-xl border border-white/10">
                     <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
                         <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
@@ -74,7 +74,6 @@
                     </select>
                 </div>
 
-                <!-- Language Switcher (EN / PT) -->
                 <div class="flex items-center gap-1 bg-black/40 p-1.5 rounded-xl border border-white/10">
                     <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
                     <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
@@ -83,19 +82,17 @@
                     </select>
                 </div>
 
-                <!-- Login Button -->
-                <button onclick="openLoginModal()" class="bg-black/60 hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5">
+                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5">
                     <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> <span id="btnLoginText">Login</span>
                 </button>
 
-                <!-- Action CTA -->
                 <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Post</span>
                 </button>
             </div>
         </div>
 
-        <!-- Clean Weather Banner (No spinners) -->
+        <!-- Clean Weather Banner -->
         <a id="weatherBannerLink" href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-black/80 hover:bg-black/90 transition backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
             <div class="flex items-center gap-5 overflow-x-auto">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan group-hover:underline">
@@ -130,24 +127,30 @@
 
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-
         <!-- EVENTS TAB -->
         <section id="tab-content-events" class="space-y-6">
-            <div class="flex flex-wrap justify-between items-center gap-4">
+            <div class="flex flex-col gap-4">
                 <div>
                     <h2 class="text-2xl font-black text-white flex items-center gap-2 drop-shadow-md">
-                        🔥 <span id="popularHeaderTitle">Most Popular Next Weekend in</span> <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
+                        <span id="popularHeaderTitle">Events & Happenings in</span> <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
                     </h2>
-                    <p id="popularSubtext" class="text-sm text-gray-300 drop-shadow">Ranked by attendance for upcoming weekend events.</p>
+                    <p id="popularSubtext" class="text-sm text-gray-300 drop-shadow">Click any category below to filter instantly.</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="filterEvents('weekend')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink/20 text-miamiPink border border-miamiPink/40 backdrop-blur-sm" id="filterWeekend">🌴 Next Weekend</button>
-                    <button onclick="filterEvents('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm" id="filterAll">All Events</button>
-                    <button onclick="filterEvents('Nightlife')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm" id="filterNightlife">🍹 Nightlife</button>
+                
+                <!-- Compact Direct Clickable Category Filter Bar (No Emojis, No Next Weekend) -->
+                <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
+                    <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition">ALL EVENTS</button>
+                    <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE TV</button>
+                    <button onclick="filterEvents('SPORTS')" id="cat-btn-sports" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">SPORTS</button>
+                    <button onclick="filterEvents('EXHIBITIONS')" id="cat-btn-exhibitions" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">EXHIBITIONS</button>
+                    <button onclick="filterEvents('CLASSES')" id="cat-btn-classes" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">CLASSES</button>
+                    <button onclick="filterEvents('DINING & DRINK')" id="cat-btn-dining" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">DINING & DRINK</button>
+                    <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" id="cat-btn-happy" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">HAPPY HOUR & SPECIALS</button>
+                    <button onclick="filterEvents('SUNSET & NIGHTLIFE')" id="cat-btn-sunset" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">SUNSET & NIGHTLIFE</button>
+                    <button onclick="filterEvents('LIVE MUSIC')" id="cat-btn-music" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE MUSIC</button>
+                    <button onclick="filterEvents('MARKETS')" id="cat-btn-markets" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">MARKETS</button>
                 </div>
             </div>
-
-            <!-- Events Grid -->
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
@@ -194,10 +197,9 @@
             </div>
             <div id="forumList" class="space-y-4"></div>
         </section>
-
     </main>
 
-    <!-- LOGIN MODAL -->
+    <!-- LOGIN MODAL WITH REMEMBER ME -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -209,14 +211,19 @@
             <div class="space-y-3">
                 <div>
                     <label id="lblEmail" class="text-xs font-bold text-gray-400">Email Address</label>
-                    <input type="email" placeholder="you@example.com" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="email" id="loginEmail" placeholder="you@example.com" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
                     <label id="lblPass" class="text-xs font-bold text-gray-400">Password</label>
-                    <input type="password" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-                <button onclick="alert('Successfully logged into Albufeira Pulse!'); closeLoginModal();" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
-                    Sign In 🔑
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="rememberMe" checked class="w-4 h-4 accent-miamiCyan cursor-pointer rounded">
+                    <label for="rememberMe" class="text-xs text-gray-300 cursor-pointer">Remember Me</label>
+                </div>
+                <p id="loginErrorMsg" class="text-xs text-miamiPink font-semibold hidden"></p>
+                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                    Sign In
                 </button>
             </div>
         </div>
@@ -231,7 +238,6 @@
             <h3 class="text-xl font-black text-white flex items-center gap-2">
                 <i data-lucide="plus-circle" class="text-miamiPink"></i> Add to Albufeira Pulse
             </h3>
-            
             <div class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-400">Select Town</label>
@@ -243,59 +249,62 @@
                 <div>
                     <label class="text-xs font-bold text-gray-400">Post Type</label>
                     <select id="modalType" onchange="toggleFormType(this.value)" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
-                        <option value="event">Event / Party</option>
+                        <option value="event">Event / Happening</option>
                         <option value="business">Google Maps Business</option>
                     </select>
                 </div>
-
-                <div id="googleMapsSearchSection" class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-2 hidden">
-                    <label class="text-xs font-bold text-miamiCyan flex items-center gap-1">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Import from Google Maps
-                    </label>
-                    <div class="flex gap-2">
-                        <input type="text" id="mapSearchInput" placeholder="e.g. Kiss Club, Oura, Albufeira" class="flex-grow bg-black/60 border border-white/20 rounded-lg p-2 text-xs text-white">
-                        <button onclick="simulateGoogleSearch()" class="bg-miamiCyan text-miamiDark px-3 py-1.5 rounded-lg text-xs font-black">Search</button>
-                    </div>
-                </div>
-
                 <div>
                     <label class="text-xs font-bold text-gray-400" id="titleLabel">Event Title</label>
-                    <input type="text" id="inputTitle" placeholder="e.g. Sunset DJ Set at Praia da Oura" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="text" id="inputTitle" placeholder="e.g. Happy Hour Mojitos at Oura Strip" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-
                 <div id="posterUploadSection" class="p-3 bg-miamiPink/10 border border-miamiPink/30 rounded-xl space-y-2">
                     <label class="text-xs font-bold text-miamiPink flex items-center gap-1">
-                        <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Event Poster / Flyer (96 DPI Web & Phone View)
+                        <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Event Poster / Flyer
                     </label>
                     <input type="file" id="inputPoster" accept="image/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-miamiPink file:text-white hover:file:opacity-90 cursor-pointer">
-                    <p class="text-[10px] text-gray-400">Supports JPG, PNG, WEBP. Optimized for fast mobile loading.</p>
                 </div>
-
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs font-bold text-gray-400">Date</label>
-                        <input type="text" id="inputDate" placeholder="Nov 21, 2026 (Weekend)" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <input type="text" id="inputDate" placeholder="Nov 21, 2026" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-400">Category</label>
-                        <input type="text" id="inputCategory" placeholder="Nightlife / Live Music" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <select id="inputCategory" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1 cursor-pointer">
+                            <option value="HAPPY HOUR & SPECIALS">HAPPY HOUR & SPECIALS</option>
+                            <option value="SUNSET & NIGHTLIFE">SUNSET & NIGHTLIFE</option>
+                            <option value="LIVE MUSIC">LIVE MUSIC</option>
+                            <option value="SPORTS">SPORTS</option>
+                            <option value="LIVE TV">LIVE TV</option>
+                            <option value="DINING & DRINK">DINING & DRINK</option>
+                            <option value="MARKETS">MARKETS</option>
+                            <option value="EXHIBITIONS">EXHIBITIONS</option>
+                            <option value="CLASSES">CLASSES</option>
+                        </select>
                     </div>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Description / Details</label>
-                    <textarea id="inputDesc" rows="2" placeholder="Details about entry, happy hours, or location..." class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
+                    <textarea id="inputDesc" rows="2" placeholder="Details about entry, discounts, or location..." class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
                 </div>
                 <button onclick="submitNewPost()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white font-black py-3 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition">
-                    Publish to Albufeira Pulse 🚀
+                    Publish to Albufeira Pulse
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Application Logic connected to Supabase -->
     <script>
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6'; // <-- PASTE YOUR REAL ANON KEY HERE
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let currentTown = 'Albufeira';
         let currentLang = 'en';
+        let currentUser = null;
+        let currentFilter = 'all';
 
         const translations = {
             en: {
@@ -311,11 +320,8 @@
                 calendarTab: "Calendar Grid",
                 dirTab: "Directory & Maps",
                 forumTab: "Community Forum",
-                popTitle: "Most Popular Next Weekend in",
-                popSub: "Ranked by attendance for upcoming weekend events.",
-                filterWknd: "🌴 Next Weekend",
-                filterAll: "All Events",
-                filterNight: "🍹 Nightlife",
+                popTitle: "Events & Happenings in",
+                popSub: "Click any category below to filter instantly.",
                 dirTitle: "📍 Verified Business Directory",
                 dirSub: "Powered by Google Maps integration for Albufeira & Silves venues.",
                 addVenue: "Add Venue",
@@ -336,11 +342,8 @@
                 calendarTab: "Grelha de Calendário",
                 dirTab: "Diretório & Mapas",
                 forumTab: "Fórum Comunitário",
-                popTitle: "Mais Popular no Próximo Fim de Semana em",
-                popSub: "Classificado por afluência para os próximos eventos de fim de semana.",
-                filterWknd: "🌴 Próximo Fim de Semana",
-                filterAll: "Todos os Eventos",
-                filterNight: "🍹 Vida Noturna",
+                popTitle: "Eventos e Acontecimentos em",
+                popSub: "Clique numa categoria abaixo para filtrar instantaneamente.",
                 dirTitle: "📍 Diretório de Empresas Verificadas",
                 dirSub: "Desenvolvido com integração Google Maps para locais em Albufeira e Silves.",
                 addVenue: "Adicionar Local",
@@ -350,32 +353,102 @@
             }
         };
         
-        let eventsData = [
-            { id: 1, town: 'Albufeira', title: 'Neon Sunset Beach Party (Weekend Special)', date: 'Nov 21, 2026', time: '18:00', category: 'Nightlife', venue: 'Papagayo Beach Bar', going: 245, desc: 'Massive weekend kickoff with free entry before 8 PM and cocktails on the terrace.', poster: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96', isWeekend: true },
-            { id: 2, town: 'Albufeira', title: 'Live Rock & Cover Band Weekend Bash', date: 'Nov 22, 2026', time: '21:30', category: 'Live Music', venue: 'The Irishman Pub (The Strip)', going: 180, desc: 'Classic 80s & 90s anthems with special pint promos for the weekend crowd.', poster: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=96', isWeekend: true },
-            { id: 3, town: 'Silves', title: 'Silves Medieval Wine Tasting', date: 'Nov 20, 2026', time: '16:00', category: 'Culture', venue: 'Castelo de Silves', going: 56, desc: 'Sample local Algarve wines inside the historic castle ramparts.', poster: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=600&q=96', isWeekend: false },
-            { id: 4, town: 'Albufeira', title: 'Dolphin Watching & Cave Boat Tour', date: 'Nov 21, 2026', time: '10:00', category: 'Adventure', venue: 'Albufeira Marina', going: 210, desc: 'Guided boat excursion to Benagil Caves with live marine biologist commentary.', poster: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=96', isWeekend: true }
-        ];
-
-        let directoryData = [
-            { id: 1, town: 'Albufeira', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Praia dos Pescadores, Albufeira', rating: '4.8 ⭐', phone: '+351 289 000 111' },
-            { id: 2, town: 'Albufeira', name: 'The Irishman Pub', category: 'Nightlife & Sports', address: 'Avenida Sá Carneiro (The Strip)', rating: '4.6 ⭐', phone: '+351 289 000 222' },
-            { id: 3, town: 'Silves', name: 'Café Castelo de Silves', category: 'Historic Café & Wine', address: 'Rua do Castelo, Silves', rating: '4.9 ⭐', phone: '+351 282 000 333' }
-        ];
+        let eventsData = [];
+        let directoryData = [];
 
         let forumData = [
-            { id: 1, town: 'Albufeira', title: 'Best spot for watching the Champions League on The Strip?', author: 'Liam_M (UK Expat)', replies: 14, category: 'Sports & Pubs' },
-            { id: 2, town: 'Albufeira', title: 'Recommendations for long-term winter rentals in Olhos de Água?', author: 'Sophie_Van_D', replies: 22, category: 'Housing & Living' },
-            { id: 3, town: 'Silves', title: 'Getting around Silves without a car—bus vs taxi tips?', author: 'Marco_PT', replies: 8, category: 'Transport' }
+            { id: 1, town: 'Albufeira', title: 'Best spot for watching live sports on The Strip?', author: 'Liam_M (UK Expat)', replies: 14, category: 'SPORTS' },
+            { id: 2, town: 'Albufeira', title: 'Recommendations for long-term winter rentals in Olhos de Água?', author: 'Sophie_Van_D', replies: 22, category: 'CLASSES' },
+            { id: 3, town: 'Silves', title: 'Getting around Silves without a car—bus vs taxi tips?', author: 'Marco_PT', replies: 8, category: 'MARKETS' }
         ];
 
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {
             lucide.createIcons();
-            renderEvents('weekend');
+            await checkUserSession();
+            await fetchEvents('all');
             renderCalendar();
-            renderDirectory();
+            await fetchDirectory();
             renderForum();
         });
+
+        async function checkUserSession() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                currentUser = session.user;
+                
+                const { data: profile } = await supabaseClient
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                const displayName = (profile && profile.full_name) ? profile.full_name : currentUser.email.split('@')[0];
+                
+                const loginBtn = document.getElementById('loginBtn');
+                if (loginBtn) {
+                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${displayName}</span>`;
+                    loginBtn.setAttribute('onclick', 'handleLogout()');
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPass').value;
+            const errorMsg = document.getElementById('loginErrorMsg');
+            
+            errorMsg.classList.add('hidden');
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) {
+                errorMsg.innerText = error.message;
+                errorMsg.classList.remove('hidden');
+            } else {
+                closeLoginModal();
+                location.reload();
+            }
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            location.reload();
+        }
+
+        async function fetchEvents(filter = 'all') {
+            currentFilter = filter;
+            let query = supabaseClient.from('events').select('*');
+            if (currentTown !== 'All Algarve') {
+                query = query.eq('town', currentTown);
+            }
+            const { data, error } = await query;
+            if (!error && data && data.length > 0) {
+                eventsData = data;
+            } else {
+                eventsData = [
+                    { id: 1, town: 'Albufeira', title: 'Sunset Cocktails & 2-for-1 Happy Hour', date: 'Nov 21, 2026', time: '17:00', category: 'HAPPY HOUR & SPECIALS', venue: 'Papagayo Beach Bar', going: 245, description: 'Buy one get one free on all mojitos during golden hour.', poster_url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96' },
+                    { id: 2, town: 'Silves', title: 'Silves Municipal Farmer & Craft Market', date: 'Nov 20, 2026', time: '08:00', category: 'MARKETS', venue: 'Silves Market Grounds', going: 56, description: 'Fresh local oranges, figs, artisanal cheese, and crafts.', poster_url: 'https://images.unsplash.com/photo-1488459716770-c44b305ef7a5?auto=format&fit=crop&w=600&q=96' }
+                ];
+            }
+            renderEvents(filter);
+        }
+
+        async function fetchDirectory() {
+            let query = supabaseClient.from('directory').select('*');
+            if (currentTown !== 'All Algarve') {
+                query = query.eq('town', currentTown);
+            }
+            const { data, error } = await query;
+            if (!error && data && data.length > 0) {
+                directoryData = data;
+            } else {
+                directoryData = [
+                    { id: 1, town: 'Albufeira', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Praia dos Pescadores, Albufeira', rating: '4.8 ⭐', phone: '+351 289 000 111' },
+                    { id: 2, town: 'Silves', name: 'Café Castelo de Silves', category: 'Historic Café & Wine', address: 'Rua do Castelo, Silves', rating: '4.9 ⭐', phone: '+351 282 000 333' }
+                ];
+            }
+            renderDirectory();
+        }
 
         function changeTown(town) {
             currentTown = town;
@@ -391,9 +464,9 @@
                 weatherLink.href = 'https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1';
             }
 
-            renderEvents('weekend');
+            fetchEvents(currentFilter);
             renderCalendar();
-            renderDirectory();
+            fetchDirectory();
             renderForum();
         }
 
@@ -402,7 +475,8 @@
             const t = translations[lang];
             document.getElementById('subtextTitle').innerText = t.subtext;
             document.getElementById('labelTown').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${t.townLabel}`;
-            document.getElementById('btnLoginText').innerText = t.login;
+            const loginBtnSpan = document.querySelector('#loginBtn span');
+            if(loginBtnSpan && !currentUser) loginBtnSpan.innerText = t.login;
             document.getElementById('btnPostText').innerText = t.post;
             document.getElementById('lblForecast').innerText = t.forecast;
             document.getElementById('lblAir').innerText = t.air;
@@ -414,9 +488,6 @@
             document.getElementById('tabForumLbl').innerText = t.forumTab;
             document.getElementById('popularHeaderTitle').innerText = t.popTitle;
             document.getElementById('popularSubtext').innerText = t.popSub;
-            document.getElementById('filterWeekend').innerText = t.filterWknd;
-            document.getElementById('filterAll').innerText = t.filterAll;
-            document.getElementById('filterNightlife').innerText = t.filterNight;
             document.getElementById('dirTitle').innerText = t.dirTitle;
             document.getElementById('dirSub').innerText = t.dirSub;
             document.getElementById('btnAddVenue').innerText = t.addVenue;
@@ -438,168 +509,14 @@
             document.getElementById('tab-content-' + tab).classList.remove('hidden');
         }
 
-        function renderEvents(filter = 'weekend') {
-            const grid = document.getElementById('eventsGrid');
-            let filtered = eventsData.filter(e => currentTown === 'All Algarve' || e.town === currentTown);
-
-            if (filter === 'weekend') {
-                filtered = filtered.filter(e => e.isWeekend || e.date.includes('Nov 21') || e.date.includes('Nov 22'));
-                filtered.sort((a, b) => b.going - a.going);
-            } else if (filter === 'popular') {
-                filtered.sort((a, b) => b.going - a.going);
-            } else if (filter !== 'all') {
-                filtered = filtered.filter(e => e.category.toLowerCase().includes(filter.toLowerCase()));
-            }
-
-            grid.innerHTML = filtered.map(e => `
-                <div class="bg-miamiCard/90 backdrop-blur-md border border-miamiPink/20 rounded-2xl overflow-hidden hover:border-miamiCyan/60 transition shadow-lg flex flex-col justify-between">
-                    ${e.poster ? `<div class="h-48 overflow-hidden relative"><img src="${e.poster}" alt="${e.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300"><span class="absolute top-2 right-2 bg-black/70 text-miamiCyan text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">96 DPI Web Optimized</span></div>` : ''}
-                    <div class="p-5 flex flex-col flex-grow justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-xs font-black bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full border border-miamiPink/30">${e.category}</span>
-                                <span class="text-xs text-miamiCyan font-semibold flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${e.town}</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-white mb-1">${e.title}</h3>
-                            <p class="text-xs text-miamiCyan mb-3 font-semibold">📍 ${e.venue}</p>
-                            <p class="text-xs text-gray-300 mb-4">${e.desc}</p>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center text-xs text-gray-400 border-t border-white/10 pt-3 mb-3">
-                                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-miamiPink"></i> ${e.date} (${e.time})</span>
-                                <span class="text-miamiPink font-bold">🔥 <span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
-                            </div>
-                            <button onclick="incrementGoing(${e.id})" class="w-full bg-white/5 hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-2">
-                                ✨ ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function incrementGoing(id) {
-            const event = eventsData.find(e => e.id === id);
-            if (event) {
-                event.going += 1;
-                renderEvents('weekend');
-            }
-        }
-
-        function filterEvents(category) {
-            renderEvents(category);
-        }
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            let daysHtml = '';
-            for (let i = 1; i <= 30; i++) {
-                const hasEvent = eventsData.some(e => e.date.includes(`Nov ${i}`));
-                daysHtml += `
-                    <div onclick="alert('${currentLang === 'pt' ? 'A ver eventos para 1 de Novembro de 2026' : 'Viewing events for November ' + i + ', 2026'}')" class="aspect-square bg-black/50 border ${hasEvent ? 'border-miamiPink bg-miamiPink/10 cursor-pointer hover:bg-miamiPink/20' : 'border-white/5'} rounded-xl p-2 flex flex-col justify-between transition">
-                        <span class="text-xs font-bold ${hasEvent ? 'text-miamiPink' : 'text-gray-500'}">${i}</span>
-                        ${hasEvent ? `<span class="text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center">${currentLang === 'pt' ? 'Evento' : 'Event'}</span>` : ''}
-                    </div>
-                `;
-            }
-            grid.innerHTML = daysHtml;
-        }
-
-        function renderDirectory() {
-            const grid = document.getElementById('directoryGrid');
-            const filtered = directoryData.filter(d => currentTown === 'All Algarve' || d.town === currentTown);
-            grid.innerHTML = filtered.map(d => `
-                <div class="bg-miamiCard/90 backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg">
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-base font-bold text-white">${d.name}</h3>
-                        <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating}</span>
-                    </div>
-                    <p class="text-xs text-miamiPink font-semibold mb-2">${d.category}</p>
-                    <p class="text-xs text-gray-400 mb-4 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
-                    <div class="flex gap-2">
-                        <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${currentLang === 'pt' ? 'Abrir no Maps' : 'Open in Maps'}
-                        </a>
-                        <a href="tel:${d.phone}" class="bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
-                            <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function renderForum() {
-            const list = document.getElementById('forumList');
-            const filtered = forumData.filter(f => currentTown === 'All Algarve' || f.town === currentTown);
-            list.innerHTML = filtered.map(f => `
-                <div class="bg-miamiCard/90 backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:border-miamiPink/50 transition flex justify-between items-center">
-                    <div>
-                        <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
-                        <h4 class="text-sm font-bold text-white mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
-                        <p class="text-xs text-gray-400 mt-1">${currentLang === 'pt' ? 'Iniciado por' : 'Started by'} <span class="text-gray-300 font-semibold">${f.author}</span></p>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} ${currentLang === 'pt' ? 'respostas' : 'replies'}</span>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function openModal() { document.getElementById('postModal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('postModal').classList.add('hidden'); }
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
-
-        function toggleFormType(type) {
-            const mapSec = document.getElementById('googleMapsSearchSection');
-            const posterSec = document.getElementById('posterUploadSection');
-            if (type === 'business') {
-                mapSec.classList.remove('hidden');
-                posterSec.classList.add('hidden');
-                document.getElementById('titleLabel').innerText = 'Business Name';
-            } else {
-                mapSec.classList.add('hidden');
-                posterSec.classList.remove('hidden');
-                document.getElementById('titleLabel').innerText = 'Event Title';
-            }
-        }
-        function simulateGoogleSearch() {
-            const query = document.getElementById('mapSearchInput').value;
-            if(!query) { alert('Please enter a business name.'); return; }
-            document.getElementById('inputTitle').value = query;
-            document.getElementById('inputCategory').value = 'Nightlife & Dining';
-            document.getElementById('inputDesc').value = 'Imported via Google Places API.';
-            alert('📍 Successfully imported business details!');
-        }
-        function submitNewPost() {
-            const title = document.getElementById('inputTitle').value;
-            const town = document.getElementById('modalTown').value;
-            const category = document.getElementById('inputCategory').value || 'General';
-            const desc = document.getElementById('inputDesc').value;
-            const date = document.getElementById('inputDate').value || 'Nov 21, 2026';
-            const fileInput = document.getElementById('inputPoster');
-
-            if(!title) { alert('Please fill in the title.'); return; }
-
-            let posterUrl = 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=96';
-            if (fileInput.files && fileInput.files[0]) {
-                posterUrl = URL.createObjectURL(fileInput.files[0]);
-            }
-
-            eventsData.unshift({
-                id: eventsData.length + 1, town: town, title: title, date: date, time: '21:00',
-                category: category, venue: town === 'Albufeira' ? 'Oura Strip Venue' : 'Silves Historic Center',
-                going: 1, desc: desc || 'User submitted event flyer.', poster: posterUrl, isWeekend: true
+        function renderEvents(filter = 'all') {
+            currentFilter = filter;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                btn.className = "cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition";
             });
-
-            closeModal();
-            switchTab('events');
-            renderEvents('weekend');
-            alert('🎉 Successfully published!');
-        }
-    </script>
-</body>
-</html>
+            
+            let activeBtnId = 'cat-btn-all';
+            if(filter === 'LIVE TV') activeBtnId = 'cat-btn-livetv';
+            else if(filter === 'SPORTS') activeBtnId = 'cat-btn-sports';
+            else if(filter === 'EXHIBITIONS') activeBtnId = 'cat-btn-exhibitions';
+            else if(filter === 'CLASSES') activeBtnId = 'cat
