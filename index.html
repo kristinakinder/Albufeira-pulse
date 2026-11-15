@@ -47,7 +47,7 @@
     <!-- Top Navigation Bar -->
     <header class="bg-miamiCard/90 backdrop-blur-md border-b border-miamiPink/30 sticky top-0 z-50 shadow-lg shadow-miamiPink/10">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
-            <!-- Brand with Larger Frameless Pulsating Heart Logo -->
+            <!-- Brand Logo -->
             <div class="flex items-center gap-3">
                 <div class="flex items-center justify-center p-1">
                     <svg class="w-9 h-9 animate-pulse-color" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -56,37 +56,54 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-miamiPink to-miamiCyan bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p class="text-xs text-gray-400">The Live Beat of the Algarve</p>
+                    <p id="subtextTitle" class="text-xs text-gray-400">The Live Beat of the Algarve</p>
                 </div>
             </div>
 
-            <!-- Town Switcher -->
-            <div class="flex items-center gap-2 bg-black/40 p-1.5 rounded-xl border border-white/10">
-                <span class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
-                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
-                </span>
-                <select id="townSelect" onchange="changeTown(this.value)" class="bg-miamiCard text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink cursor-pointer">
-                    <option value="Albufeira">Albufeira</option>
-                    <option value="Silves">Silves</option>
-                    <option value="All Algarve">All Algarve</option>
-                </select>
-            </div>
+            <!-- Controls: Town Switcher, Language Switcher, Login & Post CTA -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Town Switcher -->
+                <div class="flex items-center gap-2 bg-black/40 p-1.5 rounded-xl border border-white/10">
+                    <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
+                    </span>
+                    <select id="townSelect" onchange="changeTown(this.value)" class="bg-miamiCard text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink cursor-pointer">
+                        <option value="Albufeira">Albufeira</option>
+                        <option value="Silves">Silves</option>
+                        <option value="All Algarve">All Algarve</option>
+                    </select>
+                </div>
 
-            <!-- Action CTA -->
-            <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-sm font-bold px-4 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-2">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i> + Post Event / Place
-            </button>
+                <!-- Language Switcher (EN / PT) -->
+                <div class="flex items-center gap-1 bg-black/40 p-1.5 rounded-xl border border-white/10">
+                    <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
+                        <option value="en">English</option>
+                        <option value="pt">Português</option>
+                    </select>
+                </div>
+
+                <!-- Login Button -->
+                <button onclick="openLoginModal()" class="bg-black/60 hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> <span id="btnLoginText">Login</span>
+                </button>
+
+                <!-- Action CTA -->
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Post</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Completely Clean Weather Banner Link (No spinner, no extra buttons) -->
+        <!-- Clean Weather Banner (No spinners) -->
         <a id="weatherBannerLink" href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-black/80 hover:bg-black/90 transition backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
             <div class="flex items-center gap-5 overflow-x-auto">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan group-hover:underline">
-                    <i data-lucide="sun" class="w-4 h-4"></i> <span id="bannerTown">Albufeira</span> Forecast:
+                    <i data-lucide="sun" class="w-4 h-4"></i> <span id="bannerTown">Albufeira</span> <span id="lblForecast">Forecast</span>:
                 </span>
-                <span>🌡️ Air: <strong class="text-white">19°C</strong></span>
-                <span>🌊 Sea: <strong class="text-white">18°C</strong></span>
-                <span>🏄 Waves: <strong class="text-white">0.8m</strong></span>
+                <span>🌡️ <span id="lblAir">Air</span>: <strong class="text-white">19°C</strong></span>
+                <span>🌊 <span id="lblSea">Sea</span>: <strong class="text-white">18°C</strong></span>
+                <span>🏄 <span id="lblWaves">Waves</span>: <strong class="text-white">0.8m</strong></span>
                 <span>☀️ UV: <strong class="text-white">Low (2)</strong></span>
             </div>
             <span class="text-[11px] text-miamiPink font-bold hidden md:flex items-center gap-1">
@@ -97,16 +114,16 @@
         <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 flex gap-2 overflow-x-auto pb-2 pt-2 border-t border-white/5 bg-miamiCard/50">
             <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-miamiPink text-white flex items-center gap-2 transition shadow-md shadow-miamiPink/20">
-                <i data-lucide="calendar" class="w-4 h-4"></i> Events Calendar
+                <i data-lucide="calendar" class="w-4 h-4"></i> <span id="tabEventsLbl">Events Calendar</span>
             </button>
             <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="calendar-days" class="w-4 h-4"></i> 📅 Calendar Grid
+                <i data-lucide="calendar-days" class="w-4 h-4"></i> <span id="tabCalendarLbl">Calendar Grid</span>
             </button>
             <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="map" class="w-4 h-4"></i> Directory & Google Maps
+                <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory & Maps</span>
             </button>
             <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="message-square" class="w-4 h-4"></i> Community Forum
+                <i data-lucide="message-square" class="w-4 h-4"></i> <span id="tabForumLbl">Community Forum</span>
             </button>
         </div>
     </header>
@@ -119,14 +136,14 @@
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-black text-white flex items-center gap-2 drop-shadow-md">
-                        🔥 Most Popular Next Weekend in <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
+                        🔥 <span id="popularHeaderTitle">Most Popular Next Weekend in</span> <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
                     </h2>
-                    <p class="text-sm text-gray-300 drop-shadow">Ranked by attendance for upcoming weekend events.</p>
+                    <p id="popularSubtext" class="text-sm text-gray-300 drop-shadow">Ranked by attendance for upcoming weekend events.</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="filterEvents('weekend')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink/20 text-miamiPink border border-miamiPink/40 backdrop-blur-sm">🌴 Next Weekend</button>
-                    <button onclick="filterEvents('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm">All Events</button>
-                    <button onclick="filterEvents('Nightlife')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm">🍹 Nightlife</button>
+                    <button onclick="filterEvents('weekend')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink/20 text-miamiPink border border-miamiPink/40 backdrop-blur-sm" id="filterWeekend">🌴 Next Weekend</button>
+                    <button onclick="filterEvents('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm" id="filterAll">All Events</button>
+                    <button onclick="filterEvents('Nightlife')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-black/50 text-gray-200 hover:bg-white/10 backdrop-blur-sm" id="filterNightlife">🍹 Nightlife</button>
                 </div>
             </div>
 
@@ -143,7 +160,7 @@
                     </h2>
                     <span class="text-xs bg-miamiPink/20 text-miamiPink px-3 py-1 rounded-full font-bold border border-miamiPink/40">Interactive Planner</span>
                 </div>
-                <div class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
+                <div id="calendarDaysHeader" class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
                     <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-miamiCyan">Sun</div>
                 </div>
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
@@ -154,11 +171,11 @@
         <section id="tab-content-directory" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-black text-white drop-shadow-md">📍 Verified Business Directory</h2>
-                    <p class="text-sm text-gray-300 drop-shadow">Powered by Google Maps integration for Albufeira & Silves venues.</p>
+                    <h2 id="dirTitle" class="text-2xl font-black text-white drop-shadow-md">📍 Verified Business Directory</h2>
+                    <p id="dirSub" class="text-sm text-gray-300 drop-shadow">Powered by Google Maps integration for Albufeira & Silves venues.</p>
                 </div>
                 <button onclick="openModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:bg-white transition flex items-center gap-1.5 shadow-lg">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Add Venue
+                    <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">Add Venue</span>
                 </button>
             </div>
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -168,17 +185,42 @@
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-black text-white drop-shadow-md">💬 Community Forum & Expat Chat</h2>
-                    <p class="text-sm text-gray-300 drop-shadow">Ask questions, share local tips, and connect with residents & visitors.</p>
+                    <h2 id="forumTitle" class="text-2xl font-black text-white drop-shadow-md">💬 Community Forum & Expat Chat</h2>
+                    <p id="forumSub" class="text-sm text-gray-300 drop-shadow">Ask questions, share local tips, and connect with residents & visitors.</p>
                 </div>
                 <button onclick="openModal()" class="bg-miamiPink text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1.5 shadow-lg">
-                    <i data-lucide="message-circle-plus" class="w-4 h-4"></i> New Thread
+                    <i data-lucide="message-circle-plus" class="w-4 h-4"></i> <span id="btnNewThread">New Thread</span>
                 </button>
             </div>
             <div id="forumList" class="space-y-4"></div>
         </section>
 
     </main>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="loginModalTitle" class="text-xl font-black text-white flex items-center gap-2">
+                <i data-lucide="user" class="text-miamiCyan"></i> Member Login
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label id="lblEmail" class="text-xs font-bold text-gray-400">Email Address</label>
+                    <input type="email" placeholder="you@example.com" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <div>
+                    <label id="lblPass" class="text-xs font-bold text-gray-400">Password</label>
+                    <input type="password" placeholder="••••••••" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <button onclick="alert('Successfully logged into Albufeira Pulse!'); closeLoginModal();" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                    Sign In 🔑
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL: ADD EVENT OR PLACE -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -206,7 +248,6 @@
                     </select>
                 </div>
 
-                <!-- Google Maps Place Search Simulation -->
                 <div id="googleMapsSearchSection" class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-2 hidden">
                     <label class="text-xs font-bold text-miamiCyan flex items-center gap-1">
                         <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Import from Google Maps
@@ -222,7 +263,6 @@
                     <input type="text" id="inputTitle" placeholder="e.g. Sunset DJ Set at Praia da Oura" class="w-full bg-black/50 border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
 
-                <!-- Poster / Flyer Upload (96 DPI Optimized) -->
                 <div id="posterUploadSection" class="p-3 bg-miamiPink/10 border border-miamiPink/30 rounded-xl space-y-2">
                     <label class="text-xs font-bold text-miamiPink flex items-center gap-1">
                         <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Event Poster / Flyer (96 DPI Web & Phone View)
@@ -255,6 +295,60 @@
     <!-- JavaScript Application Logic -->
     <script>
         let currentTown = 'Albufeira';
+        let currentLang = 'en';
+
+        const translations = {
+            en: {
+                subtext: "The Live Beat of the Algarve",
+                townLabel: "Town:",
+                login: "Login",
+                post: "+ Post",
+                forecast: "Forecast",
+                air: "Air",
+                sea: "Sea",
+                waves: "Waves",
+                eventsTab: "Events Calendar",
+                calendarTab: "Calendar Grid",
+                dirTab: "Directory & Maps",
+                forumTab: "Community Forum",
+                popTitle: "Most Popular Next Weekend in",
+                popSub: "Ranked by attendance for upcoming weekend events.",
+                filterWknd: "🌴 Next Weekend",
+                filterAll: "All Events",
+                filterNight: "🍹 Nightlife",
+                dirTitle: "📍 Verified Business Directory",
+                dirSub: "Powered by Google Maps integration for Albufeira & Silves venues.",
+                addVenue: "Add Venue",
+                forumTitle: "💬 Community Forum & Expat Chat",
+                forumSub: "Ask questions, share local tips, and connect with residents & visitors.",
+                newThread: "New Thread"
+            },
+            pt: {
+                subtext: "O Ritmo Ao Vivo do Algarve",
+                townLabel: "Concelho:",
+                login: "Entrar",
+                post: "+ Publicar",
+                forecast: "Previsão",
+                air: "Ar",
+                sea: "Mar",
+                waves: "Ondas",
+                eventsTab: "Calendário de Eventos",
+                calendarTab: "Grelha de Calendário",
+                dirTab: "Diretório & Mapas",
+                forumTab: "Fórum Comunitário",
+                popTitle: "Mais Popular no Próximo Fim de Semana em",
+                popSub: "Classificado por afluência para os próximos eventos de fim de semana.",
+                filterWknd: "🌴 Próximo Fim de Semana",
+                filterAll: "Todos os Eventos",
+                filterNight: "🍹 Vida Noturna",
+                dirTitle: "📍 Diretório de Empresas Verificadas",
+                dirSub: "Desenvolvido com integração Google Maps para locais em Albufeira e Silves.",
+                addVenue: "Adicionar Local",
+                forumTitle: "💬 Fórum Comunitário & Chat",
+                forumSub: "Faça perguntas, partilhe dicas locais e conecte-se com residentes e visitantes.",
+                newThread: "Novo Tópico"
+            }
+        };
         
         let eventsData = [
             { id: 1, town: 'Albufeira', title: 'Neon Sunset Beach Party (Weekend Special)', date: 'Nov 21, 2026', time: '18:00', category: 'Nightlife', venue: 'Papagayo Beach Bar', going: 245, desc: 'Massive weekend kickoff with free entry before 8 PM and cocktails on the terrace.', poster: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96', isWeekend: true },
@@ -303,6 +397,35 @@
             renderForum();
         }
 
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('subtextTitle').innerText = t.subtext;
+            document.getElementById('labelTown').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${t.townLabel}`;
+            document.getElementById('btnLoginText').innerText = t.login;
+            document.getElementById('btnPostText').innerText = t.post;
+            document.getElementById('lblForecast').innerText = t.forecast;
+            document.getElementById('lblAir').innerText = t.air;
+            document.getElementById('lblSea').innerText = t.sea;
+            document.getElementById('lblWaves').innerText = t.waves;
+            document.getElementById('tabEventsLbl').innerText = t.eventsTab;
+            document.getElementById('tabCalendarLbl').innerText = t.calendarTab;
+            document.getElementById('tabDirectoryLbl').innerText = t.dirTab;
+            document.getElementById('tabForumLbl').innerText = t.forumTab;
+            document.getElementById('popularHeaderTitle').innerText = t.popTitle;
+            document.getElementById('popularSubtext').innerText = t.popSub;
+            document.getElementById('filterWeekend').innerText = t.filterWknd;
+            document.getElementById('filterAll').innerText = t.filterAll;
+            document.getElementById('filterNightlife').innerText = t.filterNight;
+            document.getElementById('dirTitle').innerText = t.dirTitle;
+            document.getElementById('dirSub').innerText = t.dirSub;
+            document.getElementById('btnAddVenue').innerText = t.addVenue;
+            document.getElementById('forumTitle').innerText = t.forumTitle;
+            document.getElementById('forumSub').innerText = t.forumSub;
+            document.getElementById('btnNewThread').innerText = t.newThread;
+            lucide.createIcons();
+        }
+
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition";
@@ -344,10 +467,10 @@
                         <div>
                             <div class="flex justify-between items-center text-xs text-gray-400 border-t border-white/10 pt-3 mb-3">
                                 <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-miamiPink"></i> ${e.date} (${e.time})</span>
-                                <span class="text-miamiPink font-bold">🔥 <span id="going-${e.id}">${e.going}</span> Going</span>
+                                <span class="text-miamiPink font-bold">🔥 <span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
                             </div>
                             <button onclick="incrementGoing(${e.id})" class="w-full bg-white/5 hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-2">
-                                ✨ I'm Going!
+                                ✨ ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
                             </button>
                         </div>
                     </div>
@@ -374,9 +497,9 @@
             for (let i = 1; i <= 30; i++) {
                 const hasEvent = eventsData.some(e => e.date.includes(`Nov ${i}`));
                 daysHtml += `
-                    <div onclick="alert('Viewing events for November ${i}, 2026')" class="aspect-square bg-black/50 border ${hasEvent ? 'border-miamiPink bg-miamiPink/10 cursor-pointer hover:bg-miamiPink/20' : 'border-white/5'} rounded-xl p-2 flex flex-col justify-between transition">
+                    <div onclick="alert('${currentLang === 'pt' ? 'A ver eventos para 1 de Novembro de 2026' : 'Viewing events for November ' + i + ', 2026'}')" class="aspect-square bg-black/50 border ${hasEvent ? 'border-miamiPink bg-miamiPink/10 cursor-pointer hover:bg-miamiPink/20' : 'border-white/5'} rounded-xl p-2 flex flex-col justify-between transition">
                         <span class="text-xs font-bold ${hasEvent ? 'text-miamiPink' : 'text-gray-500'}">${i}</span>
-                        ${hasEvent ? '<span class="text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center">Event</span>' : ''}
+                        ${hasEvent ? `<span class="text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center">${currentLang === 'pt' ? 'Evento' : 'Event'}</span>` : ''}
                     </div>
                 `;
             }
@@ -396,7 +519,7 @@
                     <p class="text-xs text-gray-400 mb-4 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
                     <div class="flex gap-2">
                         <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open in Maps
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${currentLang === 'pt' ? 'Abrir no Maps' : 'Open in Maps'}
                         </a>
                         <a href="tel:${d.phone}" class="bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
                             <i data-lucide="phone" class="w-3.5 h-3.5"></i>
@@ -415,22 +538,21 @@
                     <div>
                         <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
                         <h4 class="text-sm font-bold text-white mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
-                        <p class="text-xs text-gray-400 mt-1">Started by <span class="text-gray-300 font-semibold">${f.author}</span></p>
+                        <p class="text-xs text-gray-400 mt-1">${currentLang === 'pt' ? 'Iniciado por' : 'Started by'} <span class="text-gray-300 font-semibold">${f.author}</span></p>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} replies</span>
+                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} ${currentLang === 'pt' ? 'respostas' : 'replies'}</span>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
         }
 
-        function openModal() {
-            document.getElementById('postModal').classList.remove('hidden');
-        }
-        function closeModal() {
-            document.getElementById('postModal').classList.add('hidden');
-        }
+        function openModal() { document.getElementById('postModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('postModal').classList.add('hidden'); }
+        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
         function toggleFormType(type) {
             const mapSec = document.getElementById('googleMapsSearchSection');
             const posterSec = document.getElementById('posterUploadSection');
@@ -446,11 +568,11 @@
         }
         function simulateGoogleSearch() {
             const query = document.getElementById('mapSearchInput').value;
-            if(!query) { alert('Please enter a business name to search on Google Maps.'); return; }
+            if(!query) { alert('Please enter a business name.'); return; }
             document.getElementById('inputTitle').value = query;
             document.getElementById('inputCategory').value = 'Nightlife & Dining';
-            document.getElementById('inputDesc').value = 'Imported via Google Places API: Albufeira Marina / Oura.';
-            alert('📍 Successfully imported business details from Google Maps!');
+            document.getElementById('inputDesc').value = 'Imported via Google Places API.';
+            alert('📍 Successfully imported business details!');
         }
         function submitNewPost() {
             const title = document.getElementById('inputTitle').value;
@@ -468,23 +590,15 @@
             }
 
             eventsData.unshift({
-                id: eventsData.length + 1,
-                town: town,
-                title: title,
-                date: date,
-                time: '21:00',
-                category: category,
-                venue: town === 'Albufeira' ? 'Oura Strip Venue' : 'Silves Historic Center',
-                going: 1,
-                desc: desc || 'User submitted event flyer.',
-                poster: posterUrl,
-                isWeekend: true
+                id: eventsData.length + 1, town: town, title: title, date: date, time: '21:00',
+                category: category, venue: town === 'Albufeira' ? 'Oura Strip Venue' : 'Silves Historic Center',
+                going: 1, desc: desc || 'User submitted event flyer.', poster: posterUrl, isWeekend: true
             });
 
             closeModal();
             switchTab('events');
             renderEvents('weekend');
-            alert('🎉 Successfully posted event for next weekend!');
+            alert('🎉 Successfully published!');
         }
     </script>
 </body>
