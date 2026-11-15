@@ -30,7 +30,7 @@
         .animate-pulse-color {
             animation: pulseColor 3s infinite ease-in-out;
         }
-        /* 80s Synthwave Cartoon Palm Sunset Background Wallpaper */
+        /* 80s Synthwave Cartoon Palm Sunset Vector Background Wallpaper */
         body {
             background-image: linear-gradient(to bottom, rgba(15, 5, 29, 0.85), rgba(30, 10, 50, 0.90)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
@@ -67,91 +67,3 @@
                     <option value="Silves">Silves</option>
                     <option value="All Algarve">All Algarve</option>
                 </select>
-            </div>
-
-            <!-- Action CTA -->
-            <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-sm font-bold px-4 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-2">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i> + Post Event / Place
-            </button>
-        </div>
-
-        <!-- True Clickable Weather & Marine Banner -->
-        <a href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=Faro&council_id=Albufeira" target="_blank" class="bg-black/80 hover:bg-black/90 transition backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
-            <div class="flex items-center gap-6 overflow-x-auto">
-                <span class="flex items-center gap-1.5 font-bold text-miamiCyan group-hover:underline">
-                    <i data-lucide="sun" class="w-4 h-4 animate-spin"></i> <span id="bannerTown">Albufeira</span> Live Weather & Waves (Click to view):
-                </span>
-                <span class="flex items-center gap-1">🌡️ Air: <strong class="text-white">19°C</strong></span>
-                <span class="flex items-center gap-1">🌊 Sea: <strong class="text-white">18°C</strong></span>
-                <span class="flex items-center gap-1">🏄 Waves: <strong class="text-white">0.8m</strong></span>
-                <span class="flex items-center gap-1">☀️ UV: <strong class="text-white">Low (2)</strong></span>
-            </div>
-            <span class="text-[11px] text-miamiPink font-bold hidden md:flex items-center gap-1">
-                Forecast <i data-lucide="external-link" class="w-3 h-3"></i>
-            </span>
-        </a>
-
-        <!-- Navigation Tabs -->
-        <div class="max-w-7xl mx-auto px-4 flex gap-2 overflow-x-auto pb-2 pt-2 border-t border-white/5 bg-miamiCard/50">
-            <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-miamiPink text-white flex items-center gap-2 transition shadow-md shadow-miamiPink/20">
-                <i data-lucide="calendar" class="w-4 h-4"></i> Events Calendar
-            </button>
-            <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="calendar-days" class="w-4 h-4"></i> 📅 Calendar Grid
-            </button>
-            <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="map" class="w-4 h-4"></i> Directory & Google Maps
-            </button>
-            <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                <i data-lucide="message-square" class="w-4 h-4"></i> Community Forum
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-
-        <!-- EVENTS TAB -->
-        <section id="tab-content-events" class="space-y-6">
-            <div class="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
-                        🔥 Most Popular Next Weekend in <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
-                    </h2>
-                    <p class="text-sm text-gray-400">Ranked by attendance for upcoming weekend events.</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="filterEvents('weekend')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink/20 text-miamiPink border border-miamiPink/40">🌴 Next Weekend</button>
-                    <button onclick="filterEvents('all')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10">All Events</button>
-                    <button onclick="filterEvents('Nightlife')" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/10">🍹 Nightlife</button>
-                </div>
-            </div>
-
-            <!-- Events Grid -->
-            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
-
-        <!-- CALENDAR VIEW TAB -->
-        <section id="tab-content-calendar" class="space-y-6 hidden">
-            <div class="bg-miamiCard/90 backdrop-blur-md border border-miamiCyan/30 rounded-2xl p-6 shadow-xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Calendar
-                    </h2>
-                    <span class="text-xs bg-miamiPink/20 text-miamiPink px-3 py-1 rounded-full font-bold border border-miamiPink/40">Interactive Planner</span>
-                </div>
-                <div class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
-                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-miamiCyan">Sun</div>
-                </div>
-                <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
-            </div>
-        </section>
-
-        <!-- DIRECTORY TAB -->
-        <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-2xl font-black text-white">📍 Verified Business Directory</h2>
-                    <p class="text-sm text-gray-400">Powered by Google Maps integration for Albufeira & Silves venues.</p>
-                </div>
-                <button onclick="openModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:
