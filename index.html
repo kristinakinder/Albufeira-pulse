@@ -40,7 +40,6 @@
             animation: pulseColor 3s infinite ease-in-out;
         }
 
-        /* Subtle Neon Tagline Glow in Night Mode */
         body.night-mode .tagline-glow {
             text-shadow: 0 0 10px rgba(6, 182, 212, 0.55);
         }
@@ -60,7 +59,7 @@
             background-position: center bottom;
         }
 
-        /* DAY MODE (Beachy Algarve Palette) */
+        /* DAY MODE */
         body.day-mode {
             background-color: #FAF7F2;
             color: #1E293B;
@@ -72,7 +71,6 @@
             background-position: center bottom;
         }
 
-        /* Adaptive Theme Card & Header Overrides for Day Mode */
         body.day-mode header {
             background-color: rgba(255, 255, 255, 0.92) !important;
             border-bottom-color: rgba(2, 132, 199, 0.25) !important;
@@ -125,13 +123,11 @@
 
             <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <!-- Day / Night Beach Mode Toggle -->
                 <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm" title="Switch between Beach Day Mode and Neon Night Mode">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
 
-                <!-- Default Albufeira Free-text Town Filter Input -->
                 <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
                     <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
                         <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
@@ -170,7 +166,7 @@
             </span>
         </a>
 
-        <!-- Navigation Tabs & Post Button Row -->
+        <!-- Navigation Tabs & Action Buttons -->
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
                 <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap">
@@ -180,7 +176,7 @@
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> <span id="tabCalendarLbl">Calendar & Journal</span>
                 </button>
                 <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
-                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory</span>
+                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory (Yellow Pages)</span>
                 </button>
                 <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="newspaper" class="w-4 h-4"></i> <span id="tabArticlesLbl">Articles</span>
@@ -199,9 +195,14 @@
                 </button>
             </div>
             
-            <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Add Event or Venue</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 whitespace-nowrap">
+                    <i data-lucide="building-2" class="w-4 h-4"></i> <span>+ Add Business</span>
+                </button>
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Add Event</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -218,13 +219,12 @@
                         <p id="popularSubtext" class="text-sm text-gray-300 theme-text-sub">Filter by neighbourhood zone, live happenings, or category.</p>
                     </div>
 
-                    <!-- WHAT'S ON NOW REAL-TIME BUTTON -->
                     <button onclick="filterEvents('WHATS_ON_NOW')" id="cat-btn-now" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg shadow-amber-500/30 hover:scale-105 transition flex items-center gap-1.5 animate-pulse">
                         <i data-lucide="zap" class="w-4 h-4"></i> WHAT'S ON NOW
                     </button>
                 </div>
 
-                <!-- MICRO-LOCATIONS BAR (Albufeira Zones) -->
+                <!-- MICRO-LOCATIONS BAR -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                     <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1 whitespace-nowrap">
                         <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Zone:
@@ -238,7 +238,7 @@
                     <button onclick="filterZone('Oura Beach')" id="zone-btn-oura" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Oura Beach</button>
                 </div>
                 
-                <!-- Compact Direct Clickable Category Filter Bar -->
+                <!-- Category Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
                     <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition">ALL EVENTS</button>
                     <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE TV</button>
@@ -274,18 +274,26 @@
             </div>
         </section>
 
-        <!-- DIRECTORY TAB -->
+        <!-- YELLOW PAGES DIRECTORY TAB -->
         <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
-                    <h2 id="dirTitle" class="text-2xl font-black text-white theme-text-main drop-shadow-sm">📍 Verified Business Directory</h2>
-                    <p id="dirSub" class="text-sm text-gray-300 theme-text-sub">Powered by Google Maps integration across Algarve towns.</p>
+                    <h2 id="dirTitle" class="text-2xl font-black text-white theme-text-main drop-shadow-sm flex items-center gap-2">
+                        📍 Local Yellow Pages & Business Directory
+                        <span id="dirTotalBadge" class="text-xs bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 px-2.5 py-0.5 rounded-full">0 listings</span>
+                    </h2>
+                    <p id="dirSub" class="text-sm text-gray-300 theme-text-sub">Search restaurants, bars, trades, shops, and services across Albufeira.</p>
                 </div>
-                <button onclick="openModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:bg-white transition flex items-center gap-1.5 shadow-lg">
-                    <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">Add Venue</span>
-                </button>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="relative">
+                        <input type="text" id="directorySearchInput" oninput="renderDirectory()" placeholder="Search business name or category..." class="bg-black/60 theme-input border border-miamiCyan/40 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-miamiPink w-60">
+                    </div>
+                    <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:bg-white transition flex items-center gap-1.5 shadow-lg">
+                        <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">Create Listing</span>
+                    </button>
+                </div>
             </div>
-            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
         <!-- ARTICLES TAB -->
@@ -318,7 +326,6 @@
                 </button>
             </div>
 
-            <!-- Classifieds Filter Bar -->
             <div class="flex gap-1.5 overflow-x-auto pb-1">
                 <button onclick="filterClassifieds('all')" id="cls-btn-all" class="cls-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white whitespace-nowrap transition">ALL LISTINGS</button>
                 <button onclick="filterClassifieds('FOR SALE')" id="cls-btn-sale" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">FOR SALE</button>
@@ -354,7 +361,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Fogos.pt Card -->
                 <div class="bg-miamiCard/90 theme-card border border-orange-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-orange-400 font-black text-lg">
@@ -367,7 +373,6 @@
                     </a>
                 </div>
 
-                <!-- Faro Airport Arrivals Card -->
                 <div class="bg-miamiCard/90 theme-card border border-sky-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-sky-400 font-black text-lg">
@@ -380,7 +385,6 @@
                     </a>
                 </div>
 
-                <!-- IPMA Official Weather Card -->
                 <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
@@ -393,7 +397,6 @@
                     </a>
                 </div>
 
-                <!-- Vamus Algarve Bus Network Card -->
                 <div class="bg-miamiCard/90 theme-card border border-purple-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-purple-400 font-black text-lg">
@@ -406,7 +409,6 @@
                     </a>
                 </div>
 
-                <!-- CP Portuguese Railways Card -->
                 <div class="bg-miamiCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-red-400 font-black text-lg">
@@ -419,7 +421,6 @@
                     </a>
                 </div>
 
-                <!-- Municipality / Camara Municipal Card -->
                 <div class="bg-miamiCard/90 theme-card border border-emerald-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-emerald-400 font-black text-lg">
@@ -440,11 +441,10 @@
                 <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
                     <i data-lucide="shield-alert" class="text-amber-400 w-7 h-7"></i> Emergency Numbers & Essential Info
                 </h2>
-                <p class="text-sm text-gray-300 theme-text-sub">Critical contacts for medical care, wildlife rescue, and local services in Albufeira & the Algarve.</p>
+                <p class="text-sm text-gray-300 theme-text-sub">Critical contacts for medical care, local services, and platform enquiries in Albufeira & the Algarve.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- National Emergency Card -->
                 <div class="bg-miamiCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3">
                     <div class="flex items-center gap-2 text-red-400 font-black text-lg">
                         <i data-lucide="phone-call" class="w-5 h-5"></i> National Emergencies
@@ -465,54 +465,52 @@
                     </div>
                 </div>
 
-                <!-- Platform Support Line Card -->
-                <div class="bg-miamiCard/90 theme-card border border-miamiPink/40 rounded-2xl p-6 shadow-xl space-y-3">
-                    <div class="flex items-center gap-2 text-miamiPink font-black text-lg">
-                        <i data-lucide="phone-forwarded" class="w-5 h-5"></i> Albufeira Pulse Support Line
-                    </div>
-                    <p class="text-xs text-gray-400 theme-text-sub">Direct contact for venue onboarding, editorial spotlights, and support:</p>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                            <span class="font-bold">Operations & WhatsApp</span>
-                            <a href="tel:+351937747768" class="bg-miamiPink text-white font-black px-3 py-1 rounded-lg text-xs">+351 937 747 768</a>
+                <div class="bg-miamiCard/90 theme-card border border-miamiPink/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-miamiPink font-black text-lg">
+                            <i data-lucide="mail" class="w-5 h-5"></i> Albufeira Pulse Desk
                         </div>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold">Support Email</span>
-                            <span class="text-xs text-miamiCyan font-bold">support@albufeirapulse.com</span>
+                        <p class="text-xs text-gray-400 theme-text-sub">Get in touch for venue listings, editorial features, partnerships, or support:</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <span class="font-bold">Official Email</span>
+                                <a href="mailto:info@albufeira-pulse.com" class="text-xs text-miamiCyan font-bold hover:underline">info@albufeira-pulse.com</a>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold">Response Time</span>
+                                <span class="text-xs text-gray-300 theme-text-sub">Within 24 hours</span>
+                            </div>
                         </div>
                     </div>
+                    <a href="mailto:info@albufeira-pulse.com?subject=Albufeira%20Pulse%20Enquiry" class="bg-miamiPink hover:opacity-90 text-white text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Email Albufeira Pulse
+                    </a>
                 </div>
 
-                <!-- International Clinic Card -->
-                <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3">
-                    <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
-                        <i data-lucide="stethoscope" class="w-5 h-5"></i> International Medical Care
-                    </div>
-                    <p class="text-xs text-gray-400 theme-text-sub">English-speaking private medical care & tourist clinic in Albufeira:</p>
-                    <div class="space-y-2 text-sm">
-                        <div>
+                <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
+                            <i data-lucide="stethoscope" class="w-5 h-5"></i> International Medical Care
+                        </div>
+                        <p class="text-xs text-gray-400 theme-text-sub">English-speaking private medical care & tourist clinic in Albufeira:</p>
+                        <div class="space-y-1 text-sm">
                             <p class="font-bold">International Health Centres</p>
                             <p class="text-xs text-gray-400 theme-text-sub">Av. Infante Dom Henrique nº 7, Oura Village, Albufeira</p>
                         </div>
-                        <div class="pt-1 flex gap-2">
-                            <a href="tel:+351289588923" class="flex-grow bg-miamiCyan text-miamiDark text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1">
-                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> +351 289 588 923
-                            </a>
-                        </div>
                     </div>
+                    <a href="tel:+351289588923" class="bg-miamiCyan text-miamiDark text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition">
+                        <i data-lucide="phone" class="w-3.5 h-3.5"></i> +351 289 588 923
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- FOOTER WITH LIVE TRAFFIC COUNTER -->
+    <!-- CLEAN FOOTER -->
     <footer class="bg-miamiCard/95 theme-card border-t border-white/10 py-6 px-4 mt-12">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 theme-text-sub">
             <div class="flex items-center gap-3">
                 <span class="font-black text-miamiPink">ALBUFEIRA PULSE</span> © 2026 — The Heartbeat of the Algarve.
-                <span class="bg-miamiCyan/10 text-miamiCyan border border-miamiCyan/30 px-2.5 py-1 rounded-full font-bold flex items-center gap-1">
-                    <i data-lucide="activity" class="w-3.5 h-3.5"></i> Traffic: <strong id="liveTrafficCount" class="text-white">...</strong> views
-                </span>
             </div>
             <div class="flex flex-wrap justify-center gap-4 font-semibold">
                 <button onclick="openLegalModal()" class="hover:text-miamiCyan underline transition">Impressum & Legal Notice</button>
@@ -523,6 +521,80 @@
             </div>
         </div>
     </footer>
+
+    <!-- MODAL: ADD YELLOW PAGES BUSINESS LISTING -->
+    <div id="businessModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard theme-card border border-miamiCyan/50 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeBusinessModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+                <i data-lucide="building-2" class="text-miamiCyan"></i> Create Yellow Pages Business Listing
+            </h3>
+            <p class="text-xs text-gray-400 theme-text-sub">Add a permanent business, restaurant, bar, or local trade to the Albufeira Directory.</p>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Business / Venue Name *</label>
+                    <input type="text" id="bizName" placeholder="e.g. Restaurante A Sardinha" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Category *</label>
+                        <select id="bizCategory" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                            <option value="Restaurant">Restaurant</option>
+                            <option value="Bar">Bar / Lounge</option>
+                            <option value="Café">Café / Bakery</option>
+                            <option value="Pub">Pub / Sports Bar</option>
+                            <option value="Nightclub">Nightclub / Beach Club</option>
+                            <option value="Shop & Retail">Shop & Retail</option>
+                            <option value="Trades & Services">Trades & Home Services</option>
+                            <option value="Health & Wellness">Health & Wellness</option>
+                            <option value="Real Estate & Legal">Real Estate & Legal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Cuisine / Specialty</label>
+                        <input type="text" id="bizSpecialty" placeholder="e.g. Seafood, Plumbing, Irish Pub" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Town</label>
+                        <input type="text" id="bizTown" value="Albufeira" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Neighbourhood Zone</label>
+                        <select id="bizZone" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                            <option value="Old Town">Old Town</option>
+                            <option value="The Strip">The Strip</option>
+                            <option value="Marina">Marina</option>
+                            <option value="Monte Choro">Monte Choro</option>
+                            <option value="Ferreiras">Ferreiras</option>
+                            <option value="Oura Beach">Oura Beach</option>
+                            <option value="Albufeira">Albufeira Centre</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Street Address</label>
+                    <input type="text" id="bizAddress" placeholder="e.g. Rua 5 de Outubro, Old Town, Albufeira" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Business Phone (Optional)</label>
+                        <input type="text" id="bizPhone" placeholder="e.g. +351 289 512 000" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Website / Social Link (Optional)</label>
+                        <input type="url" id="bizWebsite" placeholder="https://..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                </div>
+                <button onclick="submitNewBusiness()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition">
+                    Save to Yellow Pages Directory
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- DAY JOURNAL & PARTY PHOTO MODAL -->
     <div id="dayJournalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -568,15 +640,13 @@
             <div class="text-xs text-gray-300 theme-text-sub space-y-3 leading-relaxed">
                 <p><strong>Information in accordance with Portuguese E-Commerce Law (Decreto-Lei n.º 7/2004) & EU GDPR:</strong></p>
                 <div class="bg-black/30 theme-input p-3 rounded-xl border border-white/10 space-y-1">
-                    <p><strong>Platform Name:</strong> Albufeira Pulse / Algarve Pulse</p>
-                    <p><strong>Operators:</strong> Albufeira Pulse Media Operations</p>
-                    <p><strong>Operator NIFs:</strong> [Insert Operator 1 NIF] & [Insert Operator 2 NIF]</p>
+                    <p><strong>Platform Name:</strong> Albufeira Pulse</p>
+                    <p><strong>Website:</strong> <a href="https://albufeira-pulse.com" class="text-miamiCyan underline">albufeira-pulse.com</a></p>
+                    <p><strong>Operators:</strong> Albufeira Pulse Editorial & Operations</p>
                     <p><strong>Location:</strong> Albufeira, Algarve, Portugal</p>
-                    <p><strong>Support Phone:</strong> +351 937 747 768</p>
-                    <p><strong>Contact Email:</strong> support@albufeirapulse.com</p>
-                    <p><strong>Tax Status:</strong> Individual Operators (Portuguese NIF registered; commercial invoicing via Recibos Verdes).</p>
+                    <p><strong>Contact Email:</strong> <a href="mailto:info@albufeira-pulse.com" class="text-miamiCyan underline">info@albufeira-pulse.com</a></p>
                 </div>
-                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets.</p>
+                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets. To request data deletion, contact <a href="mailto:info@albufeira-pulse.com" class="text-miamiCyan underline">info@albufeira-pulse.com</a>.</p>
             </div>
         </div>
     </div>
@@ -632,48 +702,62 @@
         </div>
     </div>
 
-<!-- PROFILE MODAL -->
-<div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
-        <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-            <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-        <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-            <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
-        </h3>
-        <div class="space-y-3">
-            <div>
-                <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
-                <input type="text" id="updateUsernameInput" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1 focus:outline-none focus:border-miamiPink" placeholder="Enter new username">
+    <!-- PROFILE MODAL -->
+    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+                <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
+                    <input type="text" id="updateUsernameInput" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1 focus:outline-none focus:border-miamiPink" placeholder="Enter new username">
+                </div>
+                <button onclick="handleUpdateUsername()" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl text-xs hover:bg-white transition">
+                    Save Username
+                </button>
+                <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+                </button>
             </div>
-            <button onclick="handleUpdateUsername()" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl text-xs hover:bg-white transition">
-                Save Username
-            </button>
-            <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-            </button>
         </div>
     </div>
-</div>
 
-    <!-- MODAL: ADD EVENT & VENUE (WITH DATABASE VENUE AUTO-FILL) -->
+    <!-- MODAL: ADD EVENT (WITH SEARCHABLE SCROLLING VENUE DROPDOWN) -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="plus-circle" class="text-miamiPink"></i> Add Event or Venue
+                <i data-lucide="plus-circle" class="text-miamiPink"></i> Add Event
             </h3>
             <div class="space-y-3">
-                <!-- Quick Select Existing Venue from Database -->
-                <div class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-1.5">
-                    <label class="text-xs font-bold text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="database" class="w-3.5 h-3.5"></i> Select Existing Venue from Database (Auto-Fill)
-                    </label>
-                    <select id="dbVenueQuickSelect" onchange="handleVenueDropdownSelect(this.value)" class="w-full bg-black/60 theme-input border border-miamiCyan/40 rounded-xl p-2 text-xs text-white cursor-pointer">
-                        <option value="">-- Choose a saved venue or enter a new one below --</option>
-                    </select>
+                <div class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-2 relative" id="venuePickerContainer">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-bold text-miamiCyan flex items-center gap-1.5">
+                            <i data-lucide="database" class="w-3.5 h-3.5"></i> Venue Name (Select from Directory or Type New)
+                        </label>
+                        <span id="venueCountBadge" class="text-[10px] font-bold bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded-full">Loading venues...</span>
+                    </div>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="inputVenueName" 
+                            onfocus="openVenueDropdown()" 
+                            oninput="filterVenueDropdown(this.value)" 
+                            placeholder="Click to search 377+ Albufeira venues or type a new one..." 
+                            autocomplete="off" 
+                            class="w-full bg-black/60 theme-input border border-miamiCyan/40 rounded-xl p-2.5 pr-9 text-sm text-white focus:outline-none focus:border-miamiPink"
+                        >
+                        <button type="button" onclick="toggleVenueDropdown()" class="absolute right-2.5 top-2.5 text-miamiCyan hover:text-white" title="Show all venues">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div id="customVenueDropdown" class="hidden max-h-48 overflow-y-auto bg-miamiDark theme-input border border-miamiCyan/50 rounded-xl shadow-2xl divide-y divide-white/10 z-50"></div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
@@ -694,16 +778,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="text-xs font-bold text-gray-400">Venue Name (Type or Select)</label>
-                        <input type="text" id="inputVenueName" list="venuesDatalist" oninput="handleVenueAutoFill(this.value)" placeholder="Start typing venue..." autocomplete="off" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
-                        <datalist id="venuesDatalist"></datalist>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-400">Venue Type</label>
-                        <input type="text" id="inputVenueType" placeholder="e.g. Beach Club / Bar" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
-                    </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Venue Type</label>
+                    <input type="text" id="inputVenueType" placeholder="e.g. Beach Club / Sports Bar / Restaurant" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Event Title</label>
@@ -829,8 +906,8 @@
                         <input type="text" id="clsZone" placeholder="e.g. Oura Beach / Ferreiras" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                     </div>
                     <div>
-                        <label class="text-xs font-bold text-gray-400">Contact (Phone / WhatsApp / Email)</label>
-                        <input type="text" id="clsContact" placeholder="+351 9XX XXX XXX" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <label class="text-xs font-bold text-gray-400">Contact Email / Handle</label>
+                        <input type="text" id="clsContact" placeholder="e.g. buyer@example.com" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                     </div>
                 </div>
                 <div>
@@ -846,7 +923,6 @@
 
     <!-- JavaScript Application Logic -->
     <script>
-        // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -877,7 +953,7 @@
                 subtext: "The Heartbeat of the Algarve",
                 townLabel: "Town:",
                 login: "Login",
-                post: "+ Add Event or Venue",
+                post: "+ Add Event",
                 forecast: "Forecast",
                 air: "Air",
                 sea: "Sea",
@@ -886,7 +962,7 @@
                 sunset: "Sunset",
                 eventsTab: "Events",
                 calendarTab: "Calendar & Journal",
-                dirTab: "Directory",
+                dirTab: "Directory (Yellow Pages)",
                 articlesTab: "Articles",
                 classifiedsTab: "Classifieds",
                 forumTab: "Forum",
@@ -894,9 +970,9 @@
                 infoTab: "Emergency & Info",
                 popTitle: "Events & Happenings in",
                 popSub: "Filter by neighbourhood zone, live happenings, or category.",
-                dirTitle: "📍 Verified Business Directory",
-                dirSub: "Powered by Google Maps integration across Algarve towns.",
-                addVenue: "Add Venue",
+                dirTitle: "📍 Local Yellow Pages & Business Directory",
+                dirSub: "Search restaurants, bars, trades, shops, and services across Albufeira.",
+                addVenue: "Create Listing",
                 forumTitle: "💬 Community Forum & Expat Chat",
                 forumSub: "Ask questions, share local tips, and connect with residents & visitors.",
                 newThread: "New Thread"
@@ -905,7 +981,7 @@
                 subtext: "O Batimento do Algarve",
                 townLabel: "Concelho:",
                 login: "Entrar",
-                post: "+ Adicionar Evento ou Local",
+                post: "+ Adicionar Evento",
                 forecast: "Previsão",
                 air: "Ar",
                 sea: "Mar",
@@ -914,7 +990,7 @@
                 sunset: "Pôr do Sol",
                 eventsTab: "Eventos",
                 calendarTab: "Calendário & Diário",
-                dirTab: "Diretório",
+                dirTab: "Diretório (Páginas Amarelas)",
                 articlesTab: "Artigos",
                 classifiedsTab: "Classificados",
                 forumTab: "Fórum",
@@ -922,9 +998,9 @@
                 infoTab: "Emergência & Info",
                 popTitle: "Eventos e Acontecimentos em",
                 popSub: "Filtre por zona, eventos ao vivo ou categoria.",
-                dirTitle: "📍 Diretório de Empresas Verificadas",
-                dirSub: "Desenvolvido com integração Google Maps em todo o Algarve.",
-                addVenue: "Adicionar Local",
+                dirTitle: "📍 Diretório de Empresas e Serviços",
+                dirSub: "Pesquise restaurantes, bares, lojas e serviços em Albufeira.",
+                addVenue: "Criar Anúncio",
                 forumTitle: "💬 Fórum Comunitário & Chat",
                 forumSub: "Faça perguntas, partilhe dicas locais e conecte-se com residentes e visitantes.",
                 newThread: "Novo Tópico"
@@ -978,7 +1054,7 @@
                 category: 'FOR SALE',
                 title: "7'4 Minimalibu Surfboard + Leash & Travel Bag",
                 price: '€195',
-                contact: '+351 912 345 678',
+                contact: 'surfgear.albufeira@example.com',
                 author: 'Liam_M',
                 description: 'Great condition, ideal for Galé and Falésia waves. Ready for collection near Oura.'
             },
@@ -1000,7 +1076,7 @@
                 category: 'LOCAL SERVICES',
                 title: 'Bilingual Handyman, Plumbing & AC Servicing',
                 price: '€30 / hr',
-                contact: '+351 965 432 109',
+                contact: 'joao.fixit@example.com',
                 author: 'João FixIt',
                 description: 'Reliable home maintenance across Albufeira, Guia, and Olhos de Água. Free quotes.'
             }
@@ -1016,50 +1092,27 @@
             lucide.createIcons();
             initAutoDayNight();
             await checkUserSession();
-            await trackTraffic();
             await fetchEvents('all');
             await fetchDirectory();
-            populateVenueAutoFillList();
+            await fetchAllVenuesForDropdown();
             renderCalendar();
             renderArticles();
             renderClassifieds('all');
             renderForum();
+
+            document.addEventListener('click', (e) => {
+                const container = document.getElementById('venuePickerContainer');
+                if (container && !container.contains(e.target)) {
+                    closeVenueDropdown();
+                }
+            });
         });
 
-        // AUTOMATIC SUNRISE/SUNSET THEME SWITCHER FOR ALBUFEIRA
         function initAutoDayNight() {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const currentTimeMinutes = currentHour * 60 + currentMinute;
-
-            const sunriseMinutes = 7 * 60 + 13;
-            const sunsetMinutes = 17 * 60 + 25;
-
-            if (currentTimeMinutes >= sunriseMinutes && currentTimeMinutes < sunsetMinutes) {
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+            if (currentTimeMinutes >= (7 * 60 + 13) && currentTimeMinutes < (17 * 60 + 25)) {
                 toggleDayNightMode(false);
-            }
-        }
-
-        // LIVE TRAFFIC TRACKER IN SUPABASE
-        async function trackTraffic() {
-            try {
-                let { data, error } = await supabaseClient
-                    .from('analytics')
-                    .select('views')
-                    .eq('id', 1)
-                    .single();
-
-                let currentViews = data ? data.views : 1250;
-                currentViews += 1;
-
-                await supabaseClient
-                    .from('analytics')
-                    .upsert({ id: 1, views: currentViews });
-
-                document.getElementById('liveTrafficCount').innerText = currentViews.toLocaleString();
-            } catch (err) {
-                document.getElementById('liveTrafficCount').innerText = "1,482";
             }
         }
 
@@ -1072,21 +1125,17 @@
 
             if (imageFile) {
                 try {
-                    if (!nsfwModel) {
-                        nsfwModel = await nsfwjs.load();
-                    }
+                    if (!nsfwModel) nsfwModel = await nsfwjs.load();
                     const img = document.createElement('img');
                     img.src = URL.createObjectURL(imageFile);
                     await new Promise((resolve, reject) => {
                         img.onload = resolve;
                         img.onerror = reject;
                     });
-
                     const predictions = await nsfwModel.classify(img);
                     const unsafe = predictions.find(p => 
                         (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.60
                     );
-
                     if (unsafe) {
                         alert("🚫 Image blocked: Our automated safety bot detected nudity or explicit content.");
                         return false;
@@ -1106,12 +1155,7 @@
         }
 
         function toggleDayNightMode(isManualClick = false) {
-            if (isManualClick) {
-                isDayMode = !isDayMode;
-            } else {
-                isDayMode = true;
-            }
-
+            isDayMode = isManualClick ? !isDayMode : true;
             const body = document.body;
             const btn = document.getElementById('themeToggleBtn');
             const text = document.getElementById('themeText');
@@ -1249,6 +1293,33 @@
             document.getElementById('profileModal').classList.add('hidden');
         }
 
+        async function handleUpdateUsername() {
+            const newUsername = document.getElementById('updateUsernameInput').value.trim();
+            if (!newUsername) {
+                alert("Please enter a valid username.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.updateUser({
+                data: { username: newUsername, full_name: newUsername }
+            });
+
+            if (error) {
+                alert("Error updating username: " + error.message);
+                return;
+            }
+
+            if (currentUser) {
+                await supabaseClient
+                    .from('profiles')
+                    .upsert({ id: currentUser.id, full_name: newUsername });
+            }
+
+            alert("Username updated successfully!");
+            closeProfileModal();
+            location.reload();
+        }
+
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             location.reload();
@@ -1265,97 +1336,237 @@
                 eventsData = data;
             } else {
                 eventsData = [
-                    { id: 1, town: 'Albufeira', zone: 'Marina', title: 'Sunset Cocktails & 2-for-1 Happy Hour', date: 'Nov 16, 2026', time: '17:00', price: 'Free', category: 'HAPPY HOUR & SPECIALS', venue: 'Papagayo Beach Bar', venue_type: 'Beach Club', owner_email: 'alexlockwood78@yahoo.co.uk', going: 245, description: 'Buy one get one free on all mojitos during golden hour at the Marina.', poster_url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96', is_live_now: true },
-                    { id: 2, town: 'Albufeira', zone: 'The Strip', title: 'Premier League Super Sunday Screening', date: 'Nov 16, 2026', time: '16:30', price: 'Free', category: 'LIVE TV', venue: 'Linekers Bar Albufeira', venue_type: 'Sports Bar', owner_email: 'alexlockwood78@yahoo.co.uk', going: 180, description: 'All matches live on 20 giant HD screens right on The Strip.', poster_url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=96', is_live_now: true },
-                    { id: 3, town: 'Albufeira', zone: 'Old Town', title: 'Acoustic Fado & Tapas Evening', date: 'Nov 21, 2026', time: '20:30', price: 'Free', category: 'LIVE MUSIC', venue: 'Praça dos Pescadores Lounge', venue_type: 'Wine Bar', owner_email: 'alexlockwood78@yahoo.co.uk', going: 94, description: 'Traditional Portuguese guitar and local petiscos in Old Town.', poster_url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=96', is_live_now: false },
-                    { id: 4, town: 'Albufeira', zone: 'Ferreiras', title: 'Traditional Farmers & Artisan Market', date: 'Nov 21, 2026', time: '09:00', price: 'Free', category: 'MARKETS', venue: 'Largo de Ferreiras', venue_type: 'Outdoor Market', owner_email: 'alexlockwood78@yahoo.co.uk', going: 112, description: 'Fresh Algarve oranges, honey, figs, and handmade crafts.', poster_url: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=600&q=96', is_live_now: false }
+                    { id: 1, town: 'Albufeira', zone: 'Marina', title: 'Sunset Cocktails & 2-for-1 Happy Hour', date: 'Nov 16, 2026', time: '17:00', price: 'Free', category: 'HAPPY HOUR & SPECIALS', venue: 'Papagayo Beach Bar', venue_type: 'Beach Club', owner_email: 'info@albufeira-pulse.com', going: 245, description: 'Buy one get one free on all mojitos during golden hour at the Marina.', poster_url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96', is_live_now: true },
+                    { id: 2, town: 'Albufeira', zone: 'The Strip', title: 'Premier League Super Sunday Screening', date: 'Nov 16, 2026', time: '16:30', price: 'Free', category: 'LIVE TV', venue: 'Linekers Bar Albufeira', venue_type: 'Sports Bar', owner_email: 'info@albufeira-pulse.com', going: 180, description: 'All matches live on 20 giant HD screens right on The Strip.', poster_url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=96', is_live_now: true },
+                    { id: 3, town: 'Albufeira', zone: 'Old Town', title: 'Acoustic Fado & Tapas Evening', date: 'Nov 21, 2026', time: '20:30', price: 'Free', category: 'LIVE MUSIC', venue: 'Praça dos Pescadores Lounge', venue_type: 'Wine Bar', owner_email: 'info@albufeira-pulse.com', going: 94, description: 'Traditional Portuguese guitar and local petiscos in Old Town.', poster_url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=96', is_live_now: false },
+                    { id: 4, town: 'Albufeira', zone: 'Ferreiras', title: 'Traditional Farmers & Artisan Market', date: 'Nov 21, 2026', time: '09:00', price: 'Free', category: 'MARKETS', venue: 'Largo de Ferreiras', venue_type: 'Outdoor Market', owner_email: 'info@albufeira-pulse.com', going: 112, description: 'Fresh Algarve oranges, honey, figs, and handmade crafts.', poster_url: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=600&q=96', is_live_now: false }
                 ];
             }
             renderEvents(filter);
-            populateVenueAutoFillList();
         }
 
         async function fetchDirectory() {
-            let query = supabaseClient.from('directory').select('*');
+            let query = supabaseClient.from('directory').select('*').limit(1000);
             if (currentTown) {
                 query = query.ilike('town', `%${currentTown}%`);
             }
             const { data, error } = await query;
             if (!error && data && data.length > 0) {
-                directoryData = data;
+                directoryData = data.map(item => ({
+                    id: item.id,
+                    town: item.town || 'Albufeira',
+                    zone: item.zone || 'Albufeira',
+                    name: item.name || item.Name || item.title || 'Local Venue',
+                    category: item.category || item.Category || 'Local Business',
+                    address: item.address || item.Address || 'Albufeira',
+                    rating: item.rating || '4.8 ⭐',
+                    owner_email: item.owner_email || '',
+                    phone: item.phone || item.Phone || '',
+                    website: item.website || item.Website || ''
+                }));
             } else {
                 directoryData = [
-                    { id: 1, town: 'Albufeira', zone: 'Marina', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', rating: '4.8 ⭐', owner_email: 'alexlockwood78@yahoo.co.uk', phone: '+351 289 000 111' },
-                    { id: 2, town: 'Albufeira', zone: 'The Strip', name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightlife', address: 'Av. Dr. Francisco Sá Carneiro, Oura', rating: '4.7 ⭐', owner_email: 'alexlockwood78@yahoo.co.uk', phone: '+351 289 586 000' },
-                    { id: 3, town: 'Albufeira', zone: 'Oura Beach', name: 'International Health Centres', category: 'Medical Clinic (English Speaking)', address: 'Av. Infante Dom Henrique nº 7, Oura Village', rating: '4.9 ⭐', owner_email: '', phone: '+351 289 588 923' }
+                    { id: 1, town: 'Albufeira', zone: 'Marina', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', rating: '4.8 ⭐', owner_email: 'info@albufeira-pulse.com', phone: '+351 289 000 111', website: '' },
+                    { id: 2, town: 'Albufeira', zone: 'The Strip', name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightlife', address: 'Av. Dr. Francisco Sá Carneiro, Oura', rating: '4.7 ⭐', owner_email: 'info@albufeira-pulse.com', phone: '+351 289 586 000', website: '' },
+                    { id: 3, town: 'Albufeira', zone: 'Oura Beach', name: 'International Health Centres', category: 'Medical Clinic (English Speaking)', address: 'Av. Infante Dom Henrique nº 7, Oura Village', rating: '4.9 ⭐', owner_email: '', phone: '+351 289 588 923', website: '' }
                 ];
             }
             renderDirectory();
-            populateVenueAutoFillList();
         }
 
-        // --- DATABASE VENUE AUTO-FILL ENGINE ---
-        function populateVenueAutoFillList() {
+        // --- YELLOW PAGES DIRECTORY CREATOR MODAL ---
+        function openBusinessModal() {
+            document.getElementById('bizTown').value = currentTown || 'Albufeira';
+            document.getElementById('businessModal').classList.remove('hidden');
+        }
+        function closeBusinessModal() {
+            document.getElementById('businessModal').classList.add('hidden');
+        }
+
+        async function submitNewBusiness() {
+            const name = document.getElementById('bizName').value.trim();
+            const cat = document.getElementById('bizCategory').value;
+            const specialty = document.getElementById('bizSpecialty').value.trim();
+            const town = document.getElementById('bizTown').value.trim() || 'Albufeira';
+            const zone = document.getElementById('bizZone').value;
+            const address = document.getElementById('bizAddress').value.trim() || `${zone}, ${town}`;
+            const phone = document.getElementById('bizPhone').value.trim();
+            const website = document.getElementById('bizWebsite').value.trim();
+
+            if (!name) {
+                alert("Please enter the business or venue name.");
+                return;
+            }
+
+            const fullCategory = specialty ? `${cat} (${specialty})` : cat;
+            const isSafe = await checkContentSafety(null, `${name} ${fullCategory} ${address}`);
+            if (!isSafe) return;
+
+            const newEntry = {
+                town: town,
+                zone: zone,
+                name: name,
+                category: fullCategory,
+                address: address,
+                phone: phone,
+                website: website,
+                rating: '4.8 ⭐',
+                owner_email: currentUser ? currentEmail : ''
+            };
+
+            const { error } = await supabaseClient.from('directory').insert([newEntry]);
+            if (error) {
+                alert("Database notice: " + error.message + "\n(Added locally for now — run the RLS SQL policy in Supabase to persist permanently.)");
+                directoryData.unshift({ id: Date.now(), ...newEntry });
+            } else {
+                await fetchDirectory();
+            }
+
+            await fetchAllVenuesForDropdown();
+
+            document.getElementById('bizName').value = '';
+            document.getElementById('bizSpecialty').value = '';
+            document.getElementById('bizAddress').value = '';
+            document.getElementById('bizPhone').value = '';
+            document.getElementById('bizWebsite').value = '';
+            closeBusinessModal();
+            switchTab('directory');
+            renderDirectory();
+        }
+
+        // --- GLOBAL VENUE FETCHER & CUSTOM SEARCHABLE DROPDOWN ---
+        async function fetchAllVenuesForDropdown() {
             const venueMap = new Map();
 
-            directoryData.forEach(d => {
-                if (d.name) {
-                    venueMap.set(d.name.toLowerCase(), {
-                        name: d.name,
-                        town: d.town || 'Albufeira',
-                        zone: d.zone || 'Old Town',
-                        type: d.category || 'Venue'
+            const registerVenue = (rawName, rawTown, rawZone, rawType) => {
+                if (!rawName || typeof rawName !== 'string') return;
+                const cleanName = rawName.trim();
+                if (!cleanName) return;
+                const key = cleanName.toLowerCase();
+                if (!venueMap.has(key)) {
+                    venueMap.set(key, {
+                        name: cleanName,
+                        town: (rawTown || 'Albufeira').trim(),
+                        zone: (rawZone || 'Old Town').trim(),
+                        type: (rawType || 'Venue').trim()
                     });
                 }
-            });
+            };
 
-            eventsData.forEach(e => {
-                if (e.venue && !venueMap.has(e.venue.toLowerCase())) {
-                    venueMap.set(e.venue.toLowerCase(), {
-                        name: e.venue,
-                        town: e.town || 'Albufeira',
-                        zone: e.zone || 'Old Town',
-                        type: e.venue_type || 'Venue'
-                    });
+            directoryData.forEach(d => registerVenue(d.name, d.town, d.zone, d.category));
+            eventsData.forEach(e => registerVenue(e.venue, e.town, e.zone, e.venue_type));
+
+            try {
+                const { data: allDir } = await supabaseClient.from('directory').select('*').limit(1000);
+                if (allDir && Array.isArray(allDir)) {
+                    allDir.forEach(d => registerVenue(d.name || d.Name || d.title, d.town, d.zone, d.category || d.Category));
                 }
-            });
+            } catch (err) {
+                console.warn('Directory fetch for dropdown:', err);
+            }
+
+            try {
+                const { data: allEv } = await supabaseClient.from('events').select('*').limit(1000);
+                if (allEv && Array.isArray(allEv)) {
+                    allEv.forEach(e => registerVenue(e.venue || e.venue_name, e.town, e.zone, e.venue_type));
+                }
+            } catch (err) {
+                console.warn('Events fetch for dropdown:', err);
+            }
 
             knownVenuesCache = Array.from(venueMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 
-            // Populate <datalist> for typing auto-complete
-            const datalist = document.getElementById('venuesDatalist');
-            if (datalist) {
-                datalist.innerHTML = knownVenuesCache.map(v => `<option value="${v.name}">${v.zone} (${v.type})</option>`).join('');
+            const badge = document.getElementById('venueCountBadge');
+            if (badge) {
+                badge.innerText = `${knownVenuesCache.length} saved venues`;
             }
 
-            // Populate <select> dropdown for immediate scrolling & clicking
-            const selectEl = document.getElementById('dbVenueQuickSelect');
-            if (selectEl) {
-                selectEl.innerHTML = `<option value="">-- Choose a saved venue (${knownVenuesCache.length} available) or enter new below --</option>` +
-                    knownVenuesCache.map(v => `<option value="${v.name}">${v.name} — ${v.zone} (${v.type})</option>`).join('');
+            renderVenueDropdownItems(knownVenuesCache);
+        }
+
+        function renderVenueDropdownItems(list) {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (!dropdown) return;
+
+            if (!list || list.length === 0) {
+                dropdown.innerHTML = `<div class="p-3 text-xs text-gray-400 italic">No saved venues match. Keep typing to add a new venue!</div>`;
+                return;
+            }
+
+            dropdown.innerHTML = list.slice(0, 150).map((v, idx) => `
+                <button type="button" onclick="selectVenueFromDropdown(${idx}, '${v.name.replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-2.5 hover:bg-miamiCyan/20 transition flex justify-between items-center gap-2">
+                    <div>
+                        <p class="text-xs font-bold text-white theme-text-main">${v.name}</p>
+                        <p class="text-[11px] text-gray-400 theme-text-sub">${v.town} • ${v.zone}</p>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-miamiPink/20 text-miamiPink whitespace-nowrap">${v.type}</span>
+                </button>
+            `).join('');
+        }
+
+        function openVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) {
+                const currentVal = document.getElementById('inputVenueName').value.trim();
+                filterVenueDropdown(currentVal);
+                dropdown.classList.remove('hidden');
             }
         }
 
-        function handleVenueDropdownSelect(selectedName) {
-            if (!selectedName) return;
-            document.getElementById('inputVenueName').value = selectedName;
-            handleVenueAutoFill(selectedName);
+        function closeVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
         }
 
-        function handleVenueAutoFill(typedName) {
-            if (!typedName) return;
-            const match = knownVenuesCache.find(v => v.name.toLowerCase() === typedName.trim().toLowerCase());
-            if (match) {
-                document.getElementById('modalTown').value = match.town;
-                document.getElementById('inputVenueType').value = match.type;
-                const zoneSelect = document.getElementById('modalZone');
-                for (let opt of zoneSelect.options) {
-                    if (opt.value.toLowerCase() === match.zone.toLowerCase()) {
-                        zoneSelect.value = opt.value;
-                        break;
-                    }
+        function toggleVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (!dropdown) return;
+            if (dropdown.classList.contains('hidden')) {
+                renderVenueDropdownItems(knownVenuesCache);
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        function filterVenueDropdown(query) {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) dropdown.classList.remove('hidden');
+
+            const q = (query || '').trim().toLowerCase();
+            if (!q) {
+                renderVenueDropdownItems(knownVenuesCache);
+                return;
+            }
+
+            const matches = knownVenuesCache.filter(v =>
+                v.name.toLowerCase().includes(q) ||
+                v.zone.toLowerCase().includes(q) ||
+                v.type.toLowerCase().includes(q)
+            );
+            renderVenueDropdownItems(matches);
+        }
+
+        function selectVenueFromDropdown(_, venueName) {
+            const match = knownVenuesCache.find(v => v.name === venueName);
+            if (!match) return;
+
+            document.getElementById('inputVenueName').value = match.name;
+            document.getElementById('modalTown').value = match.town;
+            document.getElementById('inputVenueType').value = match.type;
+
+            const zoneSelect = document.getElementById('modalZone');
+            let matchedZone = false;
+            for (let opt of zoneSelect.options) {
+                if (opt.value.toLowerCase() === match.zone.toLowerCase()) {
+                    zoneSelect.value = opt.value;
+                    matchedZone = true;
+                    break;
                 }
             }
+            if (!matchedZone) zoneSelect.value = 'Other';
+
+            closeVenueDropdown();
         }
 
         function changeTown(town) {
@@ -1417,7 +1628,6 @@
             document.getElementById('tabInfoLbl').innerText = t.infoTab;
             document.getElementById('popularHeaderTitle').innerText = t.popTitle;
             document.getElementById('popularSubtext').innerText = t.popSub;
-            document.getElementById('dirTitle').innerText = t.dirTitle;
             document.getElementById('dirSub').innerText = t.dirSub;
             document.getElementById('btnAddVenue').innerText = t.addVenue;
             document.getElementById('forumTitle').innerText = t.forumTitle;
@@ -1500,7 +1710,7 @@
                 return;
             }
 
-            const adminEmails = ['alexlockwood78@yahoo.co.uk', 'kris'];
+            const adminEmails = ['info@albufeira-pulse.com', 'alexlockwood78@yahoo.co.uk', 'kris'];
             const isUserAdmin = currentUser && (
                 adminEmails.includes(currentEmail.toLowerCase()) || 
                 currentDisplayName.toLowerCase().includes('kris') ||
@@ -1555,7 +1765,6 @@
             lucide.createIcons();
         }
 
-        // --- ARTICLES RENDER & SUBMIT ---
         function renderArticles() {
             const grid = document.getElementById('articlesGrid');
             const filtered = articlesData.filter(a => !currentTown || (a.town && a.town.toLowerCase().includes(currentTown.toLowerCase())));
@@ -1628,7 +1837,6 @@
             renderArticles();
         }
 
-        // --- CLASSIFIEDS RENDER & SUBMIT ---
         function filterClassifieds(category) {
             currentClassifiedFilter = category;
             renderClassifieds(category);
@@ -1722,21 +1930,12 @@
             renderClassifieds(currentClassifiedFilter);
         }
 
-        // REAL SUPABASE GOING COUNTER INCREMENT
         async function incrementGoing(id) {
             const event = eventsData.find(e => e.id === id);
             if (event) {
                 const newCount = (event.going || 0) + 1;
                 event.going = newCount;
-                
-                const { error } = await supabaseClient
-                    .from('events')
-                    .update({ going: newCount })
-                    .eq('id', id);
-
-                if (error) {
-                    console.warn("Supabase going count update notice:", error.message);
-                }
+                await supabaseClient.from('events').update({ going: newCount }).eq('id', id);
                 renderEvents(currentFilter);
             }
         }
@@ -1859,26 +2058,49 @@
 
         function renderDirectory() {
             const grid = document.getElementById('directoryGrid');
-            const filtered = directoryData.filter(d => !currentTown || (d.town && d.town.toLowerCase().includes(currentTown.toLowerCase())));
-            grid.innerHTML = filtered.map(d => `
+            const searchInput = document.getElementById('directorySearchInput');
+            const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+            let filtered = directoryData.filter(d => !currentTown || (d.town && d.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (q) {
+                filtered = filtered.filter(d =>
+                    (d.name && d.name.toLowerCase().includes(q)) ||
+                    (d.category && d.category.toLowerCase().includes(q)) ||
+                    (d.address && d.address.toLowerCase().includes(q))
+                );
+            }
+
+            const totalBadge = document.getElementById('dirTotalBadge');
+            if (totalBadge) totalBadge.innerText = `${filtered.length} listings`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No businesses match your search. Click "+ Create Listing" to add one!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.slice(0, 120).map(d => `
                 <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg flex flex-col justify-between">
                     <div>
-                        <div class="flex justify-between items-start mb-2">
+                        <div class="flex justify-between items-start mb-2 gap-2">
                             <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
-                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating || '4.8 ⭐'}</span>
+                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold whitespace-nowrap">${d.rating || '4.8 ⭐'}</span>
                         </div>
                         <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
-                        <p class="text-xs text-gray-400 theme-text-sub mb-2 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
-                        <p class="text-[11px] text-miamiCyan mb-4">👤 Owner/Manager: <strong class="text-white theme-text-main">${d.owner_email ? d.owner_email.split('@')[0] : 'Unclaimed'}</strong></p>
+                        <p class="text-xs text-gray-400 theme-text-sub mb-3 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-miamiCyan"></i> ${d.address}</p>
                     </div>
-                    <div class="space-y-2">
+                    <div class="space-y-2 pt-2 border-t border-white/10">
                         <div class="flex gap-2">
                             <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
-                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open in Maps
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Maps
                             </a>
-                            <a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
+                            ${d.phone ? `<a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center" title="${d.phone}">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                            </a>
+                            </a>` : ''}
+                            ${d.website ? `<a href="${d.website.startsWith('http') ? d.website : 'https://' + d.website}" target="_blank" class="bg-miamiPink/10 hover:bg-miamiPink/20 text-miamiPink px-3 py-2 rounded-xl text-xs font-bold border border-miamiPink/30 flex items-center justify-center" title="Visit Website">
+                                <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                            </a>` : ''}
                         </div>
                     </div>
                 </div>
@@ -1907,11 +2129,15 @@
             lucide.createIcons();
         }
 
-        function openModal() {
-            populateVenueAutoFillList();
+        async function openModal() {
+            closeVenueDropdown();
             document.getElementById('postModal').classList.remove('hidden');
+            await fetchAllVenuesForDropdown();
         }
-        function closeModal() { document.getElementById('postModal').classList.add('hidden'); }
+        function closeModal() {
+            closeVenueDropdown();
+            document.getElementById('postModal').classList.add('hidden');
+        }
         function openLegalModal() { document.getElementById('legalModal').classList.remove('hidden'); }
         function closeLegalModal() { document.getElementById('legalModal').classList.add('hidden'); }
         function openTermsModal() { document.getElementById('termsModal').classList.remove('hidden'); }
@@ -1953,7 +2179,7 @@
                 }
             }
 
-            const posterEmail = currentUser ? currentEmail : 'anonymous@albufeirapulse.com';
+            const posterEmail = currentUser ? currentEmail : 'info@albufeira-pulse.com';
 
             const { error } = await supabaseClient.from('events').insert([{
                 town: town, zone: zone, title: title, date: date, time: time, price: price,
@@ -1966,34 +2192,10 @@
                 alert('Error publishing: ' + error.message);
             } else {
                 closeModal();
-                fetchEvents(currentFilter);
+                await fetchEvents(currentFilter);
+                await fetchAllVenuesForDropdown();
                 renderCalendar();
             }
-        }async function handleUpdateUsername() {
-            const newUsername = document.getElementById('updateUsernameInput').value.trim();
-            if (!newUsername) {
-                alert("Please enter a valid username.");
-                return;
-            }
-
-            const { data, error } = await supabaseClient.auth.updateUser({
-                data: { username: newUsername, full_name: newUsername }
-            });
-
-            if (error) {
-                alert("Error updating username: " + error.message);
-                return;
-            }
-
-            if (currentUser) {
-                await supabaseClient
-                    .from('profiles')
-                    .upsert({ id: currentUser.id, full_name: newUsername });
-            }
-
-            alert("Username updated successfully!");
-            closeProfileModal();
-            location.reload();
         }
     </script>
 </body>
