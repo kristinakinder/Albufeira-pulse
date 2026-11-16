@@ -1969,4 +1969,29 @@
         }
     </script>
 </body>
-</html>
+</html>async function handleUpdateUsername() {
+            const newUsername = document.getElementById('updateUsernameInput').value.trim();
+            if (!newUsername) {
+                alert("Please enter a valid username.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.updateUser({
+                data: { username: newUsername, full_name: newUsername }
+            });
+
+            if (error) {
+                alert("Error updating username: " + error.message);
+                return;
+            }
+
+            if (currentUser) {
+                await supabaseClient
+                    .from('profiles')
+                    .upsert({ id: currentUser.id, full_name: newUsername });
+            }
+
+            alert("Username updated successfully!");
+            closeProfileModal();
+            location.reload();
+        }
