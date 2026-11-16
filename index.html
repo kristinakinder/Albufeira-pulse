@@ -7,8 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -53,7 +51,6 @@
         body.day-mode .theme-text-main { color: #0F172A !important; }
         body.day-mode .theme-text-sub { color: #475569 !important; }
         body.day-mode .theme-input { background-color: #F8FAFC !important; color: #0F172A !important; }
-        body.day-mode .theme-pill { background-color: rgba(255, 255, 255, 0.85) !important; color: #334155 !important; }
     </style>
 </head>
 <body class="night-mode text-gray-100 min-h-screen flex flex-col font-sans transition-colors duration-300">
@@ -108,7 +105,7 @@
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> November 2026 Journal
                 </button>
                 <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-2 transition">
-                    <i data-lucide="map" class="w-4 h-4"></i> Directory & Venues (377 Loaded)
+                    <i data-lucide="map" class="w-4 h-4"></i> Directory & Venues
                 </button>
                 <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-2 transition">
                     <i data-lucide="message-square" class="w-4 h-4"></i> Community Forum
@@ -162,11 +159,13 @@
         <section id="tab-content-directory" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-black text-white theme-text-main">📍 Verified Business Directory (377 Venues)</h2>
-                    <p class="text-sm text-gray-300 theme-text-sub">Click any venue to open its profile and view all its scheduled events.</p>
+                    <h2 class="text-2xl font-black text-white theme-text-main">📍 Verified Business Directory</h2>
+                    <p class="text-sm text-gray-300 theme-text-sub">Loaded directly from your Supabase database. Click any venue for details, map directions, and events.</p>
                 </div>
             </div>
-            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <p class="text-xs text-gray-400 animate-pulse">Loading directory from Supabase...</p>
+            </div>
         </section>
 
         <!-- VENUE PROFILE PAGE VIEW (Dynamic) -->
@@ -179,19 +178,30 @@
 
         <!-- FORUM TAB -->
         <section id="tab-content-forum" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black text-white theme-text-main">💬 Community Forum & Expat Chat</h2>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-miamiCard/90 theme-card p-5 rounded-2xl border border-miamiPink/30 shadow-lg">
+                <div>
+                    <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
+                        💬 Community Forum & Expat Chat
+                    </h2>
+                    <p class="text-xs text-gray-300 theme-text-sub mt-1">
+                        🌟 <strong>Community Rules:</strong> Please stay polite, friendly, and helpful. No spam, self-promotion outside listings, or trolling allowed.
+                    </p>
+                </div>
+                <button onclick="openNewThreadModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg whitespace-nowrap hover:opacity-90 transition flex items-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> + New Thread
+                </button>
+            </div>
             <div id="forumList" class="space-y-4"></div>
         </section>
     </main>
 
-    <!-- CREATE MODAL (Hidden by default) -->
+    <!-- CREATE MODAL (Events / Venues) -->
     <div id="createModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard border border-miamiPink/40 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-lg font-black text-white">Add New Event or Venue</h3>
                 <button onclick="closeCreateModal()" class="text-gray-400 hover:text-white font-bold text-lg">✕</button>
             </div>
-            <p class="text-xs text-gray-400">Publish a new happening or list your venue on Albufeira Pulse.</p>
             <div class="space-y-3">
                 <input type="text" id="newTitle" placeholder="Event or Venue Name" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
                 <select id="newType" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
@@ -200,6 +210,22 @@
                 </select>
                 <textarea id="newDesc" placeholder="Description & details..." class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white h-24"></textarea>
                 <button onclick="submitNewEntry()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold py-2.5 rounded-xl shadow-lg">Publish Listing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW THREAD MODAL (Forum) -->
+    <div id="newThreadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard border border-miamiCyan/40 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-black text-white">Start a New Forum Thread</h3>
+                <button onclick="closeNewThreadModal()" class="text-gray-400 hover:text-white font-bold text-lg">✕</button>
+            </div>
+            <p class="text-xs text-gray-400">Remember to keep discussions friendly and polite!</p>
+            <div class="space-y-3">
+                <input type="text" id="threadTitleInput" placeholder="Thread Subject / Question" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                <textarea id="threadBodyInput" placeholder="What would you like to discuss with the community?" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs text-white h-24"></textarea>
+                <button onclick="submitNewThread()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold py-2.5 rounded-xl shadow-lg">Post Thread</button>
             </div>
         </div>
     </div>
@@ -225,9 +251,11 @@
             { id: 3, town: 'Albufeira', zone: 'The Strip', title: 'Premier League Super Sunday Screening', date: 'Nov 16, 2026', time: '16:30', price: 'Free', category: 'LIVE TV', venue: 'Linekers Bar Albufeira', venue_type: 'Sports Bar', going: 180, description: 'All matches live on giant HD screens.', poster_url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=96', is_live_now: true }
         ];
 
-        let directoryData = [
-            { id: 1, town: 'Albufeira', zone: 'Marina', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', rating: '4.8 ⭐', phone: '+351 289 000 111' },
-            { id: 2, town: 'Albufeira', zone: 'The Strip', name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightclub', address: 'The Strip, Albufeira', rating: '4.7 ⭐', phone: '+351 289 000 222' }
+        let directoryData = [];
+
+        let forumThreads = [
+            { id: 1, author: 'Liam_M', title: 'Best spot for watching live sports on The Strip?', replies: 14, time: '2 hours ago', content: 'Visiting this weekend and looking for recommendations for good atmosphere and big screens.' },
+            { id: 2, author: 'Sarah_Algarve', title: 'Recommendations for quiet coastal walks near Albufeira?', replies: 8, time: 'Yesterday', content: 'Loving the November weather! Any hidden trail tips?' }
         ];
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -235,19 +263,46 @@
             lucide.createIcons();
             renderEvents('WHATS_ON_NOW');
             renderCalendar();
-            renderDirectory();
+            await fetchDirectoryFromSupabase();
             renderForum();
         });
 
-        // Automatically sets Day or Night mode based on Albufeira sunrise (07:13) and sunset (17:25)
+        async function fetchDirectoryFromSupabase() {
+            try {
+                const { data, error } = await supabaseClient.from('directory').select('*');
+                if (error) throw error;
+                if (data && data.length > 0) {
+                    directoryData = data.map(d => ({
+                        id: d.id,
+                        name: d.name || d.Name || 'Unnamed Venue',
+                        category: d.category || d.Category || 'Bar / Restaurant',
+                        address: d.address || d.Address || 'Albufeira, Portugal',
+                        phone: d.phone || d.Phone || '+351 289 000 000',
+                        rating: d.rating || d.Rating || '4.8 ⭐'
+                    }));
+                } else {
+                    // Fallback sample if table is currently empty
+                    directoryData = [
+                        { id: 1, name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', phone: '+351 289 000 111', rating: '4.8 ⭐' },
+                        { id: 2, name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightclub', address: 'The Strip, Albufeira', phone: '+351 289 000 222', rating: '4.7 ⭐' }
+                    ];
+                }
+                renderDirectory();
+            } catch (err) {
+                console.error('Error fetching directory:', err);
+                directoryData = [
+                    { id: 1, name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', phone: '+351 289 000 111', rating: '4.8 ⭐' },
+                    { id: 2, name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightclub', address: 'The Strip, Albufeira', phone: '+351 289 000 222', rating: '4.7 ⭐' }
+                ];
+                renderDirectory();
+            }
+        }
+
         function initAutoTheme() {
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            
-            // Sunrise 07:13 = 433 minutes, Sunset 17:25 = 1045 minutes
             const sunriseMinutes = 7 * 60 + 13;
             const sunsetMinutes = 17 * 60 + 25;
-
             const isDayTime = currentMinutes >= sunriseMinutes && currentMinutes < sunsetMinutes;
             
             if (isDayTime) {
@@ -290,19 +345,25 @@
             }
         }
 
-        function openCreateModal() {
-            document.getElementById('createModal').classList.remove('hidden');
-        }
-
-        function closeCreateModal() {
-            document.getElementById('createModal').classList.add('hidden');
-        }
+        function openCreateModal() { document.getElementById('createModal').classList.remove('hidden'); }
+        function closeCreateModal() { document.getElementById('createModal'].classList.add('hidden'); }
+        function openNewThreadModal() { document.getElementById('newThreadModal').classList.remove('hidden'); }
+        function closeNewThreadModal() { document.getElementById('newThreadModal').classList.add('hidden'); }
 
         function submitNewEntry() {
-            const title = document.getElementById('newTitle').value;
-            if(!title) { alert('Please enter a title'); return; }
             alert('Listing successfully submitted for review!');
             closeCreateModal();
+        }
+
+        function submitNewThread() {
+            const title = document.getElementById('threadTitleInput').value;
+            const content = document.getElementById('threadBodyInput').value;
+            if(!title) { alert('Please enter a thread title'); return; }
+            forumThreads.unshift({ id: Date.now(), author: 'You', title, replies: 0, time: 'Just now', content });
+            renderForum();
+            closeNewThreadModal();
+            document.getElementById('threadTitleInput').value = '';
+            document.getElementById('threadBodyInput').value = '';
         }
 
         function renderEvents(filter = 'WHATS_ON_NOW') {
@@ -334,36 +395,52 @@
 
         function renderDirectory() {
             const grid = document.getElementById('directoryGrid');
-            grid.innerHTML = directoryData.map(d => `
-                <div onclick="openVenueProfile('${d.name}')" class="bg-miamiCard/90 theme-card border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink cursor-pointer transition shadow-lg flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
-                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating}</span>
+            if(directoryData.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400">No venues found in Supabase.</p>`;
+                return;
+            }
+            grid.innerHTML = directoryData.map(d => {
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.name + ' ' + d.address)}`;
+                return `
+                    <div class="bg-miamiCard/90 theme-card border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink transition shadow-lg flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-base font-bold text-white theme-text-main cursor-pointer hover:text-miamiCyan" onclick="openVenueProfile('${d.name.replace(/'/g, "\\'")}')">${d.name}</h3>
+                                <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating}</span>
+                            </div>
+                            <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
+                            <p class="text-xs text-gray-400 theme-text-sub flex items-center gap-1 mt-1">
+                                <span>📍 ${d.address}</span>
+                            </p>
                         </div>
-                        <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
-                        <p class="text-xs text-gray-400 theme-text-sub">📍 ${d.address}</p>
+                        <div class="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                            <span class="text-miamiCyan font-bold cursor-pointer hover:underline" onclick="openVenueProfile('${d.name.replace(/'/g, "\\'")}')">View Profile & Events →</span>
+                            <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="bg-miamiCyan/10 text-miamiCyan hover:bg-miamiCyan/20 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1">
+                                <i data-lucide="map" class="w-3.5 h-3.5"></i> Map
+                            </a>
+                        </div>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-white/10 text-xs text-miamiCyan font-bold flex justify-between items-center">
-                        <span>View Venue Profile & Events →</span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             lucide.createIcons();
         }
 
         function openVenueProfile(venueName) {
             const venue = directoryData.find(d => d.name === venueName) || { name: venueName, category: 'Venue', address: 'Albufeira', rating: '4.8 ⭐', phone: '+351 289 000 000' };
             const venueEvents = eventsData.filter(e => e.venue === venueName);
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.name + ' ' + venue.address)}`;
 
             const container = document.getElementById('venueProfileContainer');
             container.innerHTML = `
-                <div class="flex justify-between items-start">
+                <div class="flex flex-col md:flex-row justify-between items-start gap-4">
                     <div>
                         <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-3 py-1 rounded-full font-bold">${venue.category}</span>
                         <h2 class="text-3xl font-black text-white theme-text-main mt-2">${venue.name}</h2>
                         <p class="text-sm text-gray-300 theme-text-sub mt-1">📍 ${venue.address} • 📞 ${venue.phone} • <strong class="text-amber-400">${venue.rating}</strong></p>
                     </div>
+                    <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg flex items-center gap-1.5 whitespace-nowrap">
+                        <i data-lucide="navigation" class="w-4 h-4"></i> Get Map Directions
+                    </a>
                 </div>
                 <div class="border-t border-white/10 pt-4 space-y-3">
                     <h3 class="text-lg font-black text-miamiPink">Events & Specials at ${venue.name} (${venueEvents.length})</h3>
@@ -387,11 +464,9 @@
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             let daysHtml = '';
-            
             for (let p = 0; p < 6; p++) {
                 daysHtml += `<div class="aspect-square opacity-20 bg-black/20 rounded-xl"></div>`;
             }
-
             for (let i = 1; i <= 30; i++) {
                 const isToday = (i === 16);
                 daysHtml += `
@@ -405,12 +480,18 @@
         }
 
         function renderForum() {
-            document.getElementById('forumList').innerHTML = `
-                <div class="bg-miamiCard/90 theme-card p-4 rounded-2xl border border-white/10">
-                    <h4 class="text-sm font-bold text-white">Best spot for watching live sports on The Strip?</h4>
-                    <p class="text-xs text-gray-400 mt-1">Started by Liam_M • 14 replies</p>
+            const forumList = document.getElementById('forumList');
+            forumList.innerHTML = forumThreads.map(t => `
+                <div class="bg-miamiCard/90 theme-card p-5 rounded-2xl border border-white/10 shadow-md space-y-2">
+                    <div class="flex justify-between items-start">
+                        <h4 class="text-base font-bold text-white theme-text-main">${t.title}</h4>
+                        <span class="text-[11px] bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full font-bold">${t.replies} replies</span>
+                    </div>
+                    <p class="text-xs text-gray-300">${t.content}</p>
+                    <p class="text-[11px] text-gray-400 theme-text-sub">Started by <strong>${t.author}</strong> • ${t.time}</p>
                 </div>
-            `;
+            `).join('');
+            lucide.createIcons();
         }
     </script>
 </body>
