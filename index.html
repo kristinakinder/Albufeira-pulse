@@ -81,9 +81,6 @@
                     </span>
                     <input type="text" id="townInputFilter" value="Albufeira" oninput="changeTown(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 w-32">
                 </div>
-                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 theme-input text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 flex items-center gap-1.5">
-                    <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> <span id="btnLoginText">Login</span>
-                </button>
             </div>
         </div>
 
@@ -117,9 +114,6 @@
                     <i data-lucide="message-square" class="w-4 h-4"></i> Community Forum
                 </button>
             </div>
-            <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg flex items-center gap-1.5 whitespace-nowrap">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event or Venue
-            </button>
         </div>
     </header>
 
@@ -135,7 +129,7 @@
                         </h2>
                         <p class="text-sm text-gray-300 theme-text-sub">Today is Monday, Nov 16, 2026. Explore live happenings across Algarve zones.</p>
                     </div>
-                    <button onclick="filterEvents('WHATS_ON_NOW')" class="px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg animate-pulse flex items-center gap-1.5">
+                    <button onclick="renderEvents('WHATS_ON_NOW')" class="px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg animate-pulse flex items-center gap-1.5">
                         <i data-lucide="zap" class="w-4 h-4"></i> WHAT'S ON NOW (NOV 16)
                     </button>
                 </div>
@@ -149,9 +143,9 @@
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                            <i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Calendar (Today: Mon, Nov 16)
+                            <i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Journal (Today: Mon, Nov 16)
                         </h2>
-                        <p class="text-xs text-gray-400 theme-text-sub">Click any date to view events or upload party photos.</p>
+                        <p class="text-xs text-gray-400 theme-text-sub">Click any date to view scheduled events.</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
@@ -202,7 +196,6 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentTown = 'Albufeira';
         let eventsData = [
             { id: 1, town: 'Albufeira', zone: 'Marina', title: 'Sunset Cocktails & 2-for-1 Happy Hour', date: 'Nov 16, 2026', time: '17:00', price: 'Free', category: 'HAPPY HOUR & SPECIALS', venue: 'Papagayo Beach Bar', venue_type: 'Beach Club', going: 245, description: 'Buy one get one free on all mojitos during golden hour at the Marina.', poster_url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=96', is_live_now: true },
             { id: 2, town: 'Albufeira', zone: 'Marina', title: 'Acoustic Sunset Sessions', date: 'Nov 16, 2026', time: '19:00', price: 'Free', category: 'LIVE MUSIC', venue: 'Papagayo Beach Bar', venue_type: 'Beach Club', going: 110, description: 'Live guitar performance right on the Marina waterfront.', poster_url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=96', is_live_now: true },
@@ -227,6 +220,13 @@
                 document.getElementById('tab-content-' + t).classList.add('hidden');
             });
             document.getElementById('tab-content-' + tab).classList.remove('hidden');
+            
+            // Highlight active tab button
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('bg-miamiPink', 'text-white'));
+            const activeBtn = document.getElementById('btn-' + tab);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-miamiPink', 'text-white');
+            }
         }
 
         function renderEvents(filter = 'WHATS_ON_NOW') {
@@ -311,12 +311,18 @@
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             let daysHtml = '';
+            
+            // Nov 1, 2026 is a Sunday. In a Monday-start grid, add 6 leading blanks.
+            for (let p = 0; p < 6; p++) {
+                daysHtml += `<div class="aspect-square opacity-20 bg-black/20 rounded-xl"></div>`;
+            }
+
             for (let i = 1; i <= 30; i++) {
                 const isToday = (i === 16);
                 daysHtml += `
-                    <div class="aspect-square bg-black/50 theme-input border ${isToday ? 'border-miamiPink bg-miamiPink/20' : 'border-white/10'} rounded-xl p-2 flex flex-col justify-between">
-                        <span class="text-xs font-bold ${isToday ? 'text-miamiPink font-black' : 'text-gray-400'}">${i} ${isToday ? '(Today)' : ''}</span>
-                        <span class="text-[10px] text-miamiCyan">${i === 16 ? '3 Events' : ''}</span>
+                    <div class="aspect-square bg-black/50 theme-input border ${isToday ? 'border-miamiPink bg-miamiPink/20 ring-2 ring-miamiPink' : 'border-white/10'} rounded-xl p-2 flex flex-col justify-between transition hover:border-miamiCyan cursor-pointer">
+                        <span class="text-xs font-bold ${isToday ? 'text-miamiPink font-black' : 'text-gray-300'}">${i} ${isToday ? '★ Today' : ''}</span>
+                        <span class="text-[10px] text-miamiCyan font-semibold">${i === 16 ? '3 Events' : ''}</span>
                     </div>
                 `;
             }
