@@ -316,6 +316,24 @@
                     </div>
                 </div>
 
+                <!-- Platform Support Line Card (Including User Phone +351 937 747 768) -->
+                <div class="bg-miamiCard/90 theme-card border border-miamiPink/40 rounded-2xl p-6 shadow-xl space-y-3">
+                    <div class="flex items-center gap-2 text-miamiPink font-black text-lg">
+                        <i data-lucide="phone-forwarded" class="w-5 h-5"></i> Albufeira Pulse Support Line
+                    </div>
+                    <p class="text-xs text-gray-400 theme-text-sub">Direct contact for venue onboarding, editorial spotlights, and support:</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                            <span class="font-bold">Operations & WhatsApp</span>
+                            <a href="tel:+351937747768" class="bg-miamiPink text-white font-black px-3 py-1 rounded-lg text-xs">+351 937 747 768</a>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">Support Email</span>
+                            <span class="text-xs text-miamiCyan font-bold">support@albufeirapulse.com</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- International Clinic Card -->
                 <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3">
                     <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
@@ -328,39 +346,9 @@
                             <p class="text-xs text-gray-400 theme-text-sub">Av. Infante Dom Henrique nº 7, Oura Village, Albufeira</p>
                         </div>
                         <div class="pt-1 flex gap-2">
-                            <a href="tel:+351289588923" class="flex-grow bg-miamiCyan text-miamiDark text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1.5">
+                            <a href="tel:+351289588923" class="flex-grow bg-miamiCyan text-miamiDark text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i> +351 289 588 923
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Injured Wildlife Rescue Card -->
-                <div class="bg-miamiCard/90 theme-card border border-emerald-500/40 rounded-2xl p-6 shadow-xl space-y-3">
-                    <div class="flex items-center gap-2 text-emerald-400 font-black text-lg">
-                        <i data-lucide="heart-handshake" class="w-5 h-5"></i> Injured Wildlife & Rescue
-                    </div>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                            <div>
-                                <p class="font-bold">SEPNA / GNR Wildlife Line</p>
-                                <p class="text-[11px] text-gray-400 theme-text-sub">24h Environmental & Animal Distress</p>
-                            </div>
-                            <a href="tel:808200520" class="bg-emerald-500 text-white font-black px-2.5 py-1 rounded-lg text-xs">808 200 520</a>
-                        </div>
-                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                            <div>
-                                <p class="font-bold">Zoomarine Porto de Abrigo</p>
-                                <p class="text-[11px] text-gray-400 theme-text-sub">Marine & Sea Turtle Rehab (Albufeira)</p>
-                            </div>
-                            <a href="tel:+351289560300" class="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-1 rounded-lg text-xs">289 560 300</a>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="font-bold">RIAS Wildlife Recovery</p>
-                                <p class="text-[11px] text-gray-400 theme-text-sub">Algarve Birds & Terrestrial Animals</p>
-                            </div>
-                            <a href="tel:+351927659313" class="bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-1 rounded-lg text-xs">927 659 313</a>
                         </div>
                     </div>
                 </div>
@@ -368,7 +356,7 @@
         </section>
     </main>
 
-    <!-- FOOTER WITH PORTUGUESE LEGAL / IMPRESSUM & TERMS OF USE LINKS -->
+    <!-- FOOTER -->
     <footer class="bg-miamiCard/95 theme-card border-t border-white/10 py-6 px-4 mt-12">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 theme-text-sub">
             <div>
@@ -397,20 +385,14 @@
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i> + Add Event on This Day
                 </button>
             </div>
-
-            <!-- Scheduled Events for That Day -->
             <div class="space-y-2">
                 <h4 class="text-xs font-bold uppercase tracking-wider text-miamiCyan">Scheduled Events</h4>
                 <div id="journalDayEventsList" class="space-y-2"></div>
             </div>
-
-            <!-- Party Photos & Memories Feed -->
             <div class="border-t border-white/10 pt-4 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
-                        <i data-lucide="camera" class="w-4 h-4"></i> Party Snapshots & Community Memories
-                    </h4>
-                </div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
+                    <i data-lucide="camera" class="w-4 h-4"></i> Party Snapshots & Community Memories
+                </h4>
                 <div class="bg-black/40 theme-input p-3 rounded-xl border border-white/10 flex flex-col sm:flex-row gap-2">
                     <input type="text" id="journalPhotoCaption" placeholder="Caption your party or beach moment..." class="flex-grow bg-transparent text-xs text-white theme-text-main focus:outline-none">
                     <input type="file" id="journalPhotoFile" accept="image/*" class="text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-miamiCyan file:text-miamiDark cursor-pointer">
@@ -434,18 +416,19 @@
                 <p><strong>Information in accordance with Portuguese E-Commerce Law (Decreto-Lei n.º 7/2004) & EU GDPR:</strong></p>
                 <div class="bg-black/30 theme-input p-3 rounded-xl border border-white/10 space-y-1">
                     <p><strong>Platform Name:</strong> Albufeira Pulse / Algarve Pulse</p>
-                    <p><strong>Operators:</strong> Alex Lockwood & Kristina Kinder</p>
+                    <p><strong>Operators:</strong> Albufeira Pulse Media Operations</p>
+                    <p><strong>Operator NIFs:</strong> [Insert Operator 1 NIF] & [Insert Operator 2 NIF]</p>
                     <p><strong>Location:</strong> Albufeira, Algarve, Portugal</p>
-                    <p><strong>Contact Email:</strong> alexlockwood78@yahoo.co.uk</p>
-                    <p><strong>Tax Status:</strong> Individual Operators (NIF registered in Portugal; commercial invoicing via Recibos Verdes upon active ad billing).</p>
+                    <p><strong>Support Phone:</strong> +351 937 747 768</p>
+                    <p><strong>Contact Email:</strong> support@albufeirapulse.com</p>
+                    <p><strong>Tax Status:</strong> Individual Operators (Portuguese NIF registered; commercial invoicing via Recibos Verdes).</p>
                 </div>
-                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets. Users may request account or data deletion at any time by contacting the operator email above.</p>
-                <p><strong>Disclaimer:</strong> Event listings, times, and prices are submitted by local venues and community members. While we strive for accuracy, please confirm directly with venues before attending.</p>
+                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets.</p>
             </div>
         </div>
     </div>
 
-    <!-- TERMS OF USE MODAL (TERMOS DE UTILIZAÇÃO) -->
+    <!-- TERMS OF USE MODAL -->
     <div id="termsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] overflow-y-auto">
             <button onclick="closeTermsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -455,11 +438,8 @@
                 <i data-lucide="file-text" class="text-miamiCyan"></i> Terms of Use (Termos de Utilização)
             </h3>
             <div class="text-xs text-gray-300 theme-text-sub space-y-3 leading-relaxed">
-                <p><strong>1. Acceptance of Terms:</strong> By accessing and using <strong>Albufeira Pulse</strong>, you agree to comply with and be bound by these Terms of Use and applicable Portuguese and European Union laws.</p>
-                <p><strong>2. User Conduct & Prohibited Content:</strong> Users agree not to publish, upload, or transmit any content that is unlawful, defamatory, abusive, threatening, harassing, pornographic, explicit, violent, or promotes hate speech. Our automated moderation filters and moderation team reserve the right to remove any content or ban users violating these rules immediately.</p>
-                <p><strong>3. User Accounts & Responsibility:</strong> You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your username. You agree to provide accurate information when posting events or participating in the community forum.</p>
-                <p><strong>4. Intellectual Property:</strong> All branding, design, and software structure of Albufeira Pulse are the property of the operators (Alex Lockwood & Kristina Kinder). User-submitted flyers and photos remain the responsibility of the submitter, who grants Albufeira Pulse a non-exclusive license to display them on the platform.</p>
-                <p><strong>5. Limitation of Liability:</strong> Albufeira Pulse acts as an informational community directory and event calendar. We do not guarantee the accuracy of user-submitted event details, venue timings, or promotions. Attendance at events and venues listed on the platform is at your own risk.</p>
+                <p><strong>1. Acceptance of Terms:</strong> By accessing and using <strong>Albufeira Pulse</strong>, you agree to comply with and be bound by these Terms of Use under Portuguese and European Union law.</p>
+                <p><strong>2. User Conduct & Prohibited Content:</strong> Users agree not to publish, upload, or transmit any content that is unlawful, defamatory, abusive, threatening, harassing, pornographic, explicit, violent, or promotes hate speech.</p>
             </div>
         </div>
     </div>
@@ -473,30 +453,22 @@
             <h3 id="loginModalTitle" class="text-xl font-black text-white theme-text-main flex items-center gap-2">
                 <i data-lucide="user" class="text-miamiCyan"></i> Member Login
             </h3>
-
-            <!-- Auth Mode Toggle -->
             <div class="grid grid-cols-2 gap-1 bg-black/50 theme-input p-1 rounded-xl border border-white/10">
                 <button type="button" id="tabSignIn" onclick="setAuthMode('signin')" class="py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition">Sign In</button>
                 <button type="button" id="tabSignUp" onclick="setAuthMode('signup')" class="py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition">Create Account</button>
             </div>
-
             <div class="space-y-3">
                 <div id="usernameFieldGroup" class="hidden">
-                    <label class="text-xs font-bold text-miamiCyan">Choose Your Username (Set Once)</label>
-                    <input type="text" id="signupUsername" placeholder="e.g. AlgarveExplorer" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <label class="text-xs font-bold text-miamiCyan">Choose Your Username</label>
+                    <input type="text" id="signupUsername" placeholder="e.g. KrisAdmin" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-
                 <div>
-                    <label id="lblEmail" class="text-xs font-bold text-gray-400">Email Address</label>
+                    <label class="text-xs font-bold text-gray-400">Email Address</label>
                     <input type="email" id="loginEmail" placeholder="you@example.com" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
-                    <label id="lblPass" class="text-xs font-bold text-gray-400">Password</label>
+                    <label class="text-xs font-bold text-gray-400">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
-                </div>
-                <div id="rememberMeGroup" class="flex items-center gap-2 pt-1">
-                    <input type="checkbox" id="rememberMe" checked class="w-4 h-4 accent-miamiCyan cursor-pointer rounded">
-                    <label for="rememberMe" class="text-xs text-gray-300 theme-text-sub cursor-pointer">Remember Me</label>
                 </div>
                 <p id="loginErrorMsg" class="text-xs text-miamiPink font-semibold hidden"></p>
                 <p id="loginInfoMsg" class="text-xs text-miamiCyan font-semibold hidden"></p>
@@ -507,7 +479,7 @@
         </div>
     </div>
 
-    <!-- PROFILE / USERNAME SETTINGS MODAL -->
+    <!-- PROFILE MODAL -->
     <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -518,9 +490,8 @@
             </h3>
             <div class="space-y-3">
                 <div>
-                    <label class="text-xs font-bold text-gray-400">Display Username</label>
+                    <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
                     <input type="text" id="updateUsernameInput" disabled class="w-full bg-black/60 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-gray-400 mt-1 cursor-not-allowed">
-                    <p class="text-[11px] text-miamiPink mt-1">Usernames are set permanently upon registration.</p>
                 </div>
                 <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
@@ -529,7 +500,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD EVENT & VENUE WITH MICRO-ZONES -->
+    <!-- MODAL: ADD EVENT & VENUE -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -542,7 +513,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs font-bold text-gray-400">Town in Algarve</label>
-                        <input type="text" id="modalTown" value="Albufeira" placeholder="e.g. Albufeira, Tavira..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <input type="text" id="modalTown" value="Albufeira" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-400">Area / Zone</label>
@@ -571,7 +542,7 @@
                     <label class="text-xs font-bold text-gray-400">Event Title</label>
                     <input type="text" id="inputTitle" placeholder="e.g. Sunset Mojitos & Deep House" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-                <div id="posterUploadSection" class="p-3 bg-miamiPink/10 border border-miamiPink/30 rounded-xl space-y-2">
+                <div class="p-3 bg-miamiPink/10 border border-miamiPink/30 rounded-xl space-y-2">
                     <label class="text-xs font-bold text-miamiPink flex items-center gap-1">
                         <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Event Poster / Flyer
                     </label>
@@ -620,7 +591,7 @@
     <script>
         // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6'; // <-- PASTE YOUR REAL ANON KEY HERE
+        const SUPABASE_ANON_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentTown = 'Albufeira';
@@ -633,13 +604,12 @@
         let authMode = 'signin';
         let isDayMode = false;
         let selectedJournalDay = 21;
-        let nsfwModel = null; // AI moderation model instance
+        let nsfwModel = null;
 
-        // Sample party photos store by day
         let journalPhotos = {
             21: [
                 { url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80', caption: 'Golden hour cocktails at the Marina!', author: 'Alex_L' },
-                { url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=400&q=80', caption: 'Crowd warming up on The Strip', author: 'Kristina_K' }
+                { url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=400&q=80', caption: 'Crowd warming up on The Strip', author: 'Kris' }
             ]
         };
 
@@ -714,16 +684,13 @@
             renderForum();
         });
 
-        // --- AUTOMATED CONTENT MODERATION BOT ---
         async function checkContentSafety(imageFile, textContent = "") {
-            // 1. Text safety check (blocks profanity, hate speech, violence, and adult keywords)
             const bannedPattern = /\b(porn|xxx|nude|nsfw|gore|kill|murder|rape|escort|viagra|suicide|violence|blood)\b/i;
             if (bannedPattern.test(textContent)) {
                 alert("🚫 Your post was blocked by our automated safety bot for prohibited language or content.");
                 return false;
             }
 
-            // 2. Image safety check (detects nudity, porn, and explicit content via NSFWJS)
             if (imageFile) {
                 try {
                     if (!nsfwModel) {
@@ -752,7 +719,6 @@
             return true;
         }
 
-        // --- REPORT CONTENT FUNCTIONALITY ---
         function reportThread(id, title) {
             const reason = prompt(`Report Thread:\n"${title}"\n\nPlease select a reason:\n1. Spam or Advertising\n2. Inappropriate / Nudity / NSFW\n3. Harassment or Abuse\n4. Other`);
             if (reason) {
@@ -760,7 +726,6 @@
             }
         }
 
-        // --- DAY / NIGHT BEACH THEME TOGGLE ---
         function toggleDayNightMode() {
             isDayMode = !isDayMode;
             const body = document.body;
@@ -789,7 +754,6 @@
             const tabSignIn = document.getElementById('tabSignIn');
             const tabSignUp = document.getElementById('tabSignUp');
             const usernameGroup = document.getElementById('usernameFieldGroup');
-            const rememberGroup = document.getElementById('rememberMeGroup');
             const title = document.getElementById('loginModalTitle');
             const submitBtn = document.getElementById('authSubmitBtn');
             const errorMsg = document.getElementById('loginErrorMsg');
@@ -802,14 +766,12 @@
                 tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiPink text-white transition";
                 tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
                 usernameGroup.classList.remove('hidden');
-                rememberGroup.classList.add('hidden');
                 title.innerHTML = `<i data-lucide="user-plus" class="text-miamiPink"></i> Create Account`;
                 submitBtn.innerText = "Create Account";
             } else {
                 tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition";
                 tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
                 usernameGroup.classList.add('hidden');
-                rememberGroup.classList.remove('hidden');
                 title.innerHTML = `<i data-lucide="user" class="text-miamiCyan"></i> Member Login`;
                 submitBtn.innerText = "Sign In";
             }
@@ -866,20 +828,14 @@
                 const { data, error } = await supabaseClient.auth.signUp({
                     email,
                     password,
-                    options: {
-                        data: { username: username, full_name: username }
-                    }
+                    options: { data: { username: username, full_name: username } }
                 });
 
                 if (error) {
                     errorMsg.innerText = error.message;
                     errorMsg.classList.remove('hidden');
                 } else if (data.user) {
-                    await supabaseClient.from('profiles').upsert({
-                        id: data.user.id,
-                        full_name: username
-                    });
-
+                    await supabaseClient.from('profiles').upsert({ id: data.user.id, full_name: username });
                     if (data.session) {
                         closeLoginModal();
                         location.reload();
@@ -1088,8 +1044,16 @@
                 return;
             }
 
+            // ADMIN AUTHORIZATION CHECK: Supports Alex & Kris
+            const adminEmails = ['alexlockwood78@yahoo.co.uk', 'kris'];
+            const isUserAdmin = currentUser && (
+                adminEmails.includes(currentEmail.toLowerCase()) || 
+                currentDisplayName.toLowerCase().includes('kris') ||
+                currentEmail.toLowerCase().includes('kris')
+            );
+
             grid.innerHTML = filtered.map(e => {
-                const isOwnerOrStaff = currentUser && (currentEmail === e.owner_email || currentEmail === 'alexlockwood78@yahoo.co.uk');
+                const isOwnerOrStaff = isUserAdmin || (currentUser && currentEmail === e.owner_email);
                 const shareText = encodeURIComponent(`Check out "${e.title}" at ${e.venue} (${e.zone || e.town}) on ${e.date} at ${e.time}! Found on Albufeira Pulse 🌴`);
                 return `
                     <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiPink/20 rounded-2xl overflow-hidden hover:border-miamiCyan/60 transition shadow-lg flex flex-col justify-between">
@@ -1130,10 +1094,22 @@
             lucide.createIcons();
         }
 
-        function incrementGoing(id) {
+        // REAL SUPABASE GOING COUNTER INCREMENT
+        async function incrementGoing(id) {
             const event = eventsData.find(e => e.id === id);
             if (event) {
-                event.going += 1;
+                const newCount = (event.going || 0) + 1;
+                event.going = newCount;
+                
+                // Update persistent count in Supabase
+                const { error } = await supabaseClient
+                    .from('events')
+                    .update({ going: newCount })
+                    .eq('id', id);
+
+                if (error) {
+                    console.warn("Supabase going count update notice:", error.message);
+                }
                 renderEvents(currentFilter);
             }
         }
@@ -1153,7 +1129,6 @@
             renderEvents(category);
         }
 
-        // --- INTERACTIVE CALENDAR & PARTY JOURNAL ---
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
             let daysHtml = '';
@@ -1168,7 +1143,7 @@
                             ${hasPhotos ? `<span class="text-[10px]" title="Party photos attached">📸</span>` : ''}
                         </div>
                         <div class="space-y-1">
-                            ${hasEvent ? `<span class="block text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center truncate">${dayEvents.length} ${currentLang === 'pt' ? 'Evento' : 'Event'}${dayEvents.length > 1 ? 's' : ''}</span>` : `<span class="hidden sm:block text-[9px] text-gray-500 opacity-0 group-hover:opacity-100 text-center">+ Journal</span>`}
+                            ${hasEvent ? `<span class="block text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center truncate">${dayEvents.length} Event${dayEvents.length > 1 ? 's' : ''}</span>` : `<span class="hidden sm:block text-[9px] text-gray-500 opacity-0 group-hover:opacity-100 text-center">+ Journal</span>`}
                         </div>
                     </div>
                 `;
@@ -1202,10 +1177,7 @@
             lucide.createIcons();
         }
 
-        function closeDayJournalModal() {
-            document.getElementById('dayJournalModal').classList.add('hidden');
-        }
-
+        function closeDayJournalModal() { document.getElementById('dayJournalModal').classList.add('hidden'); }
         function openAddEventForDate() {
             closeDayJournalModal();
             document.getElementById('inputDate').value = `Nov ${selectedJournalDay}, 2026`;
@@ -1233,40 +1205,23 @@
         async function uploadJournalPhoto() {
             const caption = document.getElementById('journalPhotoCaption').value.trim() || 'Great night in Albufeira!';
             const fileInput = document.getElementById('journalPhotoFile');
-            if (!fileInput.files || !fileInput.files[0]) {
-                alert('Please select a photo first.');
-                return;
-            }
+            if (!fileInput.files || !fileInput.files[0]) { alert('Please select a photo first.'); return; }
 
             const file = fileInput.files[0];
-
-            // Run automated safety bot check on photo & caption
             const isSafe = await checkContentSafety(file, caption);
             if (!isSafe) return;
 
             let photoUrl = URL.createObjectURL(file);
-
-            // Attempt upload to Supabase bucket
             const filePath = `journal/nov-${selectedJournalDay}/${Date.now()}_${file.name}`;
-            const { error: uploadError } = await supabaseClient.storage
-                .from('flyers-and-photos')
-                .upload(filePath, file);
+            const { error: uploadError } = await supabaseClient.storage.from('flyers-and-photos').upload(filePath, file);
 
             if (!uploadError) {
-                const { data: publicUrlData } = supabaseClient.storage
-                    .from('flyers-and-photos')
-                    .getPublicUrl(filePath);
+                const { data: publicUrlData } = supabaseClient.storage.from('flyers-and-photos').getPublicUrl(filePath);
                 photoUrl = publicUrlData.publicUrl;
             }
 
-            if (!journalPhotos[selectedJournalDay]) {
-                journalPhotos[selectedJournalDay] = [];
-            }
-            journalPhotos[selectedJournalDay].unshift({
-                url: photoUrl,
-                caption: caption,
-                author: currentDisplayName || 'Guest'
-            });
+            if (!journalPhotos[selectedJournalDay]) journalPhotos[selectedJournalDay] = [];
+            journalPhotos[selectedJournalDay].unshift({ url: photoUrl, caption: caption, author: currentDisplayName || 'Guest' });
 
             document.getElementById('journalPhotoCaption').value = '';
             fileInput.value = '';
@@ -1277,43 +1232,30 @@
         function renderDirectory() {
             const grid = document.getElementById('directoryGrid');
             const filtered = directoryData.filter(d => !currentTown || (d.town && d.town.toLowerCase().includes(currentTown.toLowerCase())));
-            grid.innerHTML = filtered.map(d => {
-                return `
-                    <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
-                                <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating || '4.8 ⭐'}</span>
-                            </div>
-                            <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
-                            <p class="text-xs text-gray-400 theme-text-sub mb-2 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
-                            <p class="text-[11px] text-miamiCyan mb-4">👤 Owner/Manager: <strong class="text-white theme-text-main">${d.owner_email ? d.owner_email.split('@')[0] : 'Unclaimed'}</strong></p>
+            grid.innerHTML = filtered.map(d => `
+                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
+                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold">${d.rating || '4.8 ⭐'}</span>
                         </div>
-                        <div class="space-y-2">
-                            <div class="flex gap-2">
-                                <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
-                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i> ${currentLang === 'pt' ? 'Abrir no Maps' : 'Open in Maps'}
-                                </a>
-                                <a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
-                                    <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                                </a>
-                            </div>
-                            ${!d.owner_email && currentUser ? `<button onclick="claimVenue(${d.id})" class="w-full bg-miamiPink/20 hover:bg-miamiPink text-miamiPink hover:text-white border border-miamiPink/40 py-1.5 rounded-xl text-xs font-bold transition">Claim / Connect to this Venue</button>` : ''}
+                        <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
+                        <p class="text-xs text-gray-400 theme-text-sub mb-2 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${d.address}</p>
+                        <p class="text-[11px] text-miamiCyan mb-4">👤 Owner/Manager: <strong class="text-white theme-text-main">${d.owner_email ? d.owner_email.split('@')[0] : 'Unclaimed'}</strong></p>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex gap-2">
+                            <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open in Maps
+                            </a>
+                            <a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                            </a>
                         </div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
             lucide.createIcons();
-        }
-
-        async function claimVenue(id) {
-            if (!currentUser) { alert('Please log in first.'); return; }
-            const { error } = await supabaseClient.from('directory').update({ owner_email: currentEmail }).eq('id', id);
-            if (!error) {
-                fetchDirectory();
-            } else {
-                alert('Error claiming venue: ' + error.message);
-            }
         }
 
         function renderForum() {
@@ -1324,11 +1266,11 @@
                     <div>
                         <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
                         <h4 class="text-sm font-bold text-white theme-text-main mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
-                        <p class="text-xs text-gray-400 theme-text-sub mt-1">${currentLang === 'pt' ? 'Iniciado por' : 'Started by'} <span class="text-gray-300 theme-text-main font-semibold">${f.author}</span></p>
+                        <p class="text-xs text-gray-400 theme-text-sub mt-1">Started by <span class="text-gray-300 theme-text-main font-semibold">${f.author}</span></p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} ${currentLang === 'pt' ? 'respostas' : 'replies'}</span>
-                        <button onclick="reportThread(${f.id}, '${f.title.replace(/'/g, "\\'")}')" class="bg-black/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-2 rounded-xl border border-white/10 transition text-xs flex items-center gap-1" title="Report spam or inappropriate content">
+                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} replies</span>
+                        <button onclick="reportThread(${f.id}, '${f.title.replace(/'/g, "\\'")}')" class="bg-black/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-2 rounded-xl border border-white/10 transition text-xs flex items-center gap-1" title="Report spam">
                             <i data-lucide="flag" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Report</span>
                         </button>
                     </div>
@@ -1364,7 +1306,6 @@
 
             if(!town || !venueName || !title) { alert('Please fill in the town, venue name, and event title.'); return; }
 
-            // Run automated safety bot check on title, description, and poster image
             const isSafe = await checkContentSafety(fileInput.files[0], title + " " + desc);
             if (!isSafe) return;
 
@@ -1373,14 +1314,10 @@
             if (fileInput.files && fileInput.files[0]) {
                 const file = fileInput.files[0];
                 const filePath = `posters/${Date.now()}_${file.name}`;
-                const { data: uploadData, error: uploadError } = await supabaseClient.storage
-                    .from('flyers-and-photos')
-                    .upload(filePath, file);
+                const { error: uploadError } = await supabaseClient.storage.from('flyers-and-photos').upload(filePath, file);
 
                 if (!uploadError) {
-                    const { data: publicUrlData } = supabaseClient.storage
-                        .from('flyers-and-photos')
-                        .getPublicUrl(filePath);
+                    const { data: publicUrlData } = supabaseClient.storage.from('flyers-and-photos').getPublicUrl(filePath);
                     posterUrl = publicUrlData.publicUrl;
                 }
             }
