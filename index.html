@@ -157,10 +157,15 @@
 
         <!-- DIRECTORY TAB -->
         <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-miamiCard/90 theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-lg">
                 <div>
                     <h2 class="text-2xl font-black text-white theme-text-main">📍 Verified Business Directory</h2>
                     <p class="text-sm text-gray-300 theme-text-sub">Loaded from Supabase. Click any venue for details, map directions, and events.</p>
+                </div>
+                <!-- Find Venue Search Bar -->
+                <div class="flex items-center gap-2 bg-black/40 theme-input p-2 rounded-xl border border-miamiCyan/40 w-full md:w-80">
+                    <i data-lucide="search" class="w-4 h-4 text-miamiCyan ml-1"></i>
+                    <input type="text" id="venueSearchInput" oninput="renderDirectory()" placeholder="Find venue (name, category...)" class="bg-transparent text-xs font-bold text-white focus:outline-none w-full">
                 </div>
             </div>
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -249,7 +254,6 @@
             { id: 3, town: 'Albufeira', zone: 'The Strip', title: 'Premier League Super Sunday Screening', date: 'Nov 16, 2026', time: '16:30', price: 'Free', category: 'LIVE TV', venue: 'Linekers Bar Albufeira', venue_type: 'Sports Bar', going: 180, description: 'All matches live on giant HD screens.', poster_url: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=600&q=96', is_live_now: true }
         ];
 
-        // Immediate default venues so cards always display instantly
         let directoryData = [
             { id: 1, name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', phone: '+351 289 000 111', rating: '4.8 ⭐' },
             { id: 2, name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightclub', address: 'The Strip, Albufeira', phone: '+351 289 000 222', rating: '4.7 ⭐' }
@@ -265,9 +269,9 @@
             lucide.createIcons();
             renderEvents('WHATS_ON_NOW');
             renderCalendar();
-            renderDirectory(); // Render defaults immediately
+            renderDirectory();
             renderForum();
-            await fetchDirectoryFromSupabase(); // Then fetch live Supabase data
+            await fetchDirectoryFromSupabase();
         });
 
         async function fetchDirectoryFromSupabase() {
@@ -286,7 +290,7 @@
                     renderDirectory();
                 }
             } catch (err) {
-                console.error('Error fetching directory from Supabase, keeping defaults:', err);
+                console.error('Error fetching directory from Supabase:', err);
             }
         }
 
@@ -388,11 +392,22 @@
         function renderDirectory() {
             const grid = document.getElementById('directoryGrid');
             if(!grid) return;
-            if(directoryData.length === 0) {
-                grid.innerHTML = `<p class="text-xs text-gray-400">No venues found.</p>`;
+            
+            const searchInput = document.getElementById('venueSearchInput');
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            
+            const filtered = directoryData.filter(d => 
+                d.name.toLowerCase().includes(query) || 
+                d.category.toLowerCase().includes(query) || 
+                d.address.toLowerCase().includes(query)
+            );
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400 col-span-3">No venues found matching your search.</p>`;
                 return;
             }
-            grid.innerHTML = directoryData.map(d => {
+
+            grid.innerHTML = filtered.map(d => {
                 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.name + ' ' + d.address)}`;
                 return `
                     <div class="bg-miamiCard/90 theme-card border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink transition shadow-lg flex flex-col justify-between">
