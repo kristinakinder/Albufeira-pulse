@@ -114,7 +114,6 @@
                     <i data-lucide="message-square" class="w-4 h-4"></i> Community Forum
                 </button>
             </div>
-            <!-- Restored Create Button -->
             <button onclick="openCreateModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-1.5 whitespace-nowrap hover:opacity-90 transition">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event or Venue
             </button>
@@ -232,12 +231,51 @@
         ];
 
         document.addEventListener("DOMContentLoaded", async () => {
+            initAutoTheme();
             lucide.createIcons();
             renderEvents('WHATS_ON_NOW');
             renderCalendar();
             renderDirectory();
             renderForum();
         });
+
+        // Automatically sets Day or Night mode based on Albufeira sunrise (07:13) and sunset (17:25)
+        function initAutoTheme() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            
+            // Sunrise 07:13 = 433 minutes, Sunset 17:25 = 1045 minutes
+            const sunriseMinutes = 7 * 60 + 13;
+            const sunsetMinutes = 17 * 60 + 25;
+
+            const isDayTime = currentMinutes >= sunriseMinutes && currentMinutes < sunsetMinutes;
+            
+            if (isDayTime) {
+                document.body.classList.remove('night-mode');
+                document.body.classList.add('day-mode');
+                document.getElementById('themeText').innerText = 'Night Mode';
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+            } else {
+                document.body.classList.remove('day-mode');
+                document.body.classList.add('night-mode');
+                document.getElementById('themeText').innerText = 'Day Mode';
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+            }
+        }
+
+        function toggleDayNightMode() {
+            if (document.body.classList.contains('night-mode')) {
+                document.body.classList.remove('night-mode');
+                document.body.classList.add('day-mode');
+                document.getElementById('themeText').innerText = 'Night Mode';
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+            } else {
+                document.body.classList.remove('day-mode');
+                document.body.classList.add('night-mode');
+                document.getElementById('themeText').innerText = 'Day Mode';
+                document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+            }
+        }
 
         function switchTab(tab) {
             ['events', 'calendar', 'directory', 'venue-profile', 'forum'].forEach(t => {
@@ -262,7 +300,6 @@
 
         function submitNewEntry() {
             const title = document.getElementById('newTitle').value;
-            const desc = document.getElementById('newDesc').value;
             if(!title) { alert('Please enter a title'); return; }
             alert('Listing successfully submitted for review!');
             closeCreateModal();
@@ -374,11 +411,6 @@
                     <p class="text-xs text-gray-400 mt-1">Started by Liam_M • 14 replies</p>
                 </div>
             `;
-        }
-
-        function toggleDayNightMode() {
-            document.body.classList.toggle('day-mode');
-            document.body.classList.toggle('night-mode');
         }
     </script>
 </body>
