@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +38,14 @@
         }
         .animate-pulse-color {
             animation: pulseColor 3s infinite ease-in-out;
+        }
+
+        /* Subtle Neon Tagline Glow in Night Mode */
+        body.night-mode .tagline-glow {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.55);
+        }
+        body.day-mode .tagline-glow {
+            text-shadow: none;
         }
 
         /* NIGHT MODE (Default) */
@@ -111,7 +119,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-miamiPink to-miamiCyan bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p id="subtextTitle" class="text-xs text-gray-400 theme-text-sub">The Live Beat of the Algarve</p>
+                    <p id="subtextTitle" class="text-[11px] font-medium tracking-widest uppercase text-miamiCyan/90 theme-text-sub tagline-glow">The Heartbeat of the Algarve</p>
                 </div>
             </div>
 
@@ -134,7 +142,7 @@
                 <div class="flex items-center gap-1 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
                     <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
                     <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
-                        <option value="en">English</option>
+                        <option value="en">English (UK)</option>
                         <option value="pt">Português</option>
                     </select>
                 </div>
@@ -145,7 +153,7 @@
             </div>
         </div>
 
-        <!-- Clean Weather Banner (No Pictograms) -->
+        <!-- Clean Weather Banner -->
         <a id="weatherBannerLink" href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-black/80 hover:bg-black/90 transition backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
             <div class="flex items-center gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan group-hover:underline">
@@ -164,23 +172,29 @@
 
         <!-- Navigation Tabs & Post Button Row -->
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
-            <div class="flex gap-2 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-miamiPink text-white flex items-center gap-2 transition shadow-md shadow-miamiPink/20">
-                    <i data-lucide="calendar" class="w-4 h-4"></i> <span id="tabEventsLbl">Events Calendar</span>
+            <div class="flex gap-1.5 overflow-x-auto">
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> <span id="tabEventsLbl">Events</span>
                 </button>
-                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
+                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> <span id="tabCalendarLbl">Calendar & Journal</span>
                 </button>
-                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory & Maps</span>
+                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory</span>
                 </button>
-                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-2 transition">
-                    <i data-lucide="message-square" class="w-4 h-4"></i> <span id="tabForumLbl">Community Forum</span>
+                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <i data-lucide="newspaper" class="w-4 h-4"></i> <span id="tabArticlesLbl">Articles</span>
                 </button>
-                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-sky-400 hover:bg-white/5 flex items-center gap-2 transition">
+                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <i data-lucide="tag" class="w-4 h-4"></i> <span id="tabClassifiedsLbl">Classifieds</span>
+                </button>
+                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                    <i data-lucide="message-square" class="w-4 h-4"></i> <span id="tabForumLbl">Forum</span>
+                </button>
+                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="external-link" class="w-4 h-4"></i> <span id="tabLinksLbl">Essential Links</span>
                 </button>
-                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold text-amber-400 hover:bg-white/5 flex items-center gap-2 transition">
+                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="shield-alert" class="w-4 h-4"></i> <span id="tabInfoLbl">Emergency & Info</span>
                 </button>
             </div>
@@ -201,7 +215,7 @@
                         <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2 drop-shadow-sm">
                             <span id="popularHeaderTitle">Events & Happenings in</span> <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
                         </h2>
-                        <p id="popularSubtext" class="text-sm text-gray-300 theme-text-sub">Filter by neighborhood zone, live happenings, or category.</p>
+                        <p id="popularSubtext" class="text-sm text-gray-300 theme-text-sub">Filter by neighbourhood zone, live happenings, or category.</p>
                     </div>
 
                     <!-- WHAT'S ON NOW REAL-TIME BUTTON -->
@@ -274,6 +288,48 @@
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
+        <!-- ARTICLES TAB -->
+        <section id="tab-content-articles" class="space-y-6 hidden">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h2 id="articlesTitle" class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="newspaper" class="text-emerald-400 w-7 h-7"></i> Local Articles & Stories
+                    </h2>
+                    <p id="articlesSub" class="text-sm text-gray-300 theme-text-sub">Neighbourhood guides, venue spotlights, and Algarve lifestyle features.</p>
+                </div>
+                <button onclick="openArticleModal()" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg">
+                    <i data-lucide="pen-tool" class="w-4 h-4"></i> <span id="btnWriteArticle">+ Write Article</span>
+                </button>
+            </div>
+            <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- CLASSIFIEDS TAB -->
+        <section id="tab-content-classifieds" class="space-y-6 hidden">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h2 id="classifiedsTitle" class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="tag" class="text-purple-400 w-7 h-7"></i> Local Classifieds & Marketplace
+                    </h2>
+                    <p id="classifiedsSub" class="text-sm text-gray-300 theme-text-sub">Buy, sell, rent, and offer local services across Albufeira.</p>
+                </div>
+                <button onclick="openClassifiedModal()" class="bg-purple-500 text-white text-xs font-black px-4 py-2.5 rounded-xl hover:bg-purple-400 transition flex items-center gap-1.5 shadow-lg">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostClassified">+ Post Classified</span>
+                </button>
+            </div>
+
+            <!-- Classifieds Filter Bar -->
+            <div class="flex gap-1.5 overflow-x-auto pb-1">
+                <button onclick="filterClassifieds('all')" id="cls-btn-all" class="cls-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white whitespace-nowrap transition">ALL LISTINGS</button>
+                <button onclick="filterClassifieds('FOR SALE')" id="cls-btn-sale" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">FOR SALE</button>
+                <button onclick="filterClassifieds('RENTALS & HOUSING')" id="cls-btn-rentals" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">RENTALS & HOUSING</button>
+                <button onclick="filterClassifieds('LOCAL SERVICES')" id="cls-btn-services" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">LOCAL SERVICES</button>
+                <button onclick="filterClassifieds('JOBS & GIGS')" id="cls-btn-jobs" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">JOBS & GIGS</button>
+            </div>
+
+            <div id="classifiedsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
         <!-- FORUM TAB -->
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
@@ -343,10 +399,10 @@
                         <div class="flex items-center gap-2 text-purple-400 font-black text-lg">
                             <i data-lucide="bus" class="w-5 h-5"></i> Vamus Algarve (Bus Timetables)
                         </div>
-                        <p class="text-xs text-gray-300 theme-text-sub">Regional bus schedules connecting Albufeira to Faro, Lagos, Vilamoura, and local town centers.</p>
+                        <p class="text-xs text-gray-300 theme-text-sub">Regional bus timetables connecting Albufeira to Faro, Lagos, Vilamoura, and local town centres.</p>
                     </div>
                     <a href="https://vamus.pt/" target="_blank" rel="noopener noreferrer" class="bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 text-center py-2.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5">
-                        View Bus Schedules <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        View Bus Timetables <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
                 </div>
 
@@ -409,7 +465,7 @@
                     </div>
                 </div>
 
-                <!-- Platform Support Line Card (Including User Phone +351 937 747 768) -->
+                <!-- Platform Support Line Card -->
                 <div class="bg-miamiCard/90 theme-card border border-miamiPink/40 rounded-2xl p-6 shadow-xl space-y-3">
                     <div class="flex items-center gap-2 text-miamiPink font-black text-lg">
                         <i data-lucide="phone-forwarded" class="w-5 h-5"></i> Albufeira Pulse Support Line
@@ -453,7 +509,7 @@
     <footer class="bg-miamiCard/95 theme-card border-t border-white/10 py-6 px-4 mt-12">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 theme-text-sub">
             <div class="flex items-center gap-3">
-                <span class="font-black text-miamiPink">ALBUFEIRA PULSE</span> © 2026 — The Live Beat of the Algarve.
+                <span class="font-black text-miamiPink">ALBUFEIRA PULSE</span> © 2026 — The Heartbeat of the Algarve.
                 <span class="bg-miamiCyan/10 text-miamiCyan border border-miamiCyan/30 px-2.5 py-1 rounded-full font-bold flex items-center gap-1">
                     <i data-lucide="activity" class="w-3.5 h-3.5"></i> Traffic: <strong id="liveTrafficCount" class="text-white">...</strong> views
                 </span>
@@ -597,7 +653,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADD EVENT & VENUE -->
+    <!-- MODAL: ADD EVENT & VENUE (WITH DATABASE VENUE AUTO-FILL) -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
@@ -607,6 +663,16 @@
                 <i data-lucide="plus-circle" class="text-miamiPink"></i> Add Event or Venue
             </h3>
             <div class="space-y-3">
+                <!-- Quick Select Existing Venue from Database -->
+                <div class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-1.5">
+                    <label class="text-xs font-bold text-miamiCyan flex items-center gap-1.5">
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i> Select Existing Venue from Database (Auto-Fill)
+                    </label>
+                    <select id="dbVenueQuickSelect" onchange="handleVenueDropdownSelect(this.value)" class="w-full bg-black/60 theme-input border border-miamiCyan/40 rounded-xl p-2 text-xs text-white cursor-pointer">
+                        <option value="">-- Choose a saved venue or enter a new one below --</option>
+                    </select>
+                </div>
+
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs font-bold text-gray-400">Town in Algarve</label>
@@ -621,14 +687,15 @@
                             <option value="Monte Choro">Monte Choro</option>
                             <option value="Ferreiras">Ferreiras</option>
                             <option value="Oura Beach">Oura Beach</option>
-                            <option value="Other">Other / Town Center</option>
+                            <option value="Other">Other / Town Centre</option>
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="text-xs font-bold text-gray-400">Venue Name</label>
-                        <input type="text" id="inputVenueName" placeholder="e.g. Papagayo Beach Bar" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <label class="text-xs font-bold text-gray-400">Venue Name (Type or Select)</label>
+                        <input type="text" id="inputVenueName" list="venuesDatalist" oninput="handleVenueAutoFill(this.value)" placeholder="Start typing venue..." autocomplete="off" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <datalist id="venuesDatalist"></datalist>
                     </div>
                     <div>
                         <label class="text-xs font-bold text-gray-400">Venue Type</label>
@@ -684,6 +751,96 @@
         </div>
     </div>
 
+    <!-- MODAL: WRITE ARTICLE -->
+    <div id="articleModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard theme-card border border-emerald-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+                <i data-lucide="pen-tool" class="text-emerald-400"></i> Publish Local Article
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Article Headline</label>
+                    <input type="text" id="artTitle" placeholder="e.g. Hidden Coves Between São Rafael and Galé" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Topic Tag</label>
+                        <select id="artTag" class="w-full bg-black/50 theme-input border border-emerald-500/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                            <option value="LOCAL GUIDE">LOCAL GUIDE</option>
+                            <option value="FOOD & DRINK">FOOD & DRINK</option>
+                            <option value="EXPAT LIFE">EXPAT LIFE</option>
+                            <option value="COMMUNITY NEWS">COMMUNITY NEWS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Town</label>
+                        <input type="text" id="artTown" value="Albufeira" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Summary / Excerpt</label>
+                    <textarea id="artBody" rows="4" placeholder="Write your story or neighbourhood guide..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
+                </div>
+                <button onclick="submitNewArticle()" class="w-full bg-emerald-500 text-miamiDark font-black py-3 rounded-xl shadow-lg hover:bg-emerald-400 transition">
+                    Publish Article
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: POST CLASSIFIED -->
+    <div id="classifiedModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeClassifiedModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+                <i data-lucide="tag" class="text-purple-400"></i> Post Local Classified
+            </h3>
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Listing Title</label>
+                    <input type="text" id="clsTitle" placeholder="e.g. Surfboard 7'2 Minimalibu + Bag" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Category</label>
+                        <select id="clsCategory" class="w-full bg-black/50 theme-input border border-purple-500/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                            <option value="FOR SALE">FOR SALE</option>
+                            <option value="RENTALS & HOUSING">RENTALS & HOUSING</option>
+                            <option value="LOCAL SERVICES">LOCAL SERVICES</option>
+                            <option value="JOBS & GIGS">JOBS & GIGS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Price / Rate (€)</label>
+                        <input type="text" id="clsPrice" placeholder="e.g. €180 or €25/hr" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Neighbourhood / Zone</label>
+                        <input type="text" id="clsZone" placeholder="e.g. Oura Beach / Ferreiras" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400">Contact (Phone / WhatsApp / Email)</label>
+                        <input type="text" id="clsContact" placeholder="+351 9XX XXX XXX" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400">Details</label>
+                    <textarea id="clsDesc" rows="3" placeholder="Condition, availability, or service details..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
+                </div>
+                <button onclick="submitNewClassified()" class="w-full bg-purple-500 text-white font-black py-3 rounded-xl shadow-lg hover:bg-purple-400 transition">
+                    Post Classified Listing
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript Application Logic -->
     <script>
         // --- SUPABASE CONFIGURATION ---
@@ -698,10 +855,12 @@
         let currentEmail = '';
         let currentDisplayName = '';
         let currentFilter = 'all';
+        let currentClassifiedFilter = 'all';
         let authMode = 'signin';
         let isDayMode = false;
         let selectedJournalDay = 21;
         let nsfwModel = null;
+        let knownVenuesCache = [];
 
         let journalPhotos = {
             21: [
@@ -712,7 +871,7 @@
 
         const translations = {
             en: {
-                subtext: "The Live Beat of the Algarve",
+                subtext: "The Heartbeat of the Algarve",
                 townLabel: "Town:",
                 login: "Login",
                 post: "+ Add Event or Venue",
@@ -722,14 +881,16 @@
                 waves: "Waves",
                 sunrise: "Sunrise",
                 sunset: "Sunset",
-                eventsTab: "Events Calendar",
+                eventsTab: "Events",
                 calendarTab: "Calendar & Journal",
-                dirTab: "Directory & Maps",
-                forumTab: "Community Forum",
+                dirTab: "Directory",
+                articlesTab: "Articles",
+                classifiedsTab: "Classifieds",
+                forumTab: "Forum",
                 linksTab: "Essential Links",
                 infoTab: "Emergency & Info",
                 popTitle: "Events & Happenings in",
-                popSub: "Filter by neighborhood zone, live happenings, or category.",
+                popSub: "Filter by neighbourhood zone, live happenings, or category.",
                 dirTitle: "📍 Verified Business Directory",
                 dirSub: "Powered by Google Maps integration across Algarve towns.",
                 addVenue: "Add Venue",
@@ -738,7 +899,7 @@
                 newThread: "New Thread"
             },
             pt: {
-                subtext: "O Ritmo Ao Vivo do Algarve",
+                subtext: "O Batimento do Algarve",
                 townLabel: "Concelho:",
                 login: "Entrar",
                 post: "+ Adicionar Evento ou Local",
@@ -748,10 +909,12 @@
                 waves: "Ondas",
                 sunrise: "Nascer do Sol",
                 sunset: "Pôr do Sol",
-                eventsTab: "Calendário de Eventos",
+                eventsTab: "Eventos",
                 calendarTab: "Calendário & Diário",
-                dirTab: "Diretório & Mapas",
-                forumTab: "Fórum Comunitário",
+                dirTab: "Diretório",
+                articlesTab: "Artigos",
+                classifiedsTab: "Classificados",
+                forumTab: "Fórum",
                 linksTab: "Links Essenciais",
                 infoTab: "Emergência & Info",
                 popTitle: "Eventos e Acontecimentos em",
@@ -768,10 +931,82 @@
         let eventsData = [];
         let directoryData = [];
 
+        let articlesData = [
+            {
+                id: 1,
+                town: 'Albufeira',
+                tag: 'LOCAL GUIDE',
+                title: 'Beyond the Strip: 5 Quiet Cliff Walks Between São Rafael and Galé',
+                author: 'Albufeira Pulse Editorial',
+                date: 'Nov 14, 2026',
+                readTime: '4 min read',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=85',
+                summary: 'Discover the ochre limestone arches, hidden coves, and peaceful coastal trails just west of Albufeira Marina.'
+            },
+            {
+                id: 2,
+                town: 'Albufeira',
+                tag: 'FOOD & DRINK',
+                title: 'Where Locals Eat Cataplana & Fresh Grilled Sardines in Old Town',
+                author: 'Marco_PT',
+                date: 'Nov 11, 2026',
+                readTime: '3 min read',
+                image: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=600&q=85',
+                summary: 'Skip the tourist traps near the square—here are the family-run tascas tucked into the cobbled backstreets.'
+            },
+            {
+                id: 3,
+                town: 'Albufeira',
+                tag: 'EXPAT LIFE',
+                title: 'Winter in the Algarve: Navigating Ferreiras Train Connections & Local Markets',
+                author: 'Sophie_Van_D',
+                date: 'Nov 08, 2026',
+                readTime: '5 min read',
+                image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=600&q=85',
+                summary: 'A practical handbook for autumn and winter residents on regional rail links, Saturday farmers markets, and community clubs.'
+            }
+        ];
+
+        let classifiedsData = [
+            {
+                id: 1,
+                town: 'Albufeira',
+                zone: 'Oura Beach',
+                category: 'FOR SALE',
+                title: "7'4 Minimalibu Surfboard + Leash & Travel Bag",
+                price: '€195',
+                contact: '+351 912 345 678',
+                author: 'Liam_M',
+                description: 'Great condition, ideal for Galé and Falésia waves. Ready for collection near Oura.'
+            },
+            {
+                id: 2,
+                town: 'Albufeira',
+                zone: 'Old Town',
+                category: 'RENTALS & HOUSING',
+                title: 'Bright 1-Bed Apartment with Sea View Balcony (Dec – March)',
+                price: '€850 / month',
+                contact: 'oldtownstay@example.com',
+                author: 'Clara_R',
+                description: 'Fibre Wi-Fi, air conditioning/heating, 5 mins walk to Pescadores Beach. Bills included.'
+            },
+            {
+                id: 3,
+                town: 'Albufeira',
+                zone: 'Ferreiras',
+                category: 'LOCAL SERVICES',
+                title: 'Bilingual Handyman, Plumbing & AC Servicing',
+                price: '€30 / hr',
+                contact: '+351 965 432 109',
+                author: 'João FixIt',
+                description: 'Reliable home maintenance across Albufeira, Guia, and Olhos de Água. Free quotes.'
+            }
+        ];
+
         let forumData = [
             { id: 1, town: 'Albufeira', title: 'Best spot for watching live sports on The Strip?', author: 'Liam_M (UK Expat)', replies: 14, category: 'SPORTS' },
             { id: 2, town: 'Albufeira', title: 'Recommendations for long-term winter rentals near Old Town?', author: 'Sophie_Van_D', replies: 22, category: 'CLASSES' },
-            { id: 3, town: 'Albufeira', title: 'Train times from Ferreiras station to Faro?', author: 'Marco_PT', replies: 8, category: 'MARKETS' }
+            { id: 3, town: 'Albufeira', title: 'Train timetables from Ferreiras station to Faro?', author: 'Marco_PT', replies: 8, category: 'MARKETS' }
         ];
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -780,8 +1015,11 @@
             await checkUserSession();
             await trackTraffic();
             await fetchEvents('all');
-            renderCalendar();
             await fetchDirectory();
+            populateVenueAutoFillList();
+            renderCalendar();
+            renderArticles();
+            renderClassifieds('all');
             renderForum();
         });
 
@@ -792,13 +1030,11 @@
             const currentMinute = now.getMinutes();
             const currentTimeMinutes = currentHour * 60 + currentMinute;
 
-            // Albufeira November Sunrise (~07:13) and Sunset (~17:25) in minutes
             const sunriseMinutes = 7 * 60 + 13;
             const sunsetMinutes = 17 * 60 + 25;
 
-            // If current time is between sunrise and sunset, default to Day Mode
             if (currentTimeMinutes >= sunriseMinutes && currentTimeMinutes < sunsetMinutes) {
-                toggleDayNightMode(false); // Apply day mode without toggling manual state
+                toggleDayNightMode(false);
             }
         }
 
@@ -870,7 +1106,7 @@
             if (isManualClick) {
                 isDayMode = !isDayMode;
             } else {
-                isDayMode = true; // Auto-triggered by daytime
+                isDayMode = true;
             }
 
             const body = document.body;
@@ -1033,6 +1269,7 @@
                 ];
             }
             renderEvents(filter);
+            populateVenueAutoFillList();
         }
 
         async function fetchDirectory() {
@@ -1046,10 +1283,76 @@
             } else {
                 directoryData = [
                     { id: 1, town: 'Albufeira', zone: 'Marina', name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', rating: '4.8 ⭐', owner_email: 'alexlockwood78@yahoo.co.uk', phone: '+351 289 000 111' },
-                    { id: 2, town: 'Albufeira', zone: 'Oura Beach', name: 'International Health Centres', category: 'Medical Clinic (English Speaking)', address: 'Av. Infante Dom Henrique nº 7, Oura Village', rating: '4.9 ⭐', owner_email: '', phone: '+351 289 588 923' }
+                    { id: 2, town: 'Albufeira', zone: 'The Strip', name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightlife', address: 'Av. Dr. Francisco Sá Carneiro, Oura', rating: '4.7 ⭐', owner_email: 'alexlockwood78@yahoo.co.uk', phone: '+351 289 586 000' },
+                    { id: 3, town: 'Albufeira', zone: 'Oura Beach', name: 'International Health Centres', category: 'Medical Clinic (English Speaking)', address: 'Av. Infante Dom Henrique nº 7, Oura Village', rating: '4.9 ⭐', owner_email: '', phone: '+351 289 588 923' }
                 ];
             }
             renderDirectory();
+            populateVenueAutoFillList();
+        }
+
+        // --- DATABASE VENUE AUTO-FILL ENGINE ---
+        function populateVenueAutoFillList() {
+            const venueMap = new Map();
+
+            directoryData.forEach(d => {
+                if (d.name) {
+                    venueMap.set(d.name.toLowerCase(), {
+                        name: d.name,
+                        town: d.town || 'Albufeira',
+                        zone: d.zone || 'Old Town',
+                        type: d.category || 'Venue'
+                    });
+                }
+            });
+
+            eventsData.forEach(e => {
+                if (e.venue && !venueMap.has(e.venue.toLowerCase())) {
+                    venueMap.set(e.venue.toLowerCase(), {
+                        name: e.venue,
+                        town: e.town || 'Albufeira',
+                        zone: e.zone || 'Old Town',
+                        type: e.venue_type || 'Venue'
+                    });
+                }
+            });
+
+            knownVenuesCache = Array.from(venueMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+
+            // Populate <datalist> for typing auto-complete
+            const datalist = document.getElementById('venuesDatalist');
+            if (datalist) {
+                datalist.innerHTML = knownVenuesCache.map(v => `<option value="${v.name}">${v.zone} (${v.type})</option>`).join('');
+            }
+
+            // Populate <select> dropdown for immediate scrolling & clicking
+            const selectEl = document.getElementById('dbVenueQuickSelect');
+            if (selectEl) {
+                selectEl.innerHTML = `<option value="">-- Choose a saved venue (${knownVenuesCache.length} available) or enter new below --</option>` +
+                    knownVenuesCache.map(v => `<option value="${v.name}">${v.name} — ${v.zone} (${v.type})</option>`).join('');
+            }
+        }
+
+        function handleVenueDropdownSelect(selectedName) {
+            if (!selectedName) return;
+            document.getElementById('inputVenueName').value = selectedName;
+            handleVenueAutoFill(selectedName);
+        }
+
+        function handleVenueAutoFill(typedName) {
+            if (!typedName) return;
+            const match = knownVenuesCache.find(v => v.name.toLowerCase() === typedName.trim().toLowerCase());
+            if (match) {
+                document.getElementById('modalTown').value = match.town;
+                document.getElementById('inputVenueType').value = match.type;
+                const zoneSelect = document.getElementById('modalZone');
+                for (let opt of zoneSelect.options) {
+                    if (opt.value.toLowerCase() === match.zone.toLowerCase()) {
+                        zoneSelect.value = opt.value;
+                        break;
+                    }
+                }
+            }
         }
 
         function changeTown(town) {
@@ -1061,6 +1364,8 @@
             fetchEvents(currentFilter);
             renderCalendar();
             fetchDirectory();
+            renderArticles();
+            renderClassifieds(currentClassifiedFilter);
             renderForum();
         }
 
@@ -1102,6 +1407,8 @@
             document.getElementById('tabEventsLbl').innerText = t.eventsTab;
             document.getElementById('tabCalendarLbl').innerText = t.calendarTab;
             document.getElementById('tabDirectoryLbl').innerText = t.dirTab;
+            document.getElementById('tabArticlesLbl').innerText = t.articlesTab;
+            document.getElementById('tabClassifiedsLbl').innerText = t.classifiedsTab;
             document.getElementById('tabForumLbl').innerText = t.forumTab;
             document.getElementById('tabLinksLbl').innerText = t.linksTab;
             document.getElementById('tabInfoLbl').innerText = t.infoTab;
@@ -1118,14 +1425,14 @@
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-2 transition";
+                btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap";
             });
             const activeTabBtn = document.getElementById('btn-' + tab);
             if(activeTabBtn) {
-                activeTabBtn.className = "tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-miamiPink text-white flex items-center gap-2 transition shadow-md shadow-miamiPink/20";
+                activeTabBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap";
             }
 
-            ['events', 'calendar', 'directory', 'forum', 'links', 'info'].forEach(t => {
+            ['events', 'calendar', 'directory', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
                 const el = document.getElementById('tab-content-' + t);
                 if (el) el.classList.add('hidden');
             });
@@ -1190,7 +1497,6 @@
                 return;
             }
 
-            // ADMIN AUTHORIZATION CHECK: Supports Alex & Kris
             const adminEmails = ['alexlockwood78@yahoo.co.uk', 'kris'];
             const isUserAdmin = currentUser && (
                 adminEmails.includes(currentEmail.toLowerCase()) || 
@@ -1227,16 +1533,13 @@
                                     <button onclick="incrementGoing(${e.id})" class="flex-grow bg-white/5 theme-pill hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
                                         ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
                                     </button>
-                                    <!-- WhatsApp Share Button with Logo -->
                                     <a href="https://wa.me/?text=${shareText}" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white p-2.5 rounded-xl text-xs border border-emerald-500/40 transition flex items-center justify-center" title="Share on WhatsApp">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                                     </a>
-                                    <!-- Facebook Share Button with Logo -->
                                     <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white p-2.5 rounded-xl text-xs border border-blue-500/40 transition flex items-center justify-center" title="Share on Facebook">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.373 14.5 5 15.5 5H18V0h-3.808C10.559 0 9 1.587 9 4.75V8z"/></svg>
                                     </a>
-                                    <!-- X / Twitter Share Button with Logo -->
-                                    <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-white p-2.5 rounded-xl text-xs border border-sky-500/40 transition flex items-center justify-center" title="Share on X (Twitter)">
+                                    <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-white p-2.5 rounded-xl text-xs border border-sky-500/40 transition flex items-center justify-center" title="Share on X">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                     </a>
                                     ${isOwnerOrStaff ? `<button onclick="deleteEvent(${e.id})" class="bg-miamiPink/20 hover:bg-miamiPink text-miamiPink hover:text-white p-2.5 rounded-xl text-xs border border-miamiPink/40 transition" title="Delete event">🗑️</button>` : ''}
@@ -1247,6 +1550,173 @@
                 `;
             }).join('');
             lucide.createIcons();
+        }
+
+        // --- ARTICLES RENDER & SUBMIT ---
+        function renderArticles() {
+            const grid = document.getElementById('articlesGrid');
+            const filtered = articlesData.filter(a => !currentTown || (a.town && a.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No articles published for this town yet.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(a => `
+                <article class="bg-miamiCard/90 theme-card backdrop-blur-md border border-emerald-500/25 rounded-2xl overflow-hidden hover:border-emerald-400 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 overflow-hidden relative">
+                            <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                            <span class="absolute top-3 left-3 bg-emerald-500 text-miamiDark text-[10px] font-black px-2.5 py-1 rounded-lg">${a.tag}</span>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-center text-[11px] text-gray-400 theme-text-sub mb-2">
+                                <span>${a.date} • ${a.readTime}</span>
+                                <span class="text-emerald-400 font-bold">${a.town}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white theme-text-main mb-2 leading-snug">${a.title}</h3>
+                            <p class="text-xs text-gray-300 theme-text-sub leading-relaxed">${a.summary}</p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-400 theme-text-sub">By <strong class="text-white theme-text-main">${a.author}</strong></span>
+                        <button onclick="alert('${a.title.replace(/'/g, "\\'")}\\n\\n${a.summary.replace(/'/g, "\\'")}')" class="text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                            Read Story <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openArticleModal() { document.getElementById('articleModal').classList.remove('hidden'); }
+        function closeArticleModal() { document.getElementById('articleModal').classList.add('hidden'); }
+
+        async function submitNewArticle() {
+            const title = document.getElementById('artTitle').value.trim();
+            const tag = document.getElementById('artTag').value;
+            const town = document.getElementById('artTown').value.trim() || 'Albufeira';
+            const body = document.getElementById('artBody').value.trim();
+
+            if (!title || !body) {
+                alert('Please enter an article headline and summary.');
+                return;
+            }
+
+            const isSafe = await checkContentSafety(null, title + " " + body);
+            if (!isSafe) return;
+
+            articlesData.unshift({
+                id: Date.now(),
+                town: town,
+                tag: tag,
+                title: title,
+                author: currentDisplayName || 'Community Contributor',
+                date: 'Nov 16, 2026',
+                readTime: '3 min read',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=85',
+                summary: body
+            });
+
+            document.getElementById('artTitle').value = '';
+            document.getElementById('artBody').value = '';
+            closeArticleModal();
+            renderArticles();
+        }
+
+        // --- CLASSIFIEDS RENDER & SUBMIT ---
+        function filterClassifieds(category) {
+            currentClassifiedFilter = category;
+            renderClassifieds(category);
+        }
+
+        function renderClassifieds(filter = 'all') {
+            document.querySelectorAll('.cls-filter-btn').forEach(btn => {
+                btn.className = "cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition";
+            });
+            const mapCls = {
+                'all': 'cls-btn-all',
+                'FOR SALE': 'cls-btn-sale',
+                'RENTALS & HOUSING': 'cls-btn-rentals',
+                'LOCAL SERVICES': 'cls-btn-services',
+                'JOBS & GIGS': 'cls-btn-jobs'
+            };
+            const active = document.getElementById(mapCls[filter]);
+            if (active) active.className = "cls-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white whitespace-nowrap transition";
+
+            const grid = document.getElementById('classifiedsGrid');
+            let filtered = classifiedsData.filter(c => !currentTown || (c.town && c.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (filter !== 'all') {
+                filtered = filtered.filter(c => c.category === filter);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No classified listings in this category yet. Post one for free!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(c => `
+                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-purple-500/30 rounded-2xl p-5 hover:border-purple-400 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-3">
+                            <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">${c.category}</span>
+                            <span class="text-sm font-black text-amber-400">${c.price}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white theme-text-main mb-1">${c.title}</h3>
+                        <p class="text-xs text-miamiCyan font-semibold mb-3">📍 ${c.zone || c.town}</p>
+                        <p class="text-xs text-gray-300 theme-text-sub mb-4 leading-relaxed">${c.description}</p>
+                    </div>
+                    <div class="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-400 theme-text-sub">Posted by <strong class="text-white theme-text-main">${c.author}</strong></span>
+                        <button onclick="alert('Contact Seller (${c.author}):\\n${c.contact}')" class="bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 font-bold px-3 py-1.5 rounded-xl transition">
+                            Contact Seller
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openClassifiedModal() { document.getElementById('classifiedModal').classList.remove('hidden'); }
+        function closeClassifiedModal() { document.getElementById('classifiedModal').classList.add('hidden'); }
+
+        async function submitNewClassified() {
+            const title = document.getElementById('clsTitle').value.trim();
+            const category = document.getElementById('clsCategory').value;
+            const price = document.getElementById('clsPrice').value.trim() || 'Contact for price';
+            const zone = document.getElementById('clsZone').value.trim() || 'Albufeira';
+            const contact = document.getElementById('clsContact').value.trim();
+            const desc = document.getElementById('clsDesc').value.trim();
+
+            if (!title || !contact || !desc) {
+                alert('Please enter a title, contact details, and description.');
+                return;
+            }
+
+            const isSafe = await checkContentSafety(null, title + " " + desc);
+            if (!isSafe) return;
+
+            classifiedsData.unshift({
+                id: Date.now(),
+                town: currentTown || 'Albufeira',
+                zone: zone,
+                category: category,
+                title: title,
+                price: price,
+                contact: contact,
+                author: currentDisplayName || 'Local Member',
+                description: desc
+            });
+
+            document.getElementById('clsTitle').value = '';
+            document.getElementById('clsPrice').value = '';
+            document.getElementById('clsContact').value = '';
+            document.getElementById('clsDesc').value = '';
+            closeClassifiedModal();
+            renderClassifieds(currentClassifiedFilter);
         }
 
         // REAL SUPABASE GOING COUNTER INCREMENT
@@ -1333,7 +1803,6 @@
 
         function closeDayJournalModal() { document.getElementById('dayJournalModal').classList.add('hidden'); }
         
-        // Auto-fills the modal date when clicking "+ Add Event on This Day" from journal
         function openAddEventForDate() {
             closeDayJournalModal();
             document.getElementById('inputDate').value = `Nov ${selectedJournalDay}, 2026`;
@@ -1435,7 +1904,10 @@
             lucide.createIcons();
         }
 
-        function openModal() { document.getElementById('postModal').classList.remove('hidden'); }
+        function openModal() {
+            populateVenueAutoFillList();
+            document.getElementById('postModal').classList.remove('hidden');
+        }
         function closeModal() { document.getElementById('postModal').classList.add('hidden'); }
         function openLegalModal() { document.getElementById('legalModal').classList.remove('hidden'); }
         function closeLegalModal() { document.getElementById('legalModal').classList.add('hidden'); }
@@ -1481,7 +1953,7 @@
             const posterEmail = currentUser ? currentEmail : 'anonymous@albufeirapulse.com';
 
             const { error } = await supabaseClient.from('events').insert([{
-                town: town, title: title, date: date, time: time, price: price,
+                town: town, zone: zone, title: title, date: date, time: time, price: price,
                 category: category, venue: venueName, venue_type: venueType,
                 owner_email: posterEmail, going: 1, description: desc || 'User submitted event.', 
                 poster_url: posterUrl, is_weekend: true
