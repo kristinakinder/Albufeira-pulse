@@ -69,7 +69,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleDayNightMode()" id="themeToggleBtn" class="bg-amber-400/20 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                <button onclick="toggleDayNightMode()" id="themeToggleBtn" class="bg-amber-400/25 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i> <span id="themeText">Day Mode</span>
                 </button>
                 <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
@@ -281,7 +281,6 @@
                         rating: d.rating || d.Rating || '4.8 ⭐'
                     }));
                 } else {
-                    // Fallback sample if table is currently empty
                     directoryData = [
                         { id: 1, name: 'Papagayo Beach Bar', category: 'Beach Club & Cocktails', address: 'Marina de Albufeira', phone: '+351 289 000 111', rating: '4.8 ⭐' },
                         { id: 2, name: 'Linekers Bar Albufeira', category: 'Sports Bar & Nightclub', address: 'The Strip, Albufeira', phone: '+351 289 000 222', rating: '4.7 ⭐' }
@@ -346,7 +345,7 @@
         }
 
         function openCreateModal() { document.getElementById('createModal').classList.remove('hidden'); }
-        function closeCreateModal() { document.getElementById('createModal'].classList.add('hidden'); }
+        function closeCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
         function openNewThreadModal() { document.getElementById('newThreadModal').classList.remove('hidden'); }
         function closeNewThreadModal() { document.getElementById('newThreadModal').classList.add('hidden'); }
 
