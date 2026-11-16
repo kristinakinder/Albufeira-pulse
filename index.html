@@ -632,26 +632,29 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
-    <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
-            <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
-            </h3>
-            <div class="space-y-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
-                    <input type="text" id="updateUsernameInput" disabled class="w-full bg-black/60 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-gray-400 mt-1 cursor-not-allowed">
-                </div>
-                <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-                </button>
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+        <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+            <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
+        </h3>
+        <div class="space-y-3">
+            <div>
+                <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
+                <input type="text" id="updateUsernameInput" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1 focus:outline-none focus:border-miamiPink" placeholder="Enter new username">
             </div>
+            <button onclick="handleUpdateUsername()" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl text-xs hover:bg-white transition">
+                Save Username
+            </button>
+            <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+            </button>
         </div>
     </div>
+</div>
 
     <!-- MODAL: ADD EVENT & VENUE (WITH DATABASE VENUE AUTO-FILL) -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
