@@ -147,12 +147,11 @@
                 </button>
 
                 <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
-                    <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
-                    </span>
-                    <input type="text" id="townInputFilter" value="Albufeira" oninput="changeTown(this.value)" placeholder="Albufeira..." class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink w-32">
-                </div>
-
+        <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
+        </span>
+        <input type="text" id="townInputFilter" name="town-selector" value="Albufeira" oninput="changeTown(this.value)" autocomplete="off" placeholder="Albufeira..." class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink w-32">
+    </div>
                 <div class="flex items-center gap-1 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
                     <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
                     <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
