@@ -453,12 +453,12 @@
 
     <!-- ================= SECTION 5: JAVASCRIPT ENGINE & STATE MANAGEMENT ================= -->
     <script>
-        // Supabase Client Initialization
-        const SUPABASE_URL = 'https://ljnoabbeljnoabbeljno.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        // Supabase Client Initialization with your Project URL & Publishable Key
+        const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         let _supabaseClient = null;
         if (typeof supabase !== 'undefined') {
-            _supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            _supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
         }
 
         let albufeiraMap = null;
