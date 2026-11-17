@@ -55,6 +55,17 @@
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
 
+        /* Bubble Burst Pop-in Animation */
+        @keyframes bubbleBurst {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            80% { transform: scale(0.95); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-bubble-burst {
+            animation: bubbleBurst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
         html.night-mode body { background-color: #0B0F19; color: #F3F4F6; }
         html.day-mode body { background-color: #FAF7F2; color: #1E293B; }
 
@@ -334,6 +345,35 @@
     </main>
 
     <!-- ================= SECTION 4: MODALS & POPUPS ================= -->
+    <!-- WELCOME / BUBBLE BURST POPUP MODAL -->
+    <div id="welcomeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-miamiCard theme-card border border-miamiPink/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-miamiPink/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-miamiCyan/20 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="inline-flex p-3 bg-gradient-to-tr from-miamiPink to-miamiCyan rounded-2xl shadow-lg text-white mb-1">
+                <i data-lucide="sparkles" class="w-8 h-8"></i>
+            </div>
+            
+            <div class="space-y-2">
+                <h3 class="text-xl font-black text-white theme-text-main leading-snug">Welcome to Albufeira-pulse.com</h3>
+                <p class="text-sm font-semibold text-slate-700 dark:text-gray-200 theme-text-sub leading-relaxed">
+                    The free event calendar for Albufeira!<br>
+                    <span class="text-miamiPink font-bold">Sign up to add your events!</span>
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-2 pt-2">
+                <button onclick="closeWelcomeModalAndLogin()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition cursor-pointer text-sm">
+                    Sign Up / Login Now
+                </button>
+                <button onclick="closeWelcomeModal()" class="w-full bg-white/10 hover:bg-white/20 text-gray-300 theme-text-sub font-bold py-2.5 rounded-xl transition cursor-pointer text-xs">
+                    Explore Calendar First
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- LOGIN & USERNAME SETUP MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
@@ -386,7 +426,7 @@
         </div>
     </div>
 
-    <!-- ADD VENUE MODAL (Updated with Address / Street & Postal Code + Pin Drop Fallback) -->
+    <!-- ADD VENUE MODAL -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
@@ -399,7 +439,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-emerald-400 font-bold text-center"></div>
+                    <div><label class="block font-bold mb-1 text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-emerald-400 font-bold text-center"></div>
                 </div>
                 <!-- Hidden coordinate storage captured seamlessly via map click or defaults -->
                 <input type="hidden" id="newVenueLat" value="37.0888">
@@ -428,6 +468,16 @@
             updateThemeButtonUI();
             checkExistingAuth();
         });
+
+        // Welcome Modal Functions
+        function closeWelcomeModal() {
+            document.getElementById('welcomeModal').classList.add('hidden');
+        }
+
+        function closeWelcomeModalAndLogin() {
+            closeWelcomeModal();
+            openLoginModal();
+        }
 
         // 1. Live Weather & Marine API Integration
         async function fetchLiveWeatherAndWaves() {
