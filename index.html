@@ -281,6 +281,14 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+                <a href="https://www.vamusalgarve.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-algCyan/40 hover:border-algCyan transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                    <div>
+                        <div class="flex items-center gap-2 text-algCyan font-black text-sm mb-1"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve (Bus Timetables)</div>
+                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Regional bus network routes, timetables, and ticket information connecting Albufeira across the Algarve.</p>
+                    </div>
+                    <span class="text-algCyan font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                </a>
+
                 <a href="https://fogos.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-miamiPink/40 hover:border-miamiPink transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
                         <div class="flex items-center gap-2 text-miamiPink font-black text-sm mb-1"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt (Live Fire Monitor)</div>
@@ -733,20 +741,14 @@
             const grid = document.getElementById('calendarGrid');
             if (!grid) return;
             grid.innerHTML = '';
-            
-            // November 2026 starts on a Sunday in standard ISO calendar (or adjust padding as needed)
-            // 6 blank placeholder cells for Sunday start if needed, or straightforward day mapping:
             for (let i = 0; i < 6; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.className = 'h-28 bg-gray-100 dark:bg-black/10 rounded-xl opacity-30';
                 grid.appendChild(emptyCell);
             }
-
             for (let day = 1; day <= 30; day++) {
                 const formattedDay = day < 10 ? `0${day}` : `${day}`;
                 const dateStr = `2026-11-${formattedDay}`;
-                
-                // Find all events matching this calendar date
                 const dayEvents = registeredEvents.filter(ev => ev.date === dateStr);
 
                 const cell = document.createElement('div');
