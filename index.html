@@ -189,7 +189,7 @@
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
 
-                <!-- Combined & Reduced Categories Bar (Wraps cleanly without slider) -->
+                <!-- Combined & Reduced Categories Bar -->
                 <div class="flex flex-wrap gap-1.5 pt-1">
                     <button onclick="filterEvents('all')" class="cat-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold bg-miamiPink text-white transition cursor-pointer">ALL</button>
                     <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SOCIAL & MUSIC</button>
@@ -522,12 +522,17 @@
             }
         }
 
-        // 4. Map Initialization & Dynamic Venue Coloring
+        // 4. Map Initialization & Dynamic Venue Coloring (Fixed with referrerPolicy for Firefox)
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
                 albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
+                
+                // Added referrerPolicy to satisfy OpenStreetMap tile policies in Firefox & local file testing
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    referrerPolicy: 'origin-when-cross-origin'
+                }).addTo(albufeiraMap);
 
                 albufeiraMap.on('click', function(e) {
                     document.getElementById('newVenueLat').value = e.latlng.lat.toFixed(4);
