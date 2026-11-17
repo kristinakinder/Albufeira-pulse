@@ -189,20 +189,15 @@
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
 
-                <!-- Updated Event Categories Filter Bar -->
-                <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
-                    <button onclick="filterEvents('all')" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white whitespace-nowrap transition cursor-pointer">ALL EVENTS</button>
-                    <button onclick="filterEvents('SEASONAL & HOLIDAY')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SEASONAL & HOLIDAY</button>
-                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">MARKETS & FAIRS</button>
-                    <button onclick="filterEvents('LIVE MUSIC')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">LIVE MUSIC</button>
-                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SPORTS & OUTDOORS</button>
-                    <button onclick="filterEvents('EXHIBITIONS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">EXHIBITIONS & CULTURE</button>
-                    <button onclick="filterEvents('CLASSES')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">CLASSES & WORKSHOPS</button>
-                    <button onclick="filterEvents('DINING & DRINK')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">DINING & DRINK</button>
-                    <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">HAPPY HOUR</button>
-                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SUNSET</button>
-                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">NIGHTLIFE</button>
-                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">TV SPORTS</button>
+                <!-- Combined & Reduced Categories Bar (Wraps cleanly without slider) -->
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <button onclick="filterEvents('all')" class="cat-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold bg-miamiPink text-white transition cursor-pointer">ALL</button>
+                    <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SOCIAL & MUSIC</button>
+                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SPORTS</button>
+                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">MARKETS</button>
+                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SUNSET</button>
+                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">NIGHTLIFE</button>
+                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">TV SPORTS</button>
                 </div>
             </div>
 
@@ -271,7 +266,7 @@
             <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><p class="text-xs font-bold text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
         </section>
 
-        <!-- TAB 6: ESSENTIAL LINKS (FULLY RESTORED & POLISHED) -->
+        <!-- TAB 6: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
             <div>
                 <h2 class="text-2xl font-black text-white theme-text-main">Essential Algarve & Albufeira Links</h2>
@@ -279,67 +274,49 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                <!-- Card 1 -->
                 <a href="https://fogos.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-miamiPink/30 hover:border-miamiPink transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-miamiPink font-black text-sm mb-1">
-                            <i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt (Live Fire Monitor)
-                        </div>
+                        <div class="flex items-center gap-2 text-miamiPink font-black text-sm mb-1"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt (Live Fire Monitor)</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Real-time collaborative tracking of rural fires across Portugal with official Civil Protection updates.</p>
                     </div>
                     <span class="text-miamiPink font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <!-- Card 2 -->
                 <a href="https://www.faroairport.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-miamiCyan/30 hover:border-miamiCyan transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-miamiCyan font-black text-sm mb-1">
-                            <i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)
-                        </div>
+                        <div class="flex items-center gap-2 text-miamiCyan font-black text-sm mb-1"><i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Live flight arrivals, departures, terminal information, and parking status for the Algarve's main international gateway.</p>
                     </div>
                     <span class="text-miamiCyan font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <!-- Card 3 -->
                 <a href="https://www.ipma.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-amber-400/30 hover:border-amber-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-amber-400 font-black text-sm mb-1">
-                            <i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather & Marine
-                        </div>
+                        <div class="flex items-center gap-2 text-amber-400 font-black text-sm mb-1"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather & Marine</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Portuguese Institute for Sea and Atmosphere official meteorological forecasts, warnings, and seismic activity.</p>
                     </div>
                     <span class="text-amber-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <!-- Card 4 -->
                 <a href="https://www.cm-albufeira.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-purple-400/30 hover:border-purple-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-purple-400 font-black text-sm mb-1">
-                            <i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall (CM)
-                        </div>
+                        <div class="flex items-center gap-2 text-purple-400 font-black text-sm mb-1"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall (CM)</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Municipal announcements, local civic services, cultural agendas, and urban planning notices for Albufeira.</p>
                     </div>
                     <span class="text-purple-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <!-- Card 5 -->
                 <a href="https://www.cp.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-emerald-400/30 hover:border-emerald-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-emerald-400 font-black text-sm mb-1">
-                            <i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables (Comboios)
-                        </div>
+                        <div class="flex items-center gap-2 text-emerald-400 font-black text-sm mb-1"><i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables (Comboios)</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Algarve Line train schedules connecting Lagos, Albufeira-Ferreiras, Faro, and Vila Real de Santo António.</p>
                     </div>
                     <span class="text-emerald-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <!-- Card 6 -->
                 <a href="https://www.visitalgarve.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-sky-400/30 hover:border-sky-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-sky-400 font-black text-sm mb-1">
-                            <i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve Tourism Board
-                        </div>
+                        <div class="flex items-center gap-2 text-sky-400 font-black text-sm mb-1"><i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve Tourism Board</div>
                         <p class="text-gray-300 theme-text-sub leading-relaxed">Regional tourism guides, walking trails, golf courses, pristine beaches, and gastro-tourism experiences.</p>
                     </div>
                     <span class="text-sky-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
@@ -393,14 +370,9 @@
                 <div>
                     <label class="block font-bold mb-1 text-gray-300">Category</label>
                     <select id="newEventCategory" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
-                        <option value="SEASONAL & HOLIDAY">SEASONAL & HOLIDAY</option>
-                        <option value="MARKETS">MARKETS & FAIRS</option>
-                        <option value="LIVE MUSIC">LIVE MUSIC</option>
-                        <option value="SPORTS">SPORTS & OUTDOORS</option>
-                        <option value="EXHIBITIONS">EXHIBITIONS & CULTURE</option>
-                        <option value="CLASSES">CLASSES & WORKSHOPS</option>
-                        <option value="DINING & DRINK">DINING & DRINK</option>
-                        <option value="HAPPY HOUR & SPECIALS">HAPPY HOUR</option>
+                        <option value="SOCIAL & MUSIC">SOCIAL & MUSIC</option>
+                        <option value="SPORTS">SPORTS</option>
+                        <option value="MARKETS">MARKETS</option>
                         <option value="SUNSET">SUNSET</option>
                         <option value="NIGHTLIFE">NIGHTLIFE</option>
                         <option value="TV SPORTS">TV SPORTS</option>
@@ -439,7 +411,7 @@
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "SEASONAL & HOLIDAY", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -635,19 +607,21 @@
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
         function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
         function closeVenueModal() { document.getElementById('venueModal').classList.add('hidden'); }
+        
         function openLoginModal() { 
             const savedUsername = localStorage.getItem('albufeira_custom_username');
+            const modalTitle = document.getElementById('loginModalTitle');
+            const formElement = document.getElementById('loginFormElement');
+
             if (!savedUsername) {
-                // If username hasn't been set up yet, show username setup screen
-                document.getElementById('loginModalTitle').textContent = "Set Your Custom Username";
-                document.getElementById('loginFormElement').innerHTML = `
+                modalTitle.textContent = "Set Your Custom Username";
+                formElement.innerHTML = `
                     <div><label class="block font-bold mb-1 text-gray-300">Choose Permanent Username</label><input type="text" id="customUsernameInput" required placeholder="e.g. AlgarveLocal" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                     <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Save Username & Login</button>
                 `;
             } else {
-                // Standard login if already set
-                document.getElementById('loginModalTitle').textContent = "Login to Albufeira Pulse";
-                document.getElementById('loginFormElement').innerHTML = `
+                modalTitle.textContent = "Login to Albufeira Pulse";
+                formElement.innerHTML = `
                     <div><label class="block font-bold mb-1 text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                     <div><label class="block font-bold mb-1 text-gray-300">Password</label><input type="password" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                     <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Sign In</button>
