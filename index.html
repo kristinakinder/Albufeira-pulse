@@ -22,8 +22,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         #map { height: calc(100vh - 140px); width: 100%; }
     </style>
@@ -39,7 +37,7 @@
             </div>
         </div>
 
-        <!-- Navigation Tabs (Portal Live & Region buttons removed) -->
+        <!-- Navigation Tabs -->
         <div class="flex items-center space-x-2 flex-wrap">
             <button onclick="switchTab('map')" id="tab-map" class="px-3 py-1.5 text-sm font-medium rounded-lg bg-miamiPink text-slate-950 transition">Map</button>
             <button onclick="switchTab('events')" id="tab-events" class="px-3 py-1.5 text-sm font-medium rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Events</button>
@@ -47,9 +45,8 @@
             <button onclick="switchTab('links')" id="tab-links" class="px-3 py-1.5 text-sm font-medium rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Essential Links</button>
         </div>
 
-        <!-- User Profile & Add Event -->
+        <!-- Add Event Action -->
         <div class="flex items-center space-x-3">
-            <div id="user-display" class="text-xs text-slate-300 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700"></div>
             <button onclick="openAddEventModal()" class="bg-miamiPink hover:bg-pink-600 text-slate-950 font-semibold px-3 py-1.5 text-sm rounded-lg transition shadow-lg shadow-miamiPink/20">Add Event</button>
         </div>
     </header>
@@ -75,7 +72,11 @@
         <div id="view-events" class="hidden p-6 max-w-6xl mx-auto w-full">
             <h2 class="text-2xl font-bold mb-4">Upcoming Events & Happenings</h2>
             <div id="events-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Dynamic events loaded here -->
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                    <h3 class="font-bold text-miamiPink">Albufeira Live Music Night</h3>
+                    <p class="text-xs text-slate-400 mt-1">Old Town Square • Friday, 9:00 PM</p>
+                    <p class="text-sm text-slate-300 mt-2">Join local artists performing traditional and modern tunes in the historic square.</p>
+                </div>
             </div>
         </div>
 
@@ -116,44 +117,12 @@
         </div>
     </main>
 
-    <!-- Username Setup Modal -->
-    <div id="username-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl">
-            <h3 class="text-xl font-bold mb-2">Welcome to Albufeira Pulse!</h3>
-            <p class="text-sm text-slate-400 mb-4">Choose your display name. This is a one-time setup and cannot be changed later.</p>
-            <input type="text" id="username-input" placeholder="Enter your username..." class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2 text-white mb-4 focus:outline-none focus:border-miamiPink" />
-            <button onclick="saveUsername()" class="w-full bg-miamiPink text-slate-950 font-bold py-2 rounded-lg hover:bg-pink-600 transition">Set Username</button>
-        </div>
-    </div>
-
     <!-- JavaScript Logic -->
     <script>
-        let username = localStorage.getItem('albufeira_username');
         window.addEventListener('DOMContentLoaded', () => {
-            if (!username) {
-                document.getElementById('username-modal').classList.remove('hidden');
-            } else {
-                updateUserDisplay();
-            }
             initMap();
             loadWeather();
         });
-
-        function saveUsername() {
-            const input = document.getElementById('username-input').value.trim();
-            if (input.length < 2) {
-                alert('Please enter a valid username.');
-                return;
-            }
-            username = input;
-            localStorage.setItem('albufeira_username', username);
-            document.getElementById('username-modal').classList.add('hidden');
-            updateUserDisplay();
-        }
-
-        function updateUserDisplay() {
-            document.getElementById('user-display').innerText = `👤 ${username}`;
-        }
 
         function switchTab(tab) {
             ['map', 'events', 'weather', 'links'].forEach(t => {
@@ -201,11 +170,7 @@
         }
 
         function openAddEventModal() {
-            if (!username) {
-                document.getElementById('username-modal').classList.remove('hidden');
-                return;
-            }
-            alert('Add Event modal triggered for user: ' + username);
+            alert('Add Event modal triggered.');
         }
 
         async function loadWeather() {
