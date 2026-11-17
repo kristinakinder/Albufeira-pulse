@@ -447,7 +447,7 @@
         </div>
     </div>
 
-    <!-- ADD VENUE MODAL (WITH WEBSITE FIELD) -->
+    <!-- ADD VENUE MODAL -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
@@ -505,7 +505,7 @@
         function closeWelcomeModal() { document.getElementById('welcomeModal').classList.add('hidden'); }
         function closeWelcomeModalAndLogin() { closeWelcomeModal(); openLoginModal(); }
 
-        // Fetch registered venues from Supabase public.directory table (includes website)
+        // Fetch registered venues from Supabase public.directory table
         async function loadVenuesFromSupabase() {
             registeredVenues = [
                 { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, marker: null },
@@ -635,6 +635,15 @@
         function filterEvents(cat) { renderEventsGrid(cat, 'all'); }
         function filterZone(zone) { renderEventsGrid('all', zone); }
 
+        function jumpToVenueOnMap(venueName) {
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
+            if (!venue) return;
+            switchTab('events');
+            if (albufeiraMap) {
+                albufeiraMap.setView([venue.lat, venue.lng], 16);
+            }
+        }
+
         function renderDirectoryGrid() {
             const grid = document.getElementById('directoryGrid');
             if (!grid) return;
@@ -645,7 +654,7 @@
                 card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-miamiPink transition';
                 card.onclick = () => openVenueDetailPage(v.name);
                 
-                const websiteBadge = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-sky-400 hover:underline flex items-center gap-1 mt-1">🌐 Official Website ↗</a>` : '';
+                const websiteLink = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-sky-400 hover:underline flex items-center gap-1 mt-1 text-xs">🌐 Official Website ↗</a>` : '';
                 
                 card.innerHTML = `
                     <div>
@@ -659,11 +668,14 @@
                             <h3 class="text-lg font-black text-white theme-text-main">${v.name}</h3>
                             <p class="text-xs text-gray-300 theme-text-sub">📍 ${v.address}</p>
                             <p class="text-xs text-emerald-400 font-bold">🕒 ${v.schedule}</p>
-                            ${websiteBadge}
+                            <div class="flex flex-wrap gap-3 pt-1">
+                                <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name}')" class="text-miamiPink font-bold text-xs hover:underline inline-flex items-center gap-1 cursor-pointer">📍 Show on Map →</button>
+                                ${websiteLink}
+                            </div>
                         </div>
                     </div>
-                    <div class="px-5 pb-5 pt-2 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-miamiPink font-bold">View Personal Page & Events</span>
+                    <div class="px-5 pb-4 pt-2 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-400">View Personal Page & Events</span>
                         <span class="text-miamiCyan group-hover:translate-x-1 transition">→</span>
                     </div>
                 `;
@@ -673,12 +685,13 @@
 
         function openVenueDetailPage(venueName) {
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || {
-                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", website: "",
+                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", website: "", lat: 37.0888, lng: -8.2511,
                 image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily: 12:00 - 02:00"
             };
 
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
-            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-miamiCyan/20 hover:bg-miamiCyan/30 text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">🌐 Visit Official Website ↗</a>` : '';
+            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-miamiCyan/25 hover:bg-miamiCyan/35 text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">🌐 Visit Official Website ↗</a>` : '';
+            const mapLinkBtn = `<button onclick="jumpToVenueOnMap('${venue.name}')" class="inline-flex items-center gap-1.5 bg-miamiPink/20 hover:bg-miamiPink/30 text-miamiPink border border-miamiPink/40 text-xs font-bold px-3 py-1.5 rounded-xl transition cursor-pointer">📍 Show on Map</button>`;
             
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
@@ -691,7 +704,10 @@
                         </div>
                         <p class="text-sm text-gray-300 theme-text-sub">📍 ${venue.address}</p>
                         <p class="text-xs font-bold text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
-                        <div class="pt-1">${websiteBtn}</div>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            ${mapLinkBtn}
+                            ${websiteBtn}
+                        </div>
                     </div>
                 </div>
 
@@ -714,16 +730,6 @@
                         `).join('') : `
                             <p class="text-xs text-gray-400 italic">No specific upcoming special events scheduled right now. Check back soon or view their regular weekly schedule above!</p>
                         `}
-                    </div>
-                </div>
-
-                <div class="space-y-4 pt-4 border-t border-white/10">
-                    <h3 class="text-lg font-black text-gray-400 flex items-center gap-2">
-                        <i data-lucide="history" class="w-4 h-4"></i> Past Events Archive
-                    </h3>
-                    <div class="bg-black/20 p-4 rounded-xl border border-white/5 text-xs text-gray-400 flex justify-between items-center">
-                        <span>Albufeira Summer Sunset Sessions (Archived October 2026)</span>
-                        <span class="text-emerald-400 font-bold">Completed Successfully</span>
                     </div>
                 </div>
             `;
