@@ -270,6 +270,21 @@
                     <button onclick="filterEvents('MARKETS')" id="cat-btn-markets" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">MARKETS</button>
                 </div>
             </div>
+            <!-- Interactive Albufeira Live Map on Events Tab -->
+            <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="w-4 h-4"></i> Interactive Albufeira Map (Venues & Events)
+                    </span>
+                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition">
+                        Hide Map
+                    </button>
+                </div>
+                <div id="eventsMapContainer">
+                    <div id="eventsAlbufeiraMap" style="height: 320px; width: 100%; border-radius: 1rem; z-index: 10;" class="border border-white/10"></div>
+                </div>
+            </div>
+
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
@@ -967,3 +982,1404 @@
         let authMode = 'signin';
         let isDayMode = false;
         let selectedJournalDay = 21;
+        let nsfwModel = null;
+        let knownVenuesCache = [];
+        let pulseMap = null;
+        let pulseMarkers = [];
+        let eventsPulseMap = null;
+        let eventsPulseMarkers = [];
+
+        let journalPhotos = {
+            21: [
+                { url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80', caption: 'Golden hour cocktails at the Marina!', author: 'Alex_L' },
+                { url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=400&q=80', caption: 'Crowd warming up on The Strip', author: 'Kris' }
+            ]
+        };
+
+        const translations = {
+            en: {
+                subtext: "The Heartbeat of the Algarve",
+                townLabel: "Town:",
+                login: "Login",
+                post: "+ Add Event",
+                forecast: "Forecast",
+                air: "Air",
+                sea: "Sea",
+                waves: "Waves",
+                sunrise: "Sunrise",
+                sunset: "Sunset",
+                eventsTab: "Events",
+                calendarTab: "Calendar & Journal",
+                dirTab: "Directory (Yellow Pages)",
+                articlesTab: "Articles",
+                classifiedsTab: "Classifieds",
+                forumTab: "Forum",
+                linksTab: "Essential Links",
+                infoTab: "Emergency & Info",
+                popTitle: "Events & Happenings in",
+                popSub: "Filter by neighbourhood zone, live happenings, or category.",
+                dirTitle: "📍 Local Yellow Pages & Business Directory",
+                dirSub: "Search restaurants, bars, trades, shops, and services across Albufeira.",
+                addVenue: "Create Listing",
+                forumTitle: "💬 Community Forum & Expat Chat",
+                forumSub: "Ask questions, share local tips, and connect with residents & visitors.",
+                newThread: "New Thread"
+            },
+            pt: {
+                subtext: "O Batimento do Algarve",
+                townLabel: "Concelho:",
+                login: "Entrar",
+                post: "+ Adicionar Evento",
+                forecast: "Previsão",
+                air: "Ar",
+                sea: "Mar",
+                waves: "Ondas",
+                sunrise: "Nascer do Sol",
+                sunset: "Pôr do Sol",
+                eventsTab: "Eventos",
+                calendarTab: "Calendário & Diário",
+                dirTab: "Diretório (Páginas Amarelas)",
+                articlesTab: "Artigos",
+                classifiedsTab: "Classificados",
+                forumTab: "Fórum",
+                linksTab: "Links Essenciais",
+                infoTab: "Emergência & Info",
+                popTitle: "Eventos e Acontecimentos em",
+                popSub: "Filtre por zona, eventos ao vivo ou categoria.",
+                dirTitle: "📍 Diretório de Empresas e Serviços",
+                dirSub: "Pesquise restaurantes, bares, lojas e serviços em Albufeira.",
+                addVenue: "Criar Anúncio",
+                forumTitle: "💬 Fórum Comunitário & Chat",
+                forumSub: "Faça perguntas, partilhe dicas locais e conecte-se com residentes e visitantes.",
+                newThread: "Novo Tópico"
+            }
+        };
+        
+        let eventsData = [];
+        let directoryData = [];
+
+        let articlesData = [
+            {
+                id: 1,
+                town: 'Albufeira',
+                tag: 'LOCAL GUIDE',
+                title: 'Beyond the Strip: 5 Quiet Cliff Walks Between São Rafael and Galé',
+                author: 'Albufeira Pulse Editorial',
+                date: 'Nov 14, 2026',
+                readTime: '4 min read',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=85',
+                summary: 'Discover the ochre limestone arches, hidden coves, and peaceful coastal trails just west of Albufeira Marina.'
+            },
+            {
+                id: 2,
+                town: 'Albufeira',
+                tag: 'FOOD & DRINK',
+                title: 'Where Locals Eat Cataplana & Fresh Grilled Sardines in Old Town',
+                author: 'Marco_PT',
+                date: 'Nov 11, 2026',
+                readTime: '3 min read',
+                image: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?auto=format&fit=crop&w=600&q=85',
+                summary: 'Skip the tourist traps near the square—here are the family-run tascas tucked into the cobbled backstreets.'
+            },
+            {
+                id: 3,
+                town: 'Albufeira',
+                tag: 'EXPAT LIFE',
+                title: 'Winter in the Algarve: Navigating Ferreiras Train Connections & Local Markets',
+                author: 'Sophie_Van_D',
+                date: 'Nov 08, 2026',
+                readTime: '5 min read',
+                image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=600&q=85',
+                summary: 'A practical handbook for autumn and winter residents on regional rail links, Saturday farmers markets, and community clubs.'
+            }
+        ];
+
+        let classifiedsData = [
+            {
+                id: 1,
+                town: 'Albufeira',
+                zone: 'Oura Beach',
+                category: 'FOR SALE',
+                title: "7'4 Minimalibu Surfboard + Leash & Travel Bag",
+                price: '€195',
+                contact: 'surfgear.albufeira@example.com',
+                author: 'Liam_M',
+                description: 'Great condition, ideal for Galé and Falésia waves. Ready for collection near Oura.'
+            },
+            {
+                id: 2,
+                town: 'Albufeira',
+                zone: 'Old Town',
+                category: 'RENTALS & HOUSING',
+                title: 'Bright 1-Bed Apartment with Sea View Balcony (Dec – March)',
+                price: '€850 / month',
+                contact: 'oldtownstay@example.com',
+                author: 'Clara_R',
+                description: 'Fibre Wi-Fi, air conditioning/heating, 5 mins walk to Pescadores Beach. Bills included.'
+            },
+            {
+                id: 3,
+                town: 'Albufeira',
+                zone: 'Ferreiras',
+                category: 'LOCAL SERVICES',
+                title: 'Bilingual Handyman, Plumbing & AC Servicing',
+                price: '€30 / hr',
+                contact: 'joao.fixit@example.com',
+                author: 'João FixIt',
+                description: 'Reliable home maintenance across Albufeira, Guia, and Olhos de Água. Free quotes.'
+            }
+        ];
+
+        let forumData = [
+            { id: 1, town: 'Albufeira', title: 'Best spot for watching live sports on The Strip?', author: 'Liam_M (UK Expat)', replies: 14, category: 'SPORTS' },
+            { id: 2, town: 'Albufeira', title: 'Recommendations for long-term winter rentals near Old Town?', author: 'Sophie_Van_D', replies: 22, category: 'CLASSES' },
+            { id: 3, town: 'Albufeira', title: 'Train timetables from Ferreiras station to Faro?', author: 'Marco_PT', replies: 8, category: 'MARKETS' }
+        ];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            lucide.createIcons();
+            initAutoDayNight();
+            await checkUserSession();
+            await fetchEvents('all');
+            await fetchDirectory();
+            await fetchAllVenuesForDropdown();
+            initOrUpdateMap();
+            renderCalendar();
+            renderArticles();
+            renderClassifieds('all');
+            renderForum();
+
+            document.addEventListener('click', (e) => {
+                const container = document.getElementById('venuePickerContainer');
+                if (container && !container.contains(e.target)) {
+                    closeVenueDropdown();
+                }
+            });
+        });
+
+        function initAutoDayNight() {
+            const now = new Date();
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+            if (currentTimeMinutes >= (7 * 60 + 13) && currentTimeMinutes < (17 * 60 + 25)) {
+                toggleDayNightMode(false);
+            }
+        }
+
+        async function checkContentSafety(imageFile, textContent = "") {
+            const bannedPattern = /\b(porn|xxx|nude|nsfw|gore|kill|murder|rape|escort|viagra|suicide|violence|blood)\b/i;
+            if (bannedPattern.test(textContent)) {
+                alert("🚫 Your post was blocked by our automated safety bot for prohibited language or content.");
+                return false;
+            }
+
+            if (imageFile) {
+                try {
+                    if (!nsfwModel) nsfwModel = await nsfwjs.load();
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(imageFile);
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                    });
+                    const predictions = await nsfwModel.classify(img);
+                    const unsafe = predictions.find(p => 
+                        (p.className === 'Porn' || p.className === 'Hentai' || p.className === 'Sexy') && p.probability > 0.60
+                    );
+                    if (unsafe) {
+                        alert("🚫 Image blocked: Our automated safety bot detected nudity or explicit content.");
+                        return false;
+                    }
+                } catch (err) {
+                    console.warn("Moderation image check warning:", err);
+                }
+            }
+            return true;
+        }
+
+        function reportThread(id, title) {
+            const reason = prompt(`Report Thread:\n"${title}"\n\nPlease select a reason:\n1. Spam or Advertising\n2. Inappropriate / Nudity / NSFW\n3. Harassment or Abuse\n4. Other`);
+            if (reason) {
+                alert("🚩 Thank you. This thread has been reported to the moderators for review.");
+            }
+        }
+
+        function toggleDayNightMode(isManualClick = false) {
+            isDayMode = isManualClick ? !isDayMode : true;
+            const body = document.body;
+            const btn = document.getElementById('themeToggleBtn');
+            const text = document.getElementById('themeText');
+            const icon = document.getElementById('themeIcon');
+
+            if (isDayMode) {
+                body.classList.remove('night-mode');
+                body.classList.add('day-mode');
+                btn.className = "bg-indigo-900/10 hover:bg-indigo-900/20 text-indigo-900 border border-indigo-900/30 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm";
+                text.innerText = "Night Mode";
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                body.classList.remove('day-mode');
+                body.classList.add('night-mode');
+                btn.className = "bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm";
+                text.innerText = "Day Mode";
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        function setAuthMode(mode) {
+            authMode = mode;
+            const tabSignIn = document.getElementById('tabSignIn');
+            const tabSignUp = document.getElementById('tabSignUp');
+            const usernameGroup = document.getElementById('usernameFieldGroup');
+            const title = document.getElementById('loginModalTitle');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const errorMsg = document.getElementById('loginErrorMsg');
+            const infoMsg = document.getElementById('loginInfoMsg');
+
+            errorMsg.classList.add('hidden');
+            infoMsg.classList.add('hidden');
+
+            if (mode === 'signup') {
+                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiPink text-white transition";
+                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
+                usernameGroup.classList.remove('hidden');
+                title.innerHTML = `<i data-lucide="user-plus" class="text-miamiPink"></i> Create Account`;
+                submitBtn.innerText = "Create Account";
+            } else {
+                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition";
+                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
+                usernameGroup.classList.add('hidden');
+                title.innerHTML = `<i data-lucide="user" class="text-miamiCyan"></i> Member Login`;
+                submitBtn.innerText = "Sign In";
+            }
+            lucide.createIcons();
+        }
+
+        async function checkUserSession() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                currentUser = session.user;
+                currentEmail = currentUser.email;
+                
+                const { data: profile } = await supabaseClient
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                const metaName = currentUser.user_metadata && currentUser.user_metadata.username;
+                currentDisplayName = (profile && profile.full_name) ? profile.full_name : (metaName || currentEmail.split('@')[0]);
+                
+                const loginBtn = document.getElementById('loginBtn');
+                if (loginBtn) {
+                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${currentDisplayName}</span>`;
+                    loginBtn.setAttribute('onclick', 'openProfileModal()');
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        async function handleAuthSubmit() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPass').value;
+            const username = document.getElementById('signupUsername').value.trim();
+            const errorMsg = document.getElementById('loginErrorMsg');
+            const infoMsg = document.getElementById('loginInfoMsg');
+            
+            errorMsg.classList.add('hidden');
+            infoMsg.classList.add('hidden');
+
+            if (!email || !password) {
+                errorMsg.innerText = "Please enter your email and password.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            if (authMode === 'signup') {
+                if (!username) {
+                    errorMsg.innerText = "Please choose a username.";
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { username: username, full_name: username } }
+                });
+
+                if (error) {
+                    errorMsg.innerText = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else if (data.user) {
+                    await supabaseClient.from('profiles').upsert({ id: data.user.id, full_name: username });
+                    if (data.session) {
+                        closeLoginModal();
+                        location.reload();
+                    } else {
+                        infoMsg.innerText = "Account created! Check your email to confirm your address, then sign in.";
+                        infoMsg.classList.remove('hidden');
+                    }
+                }
+            } else {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) {
+                    errorMsg.innerText = error.message;
+                    errorMsg.classList.remove('hidden');
+                } else {
+                    closeLoginModal();
+                    location.reload();
+                }
+            }
+        }
+
+        function openProfileModal() {
+            document.getElementById('updateUsernameInput').value = currentDisplayName;
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        async function handleUpdateUsername() {
+            const newUsername = document.getElementById('updateUsernameInput').value.trim();
+            if (!newUsername) {
+                alert("Please enter a valid username.");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.updateUser({
+                data: { username: newUsername, full_name: newUsername }
+            });
+
+            if (error) {
+                alert("Error updating username: " + error.message);
+                return;
+            }
+
+            if (currentUser) {
+                await supabaseClient
+                    .from('profiles')
+                    .upsert({ id: currentUser.id, full_name: newUsername });
+            }
+
+            alert("Username updated successfully!");
+            closeProfileModal();
+            location.reload();
+        }
+
+        async function handleLogout() {
+            await supabaseClient.auth.signOut();
+            location.reload();
+        }
+
+        async function fetchEvents(filter = 'all') {
+            currentFilter = filter;
+            let query = supabaseClient.from('events').select('*');
+            if (currentTown) {
+                query = query.ilike('town', `%${currentTown}%`);
+            }
+            const { data, error } = await query;
+            if (!error && data && data.length > 0) {
+                eventsData = data;
+            } else {
+                eventsData = [];
+            }
+            renderEvents(filter);
+        }
+
+        async function fetchDirectory() {
+            let query = supabaseClient.from('directory').select('*').limit(1000);
+            if (currentTown) {
+                query = query.ilike('town', `%${currentTown}%`);
+            }
+            const { data, error } = await query;
+            if (!error && data && data.length > 0) {
+                directoryData = data.map(item => ({
+                    id: item.id,
+                    town: item.town || 'Albufeira',
+                    zone: item.zone || 'Albufeira',
+                    name: item.name || item.Name || item.title || 'Local Venue',
+                    category: item.category || item.Category || 'Local Business',
+                    address: item.address || item.Address || 'Albufeira',
+                    rating: item.rating || '4.8 ⭐',
+                    owner_email: item.owner_email || '',
+                    phone: item.phone || item.Phone || '',
+                    website: item.website || item.Website || '',
+                    lat: parseFloat(item.lat || item.latitude || 0) || null,
+                    lng: parseFloat(item.lng || item.longitude || 0) || null
+                }));
+            } else {
+                directoryData = [];
+            }
+            renderDirectory();
+        }
+
+        // --- YELLOW PAGES DIRECTORY CREATOR MODAL ---
+        function openBusinessModal() {
+            document.getElementById('bizTown').value = currentTown || 'Albufeira';
+            document.getElementById('businessModal').classList.remove('hidden');
+        }
+        function closeBusinessModal() {
+            document.getElementById('businessModal').classList.add('hidden');
+        }
+
+        async function submitNewBusiness() {
+            const name = document.getElementById('bizName').value.trim();
+            const cat = document.getElementById('bizCategory').value;
+            const specialty = document.getElementById('bizSpecialty').value.trim();
+            const town = document.getElementById('bizTown').value.trim() || 'Albufeira';
+            const zone = document.getElementById('bizZone').value;
+            const address = document.getElementById('bizAddress').value.trim() || `${zone}, ${town}`;
+            const phone = document.getElementById('bizPhone').value.trim();
+            const website = document.getElementById('bizWebsite').value.trim();
+
+            if (!name) {
+                alert("Please enter the business or venue name.");
+                return;
+            }
+
+            const fullCategory = specialty ? `${cat} (${specialty})` : cat;
+            const isSafe = await checkContentSafety(null, `${name} ${fullCategory} ${address}`);
+            if (!isSafe) return;
+
+            const newEntry = {
+                town: town,
+                zone: zone,
+                name: name,
+                category: fullCategory,
+                address: address,
+                phone: phone,
+                website: website,
+                rating: '4.8 ⭐',
+                owner_email: currentUser ? currentEmail : ''
+            };
+
+            const { error } = await supabaseClient.from('directory').insert([newEntry]);
+            if (error) {
+                alert("Database notice: " + error.message + "\n(Added locally for now — run the RLS SQL policy in Supabase to persist permanently.)");
+                directoryData.unshift({ id: Date.now(), ...newEntry });
+            } else {
+                await fetchDirectory();
+            }
+
+            await fetchAllVenuesForDropdown();
+
+            document.getElementById('bizName').value = '';
+            document.getElementById('bizSpecialty').value = '';
+            document.getElementById('bizAddress').value = '';
+            document.getElementById('bizPhone').value = '';
+            document.getElementById('bizWebsite').value = '';
+            closeBusinessModal();
+            switchTab('directory');
+            renderDirectory();
+        }
+
+        // --- GLOBAL VENUE FETCHER & CUSTOM SEARCHABLE DROPDOWN ---
+        async function fetchAllVenuesForDropdown() {
+            const venueMap = new Map();
+
+            const registerVenue = (rawName, rawTown, rawZone, rawType) => {
+                if (!rawName || typeof rawName !== 'string') return;
+                const cleanName = rawName.trim();
+                if (!cleanName) return;
+                const key = cleanName.toLowerCase();
+                if (!venueMap.has(key)) {
+                    venueMap.set(key, {
+                        name: cleanName,
+                        town: (rawTown || 'Albufeira').trim(),
+                        zone: (rawZone || 'Old Town').trim(),
+                        type: (rawType || 'Venue').trim()
+                    });
+                }
+            };
+
+            directoryData.forEach(d => registerVenue(d.name, d.town, d.zone, d.category));
+            eventsData.forEach(e => registerVenue(e.venue, e.town, e.zone, e.venue_type));
+
+            try {
+                const { data: allDir } = await supabaseClient.from('directory').select('*').limit(1000);
+                if (allDir && Array.isArray(allDir)) {
+                    allDir.forEach(d => registerVenue(d.name || d.Name || d.title, d.town, d.zone, d.category || d.Category));
+                }
+            } catch (err) {
+                console.warn('Directory fetch for dropdown:', err);
+            }
+
+            try {
+                const { data: allEv } = await supabaseClient.from('events').select('*').limit(1000);
+                if (allEv && Array.isArray(allEv)) {
+                    allEv.forEach(e => registerVenue(e.venue || e.venue_name, e.town, e.zone, e.venue_type));
+                }
+            } catch (err) {
+                console.warn('Events fetch for dropdown:', err);
+            }
+
+            knownVenuesCache = Array.from(venueMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+
+            const badge = document.getElementById('venueCountBadge');
+            if (badge) {
+                badge.innerText = `${knownVenuesCache.length} saved venues`;
+            }
+
+            renderVenueDropdownItems(knownVenuesCache);
+        }
+
+        function renderVenueDropdownItems(list) {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (!dropdown) return;
+
+            if (!list || list.length === 0) {
+                dropdown.innerHTML = `<div class="p-3 text-xs text-gray-400 italic">No saved venues match. Keep typing to add a new venue!</div>`;
+                return;
+            }
+
+            dropdown.innerHTML = list.slice(0, 150).map((v, idx) => `
+                <button type="button" onclick="selectVenueFromDropdown(${idx}, '${v.name.replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-2.5 hover:bg-miamiCyan/20 transition flex justify-between items-center gap-2">
+                    <div>
+                        <p class="text-xs font-bold text-white theme-text-main">${v.name}</p>
+                        <p class="text-[11px] text-gray-400 theme-text-sub">${v.town} • ${v.zone}</p>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-miamiPink/20 text-miamiPink whitespace-nowrap">${v.type}</span>
+                </button>
+            `).join('');
+        }
+
+        function openVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) {
+                const currentVal = document.getElementById('inputVenueName').value.trim();
+                filterVenueDropdown(currentVal);
+                dropdown.classList.remove('hidden');
+            }
+        }
+
+        function closeVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        function toggleVenueDropdown() {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (!dropdown) return;
+            if (dropdown.classList.contains('hidden')) {
+                renderVenueDropdownItems(knownVenuesCache);
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        function filterVenueDropdown(query) {
+            const dropdown = document.getElementById('customVenueDropdown');
+            if (dropdown) dropdown.classList.remove('hidden');
+
+            const q = (query || '').trim().toLowerCase();
+            if (!q) {
+                renderVenueDropdownItems(knownVenuesCache);
+                return;
+            }
+
+            const matches = knownVenuesCache.filter(v =>
+                v.name.toLowerCase().includes(q) ||
+                v.zone.toLowerCase().includes(q) ||
+                v.type.toLowerCase().includes(q)
+            );
+            renderVenueDropdownItems(matches);
+        }
+
+        function selectVenueFromDropdown(_, venueName) {
+            const match = knownVenuesCache.find(v => v.name === venueName);
+            if (!match) return;
+
+            document.getElementById('inputVenueName').value = match.name;
+            document.getElementById('modalTown').value = match.town;
+            document.getElementById('inputVenueType').value = match.type;
+
+            const zoneSelect = document.getElementById('modalZone');
+            let matchedZone = false;
+            for (let opt of zoneSelect.options) {
+                if (opt.value.toLowerCase() === match.zone.toLowerCase()) {
+                    zoneSelect.value = opt.value;
+                    matchedZone = true;
+                    break;
+                }
+            }
+            if (!matchedZone) zoneSelect.value = 'Other';
+
+            closeVenueDropdown();
+        }
+
+        function changeTown(town) {
+            currentTown = town.trim();
+            const displayTown = currentTown || 'Albufeira';
+            document.getElementById('currentTownHeader').innerText = displayTown;
+            document.getElementById('bannerTown').innerText = displayTown;
+            
+            fetchEvents(currentFilter);
+            renderCalendar();
+            fetchDirectory();
+            renderArticles();
+            renderClassifieds(currentClassifiedFilter);
+            renderForum();
+        }
+
+        function filterZone(zone) {
+            currentZone = zone;
+            document.querySelectorAll('.zone-btn').forEach(btn => {
+                btn.className = "zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap";
+            });
+            const mapIds = {
+                'all': 'zone-btn-all',
+                'Old Town': 'zone-btn-oldtown',
+                'The Strip': 'zone-btn-strip',
+                'Marina': 'zone-btn-marina',
+                'Monte Choro': 'zone-btn-choro',
+                'Ferreiras': 'zone-btn-ferreiras',
+                'Oura Beach': 'zone-btn-oura'
+            };
+            const active = document.getElementById(mapIds[zone]);
+            if (active) {
+                active.className = "zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark shadow-sm transition whitespace-nowrap";
+            }
+            renderEvents(currentFilter);
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('subtextTitle').innerText = t.subtext;
+            document.getElementById('labelTown').innerHTML = `<i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${t.townLabel}`;
+            const loginBtnSpan = document.querySelector('#loginBtn span');
+            if(loginBtnSpan && !currentUser) loginBtnSpan.innerText = t.login;
+            document.getElementById('btnPostText').innerText = t.post;
+            document.getElementById('lblForecast').innerText = t.forecast;
+            document.getElementById('lblAir').innerText = t.air;
+            document.getElementById('lblSea').innerText = t.sea;
+            document.getElementById('lblWaves').innerText = t.waves;
+            document.getElementById('lblSunrise').innerText = t.sunrise;
+            document.getElementById('lblSunset').innerText = t.sunset;
+            document.getElementById('tabEventsLbl').innerText = t.eventsTab;
+            document.getElementById('tabCalendarLbl').innerText = t.calendarTab;
+            document.getElementById('tabDirectoryLbl').innerText = t.dirTab;
+            document.getElementById('tabArticlesLbl').innerText = t.articlesTab;
+            document.getElementById('tabClassifiedsLbl').innerText = t.classifiedsTab;
+            document.getElementById('tabForumLbl').innerText = t.forumTab;
+            document.getElementById('tabLinksLbl').innerText = t.linksTab;
+            document.getElementById('tabInfoLbl').innerText = t.infoTab;
+            document.getElementById('popularHeaderTitle').innerText = t.popTitle;
+            document.getElementById('popularSubtext').innerText = t.popSub;
+            document.getElementById('dirSub').innerText = t.dirSub;
+            document.getElementById('btnAddVenue').innerText = t.addVenue;
+            document.getElementById('forumTitle').innerText = t.forumTitle;
+            document.getElementById('forumSub').innerText = t.forumSub;
+            document.getElementById('btnNewThread').innerText = t.newThread;
+            lucide.createIcons();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap";
+            });
+            const activeTabBtn = document.getElementById('btn-' + tab);
+            if(activeTabBtn) {
+                activeTabBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap";
+            }
+
+            ['events', 'calendar', 'directory', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
+                const el = document.getElementById('tab-content-' + t);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById('tab-content-' + tab);
+            if (target) target.classList.remove('hidden');
+            if (tab === 'directory' || tab === 'events') {
+                initOrUpdateMap();
+            }
+        }
+
+        function getCategoryBadgeStyle(category) {
+            const cat = (category || '').toUpperCase().trim();
+            if (cat.includes('SPORTS') || cat.includes('LIVE TV')) {
+                return 'bg-miamiCyan/20 text-miamiCyan border-miamiCyan/40';
+            } else if (cat.includes('MUSIC') || cat.includes('NIGHTLIFE')) {
+                return 'bg-purple-500/20 text-purple-400 border-purple-500/40';
+            } else if (cat.includes('HAPPY HOUR') || cat.includes('DINING')) {
+                return 'bg-amber-500/25 text-amber-400 border-amber-500/40';
+            }
+            return 'bg-miamiPink/20 text-miamiPink border-miamiPink/30';
+        }
+
+        function renderEvents(filter = 'all') {
+            currentFilter = filter;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                if (btn.id !== 'cat-btn-now') {
+                    btn.className = "cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition";
+                }
+            });
+            
+            let activeBtnId = 'cat-btn-all';
+            if(filter === 'WHATS_ON_NOW') activeBtnId = 'cat-btn-now';
+            else if(filter === 'LIVE TV') activeBtnId = 'cat-btn-livetv';
+            else if(filter === 'SPORTS') activeBtnId = 'cat-btn-sports';
+            else if(filter === 'EXHIBITIONS') activeBtnId = 'cat-btn-exhibitions';
+            else if(filter === 'CLASSES') activeBtnId = 'cat-btn-classes';
+            else if(filter === 'DINING & DRINK') activeBtnId = 'cat-btn-dining';
+            else if(filter === 'HAPPY HOUR & SPECIALS') activeBtnId = 'cat-btn-happy';
+            else if(filter === 'SUNSET & NIGHTLIFE') activeBtnId = 'cat-btn-sunset';
+            else if(filter === 'LIVE MUSIC') activeBtnId = 'cat-btn-music';
+            else if(filter === 'MARKETS') activeBtnId = 'cat-btn-markets';
+
+            const activeBtn = document.getElementById(activeBtnId);
+            if(activeBtn && activeBtnId !== 'cat-btn-now') {
+                activeBtn.className = "cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition";
+            }
+
+            const grid = document.getElementById('eventsGrid');
+            let filtered = eventsData.filter(e => !currentTown || (e.town && e.town.toLowerCase().includes(currentTown.toLowerCase())));
+
+            if (currentZone !== 'all') {
+                filtered = filtered.filter(e => e.zone && e.zone.toLowerCase().includes(currentZone.toLowerCase()));
+            }
+
+            if (filter === 'WHATS_ON_NOW') {
+                filtered = filtered.filter(e => e.is_live_now || (e.date && e.date.includes('Nov 16')));
+            } else if (filter !== 'all') {
+                filtered = filtered.filter(e => e.category && e.category.toLowerCase().trim() === filter.toLowerCase().trim());
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No events found matching this zone or filter yet. Be the first to post one!</p>
+                </div>`;
+                return;
+            }
+
+            const adminEmails = ['info@albufeira-pulse.com', 'alexlockwood78@yahoo.co.uk', 'kris'];
+            const isUserAdmin = currentUser && (
+                adminEmails.includes(currentEmail.toLowerCase()) || 
+                currentDisplayName.toLowerCase().includes('kris') ||
+                currentEmail.toLowerCase().includes('kris')
+            );
+
+            grid.innerHTML = filtered.map(e => {
+                const isOwnerOrStaff = isUserAdmin || (currentUser && currentEmail === e.owner_email);
+                const shareText = encodeURIComponent(`Check out "${e.title}" at ${e.venue} (${e.zone || e.town}) on ${e.date} at ${e.time}! Found on Albufeira Pulse 🌴`);
+                return `
+                    <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiPink/20 rounded-2xl overflow-hidden hover:border-miamiCyan/60 transition shadow-lg flex flex-col justify-between">
+                        ${e.poster_url ? `<div class="h-48 overflow-hidden relative">
+                            <img src="${e.poster_url}" alt="${e.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                            ${e.zone ? `<span class="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-miamiCyan text-[11px] font-black px-2.5 py-1 rounded-lg border border-miamiCyan/40">📍 ${e.zone}</span>` : ''}
+                        </div>` : ''}
+                        <div class="p-5 flex flex-col flex-grow justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-3 gap-2">
+                                    <span class="text-[11px] font-black px-2.5 py-1 rounded-full border ${getCategoryBadgeStyle(e.category)}">${e.category}</span>
+                                    <span class="text-xs text-miamiCyan font-semibold flex items-center gap-1 whitespace-nowrap"><i data-lucide="map-pin" class="w-3 h-3"></i> ${e.town}</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-white theme-text-main mb-1">${e.title}</h3>
+                                <p class="text-xs text-miamiCyan mb-1 font-semibold">📍 ${e.venue} <span class="text-gray-400 theme-text-sub font-normal">(${e.venue_type || 'Venue'})</span></p>
+                                <p class="text-xs text-amber-500 font-bold mb-3">🎫 ${e.price || 'Free'}</p>
+                                <p class="text-xs text-gray-300 theme-text-sub mb-4">${e.description || ''}</p>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center text-xs text-gray-400 theme-text-sub border-t border-white/10 pt-3 mb-3">
+                                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-miamiPink"></i> ${e.date} (${e.time || '21:00'})</span>
+                                    <span class="text-miamiPink font-bold"><span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <button onclick="incrementGoing(${e.id})" class="flex-grow bg-white/5 theme-pill hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                                        ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
+                                    </button>
+                                    <a href="https://wa.me/?text=${shareText}" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white p-2.5 rounded-xl text-xs border border-emerald-500/40 transition flex items-center justify-center" title="Share on WhatsApp">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                                    </a>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white p-2.5 rounded-xl text-xs border border-blue-500/40 transition flex items-center justify-center" title="Share on Facebook">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.373 14.5 5 15.5 5H18V0h-3.808C10.559 0 9 1.587 9 4.75V8z"/></svg>
+                                    </a>
+                                    <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-white p-2.5 rounded-xl text-xs border border-sky-500/40 transition flex items-center justify-center" title="Share on X">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                                    </a>
+                                    ${isOwnerOrStaff ? `<button onclick="deleteEvent(${e.id})" class="bg-miamiPink/20 hover:bg-miamiPink text-miamiPink hover:text-white p-2.5 rounded-xl text-xs border border-miamiPink/40 transition" title="Delete event">🗑️</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+            initOrUpdateMap();
+        }
+
+        function renderArticles() {
+            const grid = document.getElementById('articlesGrid');
+            const filtered = articlesData.filter(a => !currentTown || (a.town && a.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No articles published for this town yet.</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(a => `
+                <article class="bg-miamiCard/90 theme-card backdrop-blur-md border border-emerald-500/25 rounded-2xl overflow-hidden hover:border-emerald-400 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="h-44 overflow-hidden relative">
+                            <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                            <span class="absolute top-3 left-3 bg-emerald-500 text-miamiDark text-[10px] font-black px-2.5 py-1 rounded-lg">${a.tag}</span>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex justify-between items-center text-[11px] text-gray-400 theme-text-sub mb-2">
+                                <span>${a.date} • ${a.readTime}</span>
+                                <span class="text-emerald-400 font-bold">${a.town}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white theme-text-main mb-2 leading-snug">${a.title}</h3>
+                            <p class="text-xs text-gray-300 theme-text-sub leading-relaxed">${a.summary}</p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-400 theme-text-sub">By <strong class="text-white theme-text-main">${a.author}</strong></span>
+                        <button onclick="alert('${a.title.replace(/'/g, "\\'")}\\n\\n${a.summary.replace(/'/g, "\\'")}')" class="text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                            Read Story <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </article>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openArticleModal() { document.getElementById('articleModal').classList.remove('hidden'); }
+        function closeArticleModal() { document.getElementById('articleModal').classList.add('hidden'); }
+
+        async function submitNewArticle() {
+            const title = document.getElementById('artTitle').value.trim();
+            const tag = document.getElementById('artTag').value;
+            const town = document.getElementById('artTown').value.trim() || 'Albufeira';
+            const body = document.getElementById('artBody').value.trim();
+
+            if (!title || !body) {
+                alert('Please enter an article headline and summary.');
+                return;
+            }
+
+            const isSafe = await checkContentSafety(null, title + " " + body);
+            if (!isSafe) return;
+
+            articlesData.unshift({
+                id: Date.now(),
+                town: town,
+                tag: tag,
+                title: title,
+                author: currentDisplayName || 'Community Contributor',
+                date: 'Nov 16, 2026',
+                readTime: '3 min read',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=85',
+                summary: body
+            });
+
+            document.getElementById('artTitle').value = '';
+            document.getElementById('artBody').value = '';
+            closeArticleModal();
+            renderArticles();
+        }
+
+        function filterClassifieds(category) {
+            currentClassifiedFilter = category;
+            renderClassifieds(category);
+        }
+
+        function renderClassifieds(filter = 'all') {
+            document.querySelectorAll('.cls-filter-btn').forEach(btn => {
+                btn.className = "cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition";
+            });
+            const mapCls = {
+                'all': 'cls-btn-all',
+                'FOR SALE': 'cls-btn-sale',
+                'RENTALS & HOUSING': 'cls-btn-rentals',
+                'LOCAL SERVICES': 'cls-btn-services',
+                'JOBS & GIGS': 'cls-btn-jobs'
+            };
+            const active = document.getElementById(mapCls[filter]);
+            if (active) active.className = "cls-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white whitespace-nowrap transition";
+
+            const grid = document.getElementById('classifiedsGrid');
+            let filtered = classifiedsData.filter(c => !currentTown || (c.town && c.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (filter !== 'all') {
+                filtered = filtered.filter(c => c.category === filter);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No classified listings in this category yet. Post one for free!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(c => `
+                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-purple-500/30 rounded-2xl p-5 hover:border-purple-400 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-3">
+                            <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">${c.category}</span>
+                            <span class="text-sm font-black text-amber-400">${c.price}</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white theme-text-main mb-1">${c.title}</h3>
+                        <p class="text-xs text-miamiCyan font-semibold mb-3">📍 ${c.zone || c.town}</p>
+                        <p class="text-xs text-gray-300 theme-text-sub mb-4 leading-relaxed">${c.description}</p>
+                    </div>
+                    <div class="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-400 theme-text-sub">Posted by <strong class="text-white theme-text-main">${c.author}</strong></span>
+                        <button onclick="alert('Contact Seller (${c.author}):\\n${c.contact}')" class="bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 font-bold px-3 py-1.5 rounded-xl transition">
+                            Contact Seller
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openClassifiedModal() { document.getElementById('classifiedModal').classList.remove('hidden'); }
+        function closeClassifiedModal() { document.getElementById('classifiedModal').classList.add('hidden'); }
+
+        async function submitNewClassified() {
+            const title = document.getElementById('clsTitle').value.trim();
+            const category = document.getElementById('clsCategory').value;
+            const price = document.getElementById('clsPrice').value.trim() || 'Contact for price';
+            const zone = document.getElementById('clsZone').value.trim() || 'Albufeira';
+            const contact = document.getElementById('clsContact').value.trim();
+            const desc = document.getElementById('clsDesc').value.trim();
+
+            if (!title || !contact || !desc) {
+                alert('Please enter a title, contact details, and description.');
+                return;
+            }
+
+            const isSafe = await checkContentSafety(null, title + " " + desc);
+            if (!isSafe) return;
+
+            classifiedsData.unshift({
+                id: Date.now(),
+                town: currentTown || 'Albufeira',
+                zone: zone,
+                category: category,
+                title: title,
+                price: price,
+                contact: contact,
+                author: currentDisplayName || 'Local Member',
+                description: desc
+            });
+
+            document.getElementById('clsTitle').value = '';
+            document.getElementById('clsPrice').value = '';
+            document.getElementById('clsContact').value = '';
+            document.getElementById('clsDesc').value = '';
+            closeClassifiedModal();
+            renderClassifieds(currentClassifiedFilter);
+        }
+
+        async function incrementGoing(id) {
+            const event = eventsData.find(e => e.id === id);
+            if (event) {
+                const newCount = (event.going || 0) + 1;
+                event.going = newCount;
+                await supabaseClient.from('events').update({ going: newCount }).eq('id', id);
+                renderEvents(currentFilter);
+            }
+        }
+
+        async function deleteEvent(id) {
+            if (confirm("Are you sure you want to delete this event?")) {
+                const { error } = await supabaseClient.from('events').delete().eq('id', id);
+                if (!error) {
+                    fetchEvents(currentFilter);
+                } else {
+                    alert("Error deleting: " + error.message);
+                }
+            }
+        }
+
+        function filterEvents(category) {
+            renderEvents(category);
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            let daysHtml = '';
+            for (let i = 1; i <= 30; i++) {
+                const dayEvents = eventsData.filter(e => e.date && e.date.includes(`Nov ${i}`));
+                const hasEvent = dayEvents.length > 0;
+                const hasPhotos = journalPhotos[i] && journalPhotos[i].length > 0;
+                daysHtml += `
+                    <div onclick="openDayJournal(${i})" class="aspect-square bg-black/50 theme-input border ${hasEvent ? 'border-miamiPink bg-miamiPink/10' : 'border-white/10'} hover:border-miamiCyan cursor-pointer rounded-xl p-2 flex flex-col justify-between transition group">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold ${hasEvent ? 'text-miamiPink' : 'text-gray-400 theme-text-sub'} group-hover:text-miamiCyan">${i}</span>
+                            ${hasPhotos ? `<span class="text-[10px]" title="Party photos attached">📸</span>` : ''}
+                        </div>
+                        <div class="space-y-1">
+                            ${hasEvent ? `<span class="block text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center truncate">${dayEvents.length} Event${dayEvents.length > 1 ? 's' : ''}</span>` : `<span class="hidden sm:block text-[9px] text-gray-500 opacity-0 group-hover:opacity-100 text-center">+ Journal</span>`}
+                        </div>
+                    </div>
+                `;
+            }
+            grid.innerHTML = daysHtml;
+        }
+
+        function openDayJournal(day) {
+            selectedJournalDay = day;
+            const dateStr = `Nov ${day}, 2026`;
+            document.getElementById('journalDateTitle').innerHTML = `<i data-lucide="book-open" class="text-miamiCyan"></i> ${dateStr} Journal`;
+
+            const dayEvents = eventsData.filter(e => e.date && e.date.includes(`Nov ${day}`));
+            const eventsListEl = document.getElementById('journalDayEventsList');
+            if (dayEvents.length === 0) {
+                eventsListEl.innerHTML = `<p class="text-xs text-gray-400 theme-text-sub italic">No events listed yet for ${dateStr}. Click "+ Add Event on This Day" above to post one!</p>`;
+            } else {
+                eventsListEl.innerHTML = dayEvents.map(ev => `
+                    <div class="bg-black/40 theme-input p-3 rounded-xl border border-white/10 flex justify-between items-center">
+                        <div>
+                            <p class="text-xs font-bold text-white theme-text-main">${ev.title}</p>
+                            <p class="text-[11px] text-miamiCyan">📍 ${ev.venue} (${ev.zone || ev.town}) • 🕒 ${ev.time}</p>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-miamiPink/20 text-miamiPink">${ev.category}</span>
+                    </div>
+                `).join('');
+            }
+
+            renderJournalPhotos(day);
+            document.getElementById('dayJournalModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeDayJournalModal() { document.getElementById('dayJournalModal').classList.add('hidden'); }
+        
+        function openAddEventForDate() {
+            closeDayJournalModal();
+            document.getElementById('inputDate').value = `Nov ${selectedJournalDay}, 2026`;
+            openModal();
+        }
+
+        function renderJournalPhotos(day) {
+            const photosGrid = document.getElementById('journalPhotosGrid');
+            const photos = journalPhotos[day] || [];
+            if (photos.length === 0) {
+                photosGrid.innerHTML = `<p class="col-span-full text-xs text-gray-400 theme-text-sub italic">No party snapshots shared for this day yet. Upload the first memory!</p>`;
+                return;
+            }
+            photosGrid.innerHTML = photos.map(p => `
+                <div class="bg-black/40 theme-input rounded-xl overflow-hidden border border-white/10">
+                    <img src="${p.url}" class="w-full h-28 object-cover">
+                    <div class="p-2">
+                        <p class="text-[11px] font-semibold text-white theme-text-main truncate">${p.caption}</p>
+                        <p class="text-[10px] text-miamiCyan">by ${p.author}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function uploadJournalPhoto() {
+            const caption = document.getElementById('journalPhotoCaption').value.trim() || 'Great night in Albufeira!';
+            const fileInput = document.getElementById('journalPhotoFile');
+            if (!fileInput.files || !fileInput.files[0]) { alert('Please select a photo first.'); return; }
+
+            const file = fileInput.files[0];
+            const isSafe = await checkContentSafety(file, caption);
+            if (!isSafe) return;
+
+            let photoUrl = URL.createObjectURL(file);
+            const filePath = `journal/nov-${selectedJournalDay}/${Date.now()}_${file.name}`;
+            const { error: uploadError } = await supabaseClient.storage.from('flyers-and-photos').upload(filePath, file);
+
+            if (!uploadError) {
+                const { data: publicUrlData } = supabaseClient.storage.from('flyers-and-photos').getPublicUrl(filePath);
+                photoUrl = publicUrlData.publicUrl;
+            }
+
+            if (!journalPhotos[selectedJournalDay]) journalPhotos[selectedJournalDay] = [];
+            journalPhotos[selectedJournalDay].unshift({ url: photoUrl, caption: caption, author: currentDisplayName || 'Guest' });
+
+            document.getElementById('journalPhotoCaption').value = '';
+            fileInput.value = '';
+            renderJournalPhotos(selectedJournalDay);
+            renderCalendar();
+        }
+
+
+        const zoneCoords = {
+            'old town': [37.0875, -8.2525],
+            'the strip': [37.0912, -8.2275],
+            'marina': [37.0845, -8.2665],
+            'monte choro': [37.1015, -8.2285],
+            'ferreiras': [37.1295, -8.2430],
+            'oura beach': [37.0865, -8.2260],
+            'olhos de água': [37.0905, -8.1910],
+            'albufeira': [37.0891, -8.2479]
+        };
+
+        function toggleEventsMap() {
+            const container = document.getElementById('eventsMapContainer');
+            const btn = document.getElementById('toggleEventsMapBtn');
+            if (!container) return;
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                if (btn) btn.innerText = 'Hide Map';
+                initOrUpdateMap();
+            } else {
+                container.classList.add('hidden');
+                if (btn) btn.innerText = 'Show Map';
+            }
+        }
+
+        function populateMapInstance(mapInstance, markersArray) {
+            markersArray.forEach(m => mapInstance.removeLayer(m));
+            markersArray.length = 0;
+
+            const filteredDir = directoryData.filter(d => !currentTown || (d.town && d.town.toLowerCase().includes(currentTown.toLowerCase())));
+            const filteredEv = eventsData.filter(e => !currentTown || (e.town && e.town.toLowerCase().includes(currentTown.toLowerCase())));
+
+            const combined = [];
+            const seenNames = new Set();
+
+            filteredEv.forEach(e => {
+                const key = (e.venue || e.title || '').toLowerCase();
+                if (key && !seenNames.has(key)) {
+                    seenNames.add(key);
+                    combined.push({
+                        name: e.venue || e.title,
+                        zone: e.zone || e.town || 'Albufeira',
+                        town: e.town || 'Albufeira',
+                        category: `EVENT: ${e.title}`,
+                        address: `${e.date} • ${e.time || ''}`,
+                        lat: parseFloat(e.lat || 0) || null,
+                        lng: parseFloat(e.lng || 0) || null,
+                        isEvent: true
+                    });
+                }
+            });
+
+            filteredDir.forEach(d => {
+                const key = (d.name || '').toLowerCase();
+                if (key && !seenNames.has(key)) {
+                    seenNames.add(key);
+                    combined.push({
+                        name: d.name,
+                        zone: d.zone || d.town || 'Albufeira',
+                        town: d.town || 'Albufeira',
+                        category: d.category,
+                        address: d.address,
+                        lat: d.lat,
+                        lng: d.lng,
+                        isEvent: false
+                    });
+                }
+            });
+
+            combined.forEach((item, idx) => {
+                let lat = item.lat;
+                let lng = item.lng;
+
+                if (!lat || !lng) {
+                    const zKey = (item.zone || 'albufeira').toLowerCase();
+                    const base = zoneCoords[zKey] || zoneCoords['albufeira'];
+                    const angle = (idx * 137.5) * (Math.PI / 180);
+                    const radius = 0.0012 * ((idx % 5) + 1);
+                    lat = base[0] + Math.cos(angle) * radius;
+                    lng = base[1] + Math.sin(angle) * radius;
+                }
+
+                const pinColor = item.isEvent ? '#06B6D4' : '#FF2A85';
+                const borderColor = item.isEvent ? '#FF2A85' : '#06B6D4';
+                const customIcon = L.divIcon({
+                    className: 'custom-pulse-pin',
+                    html: `<div style="background-color:${pinColor}; width:14px; height:14px; border-radius:50%; border:2px solid ${borderColor}; box-shadow: 0 0 10px ${pinColor};"></div>`,
+                    iconSize: [14, 14]
+                });
+
+                const marker = L.marker([lat, lng], { icon: customIcon }).addTo(mapInstance);
+                marker.bindPopup(`
+                    <div style="min-width:160px;">
+                        <div style="font-size:10px; font-weight:800; color:#06B6D4; text-transform:uppercase;">${item.zone} • ${item.category}</div>
+                        <div style="font-size:13px; font-weight:800; color:#fff; margin-top:2px;">${item.name}</div>
+                        <div style="font-size:11px; color:#9CA3AF; margin-top:2px;">${item.address}</div>
+                        <a href="https://maps.google.com/?q=${encodeURIComponent(item.name + ' ' + item.town)}" target="_blank" style="display:inline-block; margin-top:6px; font-size:11px; font-weight:700; color:#FF2A85; text-decoration:underline;">Open in Google Maps &rarr;</a>
+                    </div>
+                `);
+                markersArray.push(marker);
+            });
+        }
+
+        function initOrUpdateMap() {
+            if (typeof L === 'undefined') return;
+
+            const eventsMapEl = document.getElementById('eventsAlbufeiraMap');
+            if (eventsMapEl && eventsMapEl.offsetParent !== null) {
+                if (!eventsPulseMap) {
+                    eventsPulseMap = L.map('eventsAlbufeiraMap').setView([37.0891, -8.2479], 13);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; OpenStreetMap &copy; CARTO',
+                        subdomains: 'abcd',
+                        maxZoom: 19
+                    }).addTo(eventsPulseMap);
+                }
+                setTimeout(() => eventsPulseMap.invalidateSize(), 150);
+                populateMapInstance(eventsPulseMap, eventsPulseMarkers);
+            }
+
+            const dirMapEl = document.getElementById('albufeiraMap');
+            if (dirMapEl && dirMapEl.offsetParent !== null) {
+                if (!pulseMap) {
+                    pulseMap = L.map('albufeiraMap').setView([37.0891, -8.2479], 13);
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                        attribution: '&copy; OpenStreetMap &copy; CARTO',
+                        subdomains: 'abcd',
+                        maxZoom: 19
+                    }).addTo(pulseMap);
+                }
+                setTimeout(() => pulseMap.invalidateSize(), 150);
+                populateMapInstance(pulseMap, pulseMarkers);
+            }
+        }
+
+        function renderDirectory() {
+            const grid = document.getElementById('directoryGrid');
+            const searchInput = document.getElementById('directorySearchInput');
+            const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+            let filtered = directoryData.filter(d => !currentTown || (d.town && d.town.toLowerCase().includes(currentTown.toLowerCase())));
+            if (q) {
+                filtered = filtered.filter(d =>
+                    (d.name && d.name.toLowerCase().includes(q)) ||
+                    (d.category && d.category.toLowerCase().includes(q)) ||
+                    (d.address && d.address.toLowerCase().includes(q))
+                );
+            }
+
+            const totalBadge = document.getElementById('dirTotalBadge');
+            if (totalBadge) totalBadge.innerText = `${filtered.length} listings`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No businesses match your search. Click "+ Create Listing" to add one!</p>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.slice(0, 120).map(d => `
+                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2 gap-2">
+                            <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
+                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold whitespace-nowrap">${d.rating || '4.8 ⭐'}</span>
+                        </div>
+                        <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
+                        <p class="text-xs text-gray-400 theme-text-sub mb-3 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-miamiCyan"></i> ${d.address}</p>
+                    </div>
+                    <div class="space-y-2 pt-2 border-t border-white/10">
+                        <div class="flex gap-2">
+                            <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Maps
+                            </a>
+                            ${d.phone ? `<a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center" title="${d.phone}">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                            </a>` : ''}
+                            ${d.website ? `<a href="${d.website.startsWith('http') ? d.website : 'https://' + d.website}" target="_blank" class="bg-miamiPink/10 hover:bg-miamiPink/20 text-miamiPink px-3 py-2 rounded-xl text-xs font-bold border border-miamiPink/30 flex items-center justify-center" title="Visit Website">
+                                <i data-lucide="globe" class="w-3.5 h-3.5"></i>
+                            </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+            initOrUpdateMap();
+        }
+
+        function renderForum() {
+            const list = document.getElementById('forumList');
+            const filtered = forumData.filter(f => !currentTown || (f.town && f.town.toLowerCase().includes(currentTown.toLowerCase())));
+            list.innerHTML = filtered.map(f => `
+                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:border-miamiPink/50 transition flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
+                        <h4 class="text-sm font-bold text-white theme-text-main mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
+                        <p class="text-xs text-gray-400 theme-text-sub mt-1">Started by <span class="text-gray-300 theme-text-main font-semibold">${f.author}</span></p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} replies</span>
+                        <button onclick="reportThread(${f.id}, '${f.title.replace(/'/g, "\\'")}')" class="bg-black/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-2 rounded-xl border border-white/10 transition text-xs flex items-center gap-1" title="Report spam">
+                            <i data-lucide="flag" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Report</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function openModal() {
+            closeVenueDropdown();
+            document.getElementById('postModal').classList.remove('hidden');
+            await fetchAllVenuesForDropdown();
+        }
+        function closeModal() {
+            closeVenueDropdown();
+            document.getElementById('postModal').classList.add('hidden');
+        }
+        function openLegalModal() { document.getElementById('legalModal').classList.remove('hidden'); }
+        function closeLegalModal() { document.getElementById('legalModal').classList.add('hidden'); }
+        function openTermsModal() { document.getElementById('termsModal').classList.remove('hidden'); }
+        function closeTermsModal() { document.getElementById('termsModal').classList.add('hidden'); }
+        function openLoginModal() {
+            setAuthMode('signin');
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+        async function submitNewPost() {
+            const town = document.getElementById('modalTown').value.trim();
+            const zone = document.getElementById('modalZone').value;
+            const venueName = document.getElementById('inputVenueName').value.trim();
+            const venueType = document.getElementById('inputVenueType').value.trim() || 'Bar / Club';
+            const title = document.getElementById('inputTitle').value.trim();
+            const category = document.getElementById('inputCategory').value;
+            const desc = document.getElementById('inputDesc').value;
+            const date = document.getElementById('inputDate').value || 'Nov 21, 2026';
+            const time = document.getElementById('inputTime').value || '21:00';
+            const price = document.getElementById('inputPrice').value || 'Free';
+            const fileInput = document.getElementById('inputPoster');
+
+            if(!town || !venueName || !title) { alert('Please fill in the town, venue name, and event title.'); return; }
+
+            const isSafe = await checkContentSafety(fileInput.files[0], title + " " + desc);
+            if (!isSafe) return;
+
+            let posterUrl = 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=96';
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                const filePath = `posters/${Date.now()}_${file.name}`;
+                const { error: uploadError } = await supabaseClient.storage.from('flyers-and-photos').upload(filePath, file);
+
+                if (!uploadError) {
+                    const { data: publicUrlData } = supabaseClient.storage.from('flyers-and-photos').getPublicUrl(filePath);
+                    posterUrl = publicUrlData.publicUrl;
+                }
+            }
+
+            const posterEmail = currentUser ? currentEmail : 'info@albufeira-pulse.com';
+
+            const { error } = await supabaseClient.from('events').insert([{
+                town: town, zone: zone, title: title, date: date, time: time, price: price,
+                category: category, venue: venueName, venue_type: venueType,
+                owner_email: posterEmail, going: 1, description: desc || 'User submitted event.', 
+                poster_url: posterUrl, is_weekend: true
+            }]);
+
+            if (error) {
+                alert('Error publishing: ' + error.message);
+            } else {
+                closeModal();
+                await fetchEvents(currentFilter);
+                await fetchAllVenuesForDropdown();
+                renderCalendar();
+            }
+        }
+    </script>
+</body>
+</html>
