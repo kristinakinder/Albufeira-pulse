@@ -733,16 +733,44 @@
             const grid = document.getElementById('calendarGrid');
             if (!grid) return;
             grid.innerHTML = '';
+            
+            // November 2026 starts on a Sunday in standard ISO calendar (or adjust padding as needed)
+            // 6 blank placeholder cells for Sunday start if needed, or straightforward day mapping:
             for (let i = 0; i < 6; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-24 bg-gray-100 dark:bg-black/10 rounded-xl opacity-30';
+                emptyCell.className = 'h-28 bg-gray-100 dark:bg-black/10 rounded-xl opacity-30';
                 grid.appendChild(emptyCell);
             }
+
             for (let day = 1; day <= 30; day++) {
+                const formattedDay = day < 10 ? `0${day}` : `${day}`;
+                const dateStr = `2026-11-${formattedDay}`;
+                
+                // Find all events matching this calendar date
+                const dayEvents = registeredEvents.filter(ev => ev.date === dateStr);
+
                 const cell = document.createElement('div');
-                cell.className = 'h-24 bg-sky-50 dark:bg-black/30 theme-input rounded-xl p-2 border-2 border-algCyan/30 flex flex-col justify-between hover:border-algCyan cursor-pointer transition shadow-sm';
-                cell.innerHTML = `<span class="font-black text-xs text-gray-900 dark:text-white">${day}</span><span class="text-[10px] text-algCyan font-black">Nov 2026</span>`;
-                cell.onclick = () => alert(`November ${day}, 2026: Click to add event or journal photo.`);
+                cell.className = 'h-28 bg-sky-50 dark:bg-black/30 theme-input rounded-xl p-2 border-2 border-algCyan/30 flex flex-col justify-between hover:border-algCyan cursor-pointer transition shadow-sm overflow-y-auto';
+                
+                let eventsHtml = '';
+                dayEvents.forEach(ev => {
+                    eventsHtml += `<div class="bg-algCyan text-white dark:bg-algCyan dark:text-miamiDark text-[9px] font-black px-1.5 py-0.5 rounded truncate mt-1" title="${ev.title}">• ${ev.title}</div>`;
+                });
+
+                cell.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-black text-xs text-gray-900 dark:text-white">${day}</span>
+                        <span class="text-[9px] text-algCyan font-black">Nov</span>
+                    </div>
+                    <div class="space-y-0.5 flex-grow overflow-y-auto">${eventsHtml}</div>
+                `;
+                cell.onclick = () => {
+                    if (dayEvents.length > 0) {
+                        switchTab('events');
+                    } else {
+                        alert(`November ${day}, 2026: Click "+ Add Event" in the top navigation to schedule an event on this date!`);
+                    }
+                };
                 grid.appendChild(cell);
             }
         }
@@ -879,7 +907,8 @@
             refreshMapMarkers();
             renderEventsGrid();
             renderDirectoryGrid();
-            alert(`Event "${title}" successfully published with poster!`);
+            generateCalendarDays();
+            alert(`Event "${title}" successfully published and added to calendar!`);
             closeModal();
         }
 
