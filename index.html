@@ -103,7 +103,6 @@
 
             <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <!-- Portal Status Indicator -->
                 <div class="bg-black/40 theme-input px-3 py-2 rounded-xl border border-emerald-500/30 flex items-center gap-2 text-xs font-bold text-emerald-400">
                     <span class="relative flex h-2.5 w-2.5">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -160,7 +159,7 @@
             <div class="flex items-center gap-2">
                 <button onclick="openVenueModal()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-black px-3 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
                 <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="building-2" class="w-4 h-4"></i> + Add Business</button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Event</button>
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> Event</button>
             </div>
         </div>
     </header>
@@ -190,6 +189,21 @@
                     <button onclick="filterZone('Guia')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Guia</button>
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
+
+                <!-- Categories Bar (Fully Restored) -->
+                <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
+                    <button onclick="filterEvents('all')" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white whitespace-nowrap transition cursor-pointer">ALL EVENTS</button>
+                    <button onclick="filterEvents('SEASONAL & HOLIDAY')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SEASONAL & HOLIDAY</button>
+                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">MARKETS & FAIRS</button>
+                    <button onclick="filterEvents('FESTIVALS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">FESTIVALS</button>
+                    <button onclick="filterEvents('LIVE MUSIC')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">LIVE MUSIC</button>
+                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SPORTS & OUTDOORS</button>
+                    <button onclick="filterEvents('EXHIBITIONS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">EXHIBITIONS & CULTURE</button>
+                    <button onclick="filterEvents('CLASSES')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">CLASSES & WORKSHOPS</button>
+                    <button onclick="filterEvents('DINING & DRINK')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">DINING & DRINK</button>
+                    <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">HAPPY HOUR</button>
+                    <button onclick="filterEvents('SUNSET & NIGHTLIFE')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SUNSET & NIGHTLIFE</button>
+                </div>
             </div>
 
             <!-- Map Container -->
@@ -202,6 +216,8 @@
                 </div>
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
             </div>
+
+            <!-- Events Grid -->
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
@@ -227,7 +243,7 @@
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Local Articles & Stories</h2>
-                <button onclick="alert('Write Article modal')" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2 rounded-xl">+ Write Article</button>
+                <button onclick="alert('Write Article modal')" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ Write Article</button>
             </div>
             <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><h3 class="font-bold text-emerald-400 mb-1">Guide to Albufeira Old Town</h3><p class="text-xs text-gray-300">Discover historic cobblestones and coastal dining.</p></div>
@@ -239,7 +255,7 @@
         <section id="tab-content-classifieds" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Classifieds & Marketplace</h2>
-                <button onclick="alert('Post Classified modal')" class="bg-purple-500 text-white text-xs font-black px-4 py-2 rounded-xl">+ Post Classified</button>
+                <button onclick="alert('Post Classified modal')" class="bg-purple-500 text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ Post Classified</button>
             </div>
             <div id="classifiedsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><h3 class="font-bold text-purple-400 mb-1">Surfboard for Sale</h3><p class="text-xs text-gray-300">Good condition, ideal for Algarve breaks. €150.</p></div>
@@ -250,7 +266,7 @@
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Community Forum</h2>
-                <button onclick="alert('New Discussion')" class="bg-miamiPink text-white text-xs font-black px-4 py-2 rounded-xl">+ New Discussion</button>
+                <button onclick="alert('New Discussion')" class="bg-miamiPink text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ New Discussion</button>
             </div>
             <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><p class="text-xs font-bold text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
         </section>
@@ -305,7 +321,7 @@
                     <div>
                         <label class="block font-bold mb-1 text-gray-300">Venue</label>
                         <input type="text" id="newEventVenue" required list="venList" placeholder="Select or type venue..." class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
-                        <datalist id="venList" id="venueDatalistOptions"></datalist>
+                        <datalist id="venList"></datalist>
                     </div>
                 </div>
                 <div>
@@ -313,9 +329,14 @@
                     <select id="newEventCategory" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
                         <option value="SEASONAL & HOLIDAY">SEASONAL & HOLIDAY</option>
                         <option value="MARKETS">MARKETS & FAIRS</option>
+                        <option value="FESTIVALS">FESTIVALS</option>
                         <option value="LIVE MUSIC">LIVE MUSIC</option>
                         <option value="SPORTS">SPORTS & OUTDOORS</option>
+                        <option value="EXHIBITIONS">EXHIBITIONS & CULTURE</option>
+                        <option value="CLASSES">CLASSES & WORKSHOPS</option>
                         <option value="DINING & DRINK">DINING & DRINK</option>
+                        <option value="HAPPY HOUR & SPECIALS">HAPPY HOUR</option>
+                        <option value="SUNSET & NIGHTLIFE">SUNSET & NIGHTLIFE</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
@@ -360,12 +381,16 @@
     <!-- ================= SCRIPT ENGINE ================= -->
     <script>
         let albufeiraMap = null;
-        let registeredVenues = []; // Stores user-added venues: {name, lat, lng, area, hasEvent: false}
-        let registeredEvents = []; // Stores user-added events
+        let registeredVenues = []; // Starts clean per user request
+        let registeredEvents = [
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "SEASONAL & HOLIDAY", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
+        ];
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
             initMap();
+            refreshMapMarkers();
+            renderEventsGrid();
             generateCalendarDays();
             fetchLiveWeatherAndWaves();
             updateThemeButtonUI();
@@ -408,7 +433,49 @@
             }
         }
 
-        // 2. Calendar Grid Generator
+        // 2. Events Grid Rendering
+        function renderEventsGrid(filterCat = 'all', filterZoneName = 'all') {
+            const grid = document.getElementById('eventsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let filtered = registeredEvents.filter(ev => {
+                let matchCat = (filterCat === 'all' || ev.category === filterCat);
+                let matchZone = (filterZoneName === 'all' || ev.zone === filterZoneName);
+                return matchCat && matchZone;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400 text-xs font-bold">No events found for this filter. Click "Event" to publish one!</div>`;
+                return;
+            }
+
+            filtered.forEach(ev => {
+                const card = document.createElement('div');
+                card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-3';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <span class="text-[10px] font-black uppercase tracking-wider bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full border border-miamiPink/40">${ev.category}</span>
+                            <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
+                        </div>
+                        <h3 class="text-base font-black text-white theme-text-main mb-1">${ev.title}</h3>
+                        <p class="text-xs font-semibold text-gray-300 theme-text-sub mb-2">📍 ${ev.venueName} (${ev.zone})</p>
+                        <p class="text-xs text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-white/10 flex justify-between items-center text-[11px] text-gray-400">
+                        <span>📅 ${ev.date} | ${ev.time}</span>
+                        <button onclick="alert('Event details & booking')" class="text-miamiPink font-bold hover:underline cursor-pointer">View Details →</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterEvents(cat) { renderEventsGrid(cat, 'all'); }
+        function filterZone(zone) { renderEventsGrid('all', zone); }
+
+        // 3. Calendar Grid Generator
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
             if (!grid) return;
@@ -427,7 +494,7 @@
             }
         }
 
-        // 3. Map Initialization (Clean map by default, markers appear when added)
+        // 4. Map Initialization & Dynamic Venue Coloring
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
@@ -446,8 +513,8 @@
             registeredVenues.forEach(v => {
                 if (v.marker) albufeiraMap.removeLayer(v.marker);
                 
-                // Venues with events get colored icon style, neutral otherwise
-                let markerColor = v.hasEvent ? '#FF2A85' : '#64748B'; // Pink for active event, neutral slate grey otherwise
+                // Colorized if has active event, neutral slate grey otherwise
+                let markerColor = v.hasEvent ? '#FF2A85' : '#64748B'; 
                 let svgIcon = L.divIcon({
                     className: 'custom-venue-pin',
                     html: `<div style="background-color: ${markerColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.5);"></div>`,
@@ -460,7 +527,7 @@
             });
         }
 
-        // 4. Theme Engine
+        // 5. Theme Engine
         function toggleManualDayNightMode() {
             const htmlTag = document.documentElement;
             let newMode = htmlTag.classList.contains('night-mode') ? 'day-mode' : 'night-mode';
@@ -478,7 +545,7 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // 5. Navigation & Modals
+        // 6. Navigation & Modals
         function switchTab(tabId) {
             ['events', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
                 document.getElementById('tab-content-' + t).classList.add('hidden');
@@ -520,17 +587,25 @@
         function handleEventSubmit(e) {
             e.preventDefault();
             const title = document.getElementById('newEventTitle').value;
+            const zone = document.getElementById('newEventZone').value;
             const venueName = document.getElementById('newEventVenue').value;
+            const category = document.getElementById('newEventCategory').value;
+            const date = document.getElementById('newEventDate').value;
+            const time = document.getElementById('newEventTime').value;
+            const fee = document.getElementById('newEventFee').value;
+            const desc = document.getElementById('newEventDesc').value;
             
-            registeredEvents.push({ title, venueName });
+            registeredEvents.push({ title, venueName, zone, category, date, time, fee, desc });
 
-            // Check if venue exists, if so mark it as having an active event
             let targetVenue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
             if (targetVenue) {
                 targetVenue.hasEvent = true;
-                refreshMapMarkers();
+            } else {
+                registeredVenues.push({ name: venueName, lat: 37.0888, lng: -8.2511, area: zone, hasEvent: true, marker: null });
             }
 
+            refreshMapMarkers();
+            renderEventsGrid();
             alert(`Event "${title}" successfully published!`);
             closeModal();
         }
@@ -586,11 +661,9 @@
             const lng = parseFloat(document.getElementById('newVenueLng').value);
             const area = document.getElementById('newVenueArea').value;
 
-            // Add venue object
             registeredVenues.push({ name, lat, lng, area, hasEvent: false, marker: null });
             refreshMapMarkers();
 
-            // Populate venue datalist options
             const datalist = document.getElementById('venList');
             if (datalist) {
                 const opt = document.createElement('option');
@@ -604,7 +677,6 @@
             alert(`Venue "${name}" pinned to map!`);
             closeVenueModal();
         }
-        function filterZone(zone) { console.log('Filtered zone:', zone); }
     </script>
 </body>
 </html>
