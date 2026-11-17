@@ -217,7 +217,7 @@
                     <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
                         <i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> Confirmed Venues & Directory Listings
                     </h2>
-                    <p class="text-xs text-gray-400 theme-text-sub">Claimed venues featuring regular weekly schedules and event archives.</p>
+                    <p class="text-xs text-gray-400 theme-text-sub">Claimed venues featuring regular weekly schedules, official websites, and event archives.</p>
                 </div>
             </div>
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -403,7 +403,7 @@
         </div>
     </div>
 
-    <!-- ADD EVENT MODAL (WITH IMAGE / FLYER UPLOAD) -->
+    <!-- ADD EVENT MODAL -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Event & Poster/Flyer</h3><button onclick="closeModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
@@ -447,9 +447,9 @@
         </div>
     </div>
 
-    <!-- ADD VENUE MODAL -->
+    <!-- ADD VENUE MODAL (WITH WEBSITE FIELD) -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
             <p class="text-[11px] text-gray-300 theme-text-sub">Tip: Enter street name and postal code, or click directly on the map to drop a pin for beaches and remote spots.</p>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
@@ -457,6 +457,10 @@
                 <div>
                     <label class="block font-bold mb-1 text-gray-300">Address (Street & Postal Code)</label>
                     <input type="text" id="newVenueAddress" placeholder="e.g. Rua da Oura 12, 8200-391 Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 text-gray-300">Official Website URL</label>
+                    <input type="url" id="newVenueWebsite" placeholder="https://www.example.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
@@ -501,12 +505,12 @@
         function closeWelcomeModal() { document.getElementById('welcomeModal').classList.add('hidden'); }
         function closeWelcomeModalAndLogin() { closeWelcomeModal(); openLoginModal(); }
 
-        // Fetch registered venues from Supabase public.directory table (ratings column removed)
+        // Fetch registered venues from Supabase public.directory table (includes website)
         async function loadVenuesFromSupabase() {
             registeredVenues = [
-                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, marker: null },
-                { name: "Libertos Club", address: "The Strip, Areias de São João", area: "The Strip", lat: 37.0910, lng: -8.2250, image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", schedule: "Wed-Sat: 23:00 - 06:00", hasEvent: true, marker: null },
-                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, marker: null }
+                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, marker: null },
+                { name: "Libertos Club", address: "The Strip, Areias de São João", area: "The Strip", lat: 37.0910, lng: -8.2250, website: "https://www.libertos.com", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", schedule: "Wed-Sat: 23:00 - 06:00", hasEvent: true, marker: null },
+                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, marker: null }
             ];
 
             if (_supabaseClient) {
@@ -521,6 +525,7 @@
                                     area: item.zone || item.town || 'Albufeira',
                                     lat: item.lat || 37.0888,
                                     lng: item.lng || -8.2511,
+                                    website: item.website || '',
                                     image: item.image || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
                                     schedule: item.schedule || 'Daily: 10:00 - 02:00',
                                     hasEvent: false,
@@ -639,6 +644,9 @@
                 const card = document.createElement('div');
                 card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-miamiPink transition';
                 card.onclick = () => openVenueDetailPage(v.name);
+                
+                const websiteBadge = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-sky-400 hover:underline flex items-center gap-1 mt-1">🌐 Official Website ↗</a>` : '';
+                
                 card.innerHTML = `
                     <div>
                         <div class="h-40 w-full overflow-hidden relative">
@@ -651,6 +659,7 @@
                             <h3 class="text-lg font-black text-white theme-text-main">${v.name}</h3>
                             <p class="text-xs text-gray-300 theme-text-sub">📍 ${v.address}</p>
                             <p class="text-xs text-emerald-400 font-bold">🕒 ${v.schedule}</p>
+                            ${websiteBadge}
                         </div>
                     </div>
                     <div class="px-5 pb-5 pt-2 border-t border-white/10 flex justify-between items-center text-xs">
@@ -664,11 +673,12 @@
 
         function openVenueDetailPage(venueName) {
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || {
-                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", 
+                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", website: "",
                 image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily: 12:00 - 02:00"
             };
 
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
+            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-miamiCyan/20 hover:bg-miamiCyan/30 text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">🌐 Visit Official Website ↗</a>` : '';
             
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
@@ -681,6 +691,7 @@
                         </div>
                         <p class="text-sm text-gray-300 theme-text-sub">📍 ${venue.address}</p>
                         <p class="text-xs font-bold text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
+                        <div class="pt-1">${websiteBtn}</div>
                     </div>
                 </div>
 
@@ -935,12 +946,13 @@
             e.preventDefault();
             const name = document.getElementById('newVenueName').value;
             const address = document.getElementById('newVenueAddress').value;
+            const website = document.getElementById('newVenueWebsite').value.trim();
             const lat = parseFloat(document.getElementById('newVenueLat').value);
             const lng = parseFloat(document.getElementById('newVenueLng').value);
             const area = document.getElementById('newVenueArea').value;
 
             registeredVenues.push({ 
-                name, address, lat, lng, area, 
+                name, address, website, lat, lng, area, 
                 image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
                 schedule: 'Daily: 11:00 - 03:00',
                 hasEvent: false, 
