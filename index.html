@@ -105,8 +105,8 @@
             background-color: #E0F2FE !important;
         }
 
-        #albufeiraMap {
-            height: 400px;
+        #eventsAlbufeiraMap {
+            height: 320px;
             width: 100%;
             border-radius: 1rem;
             z-index: 10;
@@ -141,7 +141,7 @@
 
             <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Switch between Beach Day Mode and Neon Night Mode">
+                <button onclick="toggleDayNightMode()" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Switch between Beach Day Mode and Neon Night Mode">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
@@ -278,7 +278,7 @@
                     </button>
                 </div>
                 <div id="eventsMapContainer">
-                    <div id="eventsAlbufeiraMap" style="height: 320px; width: 100%; border-radius: 1rem; z-index: 10;" class="border border-white/10"></div>
+                    <div id="eventsAlbufeiraMap"></div>
                 </div>
             </div>
 
@@ -539,13 +539,27 @@
         </div>
     </footer>
 
-    <!-- Core Script Engine -->
+    <!-- Safe Core Script Engine with Map and Event Handlers -->
     <script>
+        let albufeiraMap = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) {
                 lucide.createIcons();
             }
+            initMap();
         });
+
+        function initMap() {
+            const mapContainer = document.getElementById('eventsAlbufeiraMap');
+            if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(albufeiraMap);
+            }
+        }
 
         function toggleDayNightMode() {
             const body = document.body;
@@ -582,6 +596,24 @@
             if (activeBtn) {
                 activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap cursor-pointer";
             }
+            
+            // Refresh Leaflet map sizing if switching back to events tab
+            if (tabId === 'events' && albufeiraMap) {
+                setTimeout(() => { albufeiraMap.invalidateSize(); }, 150);
+            }
+        }
+
+        function toggleEventsMap() {
+            const container = document.getElementById('eventsMapContainer');
+            const btn = document.getElementById('toggleEventsMapBtn');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                if(btn) btn.textContent = 'Hide Map';
+                if(albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 100);
+            } else {
+                container.style.display = 'none';
+                if(btn) btn.textContent = 'Show Map';
+            }
         }
 
         function changeTown(val) {
@@ -594,7 +626,6 @@
         function filterEvents(cat) { console.log('Filter events:', cat); }
         function filterZone(zone) { console.log('Filter zone:', zone); }
         function filterClassifieds(cat) { console.log('Filter classifieds:', cat); }
-        function toggleEventsMap() { console.log('Toggle map'); }
         function openLoginModal() { alert('Login modal triggered'); }
         function openModal() { alert('Add Event modal triggered'); }
         function openBusinessModal() { alert('Add Business modal triggered'); }
