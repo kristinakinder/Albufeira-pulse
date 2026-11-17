@@ -49,8 +49,8 @@
     <style>
         @keyframes pulseColor {
             0% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
-            33% { color: #06B6D4; transform: scale(1.25); filter: drop-shadow(0 0 12px #06B6D4); }
-            66% { color: #A855F7; transform: scale(1); filter: drop-shadow(0 0 8px #A855F7); }
+            33% { color: #0284C7; transform: scale(1.25); filter: drop-shadow(0 0 12px #0284C7); }
+            66% { color: #F59E0B; transform: scale(1); filter: drop-shadow(0 0 8px #F59E0B); }
             100% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
@@ -65,31 +65,33 @@
             animation: bubbleBurst 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
+        /* Night Mode defaults */
         html.night-mode body { background-color: #0B0F19; color: #F3F4F6; }
-        html.day-mode body { background-color: #FAF7F2; color: #1E293B; }
 
+        /* Day Mode: Algarve Beachy Palette (Sand & Turquoise Ocean) */
+        html.day-mode body { background-color: #FAF7F2; color: #1E293B; }
         html.day-mode header {
-            background-color: rgba(255, 255, 255, 0.92) !important;
-            border-bottom-color: rgba(2, 132, 199, 0.25) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            border-bottom-color: rgba(2, 132, 199, 0.3) !important;
             color: #0F172A !important;
         }
         html.day-mode .theme-card {
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            border-color: rgba(2, 132, 199, 0.2) !important;
+            background-color: #FFFFFF !important;
+            border-color: rgba(2, 132, 199, 0.25) !important;
             color: #1E293B !important;
-            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.12) !important;
+            box-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.12) !important;
         }
         html.day-mode .theme-text-main { color: #0F172A !important; }
-        html.day-mode .theme-text-sub { color: #475569 !important; }
+        html.day-mode .theme-text-sub { color: #334155 !important; }
         html.day-mode .theme-input {
-            background-color: #F8FAFC !important;
+            background-color: #F0F9FF !important;
             color: #0F172A !important;
-            border-color: rgba(2, 132, 199, 0.35) !important;
+            border-color: rgba(2, 132, 199, 0.4) !important;
         }
         html.day-mode .theme-pill {
-            background-color: rgba(255, 255, 255, 0.85) !important;
-            color: #334155 !important;
-            border-color: rgba(2, 132, 199, 0.25) !important;
+            background-color: #E0F2FE !important;
+            color: #0369A1 !important;
+            border-color: rgba(2, 132, 199, 0.3) !important;
         }
 
         #eventsAlbufeiraMap { height: 320px; width: 100%; border-radius: 1rem; z-index: 10; }
@@ -105,54 +107,54 @@
             <div class="flex items-center gap-3">
                 <svg class="w-9 h-9 animate-pulse-color" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                 <div>
-                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-miamiPink to-miamiCyan bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p class="text-[11px] font-medium tracking-widest uppercase text-miamiCyan/90 theme-text-sub">The Heartbeat of the Algarve</p>
+                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-beachOcean to-miamiPink bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
+                    <p class="text-[11px] font-medium tracking-widest uppercase text-beachOcean theme-text-sub">The Heartbeat of the Algarve</p>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
-                    <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
+                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-beachSun/25 hover:bg-beachSun/35 text-amber-700 dark:text-amber-300 border border-beachSun/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="sun" id="themeIcon" class="w-4 h-4 text-amber-600 dark:text-amber-300"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
                 <div id="authArea">
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-beachOcean/10 text-white theme-text-main text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-beachOcean"></i> Login
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Live Weather Ticker -->
-        <div class="bg-black/80 backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-between items-center text-gray-300">
+        <div class="bg-beachOcean/90 dark:bg-black/80 backdrop-blur-sm border-t border-b border-beachOcean/30 px-4 py-2 text-xs flex justify-between items-center text-white dark:text-gray-300">
             <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap">
-                <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
-                    <i data-lucide="cloud-rain" class="w-4 h-4 text-miamiCyan animate-bounce"></i> <span id="bannerTown">Albufeira & Algarve</span> Live Conditions:
+                <span class="flex items-center gap-1.5 font-bold text-white dark:text-beachOcean">
+                    <i data-lucide="cloud-rain" class="w-4 h-4 text-white dark:text-miamiCyan animate-bounce"></i> <span id="bannerTown">Albufeira & Algarve</span> Live Conditions:
                 </span>
                 <span>Air: <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
-                <span>Condition: <strong id="liveWeatherCondition" class="text-miamiPink">Loading...</strong></span>
-                <span>Wave Height: <strong id="liveWaveHeight" class="text-sky-300">Loading...</strong></span>
+                <span>Condition: <strong id="liveWeatherCondition" class="text-amber-200 dark:text-miamiPink">Loading...</strong></span>
+                <span>Wave Height: <strong id="liveWaveHeight" class="text-sky-200 dark:text-sky-300">Loading...</strong></span>
                 <span>Wind: <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
             </div>
-            <span class="text-[11px] text-miamiPink font-bold hidden lg:inline">Open-Meteo Live API</span>
+            <span class="text-[11px] text-amber-200 dark:text-miamiPink font-bold hidden lg:inline">Open-Meteo Live API</span>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
+        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-beachOcean/20 bg-beachSand dark:bg-miamiCard/50 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
-                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
-                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar & Journal</button>
-                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
-                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
-                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
-                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
-                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency & Info</button>
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-beachOcean text-white flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
+                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-700 dark:text-gray-300 theme-text-sub hover:text-beachOcean flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
+                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-700 dark:text-gray-300 theme-text-sub hover:text-beachOcean flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar & Journal</button>
+                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:bg-beachOcean/10 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
+                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-600 dark:text-purple-400 hover:bg-beachOcean/10 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
+                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-700 dark:text-gray-300 theme-text-sub hover:text-beachOcean flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
+                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-600 dark:text-sky-400 hover:bg-beachOcean/10 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
+                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-600 dark:text-amber-400 hover:bg-beachOcean/10 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency & Info</button>
             </div>
             
             <div class="flex items-center gap-2">
                 <button onclick="openVenueModal()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-black px-3 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
+                <button onclick="openModal()" class="bg-gradient-to-r from-beachOcean to-miamiPink text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
             </div>
         </div>
     </header>
@@ -164,44 +166,44 @@
             <div class="flex flex-col gap-3">
                 <div class="flex flex-wrap justify-between items-end gap-4">
                     <div>
-                        <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                            Events & Happenings in <span id="currentTownHeader" class="text-miamiPink">Albufeira & Algarve</span>
+                        <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
+                            Events & Happenings in <span id="currentTownHeader" class="text-beachOcean dark:text-miamiPink">Albufeira & Algarve</span>
                         </h2>
-                        <p class="text-sm text-gray-300 theme-text-sub">Explore events across Albufeira, Vilamoura, Loulé, Silves, and the wider Algarve.</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 theme-text-sub">Explore events across Albufeira, Vilamoura, Loulé, Silves, and the wider Algarve.</p>
                     </div>
                 </div>
 
                 <!-- Location Filter Bar -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                    <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Location:</span>
-                    <button onclick="filterZone('all')" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark transition cursor-pointer">All Algarve</button>
-                    <button onclick="filterZone('Albufeira Old Town')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Albufeira Old Town</button>
-                    <button onclick="filterZone('Praça dos Pescadores')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Praça dos Pescadores</button>
-                    <button onclick="filterZone('Albufeira Marina')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Albufeira Marina</button>
-                    <button onclick="filterZone('The Strip')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">The Strip</button>
-                    <button onclick="filterZone('Guia')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Guia</button>
-                    <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
+                    <span class="text-xs font-bold text-beachOcean dark:text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Location:</span>
+                    <button onclick="filterZone('all')" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-beachOcean text-white transition cursor-pointer">All Algarve</button>
+                    <button onclick="filterZone('Albufeira Old Town')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">Albufeira Old Town</button>
+                    <button onclick="filterZone('Praça dos Pescadores')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">Praça dos Pescadores</button>
+                    <button onclick="filterZone('Albufeira Marina')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">Albufeira Marina</button>
+                    <button onclick="filterZone('The Strip')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">The Strip</button>
+                    <button onclick="filterZone('Guia')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">Guia</button>
+                    <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-700 dark:text-gray-200 border border-beachOcean/30 transition cursor-pointer">Vilamoura</button>
                 </div>
 
                 <!-- Categories Bar -->
                 <div class="flex flex-wrap gap-1.5 pt-1">
-                    <button onclick="filterEvents('all')" class="cat-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold bg-miamiPink text-white transition cursor-pointer">ALL</button>
-                    <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SOCIAL & MUSIC</button>
-                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SPORTS</button>
-                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">MARKETS</button>
-                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SUNSET</button>
-                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">NIGHTLIFE</button>
-                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">TV SPORTS</button>
+                    <button onclick="filterEvents('all')" class="cat-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold bg-beachOcean text-white transition cursor-pointer">ALL</button>
+                    <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">SOCIAL & MUSIC</button>
+                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">SPORTS</button>
+                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">MARKETS</button>
+                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">SUNSET</button>
+                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">NIGHTLIFE</button>
+                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-700 dark:text-gray-200 border border-beachOcean/20 transition cursor-pointer">TV SPORTS</button>
                 </div>
             </div>
 
             <!-- Leaflet Map Container -->
-            <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
+            <div class="bg-white theme-card border border-beachOcean/30 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                    <span class="text-xs font-black uppercase tracking-wider text-beachOcean flex items-center gap-1.5">
                         <i data-lucide="map-pin" class="w-4 h-4"></i> Interactive Algarve Map (User Venues & Active Event Pins)
                     </span>
-                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer">Hide Map</button>
+                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-beachOcean/20 hover:bg-beachOcean text-beachOcean hover:text-white px-2.5 py-1 rounded-lg border border-beachOcean/40 transition cursor-pointer">Hide Map</button>
                 </div>
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
             </div>
@@ -214,10 +216,10 @@
         <section id="tab-content-directory" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                        <i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> Confirmed Venues & Directory Listings
+                    <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="store" class="text-beachOcean w-7 h-7"></i> Confirmed Venues & Directory Listings
                     </h2>
-                    <p class="text-xs text-gray-400 theme-text-sub">Claimed venues featuring regular weekly schedules, official websites, and event archives.</p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 theme-text-sub">Claimed venues featuring regular weekly schedules, official websites, and event archives.</p>
                 </div>
             </div>
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -225,25 +227,25 @@
 
         <!-- INDIVIDUAL VENUE PERSONAL PAGE VIEW -->
         <section id="tab-content-venue-detail" class="space-y-6 hidden">
-            <button onclick="switchTab('directory')" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer">
+            <button onclick="switchTab('directory')" class="bg-beachOcean hover:bg-sky-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">
                 ← Back to Directory
             </button>
-            <div id="venueDetailContainer" class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+            <div id="venueDetailContainer" class="bg-white theme-card border border-beachOcean/40 rounded-3xl p-6 shadow-2xl space-y-6"></div>
         </section>
 
         <!-- TAB 3: NOVEMBER 2026 CALENDAR & JOURNAL -->
         <section id="tab-content-calendar" class="space-y-6 hidden">
-            <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/30 rounded-2xl p-6 shadow-xl">
+            <div class="bg-white theme-card backdrop-blur-md border border-beachOcean/30 rounded-2xl p-6 shadow-xl">
                 <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
                     <div>
-                        <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                            <i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Calendar & Journal
+                        <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
+                            <i data-lucide="calendar-days" class="text-beachOcean w-7 h-7"></i> November 2026 Calendar & Journal
                         </h2>
-                        <p class="text-xs text-gray-400 theme-text-sub">Click any date to view schedule or add journal entries.</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 theme-text-sub">Click any date to view schedule or add journal entries.</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
-                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-miamiCyan">Sun</div>
+                <div class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-500 mb-2">
+                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-beachOcean">Sun</div>
                 </div>
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
             </div>
@@ -252,110 +254,110 @@
         <!-- TAB 4: ARTICLES -->
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-white theme-text-main">Local Articles & Stories</h2>
-                <button onclick="alert('Write Article modal')" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ Write Article</button>
+                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Local Articles & Stories</h2>
+                <button onclick="alert('Write Article modal')" class="bg-emerald-500 text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ Write Article</button>
             </div>
             <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><h3 class="font-bold text-emerald-400 mb-1">Guide to Albufeira Old Town</h3><p class="text-xs text-slate-700 dark:text-gray-300">Discover historic cobblestones and coastal dining.</p></div>
-                <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><h3 class="font-bold text-emerald-400 mb-1">Algarve Winter Markets</h3><p class="text-xs text-slate-700 dark:text-gray-300">Traditional crafts, roasted chestnuts, and festive cheer.</p></div>
+                <div class="bg-white theme-card p-4 rounded-xl border border-beachOcean/25"><h3 class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Guide to Albufeira Old Town</h3><p class="text-xs text-gray-600 dark:text-gray-300">Discover historic cobblestones and coastal dining.</p></div>
+                <div class="bg-white theme-card p-4 rounded-xl border border-beachOcean/25"><h3 class="font-bold text-emerald-600 dark:text-emerald-400 mb-1">Algarve Winter Markets</h3><p class="text-xs text-gray-600 dark:text-gray-300">Traditional crafts, roasted chestnuts, and festive cheer.</p></div>
             </div>
         </section>
 
         <!-- TAB 5: CLASSIFIEDS -->
         <section id="tab-content-classifieds" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-white theme-text-main">Classifieds & Marketplace</h2>
+                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Classifieds & Marketplace</h2>
                 <button onclick="alert('Post Classified modal')" class="bg-purple-500 text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ Post Classified</button>
             </div>
             <div id="classifiedsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><h3 class="font-bold text-purple-400 mb-1">Surfboard for Sale</h3><p class="text-xs text-slate-700 dark:text-gray-300">Good condition, ideal for Algarve breaks. €150.</p></div>
+                <div class="bg-white theme-card p-4 rounded-xl border border-beachOcean/25"><h3 class="font-bold text-purple-600 dark:text-purple-400 mb-1">Surfboard for Sale</h3><p class="text-xs text-gray-600 dark:text-gray-300">Good condition, ideal for Algarve breaks. €150.</p></div>
             </div>
         </section>
 
         <!-- TAB 6: FORUM -->
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-white theme-text-main">Community Forum</h2>
-                <button onclick="alert('New Discussion')" class="bg-miamiPink text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ New Discussion</button>
+                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Community Forum</h2>
+                <button onclick="alert('New Discussion')" class="bg-beachOcean text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer">+ New Discussion</button>
             </div>
-            <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><p class="text-xs font-bold text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
+            <div class="bg-white theme-card p-4 rounded-xl border border-beachOcean/25"><p class="text-xs font-bold text-gray-900 dark:text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
         </section>
 
         <!-- TAB 7: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
             <div>
-                <h2 class="text-2xl font-black text-white theme-text-main">Essential Algarve & Albufeira Links</h2>
-                <p class="text-xs text-gray-400 theme-text-sub">Quick access to official regional authorities, transport hubs, live emergency monitors, and weather portals.</p>
+                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Essential Algarve & Albufeira Links</h2>
+                <p class="text-xs text-gray-600 dark:text-gray-400 theme-text-sub">Quick access to official regional authorities, transport hubs, live emergency monitors, and weather portals.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                <a href="https://fogos.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-miamiPink/30 hover:border-miamiPink transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://fogos.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-miamiPink/30 hover:border-miamiPink transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
                         <div class="flex items-center gap-2 text-miamiPink font-black text-sm mb-1"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt (Live Fire Monitor)</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Real-time collaborative tracking of rural fires across Portugal with official Civil Protection updates.</p>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Real-time collaborative tracking of rural fires across Portugal with official Civil Protection updates.</p>
                     </div>
                     <span class="text-miamiPink font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <a href="https://www.faroairport.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-miamiCyan/30 hover:border-miamiCyan transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://www.faroairport.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-beachOcean/30 hover:border-beachOcean transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-miamiCyan font-black text-sm mb-1"><i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Live flight arrivals, departures, terminal information, and parking status for the Algarve's main international gateway.</p>
+                        <div class="flex items-center gap-2 text-beachOcean font-black text-sm mb-1"><i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)</div>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Live flight arrivals, departures, terminal information, and parking status for the Algarve's main international gateway.</p>
                     </div>
-                    <span class="text-miamiCyan font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                    <span class="text-beachOcean font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <a href="https://www.ipma.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-amber-400/30 hover:border-amber-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://www.ipma.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-amber-400/30 hover:border-amber-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-amber-400 font-black text-sm mb-1"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather & Marine</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Portuguese Institute for Sea and Atmosphere official meteorological forecasts, warnings, and seismic activity.</p>
+                        <div class="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-black text-sm mb-1"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather & Marine</div>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Portuguese Institute for Sea and Atmosphere official meteorological forecasts, warnings, and seismic activity.</p>
                     </div>
-                    <span class="text-amber-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                    <span class="text-amber-600 dark:text-amber-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <a href="https://www.cm-albufeira.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-purple-400/30 hover:border-purple-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://www.cm-albufeira.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-purple-400/30 hover:border-purple-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-purple-400 font-black text-sm mb-1"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall (CM)</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Municipal announcements, local civic services, cultural agendas, and urban planning notices for Albufeira.</p>
+                        <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-black text-sm mb-1"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall (CM)</div>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Municipal announcements, local civic services, cultural agendas, and urban planning notices for Albufeira.</p>
                     </div>
-                    <span class="text-purple-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                    <span class="text-purple-600 dark:text-purple-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <a href="https://www.cp.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-emerald-400/30 hover:border-emerald-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://www.cp.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-emerald-400/30 hover:border-emerald-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-emerald-400 font-black text-sm mb-1"><i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables (Comboios)</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Algarve Line train schedules connecting Lagos, Albufeira-Ferreiras, Faro, and Vila Real de Santo António.</p>
+                        <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-black text-sm mb-1"><i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables (Comboios)</div>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Algarve Line train schedules connecting Lagos, Albufeira-Ferreiras, Faro, and Vila Real de Santo António.</p>
                     </div>
-                    <span class="text-emerald-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                    <span class="text-emerald-600 dark:text-emerald-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
 
-                <a href="https://www.visitalgarve.pt/" target="_blank" class="bg-miamiCard theme-card p-5 rounded-2xl border border-sky-400/30 hover:border-sky-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
+                <a href="https://www.visitalgarve.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border border-sky-400/30 hover:border-sky-400 transition shadow-lg flex flex-col justify-between space-y-3 group block">
                     <div>
-                        <div class="flex items-center gap-2 text-sky-400 font-black text-sm mb-1"><i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve Tourism Board</div>
-                        <p class="text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">Regional tourism guides, walking trails, golf courses, pristine beaches, and gastro-tourism experiences.</p>
+                        <div class="flex items-center gap-2 text-sky-600 dark:text-sky-400 font-black text-sm mb-1"><i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve Tourism Board</div>
+                        <p class="text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">Regional tourism guides, walking trails, golf courses, pristine beaches, and gastro-tourism experiences.</p>
                     </div>
-                    <span class="text-sky-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                    <span class="text-sky-600 dark:text-sky-400 font-bold group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
                 </a>
             </div>
         </section>
 
         <!-- TAB 8: EMERGENCY & INFO -->
         <section id="tab-content-info" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black text-white theme-text-main">Emergency & Essential Contacts</h2>
+            <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Emergency & Essential Contacts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-3xl">
-                <div class="bg-miamiCard theme-card p-4 rounded-xl border border-red-500/30 space-y-1.5 shadow-md">
-                    <p class="font-extrabold text-red-500 dark:text-red-400 text-sm mb-2">Emergency Services: 112</p>
-                    <p class="text-slate-700 dark:text-gray-200">SNS 24 Health Line: <strong class="text-slate-900 dark:text-white">808 24 24 24</strong></p>
-                    <p class="text-slate-700 dark:text-gray-200">Albufeira GNR Police: <strong class="text-slate-900 dark:text-white">289 583 310</strong></p>
-                    <p class="text-slate-700 dark:text-gray-200">Albufeira Fire Brigade: <strong class="text-slate-900 dark:text-white">289 586 333</strong></p>
-                    <p class="text-slate-700 dark:text-gray-200">Albufeira Town Hall: <strong class="text-slate-900 dark:text-white">289 599 500</strong></p>
+                <div class="bg-white theme-card p-4 rounded-xl border border-red-500/30 space-y-1.5 shadow-md">
+                    <p class="font-extrabold text-red-600 dark:text-red-400 text-sm mb-2">Emergency Services: 112</p>
+                    <p class="text-gray-700 dark:text-gray-200">SNS 24 Health Line: <strong class="text-gray-900 dark:text-white">808 24 24 24</strong></p>
+                    <p class="text-gray-700 dark:text-gray-200">Albufeira GNR Police: <strong class="text-gray-900 dark:text-white">289 583 310</strong></p>
+                    <p class="text-gray-700 dark:text-gray-200">Albufeira Fire Brigade: <strong class="text-gray-900 dark:text-white">289 586 333</strong></p>
+                    <p class="text-gray-700 dark:text-gray-200">Albufeira Town Hall: <strong class="text-gray-900 dark:text-white">289 599 500</strong></p>
                 </div>
 
-                <div class="bg-miamiCard theme-card p-4 rounded-xl border border-amber-500/30 space-y-2 shadow-md">
+                <div class="bg-white theme-card p-4 rounded-xl border border-amber-500/30 space-y-2 shadow-md">
                     <p class="font-extrabold text-amber-600 dark:text-amber-400 text-sm">🐾 Animal Welfare & Wildlife</p>
-                    <p class="text-slate-700 dark:text-gray-200"><strong>RIAS (Injured Wildlife Rescue):</strong> <br><span class="text-slate-900 dark:text-white">+351 927 659 313</span></p>
-                    <p class="text-slate-700 dark:text-gray-200"><strong>SOS Algarve Animals:</strong> <br><span class="text-slate-900 dark:text-white">+351 913 256 290</span> (WhatsApp)</p>
-                    <p class="text-slate-700 dark:text-gray-200"><strong>Stray – Algarve Cat Help (App):</strong> <br><span class="text-slate-900 dark:text-white">Free iOS/Android rescue & microchip locator app.</span></p>
+                    <p class="text-gray-700 dark:text-gray-200"><strong>RIAS (Injured Wildlife Rescue):</strong> <br><span class="text-gray-900 dark:text-white">+351 927 659 313</span></p>
+                    <p class="text-gray-700 dark:text-gray-200"><strong>SOS Algarve Animals:</strong> <br><span class="text-gray-900 dark:text-white">+351 913 256 290</span> (WhatsApp)</p>
+                    <p class="text-gray-700 dark:text-gray-200"><strong>Stray – Algarve Cat Help (App):</strong> <br><span class="text-gray-900 dark:text-white">Free iOS/Android rescue & microchip locator app.</span></p>
                 </div>
             </div>
         </section>
@@ -364,27 +366,27 @@
     <!-- MODALS & POPUPS -->
     <!-- BUBBLE BURST WELCOME MODAL -->
     <div id="welcomeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-miamiPink/20 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-miamiCyan/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="bg-white dark:bg-miamiCard theme-card border border-beachOcean/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-beachOcean/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-beachSun/20 rounded-full blur-2xl pointer-events-none"></div>
             
-            <div class="inline-flex p-3 bg-gradient-to-tr from-miamiPink to-miamiCyan rounded-2xl shadow-lg text-white mb-1">
+            <div class="inline-flex p-3 bg-gradient-to-tr from-beachOcean to-miamiPink rounded-2xl shadow-lg text-white mb-1">
                 <i data-lucide="sparkles" class="w-8 h-8"></i>
             </div>
             
             <div class="space-y-2">
-                <h3 class="text-xl font-black text-white theme-text-main leading-snug">Welcome to Albufeira-pulse.com</h3>
-                <p class="text-sm font-semibold text-slate-700 dark:text-gray-200 theme-text-sub leading-relaxed">
+                <h3 class="text-xl font-black text-gray-900 dark:text-white theme-text-main leading-snug">Welcome to Albufeira-pulse.com</h3>
+                <p class="text-sm font-semibold text-gray-600 dark:text-gray-200 theme-text-sub leading-relaxed">
                     The free event calendar for Albufeira!<br>
-                    <span class="text-miamiPink font-bold">Sign up to add your events!</span>
+                    <span class="text-beachOcean dark:text-miamiPink font-bold">Sign up to add your events!</span>
                 </p>
             </div>
 
             <div class="flex flex-col gap-2 pt-2">
-                <button onclick="closeWelcomeModalAndLogin()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition cursor-pointer text-sm">
+                <button onclick="closeWelcomeModalAndLogin()" class="w-full bg-gradient-to-r from-beachOcean to-miamiPink text-white font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition cursor-pointer text-sm">
                     Sign Up / Login Now
                 </button>
-                <button onclick="closeWelcomeModal()" class="w-full bg-white/10 hover:bg-white/20 text-gray-300 theme-text-sub font-bold py-2.5 rounded-xl transition cursor-pointer text-xs">
+                <button onclick="closeWelcomeModal()" class="w-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-gray-300 theme-text-sub font-bold py-2.5 rounded-xl transition cursor-pointer text-xs">
                     Explore Calendar First
                 </button>
             </div>
@@ -393,37 +395,37 @@
 
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white" id="loginModalTitle">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
+        <div class="bg-white dark:bg-miamiCard theme-card border border-beachOcean/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main" id="loginModalTitle">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleLogin(event)" class="space-y-3 text-xs" id="loginFormElement">
-                <div><label class="block font-bold mb-1 text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                <div><label class="block font-bold mb-1 text-gray-300">Password</label><input type="password" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Sign In</button>
+                <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Password</label><input type="password" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                <button type="submit" class="w-full bg-beachOcean text-white font-black py-2 rounded-xl hover:bg-sky-700 transition cursor-pointer">Sign In</button>
             </form>
         </div>
     </div>
 
     <!-- ADD EVENT MODAL -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Event & Poster/Flyer</h3><button onclick="closeModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
+        <div class="bg-white dark:bg-miamiCard theme-card border border-beachOcean/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">Add Event & Poster/Flyer</h3><button onclick="closeModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-300">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Fado Night" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Fado Night" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-bold mb-1 text-gray-300">Location / Zone</label>
-                        <input type="text" id="newEventZone" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white bg-opacity-70">
+                        <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Location / Zone</label>
+                        <input type="text" id="newEventZone" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white bg-opacity-70">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1 text-gray-300">Venue</label>
-                        <select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                        <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Venue</label>
+                        <select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white">
                             <option value="">Select a Venue...</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-gray-300">Category</label>
-                    <select id="newEventCategory" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                    <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Category</label>
+                    <select id="newEventCategory" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white">
                         <option value="SOCIAL & MUSIC">SOCIAL & MUSIC</option>
                         <option value="SPORTS">SPORTS</option>
                         <option value="MARKETS">MARKETS</option>
@@ -433,43 +435,43 @@
                     </select>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block font-bold mb-1 text-gray-300">Date</label><input type="date" id="newEventDate" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Entry Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Date</label><input type="date" id="newEventDate" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-2 py-2 text-gray-900 dark:text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-2 py-2 text-gray-900 dark:text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Entry Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-2 py-2 text-gray-900 dark:text-white"></div>
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-gray-300">Event Poster / Flyer Image URL</label>
-                    <input type="url" id="newEventImage" placeholder="https://images.unsplash.com/... (paste image or flyer link)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                    <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Event Poster / Flyer Image URL</label>
+                    <input type="url" id="newEventImage" placeholder="https://images.unsplash.com/... (paste image or flyer link)" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white">
                 </div>
-                <div><label class="block font-bold mb-1 text-gray-300">Description</label><textarea id="newEventDesc" rows="2" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-white/10 text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiPink text-white font-black cursor-pointer">Publish Event</button></div>
+                <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Description</label><textarea id="newEventDesc" rows="2" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></textarea></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-white/10 text-gray-800 dark:text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-beachOcean text-white font-black cursor-pointer">Publish Event</button></div>
             </form>
         </div>
     </div>
 
     <!-- ADD VENUE MODAL -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
-            <p class="text-[11px] text-gray-300 theme-text-sub">Tip: Enter street name and postal code, or click directly on the map to drop a pin for beaches and remote spots.</p>
+        <div class="bg-white dark:bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
+            <p class="text-[11px] text-gray-600 dark:text-gray-300 theme-text-sub">Tip: Enter street name and postal code, or click directly on the map to drop a pin for beaches and remote spots.</p>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-300">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Praia dos Pescadores Bar" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Praia dos Pescadores Bar" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
                 <div>
-                    <label class="block font-bold mb-1 text-gray-300">Address (Street & Postal Code)</label>
-                    <input type="text" id="newVenueAddress" placeholder="e.g. Rua da Oura 12, 8200-391 Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                    <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Address (Street & Postal Code)</label>
+                    <input type="text" id="newVenueAddress" placeholder="e.g. Rua da Oura 12, 8200-391 Albufeira" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1 text-gray-300">Official Website URL</label>
-                    <input type="url" id="newVenueWebsite" placeholder="https://www.example.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                    <label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Official Website URL</label>
+                    <input type="url" id="newVenueWebsite" placeholder="https://www.example.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-emerald-400 font-bold text-center"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-2 py-2 text-emerald-600 dark:text-emerald-400 font-bold text-center"></div>
                 </div>
                 <input type="hidden" id="newVenueLat" value="37.0888">
                 <input type="hidden" id="newVenueLng" value="-8.2511">
                 
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-white/10 text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-600 text-white font-black cursor-pointer">Pin to Map</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-white/10 text-gray-800 dark:text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-600 text-white font-black cursor-pointer">Pin to Map</button></div>
             </form>
         </div>
     </div>
@@ -602,30 +604,30 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400 text-xs font-bold">No events found for this filter. Click "+ Add Event" to publish one!</div>`;
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 text-xs font-bold">No events found for this filter. Click "+ Add Event" to publish one!</div>`;
                 return;
             }
 
             filtered.forEach(ev => {
                 const card = document.createElement('div');
-                card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between space-y-3';
+                card.className = 'bg-white theme-card border border-beachOcean/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between space-y-3';
                 const posterHtml = ev.image ? `<div class="h-44 w-full overflow-hidden"><img src="${ev.image}" alt="${ev.title}" class="w-full h-full object-cover"></div>` : '';
                 card.innerHTML = `
                     <div>
                         ${posterHtml}
                         <div class="p-5 space-y-2">
                             <div class="flex justify-between items-start gap-2">
-                                <span class="text-[10px] font-black uppercase tracking-wider bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full border border-miamiPink/40">${ev.category}</span>
-                                <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
+                                <span class="text-[10px] font-black uppercase tracking-wider bg-beachOcean/20 text-beachOcean dark:bg-miamiPink/25 dark:text-miamiPink px-2.5 py-1 rounded-full border border-beachOcean/40">${ev.category}</span>
+                                <span class="text-xs font-bold text-beachOcean">${ev.fee}</span>
                             </div>
-                            <h3 class="text-base font-black text-white theme-text-main">${ev.title}</h3>
-                            <p class="text-xs font-semibold text-gray-300 theme-text-sub">📍 ${ev.venueName} (${ev.zone})</p>
-                            <p class="text-xs text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
+                            <h3 class="text-base font-black text-gray-900 dark:text-white theme-text-main">${ev.title}</h3>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 theme-text-sub">📍 ${ev.venueName} (${ev.zone})</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
                         </div>
                     </div>
-                    <div class="px-5 pb-5 pt-2 border-t border-white/10 flex justify-between items-center text-[11px] text-gray-400">
+                    <div class="px-5 pb-5 pt-2 border-t border-beachOcean/10 flex justify-between items-center text-[11px] text-gray-500 dark:text-gray-400">
                         <span>📅 ${ev.date} | ${ev.time}</span>
-                        <button onclick="openVenueDetailPage('${ev.venueName}')" class="text-miamiPink font-bold hover:underline cursor-pointer">View Venue →</button>
+                        <button onclick="openVenueDetailPage('${ev.venueName}')" class="text-beachOcean dark:text-miamiPink font-bold hover:underline cursor-pointer">View Venue →</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -651,32 +653,32 @@
 
             registeredVenues.forEach(v => {
                 const card = document.createElement('div');
-                card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-miamiPink transition';
+                card.className = 'bg-white theme-card border border-beachOcean/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-beachOcean transition';
                 card.onclick = () => openVenueDetailPage(v.name);
                 
-                const websiteLink = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-sky-400 hover:underline flex items-center gap-1 mt-1 text-xs">🌐 Official Website ↗</a>` : '';
+                const websiteLink = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-beachOcean hover:underline flex items-center gap-1 mt-1 text-xs font-bold">🌐 Official Website ↗</a>` : '';
                 
                 card.innerHTML = `
                     <div>
                         <div class="h-40 w-full overflow-hidden relative">
                             <img src="${v.image}" alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute bottom-2 left-2 bg-miamiDark/80 text-miamiCyan text-[10px] font-black uppercase px-2 py-0.5 rounded-lg">
+                            <span class="absolute bottom-2 left-2 bg-beachOcean text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-lg shadow">
                                 ${v.area}
                             </span>
                         </div>
                         <div class="p-5 space-y-2">
-                            <h3 class="text-lg font-black text-white theme-text-main">${v.name}</h3>
-                            <p class="text-xs text-gray-300 theme-text-sub">📍 ${v.address}</p>
-                            <p class="text-xs text-emerald-400 font-bold">🕒 ${v.schedule}</p>
+                            <h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">${v.name}</h3>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 theme-text-sub">📍 ${v.address}</p>
+                            <p class="text-xs text-emerald-600 dark:text-emerald-400 font-bold">🕒 ${v.schedule}</p>
                             <div class="flex flex-wrap gap-3 pt-1">
-                                <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name}')" class="text-miamiPink font-bold text-xs hover:underline inline-flex items-center gap-1 cursor-pointer">📍 Show on Map →</button>
+                                <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name}')" class="text-beachOcean font-bold text-xs hover:underline inline-flex items-center gap-1 cursor-pointer">📍 Show on Map →</button>
                                 ${websiteLink}
                             </div>
                         </div>
                     </div>
-                    <div class="px-5 pb-4 pt-2 border-t border-white/10 flex justify-between items-center text-xs">
-                        <span class="text-gray-400">View Personal Page & Events</span>
-                        <span class="text-miamiCyan group-hover:translate-x-1 transition">→</span>
+                    <div class="px-5 pb-4 pt-2 border-t border-beachOcean/10 flex justify-between items-center text-xs">
+                        <span class="text-gray-500">View Personal Page & Events</span>
+                        <span class="text-beachOcean group-hover:translate-x-1 transition">→</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -690,20 +692,20 @@
             };
 
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
-            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-miamiCyan/25 hover:bg-miamiCyan/35 text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">🌐 Visit Official Website ↗</a>` : '';
-            const mapLinkBtn = `<button onclick="jumpToVenueOnMap('${venue.name}')" class="inline-flex items-center gap-1.5 bg-miamiPink/20 hover:bg-miamiPink/30 text-miamiPink border border-miamiPink/40 text-xs font-bold px-3 py-1.5 rounded-xl transition cursor-pointer">📍 Show on Map</button>`;
+            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-beachOcean/20 hover:bg-beachOcean/30 text-beachOcean border border-beachOcean/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">🌐 Visit Official Website ↗</a>` : '';
+            const mapLinkBtn = `<button onclick="jumpToVenueOnMap('${venue.name}')" class="inline-flex items-center gap-1.5 bg-beachSun/25 hover:bg-beachSun/35 text-amber-700 border border-beachSun/40 text-xs font-bold px-3 py-1.5 rounded-xl transition cursor-pointer">📍 Show on Map</button>`;
             
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-white/10 pb-6">
-                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border border-miamiCyan/30 shadow-lg">
+                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-beachOcean/15 pb-6">
+                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border border-beachOcean/30 shadow-lg">
                     <div class="space-y-3 w-full">
                         <div>
-                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full border border-miamiCyan/40">${venue.area}</span>
-                            <h2 class="text-3xl font-black text-white theme-text-main mt-2">${venue.name}</h2>
+                            <span class="bg-beachOcean/15 text-beachOcean text-xs font-black uppercase px-3 py-1 rounded-full border border-beachOcean/30">${venue.area}</span>
+                            <h2 class="text-3xl font-black text-gray-900 dark:text-white theme-text-main mt-2">${venue.name}</h2>
                         </div>
-                        <p class="text-sm text-gray-300 theme-text-sub">📍 ${venue.address}</p>
-                        <p class="text-xs font-bold text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 theme-text-sub">📍 ${venue.address}</p>
+                        <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
                         <div class="flex flex-wrap gap-2 pt-1">
                             ${mapLinkBtn}
                             ${websiteBtn}
@@ -712,23 +714,23 @@
                 </div>
 
                 <div class="space-y-4 pt-2">
-                    <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                        <i data-lucide="calendar" class="w-5 h-5 text-miamiPink"></i> Upcoming & Regular Events at ${venue.name}
+                    <h3 class="text-xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5 text-beachOcean"></i> Upcoming & Regular Events at ${venue.name}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         ${venueEvents.length > 0 ? venueEvents.map(ev => `
-                            <div class="bg-black/30 theme-input p-4 rounded-2xl border border-white/10 space-y-2">
+                            <div class="bg-sky-50 dark:bg-black/30 theme-input p-4 rounded-2xl border border-beachOcean/20 space-y-2">
                                 ${ev.image ? `<div class="h-32 w-full overflow-hidden rounded-xl mb-2"><img src="${ev.image}" class="w-full h-full object-cover"></div>` : ''}
                                 <div class="flex justify-between">
-                                    <span class="text-[10px] font-bold bg-miamiPink/20 text-miamiPink px-2.5 py-0.5 rounded-full">${ev.category}</span>
-                                    <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
+                                    <span class="text-[10px] font-bold bg-beachOcean/20 text-beachOcean px-2.5 py-0.5 rounded-full">${ev.category}</span>
+                                    <span class="text-xs font-bold text-beachOcean">${ev.fee}</span>
                                 </div>
-                                <h4 class="font-black text-base text-white theme-text-main">${ev.title}</h4>
-                                <p class="text-xs text-gray-300">${ev.desc}</p>
-                                <p class="text-[11px] text-gray-400 font-bold">📅 Date: ${ev.date} | Time: ${ev.time}</p>
+                                <h4 class="font-black text-base text-gray-900 dark:text-white theme-text-main">${ev.title}</h4>
+                                <p class="text-xs text-gray-600 dark:text-gray-300">${ev.desc}</p>
+                                <p class="text-[11px] text-gray-500 dark:text-gray-400 font-bold">📅 Date: ${ev.date} | Time: ${ev.time}</p>
                             </div>
                         `).join('') : `
-                            <p class="text-xs text-gray-400 italic">No specific upcoming special events scheduled right now. Check back soon or view their regular weekly schedule above!</p>
+                            <p class="text-xs text-gray-500 italic">No specific upcoming special events scheduled right now. Check back soon or view their regular weekly schedule above!</p>
                         `}
                     </div>
                 </div>
@@ -744,13 +746,13 @@
             grid.innerHTML = '';
             for (let i = 0; i < 6; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-24 bg-black/10 rounded-xl opacity-30';
+                emptyCell.className = 'h-24 bg-gray-100 dark:bg-black/10 rounded-xl opacity-30';
                 grid.appendChild(emptyCell);
             }
             for (let day = 1; day <= 30; day++) {
                 const cell = document.createElement('div');
-                cell.className = 'h-24 bg-black/30 theme-input rounded-xl p-2 border border-white/10 flex flex-col justify-between hover:border-miamiCyan cursor-pointer transition';
-                cell.innerHTML = `<span class="font-bold text-xs">${day}</span><span class="text-[10px] text-miamiPink font-semibold">Nov 2026</span>`;
+                cell.className = 'h-24 bg-sky-50 dark:bg-black/30 theme-input rounded-xl p-2 border border-beachOcean/20 flex flex-col justify-between hover:border-beachOcean cursor-pointer transition';
+                cell.innerHTML = `<span class="font-bold text-xs text-gray-800 dark:text-white">${day}</span><span class="text-[10px] text-beachOcean font-semibold">Nov 2026</span>`;
                 cell.onclick = () => alert(`November ${day}, 2026: Click to add event or journal photo.`);
                 grid.appendChild(cell);
             }
@@ -779,7 +781,7 @@
             registeredVenues.forEach(v => {
                 if (v.marker) albufeiraMap.removeLayer(v.marker);
                 
-                let markerColor = v.hasEvent ? '#FF2A85' : '#64748B'; 
+                let markerColor = v.hasEvent ? '#0284C7' : '#64748B'; 
                 let svgIcon = L.divIcon({
                     className: 'custom-venue-pin',
                     html: `<div style="background-color: ${markerColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.5);"></div>`,
@@ -788,7 +790,7 @@
                 });
 
                 v.marker = L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap)
-                    .bindPopup(`<b>${v.name}</b><br>${v.address}<br><a href="#" onclick="openVenueDetailPage('${v.name}'); return false;" style="color:#06B6D4; font-weight:bold;">View Venue Page →</a>`);
+                    .bindPopup(`<b>${v.name}</b><br>${v.address}<br><a href="#" onclick="openVenueDetailPage('${v.name}'); return false;" style="color:#0284C7; font-weight:bold;">View Venue Page →</a>`);
             });
         }
 
@@ -814,12 +816,12 @@
                 const el = document.getElementById('tab-content-' + t);
                 if (el) el.classList.add('hidden');
                 const btn = document.getElementById('btn-' + t);
-                if (btn) btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer";
+                if (btn) btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-700 dark:text-gray-300 theme-text-sub hover:text-beachOcean flex items-center gap-1.5 transition cursor-pointer";
             });
             const targetEl = document.getElementById('tab-content-' + tabId);
             if (targetEl) targetEl.classList.remove('hidden');
             const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer";
+            if (activeBtn) activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-beachOcean text-white flex items-center gap-1.5 transition shadow-md cursor-pointer";
             
             if (tabId === 'events' && albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 150);
             if (window.lucide) lucide.createIcons();
@@ -851,15 +853,15 @@
             if (!savedUsername) {
                 modalTitle.textContent = "Set Your Custom Username";
                 formElement.innerHTML = `
-                    <div><label class="block font-bold mb-1 text-gray-300">Choose Permanent Username</label><input type="text" id="customUsernameInput" required placeholder="e.g. AlgarveLocal" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                    <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Save Username & Login</button>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Choose Permanent Username</label><input type="text" id="customUsernameInput" required placeholder="e.g. AlgarveLocal" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                    <button type="submit" class="w-full bg-beachOcean text-white font-black py-2 rounded-xl hover:bg-sky-700 transition cursor-pointer">Save Username & Login</button>
                 `;
             } else {
                 modalTitle.textContent = "Login to Albufeira Pulse";
                 formElement.innerHTML = `
-                    <div><label class="block font-bold mb-1 text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Password</label><input type="password" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                    <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Sign In</button>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-700 dark:text-gray-300">Password</label><input type="password" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border border-beachOcean/30 rounded-xl px-3 py-2 text-gray-900 dark:text-white"></div>
+                    <button type="submit" class="w-full bg-beachOcean text-white font-black py-2 rounded-xl hover:bg-sky-700 transition cursor-pointer">Sign In</button>
                 `;
             }
             document.getElementById('loginModal').classList.remove('hidden'); 
@@ -926,10 +928,10 @@
             const authArea = document.getElementById('authArea');
             if (!authArea) return;
             authArea.innerHTML = `
-                <div class="bg-black/40 theme-input px-3 py-1.5 rounded-xl border border-miamiCyan/30 flex items-center gap-2 text-xs font-bold text-white">
-                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
+                <div class="bg-sky-100 dark:bg-black/40 theme-input px-3 py-1.5 rounded-xl border border-beachOcean/40 flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white">
+                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-beachOcean"></i>
                     <span>${displayName}</span>
-                    <button onclick="handleLogout()" class="text-red-400 hover:text-red-300 ml-2 text-[10px] cursor-pointer">Logout</button>
+                    <button onclick="handleLogout()" class="text-red-500 hover:text-red-700 ml-2 text-[10px] cursor-pointer">Logout</button>
                 </div>
             `;
             if (window.lucide) lucide.createIcons();
@@ -940,8 +942,8 @@
             const authArea = document.getElementById('authArea');
             if (authArea) {
                 authArea.innerHTML = `
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-beachOcean/10 text-white theme-text-main text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-beachOcean"></i> Login
                     </button>
                 `;
             }
