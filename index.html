@@ -147,11 +147,12 @@
                 </button>
 
                 <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
-        <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
-        </span>
-<input type="search" id="townInputFilter" name="town-filter-search" value="Albufeira" oninput="changeTown(this.value)" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');" placeholder="Albufeira..." class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink w-32">
-    </div>
+                    <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
+                    </span>
+                    <input type="text" id="townInputFilter" name="town_filter_box" value="Albufeira" oninput="changeTown(this.value)" autocomplete="off" placeholder="Albufeira..." class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink w-32">
+                </div>
+
                 <div class="flex items-center gap-1 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
                     <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
                     <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
@@ -723,25 +724,25 @@
                 <button type="button" id="tabSignIn" onclick="setAuthMode('signin')" class="py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition">Sign In</button>
                 <button type="button" id="tabSignUp" onclick="setAuthMode('signup')" class="py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition">Create Account</button>
             </div>
-            <div class="space-y-3">
+            <form onsubmit="event.preventDefault(); handleAuthSubmit();" class="space-y-3" autocomplete="on">
                 <div id="usernameFieldGroup" class="hidden">
                     <label class="text-xs font-bold text-miamiCyan">Choose Your Username</label>
-                    <input type="text" id="signupUsername" placeholder="e.g. KrisAdmin" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="text" id="signupUsername" name="signupUsername" placeholder="e.g. KrisAdmin" autocomplete="username" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="you@example.com" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="email" id="loginEmail" name="loginEmail" placeholder="you@example.com" autocomplete="email" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Password</label>
-                    <input type="password" id="loginPass" placeholder="••••••••" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="password" id="loginPass" name="loginPass" placeholder="••••••••" autocomplete="current-password" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <p id="loginErrorMsg" class="text-xs text-miamiPink font-semibold hidden"></p>
                 <p id="loginInfoMsg" class="text-xs text-miamiCyan font-semibold hidden"></p>
-                <button id="authSubmitBtn" onclick="handleAuthSubmit()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
                     Sign In
                 </button>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -2212,7 +2213,7 @@
             if (eventsMapEl && eventsMapEl.offsetParent !== null) {
                 if (!eventsPulseMap) {
                     eventsPulseMap = L.map('eventsAlbufeiraMap').setView([37.0891, -8.2479], 13);
-                   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_5aoa_1_d7e8643cb4f9105228015a6a', {
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_5aoa_1_d7e8643cb4f9105228015a6a', {
                         attribution: '&copy; OpenStreetMap &copy; CARTO',
                         subdomains: 'abcd',
                         maxZoom: 19
@@ -2226,7 +2227,7 @@
             if (dirMapEl && dirMapEl.offsetParent !== null) {
                 if (!pulseMap) {
                     pulseMap = L.map('albufeiraMap').setView([37.0891, -8.2479], 13);
-                   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_5aoa_1_d7e8643cb4f9105228015a6a', {
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_5aoa_1_d7e8643cb4f9105228015a6a', {
                         attribution: '&copy; OpenStreetMap &copy; CARTO',
                         subdomains: 'abcd',
                         maxZoom: 19
