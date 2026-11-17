@@ -141,7 +141,7 @@
 
             <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm" title="Switch between Beach Day Mode and Neon Night Mode">
+                <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Switch between Beach Day Mode and Neon Night Mode">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
@@ -161,7 +161,7 @@
                     </select>
                 </div>
 
-                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5">
+                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> <span id="btnLoginText">Login</span>
                 </button>
             </div>
@@ -187,37 +187,34 @@
         <!-- Navigation Tabs & Action Buttons -->
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap">
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap cursor-pointer">
                     <i data-lucide="calendar" class="w-4 h-4"></i> <span id="tabEventsLbl">Events</span>
                 </button>
-                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> <span id="tabCalendarLbl">Calendar & Journal</span>
                 </button>
-                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
-                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory (Yellow Pages)</span>
-                </button>
-                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="newspaper" class="w-4 h-4"></i> <span id="tabArticlesLbl">Articles</span>
                 </button>
-                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="tag" class="w-4 h-4"></i> <span id="tabClassifiedsLbl">Classifieds</span>
                 </button>
-                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="message-square" class="w-4 h-4"></i> <span id="tabForumLbl">Forum</span>
                 </button>
-                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="external-link" class="w-4 h-4"></i> <span id="tabLinksLbl">Essential Links</span>
                 </button>
-                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer">
                     <i data-lucide="shield-alert" class="w-4 h-4"></i> <span id="tabInfoLbl">Emergency & Info</span>
                 </button>
             </div>
             
             <div class="flex items-center gap-2">
-                <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
                     <i data-lucide="building-2" class="w-4 h-4"></i> <span>+ Add Business</span>
                 </button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Add Event</span>
                 </button>
             </div>
@@ -237,7 +234,7 @@
                         <p id="popularSubtext" class="text-sm text-gray-300 theme-text-sub">Filter by neighbourhood zone, live happenings, or category.</p>
                     </div>
 
-                    <button onclick="filterEvents('WHATS_ON_NOW')" id="cat-btn-now" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg shadow-amber-500/30 hover:scale-105 transition flex items-center gap-1.5 animate-pulse">
+                    <button onclick="filterEvents('WHATS_ON_NOW')" id="cat-btn-now" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg shadow-amber-500/30 hover:scale-105 transition flex items-center gap-1.5 animate-pulse cursor-pointer">
                         <i data-lucide="zap" class="w-4 h-4"></i> WHAT'S ON NOW
                     </button>
                 </div>
@@ -247,27 +244,27 @@
                     <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1 whitespace-nowrap">
                         <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Zone:
                     </span>
-                    <button onclick="filterZone('all')" id="zone-btn-all" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark shadow-sm transition whitespace-nowrap">All Zones</button>
-                    <button onclick="filterZone('Old Town')" id="zone-btn-oldtown" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Old Town</button>
-                    <button onclick="filterZone('The Strip')" id="zone-btn-strip" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">The Strip</button>
-                    <button onclick="filterZone('Marina')" id="zone-btn-marina" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Marina</button>
-                    <button onclick="filterZone('Monte Choro')" id="zone-btn-choro" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Monte Choro</button>
-                    <button onclick="filterZone('Ferreiras')" id="zone-btn-ferreiras" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Ferreiras</button>
-                    <button onclick="filterZone('Oura Beach')" id="zone-btn-oura" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Oura Beach</button>
+                    <button onclick="filterZone('all')" id="zone-btn-all" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark shadow-sm transition whitespace-nowrap cursor-pointer">All Zones</button>
+                    <button onclick="filterZone('Old Town')" id="zone-btn-oldtown" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">Old Town</button>
+                    <button onclick="filterZone('The Strip')" id="zone-btn-strip" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">The Strip</button>
+                    <button onclick="filterZone('Marina')" id="zone-btn-marina" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">Marina</button>
+                    <button onclick="filterZone('Monte Choro')" id="zone-btn-choro" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">Monte Choro</button>
+                    <button onclick="filterZone('Ferreiras')" id="zone-btn-ferreiras" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">Ferreiras</button>
+                    <button onclick="filterZone('Oura Beach')" id="zone-btn-oura" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap cursor-pointer">Oura Beach</button>
                 </div>
                 
                 <!-- Category Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
-                    <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition">ALL EVENTS</button>
-                    <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE TV</button>
-                    <button onclick="filterEvents('SPORTS')" id="cat-btn-sports" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">SPORTS</button>
-                    <button onclick="filterEvents('EXHIBITIONS')" id="cat-btn-exhibitions" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">EXHIBITIONS</button>
-                    <button onclick="filterEvents('CLASSES')" id="cat-btn-classes" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">CLASSES</button>
-                    <button onclick="filterEvents('DINING & DRINK')" id="cat-btn-dining" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">DINING & DRINK</button>
-                    <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" id="cat-btn-happy" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">HAPPY HOUR & SPECIALS</button>
-                    <button onclick="filterEvents('SUNSET & NIGHTLIFE')" id="cat-btn-sunset" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">SUNSET & NIGHTLIFE</button>
-                    <button onclick="filterEvents('LIVE MUSIC')" id="cat-btn-music" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE MUSIC</button>
-                    <button onclick="filterEvents('MARKETS')" id="cat-btn-markets" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">MARKETS</button>
+                    <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition cursor-pointer">ALL EVENTS</button>
+                    <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">LIVE TV</button>
+                    <button onclick="filterEvents('SPORTS')" id="cat-btn-sports" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">SPORTS</button>
+                    <button onclick="filterEvents('EXHIBITIONS')" id="cat-btn-exhibitions" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">EXHIBITIONS</button>
+                    <button onclick="filterEvents('CLASSES')" id="cat-btn-classes" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">CLASSES</button>
+                    <button onclick="filterEvents('DINING & DRINK')" id="cat-btn-dining" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">DINING & DRINK</button>
+                    <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" id="cat-btn-happy" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">HAPPY HOUR & SPECIALS</button>
+                    <button onclick="filterEvents('SUNSET & NIGHTLIFE')" id="cat-btn-sunset" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">SUNSET & NIGHTLIFE</button>
+                    <button onclick="filterEvents('LIVE MUSIC')" id="cat-btn-music" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">LIVE MUSIC</button>
+                    <button onclick="filterEvents('MARKETS')" id="cat-btn-markets" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition cursor-pointer">MARKETS</button>
                 </div>
             </div>
             <!-- Interactive Albufeira Live Map on Events Tab -->
@@ -276,7 +273,7 @@
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                         <i data-lucide="map-pin" class="w-4 h-4"></i> Interactive Albufeira Map (Venues & Events)
                     </span>
-                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition">
+                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer">
                         Hide Map
                     </button>
                 </div>
@@ -307,39 +304,6 @@
             </div>
         </section>
 
-        <!-- YELLOW PAGES DIRECTORY TAB -->
-        <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                    <h2 id="dirTitle" class="text-2xl font-black text-white theme-text-main drop-shadow-sm flex items-center gap-2">
-                        📍 Local Yellow Pages & Business Directory
-                        <span id="dirTotalBadge" class="text-xs bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 px-2.5 py-0.5 rounded-full">0 listings</span>
-                    </h2>
-                    <p id="dirSub" class="text-sm text-gray-300 theme-text-sub">Search restaurants, bars, trades, shops, and services across Albufeira.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="relative">
-                        <input type="text" id="directorySearchInput" oninput="renderDirectory()" placeholder="Search business name or category..." class="bg-black/60 theme-input border border-miamiCyan/40 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-miamiPink w-60">
-                    </div>
-                    <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:bg-white transition flex items-center gap-1.5 shadow-lg">
-                        <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">Create Listing</span>
-                    </button>
-                </div>
-            </div>
-            <!-- Interactive Albufeira Venue Map -->
-            <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4"></i> Live Albufeira Venue Map
-                    </span>
-                    <span class="text-[11px] text-gray-400 theme-text-sub">Click any pin for venue details</span>
-                </div>
-                <div id="albufeiraMap" class="border border-white/10"></div>
-            </div>
-
-            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-        </section>
-
         <!-- ARTICLES TAB -->
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex flex-wrap justify-between items-center gap-4">
@@ -349,7 +313,7 @@
                     </h2>
                     <p id="articlesSub" class="text-sm text-gray-300 theme-text-sub">Neighbourhood guides, venue spotlights, and Algarve lifestyle features.</p>
                 </div>
-                <button onclick="openArticleModal()" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg">
+                <button onclick="openArticleModal()" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg cursor-pointer">
                     <i data-lucide="pen-tool" class="w-4 h-4"></i> <span id="btnWriteArticle">+ Write Article</span>
                 </button>
             </div>
@@ -365,25 +329,17 @@
                     </h2>
                     <p id="classifiedsSub" class="text-sm text-gray-300 theme-text-sub">Buy, sell, rent, and offer local services across Albufeira.</p>
                 </div>
-                <button onclick="openClassifiedModal()" class="bg-purple-500 text-white text-xs font-black px-4 py-2.5 rounded-xl hover:bg-purple-400 transition flex items-center gap-1.5 shadow-lg">
+                <button onclick="openClassifiedModal()" class="bg-purple-500 text-white text-xs font-black px-4 py-2.5 rounded-xl hover:bg-purple-400 transition flex items-center gap-1.5 shadow-lg cursor-pointer">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostClassified">+ Post Classified</span>
                 </button>
             </div>
 
-            <div class="flex gap-1.5 overflow-x-auto pb-1">
-                <button onclick="filterClassifieds('all')" id="cls-btn-all" class="cls-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-500 text-white whitespace-nowrap transition">ALL LISTINGS</button>
-                <button onclick="filterClassifieds('FOR SALE')" id="cls-btn-sale" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">FOR SALE</button>
-                <button onclick="filterClassifieds('RENTALS & HOUSING')" id="cls-btn-rentals" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">RENTALS & HOUSING</button>
-                <button onclick="filterClassifieds('LOCAL SERVICES')" id="cls-btn-services" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">LOCAL SERVICES</button>
-                <button onclick="filterClassifieds('JOBS & GIGS')" id="cls-btn-jobs" class="cls-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition">JOBS & GIGS</button>
-            </div>
-
             <div class="flex gap-1.5 overflow-x-auto pb-2">
-                <button onclick="filterClassifieds('all')" id="cls-btn-all" class="cls-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-500 text-white shadow-md shadow-purple-500/20 whitespace-nowrap transition">ALL LISTINGS</button>
-                <button onclick="filterClassifieds('FOR SALE')" id="cls-btn-sale" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition">FOR SALE</button>
-                <button onclick="filterClassifieds('RENTALS & HOUSING')" id="cls-btn-rentals" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition">RENTALS & HOUSING</button>
-                <button onclick="filterClassifieds('LOCAL SERVICES')" id="cls-btn-services" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition">LOCAL SERVICES</button>
-                <button onclick="filterClassifieds('JOBS & GIGS')" id="cls-btn-jobs" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition">JOBS & GIGS</button>
+                <button onclick="filterClassifieds('all')" id="cls-btn-all" class="cls-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-purple-500 text-white shadow-md shadow-purple-500/20 whitespace-nowrap transition cursor-pointer">ALL LISTINGS</button>
+                <button onclick="filterClassifieds('FOR SALE')" id="cls-btn-sale" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition cursor-pointer">FOR SALE</button>
+                <button onclick="filterClassifieds('RENTALS & HOUSING')" id="cls-btn-rentals" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition cursor-pointer">RENTALS & HOUSING</button>
+                <button onclick="filterClassifieds('LOCAL SERVICES')" id="cls-btn-services" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition cursor-pointer">LOCAL SERVICES</button>
+                <button onclick="filterClassifieds('JOBS & GIGS')" id="cls-btn-jobs" class="cls-filter-btn theme-pill px-3.5 py-2 rounded-xl text-xs font-bold bg-black/60 text-gray-200 border border-white/15 hover:border-purple-400 whitespace-nowrap transition cursor-pointer">JOBS & GIGS</button>
             </div>
 
             <div id="classifiedsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -398,7 +354,7 @@
                     </h2>
                     <p id="forumSub" class="text-sm text-gray-300 theme-text-sub">Ask questions, share local tips, and connect with residents & visitors.</p>
                 </div>
-                <button onclick="openForumModal()" class="bg-miamiPink text-white text-xs font-black px-4 py-2.5 rounded-xl hover:opacity-90 transition flex items-center gap-1.5 shadow-lg">
+                <button onclick="openForumModal()" class="bg-miamiPink text-white text-xs font-black px-4 py-2.5 rounded-xl hover:opacity-90 transition flex items-center gap-1.5 shadow-lg cursor-pointer">
                     <i data-lucide="message-circle" class="w-4 h-4"></i> <span id="btnNewDiscussion">+ New Discussion</span>
                 </button>
             </div>
@@ -576,66 +532,77 @@
                 <strong class="text-white">ALBUFEIRA PULSE</strong> © 2026 — The Heartbeat of the Algarve.
             </div>
             <div class="flex gap-4">
-                <button onclick="openLegalModal('impressum')" class="hover:text-miamiPink transition">Impressum & Legal</button>
-                <button onclick="openLegalModal('terms')" class="hover:text-miamiPink transition">Terms of Use</button>
-                <button onclick="openLegalModal('privacy')" class="hover:text-miamiPink transition">Privacy Policy (GDPR)</button>
+                <button onclick="openLegalModal('impressum')" class="hover:text-miamiPink transition cursor-pointer">Impressum & Legal</button>
+                <button onclick="openLegalModal('terms')" class="hover:text-miamiPink transition cursor-pointer">Terms of Use</button>
+                <button onclick="openLegalModal('privacy')" class="hover:text-miamiPink transition cursor-pointer">Privacy Policy (GDPR)</button>
             </div>
         </div>
     </footer>
 
+    <!-- Core Script Engine -->
     <script>
-        lucide.createIcons();
-        function toggleDayNightMode(save) {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+
+        function toggleDayNightMode() {
             const body = document.body;
             const btnText = document.getElementById('themeText');
             const icon = document.getElementById('themeIcon');
+            
             if (body.classList.contains('night-mode')) {
                 body.classList.replace('night-mode', 'day-mode');
-                btnText.textContent = 'Night Mode';
-                if(icon) icon.setAttribute('data-lucide', 'moon');
+                if (btnText) btnText.textContent = 'Night Mode';
+                if (icon) icon.setAttribute('data-lucide', 'moon');
             } else {
                 body.classList.replace('day-mode', 'night-mode');
-                btnText.textContent = 'Day Mode';
-                if(icon) icon.setAttribute('data-lucide', 'sun');
+                if (btnText) btnText.textContent = 'Day Mode';
+                if (icon) icon.setAttribute('data-lucide', 'sun');
             }
-            lucide.createIcons();
+            if (window.lucide) {
+                lucide.createIcons();
+            }
         }
+
         function switchTab(tabId) {
-            const tabs = ['events', 'calendar', 'directory', 'articles', 'classifieds', 'forum', 'links', 'info'];
+            const tabs = ['events', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'];
             tabs.forEach(t => {
                 const content = document.getElementById('tab-content-' + t);
                 const btn = document.getElementById('btn-' + t);
                 if (content) content.classList.add('hidden');
                 if (btn) {
-                    btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap";
+                    btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap cursor-pointer";
                 }
             });
             const activeContent = document.getElementById('tab-content-' + tabId);
             const activeBtn = document.getElementById('btn-' + tabId);
             if (activeContent) activeContent.classList.remove('hidden');
             if (activeBtn) {
-                activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap";
+                activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap cursor-pointer";
             }
         }
+
         function changeTown(val) {
             const banner = document.getElementById('bannerTown');
             const header = document.getElementById('currentTownHeader');
-            if(banner) banner.textContent = val || 'Albufeira';
-            if(header) header.textContent = val || 'Albufeira';
+            if (banner) banner.textContent = val || 'Albufeira';
+            if (header) header.textContent = val || 'Albufeira';
         }
-        function filterEvents(cat) {}
-        function filterZone(zone) {}
-        function filterClassifieds(cat) {}
-        function renderDirectory() {}
-        function toggleEventsMap() {}
-        function openLoginModal() {}
-        function openModal() {}
-        function openBusinessModal() {}
-        function openArticleModal() {}
-        function openClassifiedModal() {}
-        function openForumModal() {}
-        function openLegalModal(type) {}
-        function changeLanguage(lang) {}
+
+        function filterEvents(cat) { console.log('Filter events:', cat); }
+        function filterZone(zone) { console.log('Filter zone:', zone); }
+        function filterClassifieds(cat) { console.log('Filter classifieds:', cat); }
+        function toggleEventsMap() { console.log('Toggle map'); }
+        function openLoginModal() { alert('Login modal triggered'); }
+        function openModal() { alert('Add Event modal triggered'); }
+        function openBusinessModal() { alert('Add Business modal triggered'); }
+        function openArticleModal() { alert('Write Article modal triggered'); }
+        function openClassifiedModal() { alert('Post Classified modal triggered'); }
+        function openForumModal() { alert('New Discussion modal triggered'); }
+        function openLegalModal(type) { alert('Legal modal: ' + type); }
+        function changeLanguage(lang) { console.log('Language changed to:', lang); }
     </script>
 </body>
 </html>
