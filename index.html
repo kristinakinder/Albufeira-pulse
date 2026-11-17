@@ -158,8 +158,7 @@
             
             <div class="flex items-center gap-2">
                 <button onclick="openVenueModal()" class="bg-purple-600 hover:bg-purple-500 text-white text-xs font-black px-3 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
-                <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="building-2" class="w-4 h-4"></i> + Add Business</button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> Event</button>
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
             </div>
         </div>
     </header>
@@ -190,23 +189,24 @@
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
 
-                <!-- Event Categories Filter Bar -->
+                <!-- Updated Event Categories Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
                     <button onclick="filterEvents('all')" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white whitespace-nowrap transition cursor-pointer">ALL EVENTS</button>
                     <button onclick="filterEvents('SEASONAL & HOLIDAY')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SEASONAL & HOLIDAY</button>
                     <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">MARKETS & FAIRS</button>
-                    <button onclick="filterEvents('FESTIVALS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">FESTIVALS</button>
                     <button onclick="filterEvents('LIVE MUSIC')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">LIVE MUSIC</button>
                     <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SPORTS & OUTDOORS</button>
                     <button onclick="filterEvents('EXHIBITIONS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">EXHIBITIONS & CULTURE</button>
                     <button onclick="filterEvents('CLASSES')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">CLASSES & WORKSHOPS</button>
                     <button onclick="filterEvents('DINING & DRINK')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">DINING & DRINK</button>
                     <button onclick="filterEvents('HAPPY HOUR & SPECIALS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">HAPPY HOUR</button>
-                    <button onclick="filterEvents('SUNSET & NIGHTLIFE')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SUNSET & NIGHTLIFE</button>
+                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SUNSET</button>
+                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">NIGHTLIFE</button>
+                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">TV SPORTS</button>
                 </div>
             </div>
 
-            <!-- Interactive Leaflet Map Container (Starts Clean) -->
+            <!-- Interactive Leaflet Map Container -->
             <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
@@ -294,11 +294,11 @@
     </main>
 
     <!-- ================= SECTION 4: MODALS & POPUPS ================= -->
-    <!-- LOGIN MODAL -->
+    <!-- LOGIN & USERNAME SETUP MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
-            <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white" id="loginModalTitle">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
+            <form onsubmit="handleLogin(event)" class="space-y-3 text-xs" id="loginFormElement">
                 <div><label class="block font-bold mb-1 text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                 <div><label class="block font-bold mb-1 text-gray-300">Password</label><input type="password" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                 <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Sign In</button>
@@ -309,7 +309,7 @@
     <!-- ADD EVENT MODAL -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Event</h3><button onclick="closeModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Event</h3><button onclick="closeModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
                 <div><label class="block font-bold mb-1 text-gray-300">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Fado Night" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                 <div class="grid grid-cols-2 gap-2">
@@ -329,14 +329,15 @@
                     <select id="newEventCategory" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
                         <option value="SEASONAL & HOLIDAY">SEASONAL & HOLIDAY</option>
                         <option value="MARKETS">MARKETS & FAIRS</option>
-                        <option value="FESTIVALS">FESTIVALS</option>
                         <option value="LIVE MUSIC">LIVE MUSIC</option>
                         <option value="SPORTS">SPORTS & OUTDOORS</option>
                         <option value="EXHIBITIONS">EXHIBITIONS & CULTURE</option>
                         <option value="CLASSES">CLASSES & WORKSHOPS</option>
                         <option value="DINING & DRINK">DINING & DRINK</option>
                         <option value="HAPPY HOUR & SPECIALS">HAPPY HOUR</option>
-                        <option value="SUNSET & NIGHTLIFE">SUNSET & NIGHTLIFE</option>
+                        <option value="SUNSET">SUNSET</option>
+                        <option value="NIGHTLIFE">NIGHTLIFE</option>
+                        <option value="TV SPORTS">TV SPORTS</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
@@ -367,84 +368,24 @@
         </div>
     </div>
 
-    <!-- ADD BUSINESS MODAL -->
-    <div id="businessModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Business Listing</h3><button onclick="closeBusinessModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
-            <form onsubmit="handleBusinessSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-300">Business Name</label><input type="text" id="newBizName" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeBusinessModal()" class="px-4 py-2 rounded-xl bg-white/10 text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer">Save Listing</button></div>
-            </form>
-        </div>
-    </div>
-
     <!-- ================= SECTION 5: JAVASCRIPT ENGINE & STATE MANAGEMENT ================= -->
     <script>
         let albufeiraMap = null;
-        let registeredVenues = []; // Starts clean per user request
+        let registeredVenues = []; 
         let registeredEvents = [
             { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "SEASONAL & HOLIDAY", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
         ];
 
-     document.addEventListener('DOMContentLoaded', () => {
-    if (window.lucide) lucide.createIcons();
-    initMap();
-    refreshMapMarkers();
-    renderEventsGrid();
-    generateCalendarDays();
-    fetchLiveWeatherAndWaves();
-    updateThemeButtonUI();
-    
-    // Ensure auth state is checked immediately after DOM loads
-    setTimeout(checkExistingAuth, 50);
-});
-
-function handleLogin(e) { 
-    e.preventDefault(); 
-    const email = document.getElementById('loginEmailInput').value;
-    localStorage.setItem('albufeira_user', email);
-    renderUserAuthUI(email);
-    closeLoginModal(); 
-}
-
-function checkExistingAuth() {
-    const savedUser = localStorage.getItem('albufeira_user');
-    if (savedUser && savedUser.trim() !== '') {
-        renderUserAuthUI(savedUser);
-    } else {
-        handleLogout();
-    }
-}
-
-function renderUserAuthUI(email) {
-    const authArea = document.getElementById('authArea');
-    if (!authArea) return;
-    
-    // Extract a clean username from the email if desired, or display full email
-    const displayName = email.split('@')[0];
-
-    authArea.innerHTML = `
-        <div class="bg-black/40 theme-input px-3 py-1.5 rounded-xl border border-miamiCyan/30 flex items-center gap-2 text-xs font-bold text-white">
-            <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
-            <span>${displayName}</span>
-            <button onclick="handleLogout()" class="text-red-400 hover:text-red-300 ml-2 text-[10px] cursor-pointer">Logout</button>
-        </div>
-    `;
-    if (window.lucide) lucide.createIcons();
-}
-
-function handleLogout() {
-    localStorage.removeItem('albufeira_user');
-    const authArea = document.getElementById('authArea');
-    if (authArea) {
-        authArea.innerHTML = `
-            <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
-                <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
-            </button>
-        `;
-    }
-    if (window.lucide) lucide.createIcons();
-}
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+            initMap();
+            refreshMapMarkers();
+            renderEventsGrid();
+            generateCalendarDays();
+            fetchLiveWeatherAndWaves();
+            updateThemeButtonUI();
+            checkExistingAuth();
+        });
 
         // 1. Live Weather & Marine API Integration
         async function fetchLiveWeatherAndWaves() {
@@ -495,7 +436,7 @@ function handleLogout() {
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400 text-xs font-bold">No events found for this filter. Click "Event" to publish one!</div>`;
+                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400 text-xs font-bold">No events found for this filter. Click "+ Add Event" to publish one!</div>`;
                 return;
             }
 
@@ -562,7 +503,6 @@ function handleLogout() {
             registeredVenues.forEach(v => {
                 if (v.marker) albufeiraMap.removeLayer(v.marker);
                 
-                // Colorized if has active event (pink), neutral slate grey otherwise
                 let markerColor = v.hasEvent ? '#FF2A85' : '#64748B'; 
                 let svgIcon = L.divIcon({
                     className: 'custom-venue-pin',
@@ -628,9 +568,26 @@ function handleLogout() {
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
         function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
         function closeVenueModal() { document.getElementById('venueModal').classList.add('hidden'); }
-        function openBusinessModal() { document.getElementById('businessModal').classList.remove('hidden'); }
-        function closeBusinessModal() { document.getElementById('businessModal').classList.add('hidden'); }
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        function openLoginModal() { 
+            const savedUsername = localStorage.getItem('albufeira_custom_username');
+            if (!savedUsername) {
+                // If username hasn't been set up yet, show username setup screen
+                document.getElementById('loginModalTitle').textContent = "Set Your Custom Username";
+                document.getElementById('loginFormElement').innerHTML = `
+                    <div><label class="block font-bold mb-1 text-gray-300">Choose Permanent Username</label><input type="text" id="customUsernameInput" required placeholder="e.g. AlgarveLocal" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                    <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Save Username & Login</button>
+                `;
+            } else {
+                // Standard login if already set
+                document.getElementById('loginModalTitle').textContent = "Login to Albufeira Pulse";
+                document.getElementById('loginFormElement').innerHTML = `
+                    <div><label class="block font-bold mb-1 text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-300">Password</label><input type="password" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                    <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2 rounded-xl hover:bg-white transition cursor-pointer">Sign In</button>
+                `;
+            }
+            document.getElementById('loginModal').classList.remove('hidden'); 
+        }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
 
         function handleEventSubmit(e) {
@@ -659,31 +616,43 @@ function handleLogout() {
             closeModal();
         }
 
-        function handleBusinessSubmit(e) { e.preventDefault(); alert('Business listing submitted!'); closeBusinessModal(); }
-        
         function handleLogin(e) { 
             e.preventDefault(); 
-            const email = document.getElementById('loginEmailInput').value;
-            localStorage.setItem('albufeira_user', email);
-            renderUserAuthUI(email);
-            closeLoginModal(); 
-            alert('Logged in successfully!'); 
-        }
-
-        function checkExistingAuth() {
-            const savedUser = localStorage.getItem('albufeira_user');
-            if (savedUser) {
-                renderUserAuthUI(savedUser);
+            const usernameInput = document.getElementById('customUsernameInput');
+            if (usernameInput) {
+                const chosenName = usernameInput.value.trim();
+                if (chosenName) {
+                    localStorage.setItem('albufeira_custom_username', chosenName);
+                    renderUserAuthUI(chosenName);
+                    closeLoginModal();
+                    alert(`Welcome, ${chosenName}! Your username has been saved.`);
+                }
+            } else {
+                const email = document.getElementById('loginEmailInput').value;
+                const existingName = localStorage.getItem('albufeira_custom_username') || email.split('@')[0];
+                localStorage.setItem('albufeira_user', email);
+                renderUserAuthUI(existingName);
+                closeLoginModal(); 
             }
         }
 
-        function renderUserAuthUI(email) {
+        function checkExistingAuth() {
+            const savedUsername = localStorage.getItem('albufeira_custom_username');
+            const savedUser = localStorage.getItem('albufeira_user');
+            if (savedUsername) {
+                renderUserAuthUI(savedUsername);
+            } else if (savedUser) {
+                renderUserAuthUI(savedUser.split('@')[0]);
+            }
+        }
+
+        function renderUserAuthUI(displayName) {
             const authArea = document.getElementById('authArea');
             if (!authArea) return;
             authArea.innerHTML = `
                 <div class="bg-black/40 theme-input px-3 py-1.5 rounded-xl border border-miamiCyan/30 flex items-center gap-2 text-xs font-bold text-white">
                     <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
-                    <span>${email}</span>
+                    <span>${displayName}</span>
                     <button onclick="handleLogout()" class="text-red-400 hover:text-red-300 ml-2 text-[10px] cursor-pointer">Logout</button>
                 </div>
             `;
@@ -692,6 +661,7 @@ function handleLogout() {
 
         function handleLogout() {
             localStorage.removeItem('albufeira_user');
+            // Note: keeping 'albufeira_custom_username' so they only set it once per browser storage rule
             const authArea = document.getElementById('authArea');
             if (authArea) {
                 authArea.innerHTML = `
