@@ -55,15 +55,15 @@
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
 
-        /* Bubble Burst Pop-in Animation */
+        /* Smoother, Slower Bubble Burst Pop-in Animation */
         @keyframes bubbleBurst {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.08); opacity: 1; }
-            80% { transform: scale(0.95); opacity: 1; }
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.04); opacity: 1; }
+            75% { transform: scale(0.97); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
         .animate-bubble-burst {
-            animation: bubbleBurst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: bubbleBurst 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         html.night-mode body { background-color: #0B0F19; color: #F3F4F6; }
@@ -345,7 +345,7 @@
     </main>
 
     <!-- ================= SECTION 4: MODALS & POPUPS ================= -->
-    <!-- WELCOME / BUBBLE BURST POPUP MODAL -->
+    <!-- BUBBLE BURST WELCOME MODAL -->
     <div id="welcomeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-miamiPink/20 rounded-full blur-2xl pointer-events-none"></div>
@@ -400,8 +400,9 @@
                     </div>
                     <div>
                         <label class="block font-bold mb-1 text-gray-300">Venue</label>
-                        <input type="text" id="newEventVenue" required list="venList" placeholder="Select or type venue..." class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
-                        <datalist id="venList"></datalist>
+                        <select id="newEventVenueSelect" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                            <option value="">Select a Venue...</option>
+                        </select>
                     </div>
                 </div>
                 <div>
@@ -452,6 +453,14 @@
 
     <!-- ================= SECTION 5: JAVASCRIPT ENGINE & STATE MANAGEMENT ================= -->
     <script>
+        // Supabase Client Initialization
+        const SUPABASE_URL = 'https://ljnoabbeljnoabbeljno.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+        let _supabaseClient = null;
+        if (typeof supabase !== 'undefined') {
+            _supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
@@ -461,7 +470,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
             initMap();
-            refreshMapMarkers();
+            loadVenuesFromSupabase();
             renderEventsGrid();
             generateCalendarDays();
             fetchLiveWeatherAndWaves();
@@ -477,6 +486,45 @@
         function closeWelcomeModalAndLogin() {
             closeWelcomeModal();
             openLoginModal();
+        }
+
+        // Fetch registered venues from Supabase public.directory table
+        async function loadVenuesFromSupabase() {
+            if (!_supabaseClient) return;
+            try {
+                const { data, error } = await _supabaseClient.from('directory').select('*');
+                if (error) {
+                    console.error("Error fetching Supabase directory:", error);
+                    return;
+                }
+                if (data && data.length > 0) {
+                    registeredVenues = data.map(item => ({
+                        name: item.name || 'Unnamed Venue',
+                        address: item.address || '',
+                        area: item.zone || item.town || 'Albufeira',
+                        lat: item.lat || 37.0888,
+                        lng: item.lng || -8.2511,
+                        hasEvent: false,
+                        marker: null
+                    }));
+                    refreshMapMarkers();
+                    updateVenueDropdown();
+                }
+            } catch (err) {
+                console.error("Failed connection to Supabase directory:", err);
+            }
+        }
+
+        function updateVenueDropdown() {
+            const venueSelect = document.getElementById('newEventVenueSelect');
+            if (!venueSelect) return;
+            venueSelect.innerHTML = `<option value="">Select a Venue...</option>`;
+            registeredVenues.forEach(v => {
+                const option = document.createElement('option');
+                option.value = v.name;
+                option.textContent = `${v.name} (${v.area})`;
+                venueSelect.appendChild(option);
+            });
         }
 
         // 1. Live Weather & Marine API Integration
@@ -533,6 +581,9 @@
             }
 
             filtered.forEach(ev => {
+                const venueObj = registeredVenues.find(v => v.name.toLowerCase() === ev.venueName.toLowerCase());
+                const addressDisplay = venueObj && venueObj.address ? `📍 ${venueObj.address}` : `📍 ${ev.venueName} (${ev.zone})`;
+
                 const card = document.createElement('div');
                 card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-3';
                 card.innerHTML = `
@@ -542,7 +593,7 @@
                             <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
                         </div>
                         <h3 class="text-base font-black text-white theme-text-main mb-1">${ev.title}</h3>
-                        <p class="text-xs font-semibold text-gray-300 theme-text-sub mb-2">📍 ${ev.venueName} (${ev.zone})</p>
+                        <p class="text-xs font-semibold text-gray-300 theme-text-sub mb-1">${addressDisplay}</p>
                         <p class="text-xs text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
                     </div>
                     <div class="pt-3 border-t border-white/10 flex justify-between items-center text-[11px] text-gray-400">
@@ -692,7 +743,7 @@
             e.preventDefault();
             const title = document.getElementById('newEventTitle').value;
             const zone = document.getElementById('newEventZone').value;
-            const venueName = document.getElementById('newEventVenue').value;
+            const venueName = document.getElementById('newEventVenueSelect').value;
             const category = document.getElementById('newEventCategory').value;
             const date = document.getElementById('newEventDate').value;
             const time = document.getElementById('newEventTime').value;
@@ -780,13 +831,7 @@
 
             registeredVenues.push({ name, address, lat, lng, area, hasEvent: false, marker: null });
             refreshMapMarkers();
-
-            const datalist = document.getElementById('venList');
-            if (datalist) {
-                const opt = document.createElement('option');
-                opt.value = name;
-                datalist.appendChild(opt);
-            }
+            updateVenueDropdown();
 
             if (albufeiraMap) {
                 albufeiraMap.setView([lat, lng], 14);
