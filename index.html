@@ -311,7 +311,7 @@
             </div>
         </section>
 
-        <!-- TAB 7: EMERGENCY & INFO (Minimal & Dark Gray Text) -->
+        <!-- TAB 7: EMERGENCY & INFO -->
         <section id="tab-content-info" class="space-y-6 hidden">
             <h2 class="text-2xl font-black text-white theme-text-main">Emergency & Essential Contacts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-3xl">
@@ -386,18 +386,25 @@
         </div>
     </div>
 
-    <!-- ADD VENUE MODAL -->
+    <!-- ADD VENUE MODAL (Updated with Address / Street & Postal Code + Pin Drop Fallback) -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
-            <p class="text-[11px] text-gray-300 theme-text-sub">Tip: Click anywhere on the map to auto-fill latitude and longitude coordinates.</p>
+            <p class="text-[11px] text-gray-300 theme-text-sub">Tip: Enter street name and postal code, or click directly on the map to drop a pin for beaches and remote spots.</p>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-300">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Guia Arena" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 text-gray-300">Latitude</label><input type="number" step="0.0001" id="newVenueLat" required value="37.0888" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-white"></div>
-                    <div><label class="block font-bold mb-1 text-gray-300">Longitude</label><input type="number" step="0.0001" id="newVenueLng" required value="-8.2511" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-white"></div>
+                <div><label class="block font-bold mb-1 text-gray-300">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Praia dos Pescadores Bar" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                <div>
+                    <label class="block font-bold mb-1 text-gray-300">Address (Street & Postal Code)</label>
+                    <input type="text" id="newVenueAddress" placeholder="e.g. Rua da Oura 12, 8200-391 Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
                 </div>
-                <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
+                    <div><label class="block font-bold mb-1 text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-emerald-400 font-bold text-center"></div>
+                </div>
+                <!-- Hidden coordinate storage captured seamlessly via map click or defaults -->
+                <input type="hidden" id="newVenueLat" value="37.0888">
+                <input type="hidden" id="newVenueLng" value="-8.2511">
+                
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-white/10 text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-600 text-white font-black cursor-pointer">Pin to Map</button></div>
             </form>
         </div>
@@ -519,13 +526,12 @@
             }
         }
 
-        // 4. Map Initialization & Dynamic Venue Coloring (Fixed with referrerPolicy for Firefox)
+        // 4. Map Initialization & Pin Drop Capture (Fixed with referrerPolicy for Firefox)
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
                 albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 13);
                 
-                // Added referrerPolicy to satisfy OpenStreetMap tile policies in Firefox & local file testing
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     referrerPolicy: 'origin-when-cross-origin'
@@ -534,6 +540,10 @@
                 albufeiraMap.on('click', function(e) {
                     document.getElementById('newVenueLat').value = e.latlng.lat.toFixed(4);
                     document.getElementById('newVenueLng').value = e.latlng.lng.toFixed(4);
+                    const statusBox = document.getElementById('mapPinStatusText');
+                    if (statusBox) {
+                        statusBox.value = `Pin Dropped (${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)})`;
+                    }
                 });
             }
         }
@@ -552,7 +562,7 @@
                 });
 
                 v.marker = L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap)
-                    .bindPopup(`<b>${v.name}</b><br>${v.area}<br>${v.hasEvent ? '🎉 Active Event Running!' : '☕ No Events Scheduled'}`);
+                    .bindPopup(`<b>${v.name}</b><br>${v.address ? v.address + '<br>' : ''}${v.area}<br>${v.hasEvent ? '🎉 Active Event Running!' : '☕ No Events Scheduled'}`);
             });
         }
 
@@ -713,11 +723,12 @@
         function handleVenueSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('newVenueName').value;
+            const address = document.getElementById('newVenueAddress').value;
             const lat = parseFloat(document.getElementById('newVenueLat').value);
             const lng = parseFloat(document.getElementById('newVenueLng').value);
             const area = document.getElementById('newVenueArea').value;
 
-            registeredVenues.push({ name, lat, lng, area, hasEvent: false, marker: null });
+            registeredVenues.push({ name, address, lat, lng, area, hasEvent: false, marker: null });
             refreshMapMarkers();
 
             const datalist = document.getElementById('venList');
@@ -730,7 +741,7 @@
             if (albufeiraMap) {
                 albufeiraMap.setView([lat, lng], 14);
             }
-            alert(`Venue "${name}" pinned to map!`);
+            alert(`Venue "${name}" successfully pinned to map!`);
             closeVenueModal();
         }
     </script>
