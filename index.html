@@ -386,16 +386,65 @@
             { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "SEASONAL & HOLIDAY", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
         ];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) lucide.createIcons();
-            initMap();
-            refreshMapMarkers();
-            renderEventsGrid();
-            generateCalendarDays();
-            fetchLiveWeatherAndWaves();
-            updateThemeButtonUI();
-            checkExistingAuth();
-        });
+     document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) lucide.createIcons();
+    initMap();
+    refreshMapMarkers();
+    renderEventsGrid();
+    generateCalendarDays();
+    fetchLiveWeatherAndWaves();
+    updateThemeButtonUI();
+    
+    // Ensure auth state is checked immediately after DOM loads
+    setTimeout(checkExistingAuth, 50);
+});
+
+function handleLogin(e) { 
+    e.preventDefault(); 
+    const email = document.getElementById('loginEmailInput').value;
+    localStorage.setItem('albufeira_user', email);
+    renderUserAuthUI(email);
+    closeLoginModal(); 
+}
+
+function checkExistingAuth() {
+    const savedUser = localStorage.getItem('albufeira_user');
+    if (savedUser && savedUser.trim() !== '') {
+        renderUserAuthUI(savedUser);
+    } else {
+        handleLogout();
+    }
+}
+
+function renderUserAuthUI(email) {
+    const authArea = document.getElementById('authArea');
+    if (!authArea) return;
+    
+    // Extract a clean username from the email if desired, or display full email
+    const displayName = email.split('@')[0];
+
+    authArea.innerHTML = `
+        <div class="bg-black/40 theme-input px-3 py-1.5 rounded-xl border border-miamiCyan/30 flex items-center gap-2 text-xs font-bold text-white">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
+            <span>${displayName}</span>
+            <button onclick="handleLogout()" class="text-red-400 hover:text-red-300 ml-2 text-[10px] cursor-pointer">Logout</button>
+        </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+}
+
+function handleLogout() {
+    localStorage.removeItem('albufeira_user');
+    const authArea = document.getElementById('authArea');
+    if (authArea) {
+        authArea.innerHTML = `
+            <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
+                <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+            </button>
+        `;
+    }
+    if (window.lucide) lucide.createIcons();
+}
 
         // 1. Live Weather & Marine API Integration
         async function fetchLiveWeatherAndWaves() {
