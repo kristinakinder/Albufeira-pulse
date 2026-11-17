@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albufeira Pulse | Town Event Calendar & Directory</title>
+    <title>Albufeira Pulse | Town Event Calendar & Venue Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Supabase JavaScript Client Library -->
@@ -19,14 +19,12 @@
             theme: {
                 extend: {
                     colors: {
-                        miamiPink: '#FF2A85',
-                        miamiCyan: '#06B6D4',
-                        miamiDark: '#0B0F19',
-                        miamiCard: '#131B2E',
-                        beachSand: '#FAF7F2',
-                        beachCard: '#FFFFFF',
-                        beachOcean: '#0284C7',
-                        beachSun: '#F59E0B',
+                        pulsePink: '#FF2A85',
+                        pulseMint: '#10B981',
+                        pulseBlue: '#2563EB',
+                        pulseCyan: '#06B6D4',
+                        pulseDark: '#070B14',
+                        pulseCard: '#0F172A',
                     }
                 }
             }
@@ -35,8 +33,8 @@
     <style>
         @keyframes pulseColor {
             0% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
-            33% { color: #06B6D4; transform: scale(1.25); filter: drop-shadow(0 0 12px #06B6D4); }
-            66% { color: #A855F7; transform: scale(1); filter: drop-shadow(0 0 8px #A855F7); }
+            33% { color: #10B981; transform: scale(1.25); filter: drop-shadow(0 0 12px #10B981); }
+            66% { color: #2563EB; transform: scale(1); filter: drop-shadow(0 0 8px #2563EB); }
             100% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
         }
         .animate-pulse-color {
@@ -44,7 +42,7 @@
         }
 
         body.night-mode .tagline-glow {
-            text-shadow: 0 0 10px rgba(6, 182, 212, 0.55);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.55);
         }
         body.day-mode .tagline-glow {
             text-shadow: none;
@@ -52,11 +50,11 @@
 
         /* NIGHT MODE (Default) */
         body.night-mode {
-            background-color: #0B0F19;
+            background-color: #070B14;
             color: #F3F4F6;
             background-image: 
-                linear-gradient(to bottom, rgba(11, 15, 25, 0.45), rgba(19, 27, 46, 0.85)),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%230B0F19'/%3E%3Cstop offset='45%25' stop-color='%232D1154'/%3E%3Cstop offset='78%25' stop-color='%23FF2A85'/%3E%3Cstop offset='100%25' stop-color='%23FF9E00'/%3E%3C/linearGradient%3E%3ClinearGradient id='sun' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23FFE600'/%3E%3Cstop offset='50%25' stop-color='%23FF2A85'/%3E%3Cstop offset='100%25' stop-color='%239D00FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1440' height='900' fill='url(%23sky)'/%3E%3Ccircle cx='720' cy='580' r='220' fill='url(%23sun)'/%3E%3Crect x='480' y='610' width='480' height='8' fill='%232D1154' opacity='0.6'/%3E%3Crect x='480' y='635' width='480' height='12' fill='%232D1154' opacity='0.7'/%3E%3Crect x='480' y='665' width='480' height='16' fill='%232D1154' opacity='0.8'/%3E%3Crect x='480' y='700' width='480' height='22' fill='%232D1154' opacity='0.9'/%3E%3Cpath d='M0 730 Q360 710 720 730 T1440 730 L1440 900 L0 900 Z' fill='%23090D16'/%3E%3Cpath d='M0 760 Q480 745 960 765 T1440 755 L1440 900 L0 900 Z' fill='%2306B6D4' opacity='0.15'/%3E%3Cg fill='%23070A12'%3E%3Cpath d='M160 900 Q190 650 240 430 L262 435 Q215 650 195 900 Z'/%3E%3Cpath d='M250 435 Q160 390 80 450 Q170 425 250 445 Z'/%3E%3Cpath d='M250 435 Q150 330 70 360 Q165 365 250 440 Z'/%3E%3Cpath d='M250 435 Q220 310 150 280 Q215 335 250 435 Z'/%3E%3Cpath d='M250 435 Q310 310 380 300 Q315 345 255 435 Z'/%3E%3Cpath d='M250 435 Q350 370 420 430 Q340 405 255 442 Z'/%3E%3Cpath d='M250 435 Q320 440 360 510 Q305 460 252 445 Z'/%3E%3Cpath d='M1270 900 Q1230 620 1170 380 L1148 386 Q1205 620 1235 900 Z'/%3E%3Cpath d='M1160 385 Q1260 335 1350 400 Q1250 375 1160 395 Z'/%3E%3Cpath d='M1160 385 Q1270 275 1360 305 Q1255 310 1160 390 Z'/%3E%3Cpath d='M1160 385 Q1190 250 1270 220 Q1200 280 1160 385 Z'/%3E%3Cpath d='M1160 385 Q1090 255 1010 245 Q1085 290 1155 385 Z'/%3E%3Cpath d='M1160 385 Q1050 315 970 380 Q1060 355 1155 392 Z'/%3E%3Cpath d='M1160 385 Q1080 395 1035 470 Q1100 415 1158 395 Z'/%3E%3C/g%3E%3C/svg%3E");
+                linear-gradient(to bottom, rgba(7, 11, 20, 0.5), rgba(15, 23, 42, 0.9)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23070B14'/%3E%3Cstop offset='45%25' stop-color='%231E1B4B'/%3E%3Cstop offset='78%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3ClinearGradient id='sun' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2338BDF8'/%3E%3Cstop offset='50%25' stop-color='%2310B981'/%3E%3Cstop offset='100%25' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1440' height='900' fill='url(%23sky)'/%3E%3Ccircle cx='720' cy='580' r='220' fill='url(%23sun)'/%3E%3Cpath d='M0 730 Q360 710 720 730 T1440 730 L1440 900 L0 900 Z' fill='%2305070C'/%3E%3C/svg%3E");
             background-size: cover;
             background-attachment: fixed;
             background-position: center bottom;
@@ -64,26 +62,26 @@
 
         /* DAY MODE */
         body.day-mode {
-            background-color: #FAF7F2;
-            color: #1E293B;
+            background-color: #F8FAFC;
+            color: #0F172A;
             background-image: 
-                linear-gradient(to bottom, rgba(224, 242, 254, 0.7), rgba(254, 243, 199, 0.45)),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='daysky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2338BDF8'/%3E%3Cstop offset='60%25' stop-color='%23BAE6FD'/%3E%3Cstop offset='100%25' stop-color='%23FEF3C7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1440' height='900' fill='url(%23daysky)'/%3E%3Ccircle cx='1150' cy='180' r='90' fill='%23FDE047' opacity='0.85'/%3E%3Cpath d='M0 680 Q360 650 720 680 T1440 670 L1440 900 L0 900 Z' fill='%230284C7' opacity='0.85'/%3E%3Cpath d='M0 730 Q480 705 960 735 T1440 720 L1440 900 L0 900 Z' fill='%230EA5E9' opacity='0.75'/%3E%3Cpath d='M0 780 Q420 765 840 785 T1440 775 L1440 900 L0 900 Z' fill='%23FDE68A'/%3E%3C/svg%3E");
+                linear-gradient(to bottom, rgba(224, 242, 254, 0.8), rgba(209, 250, 229, 0.5)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='daysky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2338BDF8'/%3E%3Cstop offset='60%25' stop-color='%23BAE6FD'/%3E%3Cstop offset='100%25' stop-color='%23A7F3D0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1440' height='900' fill='url(%23daysky)'/%3E%3Ccircle cx='1150' cy='180' r='90' fill='%23FDE047' opacity='0.85'/%3E%3Cpath d='M0 680 Q360 650 720 680 T1440 670 L1440 900 L0 900 Z' fill='%230284C7' opacity='0.85'/%3E%3C/svg%3E");
             background-size: cover;
             background-attachment: fixed;
             background-position: center bottom;
         }
 
         body.day-mode header {
-            background-color: rgba(255, 255, 255, 0.92) !important;
-            border-bottom-color: rgba(2, 132, 199, 0.25) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            border-bottom-color: rgba(16, 185, 129, 0.3) !important;
             color: #0F172A !important;
         }
         body.day-mode .theme-card {
             background-color: rgba(255, 255, 255, 0.95) !important;
-            border-color: rgba(2, 132, 199, 0.2) !important;
+            border-color: rgba(16, 185, 129, 0.25) !important;
             color: #1E293B !important;
-            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.12) !important;
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.12) !important;
         }
         body.day-mode .theme-text-main {
             color: #0F172A !important;
@@ -94,37 +92,34 @@
         body.day-mode .theme-input {
             background-color: #F8FAFC !important;
             color: #0F172A !important;
-            border-color: rgba(2, 132, 199, 0.35) !important;
+            border-color: rgba(16, 185, 129, 0.35) !important;
         }
         body.day-mode .theme-pill {
-            background-color: rgba(255, 255, 255, 0.85) !important;
-            color: #334155 !important;
-            border-color: rgba(2, 132, 199, 0.25) !important;
-        }
-        body.day-mode .theme-pill:hover {
-            background-color: #E0F2FE !important;
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            color: #1E293B !important;
+            border-color: rgba(16, 185, 129, 0.3) !important;
         }
 
-        #albufeiraMap {
+        #albufeiraMap, #eventsAlbufeiraMap {
             height: 400px;
             width: 100%;
             border-radius: 1rem;
             z-index: 10;
         }
         .leaflet-popup-content-wrapper {
-            background-color: #131B2E;
+            background-color: #0F172A;
             color: #F3F4F6;
-            border: 1px solid rgba(6, 182, 212, 0.4);
+            border: 1px solid rgba(16, 185, 129, 0.5);
         }
         .leaflet-popup-tip {
-            background-color: #131B2E;
+            background-color: #0F172A;
         }
     </style>
 </head>
 <body class="night-mode text-gray-100 min-h-screen flex flex-col font-sans transition-colors duration-300">
 
     <!-- Top Navigation Bar -->
-    <header class="bg-miamiCard/90 backdrop-blur-md border-b border-miamiPink/30 sticky top-0 z-50 shadow-lg shadow-miamiPink/10 transition-colors">
+    <header class="bg-pulseCard/95 backdrop-blur-md border-b border-pulseMint/45 sticky top-0 z-50 shadow-xl shadow-pulseMint/10 transition-colors">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
             <!-- Brand Logo -->
             <div class="flex items-center gap-3">
@@ -134,69 +129,69 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-miamiPink to-miamiCyan bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p id="subtextTitle" class="text-[11px] font-medium tracking-widest uppercase text-miamiCyan/90 theme-text-sub tagline-glow">The Heartbeat of the Algarve</p>
+                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-pulsePink via-pulseMint to-pulseBlue bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
+                    <p id="subtextTitle" class="text-[11px] font-bold tracking-widest uppercase text-pulseMint theme-text-sub tagline-glow">The Heartbeat of the Algarve</p>
                 </div>
             </div>
 
             <!-- Controls -->
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm" title="Switch between Beach Day Mode and Neon Night Mode">
+                <button onclick="toggleDayNightMode(true)" id="themeToggleBtn" class="bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow-sm" title="Switch between Day Mode and Night Mode">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
 
                 <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
-                    <span id="labelTown" class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1">
+                    <span id="labelTown" class="text-xs font-semibold px-2 text-pulseMint flex items-center gap-1">
                         <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Town:
                     </span>
-                    <input type="text" id="townInputFilter" name="town_filter_box" value="Albufeira" oninput="changeTown(this.value)" autocomplete="off" placeholder="Albufeira..." class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none focus:border-miamiPink w-32">
+                    <input type="text" id="townInputFilter" name="town_filter_box" value="Albufeira" oninput="changeTown(this.value)" autocomplete="off" placeholder="Albufeira..." class="bg-pulseCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-pulseMint/50 focus:outline-none focus:border-pulsePink w-32">
                 </div>
 
                 <div class="flex items-center gap-1 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
-                    <span class="text-xs text-miamiPink font-bold px-1">🌐</span>
-                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-miamiPink/40 focus:outline-none cursor-pointer">
+                    <span class="text-xs text-pulsePink font-bold px-1">🌐</span>
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-pulseCard theme-input text-xs font-bold text-white px-2.5 py-1.5 rounded-lg border border-pulsePink/50 focus:outline-none cursor-pointer">
                         <option value="en">English (UK)</option>
                         <option value="pt">Português</option>
                     </select>
                 </div>
 
-                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition flex items-center gap-1.5">
-                    <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> <span id="btnLoginText">Login</span>
+                <button id="loginBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-pulseMint"></i> <span id="btnLoginText">Login</span>
                 </button>
             </div>
         </div>
 
         <!-- Clean Weather Banner -->
-        <a id="weatherBannerLink" href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-black/80 hover:bg-black/90 transition backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
+        <a id="weatherBannerLink" href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-black/85 hover:bg-black/95 transition backdrop-blur-sm border-t border-b border-pulseMint/35 px-4 py-2 text-xs flex justify-center md:justify-between items-center text-gray-300 block group">
             <div class="flex items-center gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap">
-                <span class="flex items-center gap-1.5 font-bold text-miamiCyan group-hover:underline">
+                <span class="flex items-center gap-1.5 font-bold text-pulseMint group-hover:underline">
                     <i data-lucide="sun" class="w-4 h-4"></i> <span id="bannerTown">Albufeira</span> <span id="lblForecast">Forecast</span>:
                 </span>
                 <span><span id="lblAir">Air</span>: <strong class="text-white">19°C</strong></span>
                 <span><span id="lblSea">Sea</span>: <strong class="text-white">18°C</strong></span>
                 <span><span id="lblWaves">Waves</span>: <strong class="text-white">0.8m</strong></span>
                 <span><span id="lblSunrise">Sunrise</span>: <strong class="text-amber-300">07:13</strong></span>
-                <span><span id="lblSunset">Sunset</span>: <strong class="text-miamiPink">17:25</strong></span>
+                <span><span id="lblSunset">Sunset</span>: <strong class="text-pulsePink">17:25</strong></span>
             </div>
-            <span class="text-[11px] text-miamiPink font-bold hidden lg:flex items-center gap-1 whitespace-nowrap">
+            <span class="text-[11px] text-pulsePink font-bold hidden lg:flex items-center gap-1 whitespace-nowrap">
                 IPMA Official <i data-lucide="external-link" class="w-3 h-3"></i>
             </span>
         </a>
 
         <!-- Navigation Tabs & Action Buttons -->
-        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
+        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-pulseCard/60 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap">
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-pulsePink text-white flex items-center gap-1.5 transition shadow-md shadow-pulsePink/25 whitespace-nowrap">
                     <i data-lucide="calendar" class="w-4 h-4"></i> <span id="tabEventsLbl">Events</span>
                 </button>
                 <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> <span id="tabCalendarLbl">Calendar & Journal</span>
                 </button>
                 <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
-                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Directory (Yellow Pages)</span>
+                    <i data-lucide="map" class="w-4 h-4"></i> <span id="tabDirectoryLbl">Venue Directory</span>
                 </button>
-                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
+                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-pulseMint hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
                     <i data-lucide="newspaper" class="w-4 h-4"></i> <span id="tabArticlesLbl">Articles</span>
                 </button>
                 <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition whitespace-nowrap">
@@ -214,10 +209,10 @@
             </div>
             
             <div class="flex items-center gap-2">
-                <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-white transition flex items-center gap-1.5 whitespace-nowrap">
-                    <i data-lucide="building-2" class="w-4 h-4"></i> <span>+ Add Business</span>
+                <button onclick="openBusinessModal()" class="bg-pulseMint text-pulseDark text-xs font-black px-3.5 py-2 rounded-xl shadow-lg hover:bg-emerald-400 transition flex items-center gap-1.5 whitespace-nowrap border border-pulseMint">
+                    <i data-lucide="building-2" class="w-4 h-4"></i> <span>+ Add Venue</span>
                 </button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiPink to-miamiCyan text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="openModal()" class="bg-gradient-to-r from-pulsePink to-pulseBlue text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-pulsePink/30 hover:opacity-95 transition flex items-center gap-1.5 whitespace-nowrap">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i> <span id="btnPostText">+ Add Event</span>
                 </button>
             </div>
@@ -232,33 +227,33 @@
                 <div class="flex flex-wrap justify-between items-end gap-4">
                     <div>
                         <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2 drop-shadow-sm">
-                            <span id="popularHeaderTitle">Events & Happenings in</span> <span id="currentTownHeader" class="text-miamiPink">Albufeira</span>
+                            <span id="popularHeaderTitle">Events & Happenings in</span> <span id="currentTownHeader" class="text-pulsePink">Albufeira</span>
                         </h2>
                         <p id="popularSubtext" class="text-sm text-gray-300 theme-text-sub">Filter by neighbourhood zone, live happenings, or category.</p>
                     </div>
 
-                    <button onclick="filterEvents('WHATS_ON_NOW')" id="cat-btn-now" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-amber-500 to-miamiPink text-white shadow-lg shadow-amber-500/30 hover:scale-105 transition flex items-center gap-1.5 animate-pulse">
+                    <button onclick="filterEvents('WHATS_ON_NOW')" id="cat-btn-now" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black bg-gradient-to-r from-pulseMint to-pulsePink text-white shadow-lg shadow-pulseMint/30 hover:scale-105 transition flex items-center gap-1.5 animate-pulse">
                         <i data-lucide="zap" class="w-4 h-4"></i> WHAT'S ON NOW
                     </button>
                 </div>
 
                 <!-- MICRO-LOCATIONS BAR -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                    <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1 whitespace-nowrap">
+                    <span class="text-xs font-bold text-pulseMint mr-1 flex items-center gap-1 whitespace-nowrap">
                         <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Zone:
                     </span>
-                    <button onclick="filterZone('all')" id="zone-btn-all" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark shadow-sm transition whitespace-nowrap">All Zones</button>
-                    <button onclick="filterZone('Old Town')" id="zone-btn-oldtown" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Old Town</button>
-                    <button onclick="filterZone('The Strip')" id="zone-btn-strip" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">The Strip</button>
-                    <button onclick="filterZone('Marina')" id="zone-btn-marina" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Marina</button>
-                    <button onclick="filterZone('Monte Choro')" id="zone-btn-choro" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Monte Choro</button>
-                    <button onclick="filterZone('Ferreiras')" id="zone-btn-ferreiras" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Ferreiras</button>
-                    <button onclick="filterZone('Oura Beach')" id="zone-btn-oura" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap">Oura Beach</button>
+                    <button onclick="filterZone('all')" id="zone-btn-all" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-pulseMint text-pulseDark shadow-sm transition whitespace-nowrap">All Zones</button>
+                    <button onclick="filterZone('Old Town')" id="zone-btn-oldtown" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">Old Town</button>
+                    <button onclick="filterZone('The Strip')" id="zone-btn-strip" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">The Strip</button>
+                    <button onclick="filterZone('Marina')" id="zone-btn-marina" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">Marina</button>
+                    <button onclick="filterZone('Monte Choro')" id="zone-btn-choro" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">Monte Choro</button>
+                    <button onclick="filterZone('Ferreiras')" id="zone-btn-ferreiras" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">Ferreiras</button>
+                    <button onclick="filterZone('Oura Beach')" id="zone-btn-oura" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap">Oura Beach</button>
                 </div>
                 
                 <!-- Category Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
-                    <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition">ALL EVENTS</button>
+                    <button onclick="filterEvents('all')" id="cat-btn-all" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-pulsePink text-white shadow-md shadow-pulsePink/30 whitespace-nowrap transition">ALL EVENTS</button>
                     <button onclick="filterEvents('LIVE TV')" id="cat-btn-livetv" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">LIVE TV</button>
                     <button onclick="filterEvents('SPORTS')" id="cat-btn-sports" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">SPORTS</button>
                     <button onclick="filterEvents('EXHIBITIONS')" id="cat-btn-exhibitions" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 hover:bg-white/10 border border-white/10 whitespace-nowrap transition">EXHIBITIONS</button>
@@ -271,12 +266,12 @@
                 </div>
             </div>
             <!-- Interactive Albufeira Live Map on Events Tab -->
-            <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
+            <div class="bg-pulseCard/90 theme-card border border-pulseMint/40 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                    <span class="text-xs font-black uppercase tracking-wider text-pulseMint flex items-center gap-1.5">
                         <i data-lucide="map-pin" class="w-4 h-4"></i> Interactive Albufeira Map (Venues & Events)
                     </span>
-                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition">
+                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-bold bg-pulseMint/25 hover:bg-pulseMint text-pulseMint hover:text-pulseDark px-2.5 py-1 rounded-lg border border-pulseMint/50 transition">
                         Hide Map
                     </button>
                 </div>
@@ -290,46 +285,46 @@
 
         <!-- CALENDAR & PARTY JOURNAL TAB -->
         <section id="tab-content-calendar" class="space-y-6 hidden">
-            <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/30 rounded-2xl p-6 shadow-xl">
+            <div class="bg-pulseCard/90 theme-card backdrop-blur-md border border-pulseBlue/40 rounded-2xl p-6 shadow-xl">
                 <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
                     <div>
                         <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                            <i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Calendar & Journal
+                            <i data-lucide="calendar-days" class="text-pulseBlue w-7 h-7"></i> November 2026 Calendar & Journal
                         </h2>
                         <p class="text-xs text-gray-400 theme-text-sub">Click any date to view that day's schedule, add an event, or upload party photos!</p>
                     </div>
-                    <span class="text-xs bg-miamiPink/20 text-miamiPink px-3 py-1 rounded-full font-bold border border-miamiPink/40">Interactive Daily Journal</span>
+                    <span class="text-xs bg-pulsePink/20 text-pulsePink px-3 py-1 rounded-full font-bold border border-pulsePink/40">Interactive Daily Journal</span>
                 </div>
                 <div id="calendarDaysHeader" class="grid grid-cols-7 gap-2 text-center font-bold text-sm text-gray-400 mb-2">
-                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-miamiCyan">Sun</div>
+                    <div class="text-pulsePink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-pulseMint">Sun</div>
                 </div>
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
             </div>
         </section>
 
-        <!-- YELLOW PAGES DIRECTORY TAB -->
+        <!-- VENUE DIRECTORY TAB -->
         <section id="tab-content-directory" class="space-y-6 hidden">
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h2 id="dirTitle" class="text-2xl font-black text-white theme-text-main drop-shadow-sm flex items-center gap-2">
-                        📍 Local Yellow Pages & Business Directory
-                        <span id="dirTotalBadge" class="text-xs bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 px-2.5 py-0.5 rounded-full">0 listings</span>
+                        📍 Venue Directory & Local Businesses
+                        <span id="dirTotalBadge" class="text-xs bg-pulseMint/25 text-pulseMint border border-pulseMint/50 px-2.5 py-0.5 rounded-full font-bold">0 listings</span>
                     </h2>
                     <p id="dirSub" class="text-sm text-gray-300 theme-text-sub">Search restaurants, bars, trades, shops, and services across Albufeira.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="relative">
-                        <input type="text" id="directorySearchInput" oninput="renderDirectory()" placeholder="Search business name or category..." class="bg-black/60 theme-input border border-miamiCyan/40 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-miamiPink w-60">
+                        <input type="text" id="directorySearchInput" oninput="renderDirectory()" placeholder="Search venue name or category..." class="bg-black/60 theme-input border border-pulseMint/50 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-pulsePink w-60">
                     </div>
-                    <button onclick="openBusinessModal()" class="bg-miamiCyan text-miamiDark text-xs font-black px-4 py-2 rounded-xl hover:bg-white transition flex items-center gap-1.5 shadow-lg">
-                        <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">Create Listing</span>
+                    <button onclick="openBusinessModal()" class="bg-pulseMint text-pulseDark text-xs font-black px-4 py-2 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg border border-pulseMint">
+                        <i data-lucide="plus" class="w-4 h-4"></i> <span id="btnAddVenue">+ Add Venue</span>
                     </button>
                 </div>
             </div>
             <!-- Interactive Albufeira Venue Map -->
-            <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
+            <div class="bg-pulseCard/90 theme-card border border-pulseBlue/40 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                    <span class="text-xs font-black uppercase tracking-wider text-pulseBlue flex items-center gap-1.5">
                         <i data-lucide="map-pin" class="w-4 h-4"></i> Live Albufeira Venue Map
                     </span>
                     <span class="text-[11px] text-gray-400 theme-text-sub">Click any pin for venue details</span>
@@ -345,11 +340,11 @@
             <div class="flex flex-wrap justify-between items-center gap-4">
                 <div>
                     <h2 id="articlesTitle" class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                        <i data-lucide="newspaper" class="text-emerald-400 w-7 h-7"></i> Local Articles & Stories
+                        <i data-lucide="newspaper" class="text-pulseMint w-7 h-7"></i> Local Articles & Stories
                     </h2>
                     <p id="articlesSub" class="text-sm text-gray-300 theme-text-sub">Neighbourhood guides, venue spotlights, and Algarve lifestyle features.</p>
                 </div>
-                <button onclick="openArticleModal()" class="bg-emerald-500 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg">
+                <button onclick="openArticleModal()" class="bg-pulseMint text-pulseDark text-xs font-black px-4 py-2.5 rounded-xl hover:bg-emerald-400 transition flex items-center gap-1.5 shadow-lg">
                     <i data-lucide="pen-tool" class="w-4 h-4"></i> <span id="btnWriteArticle">+ Write Article</span>
                 </button>
             </div>
@@ -388,7 +383,7 @@
                     <h2 id="forumTitle" class="text-2xl font-black text-white theme-text-main drop-shadow-sm">💬 Community Forum & Expat Chat</h2>
                     <p id="forumSub" class="text-sm text-gray-300 theme-text-sub">Ask questions, share local tips, and connect with residents & visitors.</p>
                 </div>
-                <button onclick="openModal()" class="bg-miamiPink text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1.5 shadow-lg">
+                <button onclick="openModal()" class="bg-pulsePink text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1.5 shadow-lg">
                     <i data-lucide="message-circle-plus" class="w-4 h-4"></i> <span id="btnNewThread">New Thread</span>
                 </button>
             </div>
@@ -405,7 +400,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-miamiCard/90 theme-card border border-orange-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-orange-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-orange-400 font-black text-lg">
                             <i data-lucide="flame" class="w-5 h-5"></i> Fogos.pt (Live Fire Monitor)
@@ -417,7 +412,7 @@
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-sky-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-sky-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-sky-400 font-black text-lg">
                             <i data-lucide="plane-landing" class="w-5 h-5"></i> Faro Airport (FAO) Arrivals
@@ -429,19 +424,19 @@
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-pulseMint/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
+                        <div class="flex items-center gap-2 text-pulseMint font-black text-lg">
                             <i data-lucide="cloud-sun" class="w-5 h-5"></i> IPMA Weather & Marine
                         </div>
                         <p class="text-xs text-gray-300 theme-text-sub">Official Portuguese Meteorological Institute forecasts, UV warnings, sea temperatures, and coastal wave heights.</p>
                     </div>
-                    <a href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-miamiCyan/20 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark border border-miamiCyan/40 text-center py-2.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5">
+                    <a href="https://www.ipma.pt/en/otempo/prev.localidades/index.jsp?district_id=8&council_id=1" target="_blank" rel="noopener noreferrer" class="bg-pulseMint/20 hover:bg-pulseMint text-pulseMint hover:text-pulseDark border border-pulseMint/40 text-center py-2.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5">
                         IPMA Albufeira Forecast <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-purple-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-purple-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-purple-400 font-black text-lg">
                             <i data-lucide="bus" class="w-5 h-5"></i> Vamus Algarve (Bus Timetables)
@@ -453,7 +448,7 @@
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
                         <div class="flex items-center gap-2 text-red-400 font-black text-lg">
                             <i data-lucide="train" class="w-5 h-5"></i> CP (Comboios de Portugal)
@@ -465,14 +460,14 @@
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-emerald-500/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-pulseBlue/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <div class="flex items-center gap-2 text-emerald-400 font-black text-lg">
+                        <div class="flex items-center gap-2 text-pulseBlue font-black text-lg">
                             <i data-lucide="landmark" class="w-5 h-5"></i> Câmara Municipal de Albufeira
                         </div>
                         <p class="text-xs text-gray-300 theme-text-sub">Official town council portal for municipal notices, cultural events, parking, and local administrative services.</p>
                     </div>
-                    <a href="https://www.cm-albufeira.pt/" target="_blank" rel="noopener noreferrer" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white border border-emerald-500/40 text-center py-2.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5">
+                    <a href="https://www.cm-albufeira.pt/" target="_blank" rel="noopener noreferrer" class="bg-pulseBlue/20 hover:bg-pulseBlue text-pulseBlue hover:text-white border border-pulseBlue/40 text-center py-2.5 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5">
                         Albufeira Town Hall <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                     </a>
                 </div>
@@ -489,7 +484,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-miamiCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3">
+                <div class="bg-pulseCard/90 theme-card border border-red-500/40 rounded-2xl p-6 shadow-xl space-y-3">
                     <div class="flex items-center gap-2 text-red-400 font-black text-lg">
                         <i data-lucide="phone-call" class="w-5 h-5"></i> National Emergencies
                     </div>
@@ -500,7 +495,7 @@
                         </div>
                         <div class="flex justify-between items-center border-b border-white/10 pb-2">
                             <span class="font-bold">SNS 24 Health Advice Line</span>
-                            <a href="tel:808242424" class="bg-miamiCyan/20 text-miamiCyan font-bold px-3 py-1 rounded-lg text-xs">808 24 24 24</a>
+                            <a href="tel:808242424" class="bg-pulseMint/20 text-pulseMint font-bold px-3 py-1 rounded-lg text-xs">808 24 24 24</a>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="font-bold">Poison Control (CIAV)</span>
@@ -509,16 +504,16 @@
                     </div>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-miamiPink/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-pulsePink/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <div class="flex items-center gap-2 text-miamiPink font-black text-lg">
+                        <div class="flex items-center gap-2 text-pulsePink font-black text-lg">
                             <i data-lucide="mail" class="w-5 h-5"></i> Albufeira Pulse Desk
                         </div>
                         <p class="text-xs text-gray-400 theme-text-sub">Get in touch for venue listings, editorial features, partnerships, or support:</p>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between items-center border-b border-white/10 pb-2">
                                 <span class="font-bold">Official Email</span>
-                                <a href="mailto:info@albufeira-pulse.com" class="text-xs text-miamiCyan font-bold hover:underline">info@albufeira-pulse.com</a>
+                                <a href="mailto:info@albufeira-pulse.com" class="text-xs text-pulseMint font-bold hover:underline">info@albufeira-pulse.com</a>
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="font-bold">Response Time</span>
@@ -526,14 +521,14 @@
                             </div>
                         </div>
                     </div>
-                    <a href="mailto:info@albufeira-pulse.com?subject=Albufeira%20Pulse%20Enquiry" class="bg-miamiPink hover:opacity-90 text-white text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
+                    <a href="mailto:info@albufeira-pulse.com?subject=Albufeira%20Pulse%20Enquiry" class="bg-pulsePink hover:opacity-90 text-white text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition">
                         <i data-lucide="send" class="w-3.5 h-3.5"></i> Email Albufeira Pulse
                     </a>
                 </div>
 
-                <div class="bg-miamiCard/90 theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card border border-pulseBlue/40 rounded-2xl p-6 shadow-xl space-y-3 flex flex-col justify-between">
                     <div class="space-y-3">
-                        <div class="flex items-center gap-2 text-miamiCyan font-black text-lg">
+                        <div class="flex items-center gap-2 text-pulseBlue font-black text-lg">
                             <i data-lucide="stethoscope" class="w-5 h-5"></i> International Medical Care
                         </div>
                         <p class="text-xs text-gray-400 theme-text-sub">English-speaking private medical care & tourist clinic in Albufeira:</p>
@@ -542,7 +537,7 @@
                             <p class="text-xs text-gray-400 theme-text-sub">Av. Infante Dom Henrique nº 7, Oura Village, Albufeira</p>
                         </div>
                     </div>
-                    <a href="tel:+351289588923" class="bg-miamiCyan text-miamiDark text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition">
+                    <a href="tel:+351289588923" class="bg-pulseBlue text-white text-center font-black py-2 rounded-xl text-xs flex items-center justify-center gap-1 transition">
                         <i data-lucide="phone" class="w-3.5 h-3.5"></i> +351 289 588 923
                     </a>
                 </div>
@@ -551,35 +546,35 @@
     </main>
 
     <!-- CLEAN FOOTER -->
-    <footer class="bg-miamiCard/95 theme-card border-t border-white/10 py-6 px-4 mt-12">
+    <footer class="bg-pulseCard/95 theme-card border-t border-white/10 py-6 px-4 mt-12">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400 theme-text-sub">
             <div class="flex items-center gap-3">
-                <span class="font-black text-miamiPink">ALBUFEIRA PULSE</span> © 2026 — The Heartbeat of the Algarve.
+                <span class="font-black text-pulsePink">ALBUFEIRA PULSE</span> © 2026 — The Heartbeat of the Algarve.
             </div>
             <div class="flex flex-wrap justify-center gap-4 font-semibold">
-                <button onclick="openLegalModal()" class="hover:text-miamiCyan underline transition">Impressum & Legal Notice</button>
-                <button onclick="openTermsModal()" class="hover:text-miamiCyan underline transition">Terms of Use (Termos de Utilização)</button>
-                <button onclick="openLegalModal()" class="hover:text-miamiCyan underline transition">Privacy Policy (GDPR)</button>
+                <button onclick="openLegalModal()" class="hover:text-pulseMint underline transition">Impressum & Legal Notice</button>
+                <button onclick="openTermsModal()" class="hover:text-pulseMint underline transition">Terms of Use (Termos de Utilização)</button>
+                <button onclick="openLegalModal()" class="hover:text-pulseMint underline transition">Privacy Policy (GDPR)</button>
                 <button onclick="switchTab('links')" class="hover:text-sky-400 underline transition">Essential Links</button>
                 <button onclick="switchTab('info')" class="hover:text-amber-400 underline transition">Emergency Contacts</button>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL: ADD YELLOW PAGES BUSINESS LISTING -->
+    <!-- MODAL: ADD VENUE / BUSINESS LISTING -->
     <div id="businessModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/50 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulseMint/50 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeBusinessModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="building-2" class="text-miamiCyan"></i> Create Yellow Pages Business Listing
+                <i data-lucide="building-2" class="text-pulseMint"></i> Create Venue Listing
             </h3>
             <p class="text-xs text-gray-400 theme-text-sub">Add a permanent business, restaurant, bar, or local trade to the Albufeira Directory.</p>
             <div class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-400">Business / Venue Name *</label>
-                    <input type="text" id="bizName" placeholder="e.g. Restaurante A Sardinha" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <input type="text" id="bizName" placeholder="e.g. Restaurante A Sardinha" class="w-full bg-black/50 theme-input border border-pulseMint/40 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -633,8 +628,8 @@
                         <input type="url" id="bizWebsite" placeholder="https://..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                     </div>
                 </div>
-                <button onclick="submitNewBusiness()" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition">
-                    Save to Yellow Pages Directory
+                <button onclick="submitNewBusiness()" class="w-full bg-gradient-to-r from-pulseMint to-pulseBlue text-white font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition">
+                    Save Venue
                 </button>
             </div>
         </div>
@@ -642,30 +637,30 @@
 
     <!-- DAY JOURNAL & PARTY PHOTO MODAL -->
     <div id="dayJournalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulseBlue/40 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeDayJournalModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <div class="flex flex-wrap justify-between items-center gap-2 pr-8">
                 <h3 id="journalDateTitle" class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
-                    <i data-lucide="book-open" class="text-miamiCyan"></i> Nov 21, 2026 Journal
+                    <i data-lucide="book-open" class="text-pulseBlue"></i> Nov 21, 2026 Journal
                 </h3>
-                <button onclick="openAddEventForDate()" class="bg-miamiPink text-white text-xs font-bold px-3 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1">
+                <button onclick="openAddEventForDate()" class="bg-pulsePink text-white text-xs font-bold px-3 py-2 rounded-xl hover:opacity-90 transition flex items-center gap-1">
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i> + Add Event on This Day
                 </button>
             </div>
             <div class="space-y-2">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-miamiCyan">Scheduled Events</h4>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-pulseMint">Scheduled Events</h4>
                 <div id="journalDayEventsList" class="space-y-2"></div>
             </div>
             <div class="border-t border-white/10 pt-4 space-y-3">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-pulsePink flex items-center gap-1.5">
                     <i data-lucide="camera" class="w-4 h-4"></i> Party Snapshots & Community Memories
                 </h4>
                 <div class="bg-black/40 theme-input p-3 rounded-xl border border-white/10 flex flex-col sm:flex-row gap-2">
                     <input type="text" id="journalPhotoCaption" placeholder="Caption your party or beach moment..." class="flex-grow bg-transparent text-xs text-white theme-text-main focus:outline-none">
-                    <input type="file" id="journalPhotoFile" accept="image/*" class="text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-miamiCyan file:text-miamiDark cursor-pointer">
-                    <button onclick="uploadJournalPhoto()" class="bg-miamiPink text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:opacity-90 transition whitespace-nowrap">Post Photo</button>
+                    <input type="file" id="journalPhotoFile" accept="image/*" class="text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-pulseMint file:text-pulseDark cursor-pointer">
+                    <button onclick="uploadJournalPhoto()" class="bg-pulsePink text-white text-xs font-bold px-4 py-1.5 rounded-lg hover:opacity-90 transition whitespace-nowrap">Post Photo</button>
                 </div>
                 <div id="journalPhotosGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2"></div>
             </div>
@@ -674,35 +669,35 @@
 
     <!-- LEGAL / IMPRESSUM MODAL -->
     <div id="legalModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulsePink/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] overflow-y-auto">
             <button onclick="closeLegalModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="scale" class="text-miamiCyan"></i> Impressum & Legal Notice (Aviso Legal)
+                <i data-lucide="scale" class="text-pulseMint"></i> Impressum & Legal Notice (Aviso Legal)
             </h3>
             <div class="text-xs text-gray-300 theme-text-sub space-y-3 leading-relaxed">
                 <p><strong>Information in accordance with Portuguese E-Commerce Law (Decreto-Lei n.º 7/2004) & EU GDPR:</strong></p>
                 <div class="bg-black/30 theme-input p-3 rounded-xl border border-white/10 space-y-1">
                     <p><strong>Platform Name:</strong> Albufeira Pulse</p>
-                    <p><strong>Website:</strong> <a href="https://albufeira-pulse.com" class="text-miamiCyan underline">albufeira-pulse.com</a></p>
+                    <p><strong>Website:</strong> <a href="https://albufeira-pulse.com" class="text-pulseMint underline">albufeira-pulse.com</a></p>
                     <p><strong>Operators:</strong> Albufeira Pulse Editorial & Operations</p>
                     <p><strong>Location:</strong> Albufeira, Algarve, Portugal</p>
-                    <p><strong>Contact Email:</strong> <a href="mailto:info@albufeira-pulse.com" class="text-miamiCyan underline">info@albufeira-pulse.com</a></p>
+                    <p><strong>Contact Email:</strong> <a href="mailto:info@albufeira-pulse.com" class="text-pulseMint underline">info@albufeira-pulse.com</a></p>
                 </div>
-                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets. To request data deletion, contact <a href="mailto:info@albufeira-pulse.com" class="text-miamiCyan underline">info@albufeira-pulse.com</a>.</p>
+                <p><strong>Privacy Policy & Data Protection (GDPR):</strong> We collect email addresses and chosen usernames strictly for user authentication, event posting, and venue ownership verification via Supabase. User-uploaded flyers and party snapshots are stored in public community buckets. To request data deletion, contact <a href="mailto:info@albufeira-pulse.com" class="text-pulseMint underline">info@albufeira-pulse.com</a>.</p>
             </div>
         </div>
     </div>
 
     <!-- TERMS OF USE MODAL -->
     <div id="termsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulseBlue/40 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative space-y-4 max-h-[85vh] overflow-y-auto">
             <button onclick="closeTermsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="file-text" class="text-miamiCyan"></i> Terms of Use (Termos de Utilização)
+                <i data-lucide="file-text" class="text-pulseMint"></i> Terms of Use (Termos de Utilização)
             </h3>
             <div class="text-xs text-gray-300 theme-text-sub space-y-3 leading-relaxed">
                 <p><strong>1. Acceptance of Terms:</strong> By accessing and using <strong>Albufeira Pulse</strong>, you agree to comply with and be bound by these Terms of Use under Portuguese and European Union law.</p>
@@ -713,21 +708,21 @@
 
     <!-- LOGIN / SIGN UP MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+        <div class="bg-pulseCard theme-card border border-pulseBlue/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 id="loginModalTitle" class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="user" class="text-miamiCyan"></i> Member Login
+                <i data-lucide="user" class="text-pulseMint"></i> Member Login
             </h3>
             <div class="grid grid-cols-2 gap-1 bg-black/50 theme-input p-1 rounded-xl border border-white/10">
-                <button type="button" id="tabSignIn" onclick="setAuthMode('signin')" class="py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition">Sign In</button>
+                <button type="button" id="tabSignIn" onclick="setAuthMode('signin')" class="py-1.5 text-xs font-bold rounded-lg bg-pulseMint text-pulseDark transition">Sign In</button>
                 <button type="button" id="tabSignUp" onclick="setAuthMode('signup')" class="py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition">Create Account</button>
             </div>
             <form onsubmit="event.preventDefault(); handleAuthSubmit();" class="space-y-3" autocomplete="on">
                 <div id="usernameFieldGroup" class="hidden">
-                    <label class="text-xs font-bold text-miamiCyan">Choose Your Username</label>
-                    <input type="text" id="signupUsername" name="signupUsername" placeholder="e.g. KrisAdmin" autocomplete="username" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                    <label class="text-xs font-bold text-pulseMint">Choose Your Username</label>
+                    <input type="text" id="signupUsername" name="signupUsername" placeholder="e.g. KrisAdmin" autocomplete="username" class="w-full bg-black/50 theme-input border border-pulseMint/40 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Email Address</label>
@@ -737,9 +732,9 @@
                     <label class="text-xs font-bold text-gray-400">Password</label>
                     <input type="password" id="loginPass" name="loginPass" placeholder="••••••••" autocomplete="current-password" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-                <p id="loginErrorMsg" class="text-xs text-miamiPink font-semibold hidden"></p>
-                <p id="loginInfoMsg" class="text-xs text-miamiCyan font-semibold hidden"></p>
-                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
+                <p id="loginErrorMsg" class="text-xs text-pulsePink font-semibold hidden"></p>
+                <p id="loginInfoMsg" class="text-xs text-pulseMint font-semibold hidden"></p>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-pulseMint to-pulseBlue text-white font-black py-2.5 rounded-xl shadow-lg hover:opacity-95 transition">
                     Sign In
                 </button>
             </form>
@@ -748,44 +743,44 @@
 
     <!-- PROFILE MODAL -->
     <div id="profileModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
+        <div class="bg-pulseCard theme-card border border-pulsePink/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4">
             <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="user-check" class="text-miamiCyan"></i> Your Profile
+                <i data-lucide="user-check" class="text-pulseMint"></i> Your Profile
             </h3>
             <div class="space-y-3">
                 <div>
                     <label class="text-xs font-bold text-gray-400">Display Username / Admin</label>
-                    <input type="text" id="updateUsernameInput" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1 focus:outline-none focus:border-miamiPink" placeholder="Enter new username">
+                    <input type="text" id="updateUsernameInput" class="w-full bg-black/50 theme-input border border-pulseMint/40 rounded-xl p-2.5 text-sm text-white mt-1 focus:outline-none focus:border-pulsePink" placeholder="Enter new username">
                 </div>
-                <button onclick="handleUpdateUsername()" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl text-xs hover:bg-white transition">
+                <button onclick="handleUpdateUsername()" class="w-full bg-pulseMint text-pulseDark font-black py-2.5 rounded-xl text-xs hover:bg-emerald-400 transition">
                     Save Username
                 </button>
-                <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-miamiPink/20 text-miamiPink border border-miamiPink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
+                <button onclick="handleLogout()" class="w-full bg-black/60 hover:bg-pulsePink/20 text-pulsePink border border-pulsePink/40 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: ADD EVENT (WITH SEARCHABLE SCROLLING VENUE DROPDOWN) -->
+    <!-- MODAL: ADD EVENT -->
     <div id="postModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulsePink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="plus-circle" class="text-miamiPink"></i> Add Event
+                <i data-lucide="plus-circle" class="text-pulsePink"></i> Add Event
             </h3>
             <div class="space-y-3">
-                <div class="p-3 bg-miamiCyan/10 border border-miamiCyan/30 rounded-xl space-y-2 relative" id="venuePickerContainer">
+                <div class="p-3 bg-pulseMint/10 border border-pulseMint/30 rounded-xl space-y-2 relative" id="venuePickerContainer">
                     <div class="flex justify-between items-center">
-                        <label class="text-xs font-bold text-miamiCyan flex items-center gap-1.5">
+                        <label class="text-xs font-bold text-pulseMint flex items-center gap-1.5">
                             <i data-lucide="database" class="w-3.5 h-3.5"></i> Venue Name (Select from Directory or Type New)
                         </label>
-                        <span id="venueCountBadge" class="text-[10px] font-bold bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded-full">Loading venues...</span>
+                        <span id="venueCountBadge" class="text-[10px] font-bold bg-pulseMint/20 text-pulseMint px-2 py-0.5 rounded-full">Loading venues...</span>
                     </div>
                     <div class="relative">
                         <input 
@@ -795,13 +790,13 @@
                             oninput="filterVenueDropdown(this.value)" 
                             placeholder="Search verified Albufeira venues or type a new one..." 
                             autocomplete="off" 
-                            class="w-full bg-black/60 theme-input border border-miamiCyan/40 rounded-xl p-2.5 pr-9 text-sm text-white focus:outline-none focus:border-miamiPink"
+                            class="w-full bg-black/60 theme-input border border-pulseMint/40 rounded-xl p-2.5 pr-9 text-sm text-white focus:outline-none focus:border-pulsePink"
                         >
-                        <button type="button" onclick="toggleVenueDropdown()" class="absolute right-2.5 top-2.5 text-miamiCyan hover:text-white" title="Show all venues">
+                        <button type="button" onclick="toggleVenueDropdown()" class="absolute right-2.5 top-2.5 text-pulseMint hover:text-white" title="Show all venues">
                             <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <div id="customVenueDropdown" class="hidden max-h-48 overflow-y-auto bg-miamiDark theme-input border border-miamiCyan/50 rounded-xl shadow-2xl divide-y divide-white/10 z-50"></div>
+                    <div id="customVenueDropdown" class="hidden max-h-48 overflow-y-auto bg-pulseDark theme-input border border-pulseMint/50 rounded-xl shadow-2xl divide-y divide-white/10 z-50"></div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
@@ -830,11 +825,11 @@
                     <label class="text-xs font-bold text-gray-400">Event Title</label>
                     <input type="text" id="inputTitle" placeholder="e.g. Sunset Mojitos & Deep House" class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1">
                 </div>
-                <div class="p-3 bg-miamiPink/10 border border-miamiPink/30 rounded-xl space-y-2">
-                    <label class="text-xs font-bold text-miamiPink flex items-center gap-1">
+                <div class="p-3 bg-pulsePink/10 border border-pulsePink/30 rounded-xl space-y-2">
+                    <label class="text-xs font-bold text-pulsePink flex items-center gap-1">
                         <i data-lucide="image" class="w-3.5 h-3.5"></i> Upload Event Poster / Flyer
                     </label>
-                    <input type="file" id="inputPoster" accept="image/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-miamiPink file:text-white hover:file:opacity-90 cursor-pointer">
+                    <input type="file" id="inputPoster" accept="image/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-pulsePink file:text-white hover:file:opacity-90 cursor-pointer">
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
@@ -852,7 +847,7 @@
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-400">Category Tag</label>
-                    <select id="inputCategory" class="w-full bg-black/50 theme-input border border-miamiCyan/40 rounded-xl p-2.5 text-sm text-white mt-1 cursor-pointer font-bold text-miamiCyan">
+                    <select id="inputCategory" class="w-full bg-black/50 theme-input border border-pulseMint/40 rounded-xl p-2.5 text-sm text-white mt-1 cursor-pointer font-bold text-pulseMint">
                         <option value="HAPPY HOUR & SPECIALS">HAPPY HOUR & SPECIALS</option>
                         <option value="SUNSET & NIGHTLIFE">SUNSET & NIGHTLIFE</option>
                         <option value="LIVE MUSIC">LIVE MUSIC</option>
@@ -868,7 +863,7 @@
                     <label class="text-xs font-bold text-gray-400">Description / Details</label>
                     <textarea id="inputDesc" rows="2" placeholder="Details about entry, discounts, or location..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
                 </div>
-                <button onclick="submitNewPost()" class="w-full bg-gradient-to-r from-miamiPink to-miamiCyan text-white font-black py-3 rounded-xl shadow-lg shadow-miamiPink/30 hover:opacity-95 transition">
+                <button onclick="submitNewPost()" class="w-full bg-gradient-to-r from-pulsePink to-pulseBlue text-white font-black py-3 rounded-xl shadow-lg shadow-pulsePink/30 hover:opacity-95 transition">
                     Publish Event & Connect Venue
                 </button>
             </div>
@@ -877,12 +872,12 @@
 
     <!-- MODAL: WRITE ARTICLE -->
     <div id="articleModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-emerald-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-pulseMint/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
             <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
-                <i data-lucide="pen-tool" class="text-emerald-400"></i> Publish Local Article
+                <i data-lucide="pen-tool" class="text-pulseMint"></i> Publish Local Article
             </h3>
             <div class="space-y-3">
                 <div>
@@ -892,7 +887,7 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs font-bold text-gray-400">Topic Tag</label>
-                        <select id="artTag" class="w-full bg-black/50 theme-input border border-emerald-500/40 rounded-xl p-2.5 text-sm text-white mt-1">
+                        <select id="artTag" class="w-full bg-black/50 theme-input border border-pulseMint/40 rounded-xl p-2.5 text-sm text-white mt-1">
                             <option value="LOCAL GUIDE">LOCAL GUIDE</option>
                             <option value="FOOD & DRINK">FOOD & DRINK</option>
                             <option value="EXPAT LIFE">EXPAT LIFE</option>
@@ -908,7 +903,7 @@
                     <label class="text-xs font-bold text-gray-400">Summary / Excerpt</label>
                     <textarea id="artBody" rows="4" placeholder="Write your story or neighbourhood guide..." class="w-full bg-black/50 theme-input border border-white/10 rounded-xl p-2.5 text-sm text-white mt-1"></textarea>
                 </div>
-                <button onclick="submitNewArticle()" class="w-full bg-emerald-500 text-miamiDark font-black py-3 rounded-xl shadow-lg hover:bg-emerald-400 transition">
+                <button onclick="submitNewArticle()" class="w-full bg-pulseMint text-pulseDark font-black py-3 rounded-xl shadow-lg hover:bg-emerald-400 transition">
                     Publish Article
                 </button>
             </div>
@@ -917,7 +912,7 @@
 
     <!-- MODAL: POST CLASSIFIED -->
     <div id="classifiedModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-miamiCard theme-card border border-purple-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="bg-pulseCard theme-card border border-purple-500/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             <button onclick="closeClassifiedModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
@@ -1010,7 +1005,7 @@
                 sunset: "Sunset",
                 eventsTab: "Events",
                 calendarTab: "Calendar & Journal",
-                dirTab: "Directory (Yellow Pages)",
+                dirTab: "Venue Directory",
                 articlesTab: "Articles",
                 classifiedsTab: "Classifieds",
                 forumTab: "Forum",
@@ -1018,9 +1013,9 @@
                 infoTab: "Emergency & Info",
                 popTitle: "Events & Happenings in",
                 popSub: "Filter by neighbourhood zone, live happenings, or category.",
-                dirTitle: "📍 Local Yellow Pages & Business Directory",
+                dirTitle: "📍 Venue Directory & Local Businesses",
                 dirSub: "Search restaurants, bars, trades, shops, and services across Albufeira.",
-                addVenue: "Create Listing",
+                addVenue: "+ Add Venue",
                 forumTitle: "💬 Community Forum & Expat Chat",
                 forumSub: "Ask questions, share local tips, and connect with residents & visitors.",
                 newThread: "New Thread"
@@ -1038,7 +1033,7 @@
                 sunset: "Pôr do Sol",
                 eventsTab: "Eventos",
                 calendarTab: "Calendário & Diário",
-                dirTab: "Diretório (Páginas Amarelas)",
+                dirTab: "Diretório de Espaços",
                 articlesTab: "Artigos",
                 classifiedsTab: "Classificados",
                 forumTab: "Fórum",
@@ -1048,7 +1043,7 @@
                 popSub: "Filtre por zona, eventos ao vivo ou categoria.",
                 dirTitle: "📍 Diretório de Empresas e Serviços",
                 dirSub: "Pesquise restaurantes, bares, lojas e serviços em Albufeira.",
-                addVenue: "Criar Anúncio",
+                addVenue: "+ Adicionar Espaço",
                 forumTitle: "💬 Fórum Comunitário & Chat",
                 forumSub: "Faça perguntas, partilhe dicas locais e conecte-se com residentes e visitantes.",
                 newThread: "Novo Tópico"
@@ -1166,7 +1161,7 @@
         }
 
         async function checkContentSafety(imageFile, textContent = "") {
-            const bannedPattern = /\b(porn|xxx|nude|nsfw|gore|kill|murder|rape|escort|viagra|suicide|violence|blood)\b/i;
+            const bannedPattern = /(porn|xxx|nude|nsfw|gore|kill|murder|rape|escort|viagra|suicide|violence|blood)/i;
             if (bannedPattern.test(textContent)) {
                 alert("🚫 Your post was blocked by our automated safety bot for prohibited language or content.");
                 return false;
@@ -1197,7 +1192,14 @@
         }
 
         function reportThread(id, title) {
-            const reason = prompt(`Report Thread:\n"${title}"\n\nPlease select a reason:\n1. Spam or Advertising\n2. Inappropriate / Nudity / NSFW\n3. Harassment or Abuse\n4. Other`);
+            const reason = prompt(`Report Thread:
+"${title}"
+
+Please select a reason:
+1. Spam or Advertising
+2. Inappropriate / Nudity / NSFW
+3. Harassment or Abuse
+4. Other`);
             if (reason) {
                 alert("🚩 Thank you. This thread has been reported to the moderators for review.");
             }
@@ -1240,16 +1242,16 @@
             infoMsg.classList.add('hidden');
 
             if (mode === 'signup') {
-                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiPink text-white transition";
+                tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg bg-pulsePink text-white transition";
                 tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
                 usernameGroup.classList.remove('hidden');
-                title.innerHTML = `<i data-lucide="user-plus" class="text-miamiPink"></i> Create Account`;
+                title.innerHTML = `<i data-lucide="user-plus" class="text-pulsePink"></i> Create Account`;
                 submitBtn.innerText = "Create Account";
             } else {
-                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg bg-miamiCyan text-miamiDark transition";
+                tabSignIn.className = "py-1.5 text-xs font-bold rounded-lg bg-pulseMint text-pulseDark transition";
                 tabSignUp.className = "py-1.5 text-xs font-bold rounded-lg text-gray-300 hover:text-white transition";
                 usernameGroup.classList.add('hidden');
-                title.innerHTML = `<i data-lucide="user" class="text-miamiCyan"></i> Member Login`;
+                title.innerHTML = `<i data-lucide="user" class="text-pulseMint"></i> Member Login`;
                 submitBtn.innerText = "Sign In";
             }
             lucide.createIcons();
@@ -1272,7 +1274,7 @@
                 
                 const loginBtn = document.getElementById('loginBtn');
                 if (loginBtn) {
-                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i> <span>${currentDisplayName}</span>`;
+                    loginBtn.innerHTML = `<i data-lucide="user-check" class="w-3.5 h-3.5 text-pulseMint"></i> <span>${currentDisplayName}</span>`;
                     loginBtn.setAttribute('onclick', 'openProfileModal()');
                     lucide.createIcons();
                 }
@@ -1416,7 +1418,7 @@
             renderDirectory();
         }
 
-        // --- YELLOW PAGES DIRECTORY CREATOR MODAL ---
+        // --- VENUE DIRECTORY CREATOR MODAL ---
         function openBusinessModal() {
             document.getElementById('bizTown').value = currentTown || 'Albufeira';
             document.getElementById('businessModal').classList.remove('hidden');
@@ -1458,7 +1460,8 @@
 
             const { error } = await supabaseClient.from('directory').insert([newEntry]);
             if (error) {
-                alert("Database notice: " + error.message + "\n(Added locally for now — run the RLS SQL policy in Supabase to persist permanently.)");
+                alert("Database notice: " + error.message + "
+(Added locally for now — run the RLS SQL policy in Supabase to persist permanently.)");
                 directoryData.unshift({ id: Date.now(), ...newEntry });
             } else {
                 await fetchDirectory();
@@ -1536,12 +1539,12 @@
             }
 
             dropdown.innerHTML = list.slice(0, 150).map((v, idx) => `
-                <button type="button" onclick="selectVenueFromDropdown(${idx}, '${v.name.replace(/'/g, "\\'")}')" class="w-full text-left px-3 py-2.5 hover:bg-miamiCyan/20 transition flex justify-between items-center gap-2">
+                <button type="button" onclick="selectVenueFromDropdown(${idx}, '${v.name.replace(/'/g, "\'")}')" class="w-full text-left px-3 py-2.5 hover:bg-pulseMint/20 transition flex justify-between items-center gap-2">
                     <div>
                         <p class="text-xs font-bold text-white theme-text-main">${v.name}</p>
                         <p class="text-[11px] text-gray-400 theme-text-sub">${v.town} • ${v.zone}</p>
                     </div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-miamiPink/20 text-miamiPink whitespace-nowrap">${v.type}</span>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pulsePink/20 text-pulsePink whitespace-nowrap">${v.type}</span>
                 </button>
             `).join('');
         }
@@ -1628,7 +1631,7 @@
         function filterZone(zone) {
             currentZone = zone;
             document.querySelectorAll('.zone-btn').forEach(btn => {
-                btn.className = "zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-miamiCyan transition whitespace-nowrap";
+                btn.className = "zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 hover:border-pulseMint transition whitespace-nowrap";
             });
             const mapIds = {
                 'all': 'zone-btn-all',
@@ -1641,7 +1644,7 @@
             };
             const active = document.getElementById(mapIds[zone]);
             if (active) {
-                active.className = "zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark shadow-sm transition whitespace-nowrap";
+                active.className = "zone-btn px-3 py-1 rounded-full text-xs font-bold bg-pulseMint text-pulseDark shadow-sm transition whitespace-nowrap";
             }
             renderEvents(currentFilter);
         }
@@ -1684,7 +1687,7 @@
             });
             const activeTabBtn = document.getElementById('btn-' + tab);
             if(activeTabBtn) {
-                activeTabBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md shadow-miamiPink/20 whitespace-nowrap";
+                activeTabBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-pulsePink text-white flex items-center gap-1.5 transition shadow-md shadow-pulsePink/25 whitespace-nowrap";
             }
 
             ['events', 'calendar', 'directory', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
@@ -1701,13 +1704,13 @@
         function getCategoryBadgeStyle(category) {
             const cat = (category || '').toUpperCase().trim();
             if (cat.includes('SPORTS') || cat.includes('LIVE TV')) {
-                return 'bg-miamiCyan/20 text-miamiCyan border-miamiCyan/40';
+                return 'bg-pulseBlue/20 text-pulseBlue border-pulseBlue/40';
             } else if (cat.includes('MUSIC') || cat.includes('NIGHTLIFE')) {
                 return 'bg-purple-500/20 text-purple-400 border-purple-500/40';
             } else if (cat.includes('HAPPY HOUR') || cat.includes('DINING')) {
-                return 'bg-amber-500/25 text-amber-400 border-amber-500/40';
+                return 'bg-pulseMint/25 text-pulseMint border-pulseMint/40';
             }
-            return 'bg-miamiPink/20 text-miamiPink border-miamiPink/30';
+            return 'bg-pulsePink/20 text-pulsePink border-pulsePink/30';
         }
 
         function renderEvents(filter = 'all') {
@@ -1732,7 +1735,7 @@
 
             const activeBtn = document.getElementById(activeBtnId);
             if(activeBtn && activeBtnId !== 'cat-btn-now') {
-                activeBtn.className = "cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white shadow-md shadow-miamiPink/30 whitespace-nowrap transition";
+                activeBtn.className = "cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-pulsePink text-white shadow-md shadow-pulsePink/30 whitespace-nowrap transition";
             }
 
             const grid = document.getElementById('eventsGrid');
@@ -1749,7 +1752,7 @@
             }
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-pulseCard/60 theme-card rounded-2xl border border-white/10">
                     <p class="text-sm text-gray-400 theme-text-sub">No events found matching this zone or filter yet. Be the first to post one!</p>
                 </div>`;
                 return;
@@ -1766,41 +1769,41 @@
                 const isOwnerOrStaff = isUserAdmin || (currentUser && currentEmail === e.owner_email);
                 const shareText = encodeURIComponent(`Check out "${e.title}" at ${e.venue} (${e.zone || e.town}) on ${e.date} at ${e.time}! Found on Albufeira Pulse 🌴`);
                 return `
-                    <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiPink/20 rounded-2xl overflow-hidden hover:border-miamiCyan/60 transition shadow-lg flex flex-col justify-between">
+                    <div class="bg-pulseCard/90 theme-card backdrop-blur-md border border-pulsePink/25 rounded-2xl overflow-hidden hover:border-pulseMint transition shadow-lg flex flex-col justify-between">
                         ${e.poster_url ? `<div class="h-48 overflow-hidden relative">
                             <img src="${e.poster_url}" alt="${e.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
-                            ${e.zone ? `<span class="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-miamiCyan text-[11px] font-black px-2.5 py-1 rounded-lg border border-miamiCyan/40">📍 ${e.zone}</span>` : ''}
+                            ${e.zone ? `<span class="absolute top-3 left-3 bg-black/75 backdrop-blur-md text-pulseMint text-[11px] font-black px-2.5 py-1 rounded-lg border border-pulseMint/40">📍 ${e.zone}</span>` : ''}
                         </div>` : ''}
                         <div class="p-5 flex flex-col flex-grow justify-between">
                             <div>
                                 <div class="flex justify-between items-start mb-3 gap-2">
                                     <span class="text-[11px] font-black px-2.5 py-1 rounded-full border ${getCategoryBadgeStyle(e.category)}">${e.category}</span>
-                                    <span class="text-xs text-miamiCyan font-semibold flex items-center gap-1 whitespace-nowrap"><i data-lucide="map-pin" class="w-3 h-3"></i> ${e.town}</span>
+                                    <span class="text-xs text-pulseMint font-semibold flex items-center gap-1 whitespace-nowrap"><i data-lucide="map-pin" class="w-3 h-3"></i> ${e.town}</span>
                                 </div>
                                 <h3 class="text-lg font-bold text-white theme-text-main mb-1">${e.title}</h3>
-                                <p class="text-xs text-miamiCyan mb-1 font-semibold">📍 ${e.venue} <span class="text-gray-400 theme-text-sub font-normal">(${e.venue_type || 'Venue'})</span></p>
-                                <p class="text-xs text-amber-500 font-bold mb-3">🎫 ${e.price || 'Free'}</p>
+                                <p class="text-xs text-pulseMint mb-1 font-semibold">📍 ${e.venue} <span class="text-gray-400 theme-text-sub font-normal">(${e.venue_type || 'Venue'})</span></p>
+                                <p class="text-xs text-amber-400 font-bold mb-3">🎫 ${e.price || 'Free'}</p>
                                 <p class="text-xs text-gray-300 theme-text-sub mb-4">${e.description || ''}</p>
                             </div>
                             <div>
                                 <div class="flex justify-between items-center text-xs text-gray-400 theme-text-sub border-t border-white/10 pt-3 mb-3">
-                                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-miamiPink"></i> ${e.date} (${e.time || '21:00'})</span>
-                                    <span class="text-miamiPink font-bold"><span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
+                                    <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-pulsePink"></i> ${e.date} (${e.time || '21:00'})</span>
+                                    <span class="text-pulsePink font-bold"><span id="going-${e.id}">${e.going}</span> ${currentLang === 'pt' ? 'Vão' : 'Going'}</span>
                                 </div>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <button onclick="incrementGoing(${e.id})" class="flex-grow bg-white/5 theme-pill hover:bg-miamiCyan/20 hover:text-miamiCyan text-gray-200 border border-white/10 font-bold py-2 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                                    <button onclick="incrementGoing(${e.id})" class="flex-grow bg-white/5 theme-pill hover:bg-pulseMint/20 hover:text-pulseMint text-gray-200 border border-white/10 font-bold py-2 px-3 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
                                         ${currentLang === 'pt' ? 'Eu Vou!' : "I'm Going!"}
                                     </button>
-                                    <a href="https://wa.me/?text=${shareText}" target="_blank" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white p-2.5 rounded-xl text-xs border border-emerald-500/40 transition flex items-center justify-center" title="Share on WhatsApp">
+                                    <a href="https://wa.me/?text=${shareText}" target="_blank" class="bg-pulseMint/20 hover:bg-pulseMint text-pulseMint hover:text-pulseDark p-2.5 rounded-xl text-xs border border-pulseMint/40 transition flex items-center justify-center font-bold" title="Share on WhatsApp">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
                                     </a>
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white p-2.5 rounded-xl text-xs border border-blue-500/40 transition flex items-center justify-center" title="Share on Facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="bg-pulseBlue/20 hover:bg-pulseBlue text-pulseBlue hover:text-white p-2.5 rounded-xl text-xs border border-pulseBlue/40 transition flex items-center justify-center" title="Share on Facebook">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.373 14.5 5 15.5 5H18V0h-3.808C10.559 0 9 1.587 9 4.75V8z"/></svg>
                                     </a>
                                     <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" class="bg-sky-500/20 hover:bg-sky-500 text-sky-400 hover:text-white p-2.5 rounded-xl text-xs border border-sky-500/40 transition flex items-center justify-center" title="Share on X">
                                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                     </a>
-                                    ${isOwnerOrStaff ? `<button onclick="deleteEvent(${e.id})" class="bg-miamiPink/20 hover:bg-miamiPink text-miamiPink hover:text-white p-2.5 rounded-xl text-xs border border-miamiPink/40 transition" title="Delete event">🗑️</button>` : ''}
+                                    ${isOwnerOrStaff ? `<button onclick="deleteEvent(${e.id})" class="bg-pulsePink/20 hover:bg-pulsePink text-pulsePink hover:text-white p-2.5 rounded-xl text-xs border border-pulsePink/40 transition" title="Delete event">🗑️</button>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -1815,23 +1818,23 @@
             const grid = document.getElementById('articlesGrid');
             const filtered = articlesData.filter(a => !currentTown || (a.town && a.town.toLowerCase().includes(currentTown.toLowerCase())));
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-pulseCard/60 theme-card rounded-2xl border border-white/10">
                     <p class="text-sm text-gray-400 theme-text-sub">No articles published for this town yet.</p>
                 </div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(a => `
-                <article class="bg-miamiCard/90 theme-card backdrop-blur-md border border-emerald-500/25 rounded-2xl overflow-hidden hover:border-emerald-400 transition shadow-lg flex flex-col justify-between">
+                <article class="bg-pulseCard/90 theme-card backdrop-blur-md border border-pulseMint/30 rounded-2xl overflow-hidden hover:border-pulseMint transition shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="h-44 overflow-hidden relative">
                             <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
-                            <span class="absolute top-3 left-3 bg-emerald-500 text-miamiDark text-[10px] font-black px-2.5 py-1 rounded-lg">${a.tag}</span>
+                            <span class="absolute top-3 left-3 bg-pulseMint text-pulseDark text-[10px] font-black px-2.5 py-1 rounded-lg">${a.tag}</span>
                         </div>
                         <div class="p-5">
                             <div class="flex justify-between items-center text-[11px] text-gray-400 theme-text-sub mb-2">
                                 <span>${a.date} • ${a.readTime}</span>
-                                <span class="text-emerald-400 font-bold">${a.town}</span>
+                                <span class="text-pulseMint font-bold">${a.town}</span>
                             </div>
                             <h3 class="text-lg font-bold text-white theme-text-main mb-2 leading-snug">${a.title}</h3>
                             <p class="text-xs text-gray-300 theme-text-sub leading-relaxed">${a.summary}</p>
@@ -1839,7 +1842,7 @@
                     </div>
                     <div class="px-5 pb-5 pt-3 border-t border-white/10 flex justify-between items-center text-xs">
                         <span class="text-gray-400 theme-text-sub">By <strong class="text-white theme-text-main">${a.author}</strong></span>
-                        <button onclick="alert('${a.title.replace(/'/g, "\\'")}\\n\\n${a.summary.replace(/'/g, "\\'")}')" class="text-emerald-400 font-bold hover:underline flex items-center gap-1">
+                        <button onclick="alert('${a.title.replace(/'/g, "\'")}\n\n${a.summary.replace(/'/g, "\'")}')" class="text-pulseMint font-bold hover:underline flex items-center gap-1">
                             Read Story <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                         </button>
                     </div>
@@ -1909,26 +1912,26 @@
             }
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-pulseCard/60 theme-card rounded-2xl border border-white/10">
                     <p class="text-sm text-gray-400 theme-text-sub">No classified listings in this category yet. Post one for free!</p>
                 </div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(c => `
-                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-purple-500/30 rounded-2xl p-5 hover:border-purple-400 transition shadow-lg flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card backdrop-blur-md border border-purple-500/30 rounded-2xl p-5 hover:border-purple-400 transition shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start gap-2 mb-3">
                             <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40">${c.category}</span>
                             <span class="text-sm font-black text-amber-400">${c.price}</span>
                         </div>
                         <h3 class="text-base font-bold text-white theme-text-main mb-1">${c.title}</h3>
-                        <p class="text-xs text-miamiCyan font-semibold mb-3">📍 ${c.zone || c.town}</p>
+                        <p class="text-xs text-pulseMint font-semibold mb-3">📍 ${c.zone || c.town}</p>
                         <p class="text-xs text-gray-300 theme-text-sub mb-4 leading-relaxed">${c.description}</p>
                     </div>
                     <div class="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
                         <span class="text-gray-400 theme-text-sub">Posted by <strong class="text-white theme-text-main">${c.author}</strong></span>
-                        <button onclick="alert('Contact Seller (${c.author}):\\n${c.contact}')" class="bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 font-bold px-3 py-1.5 rounded-xl transition">
+                        <button onclick="alert('Contact Seller (${c.author}):\n${c.contact}')" class="bg-purple-500/20 hover:bg-purple-500 text-purple-300 hover:text-white border border-purple-500/40 font-bold px-3 py-1.5 rounded-xl transition">
                             Contact Seller
                         </button>
                     </div>
@@ -2009,13 +2012,13 @@
                 const hasEvent = dayEvents.length > 0;
                 const hasPhotos = journalPhotos[i] && journalPhotos[i].length > 0;
                 daysHtml += `
-                    <div onclick="openDayJournal(${i})" class="aspect-square bg-black/50 theme-input border ${hasEvent ? 'border-miamiPink bg-miamiPink/10' : 'border-white/10'} hover:border-miamiCyan cursor-pointer rounded-xl p-2 flex flex-col justify-between transition group">
+                    <div onclick="openDayJournal(${i})" class="aspect-square bg-black/50 theme-input border ${hasEvent ? 'border-pulsePink bg-pulsePink/10' : 'border-white/10'} hover:border-pulseMint cursor-pointer rounded-xl p-2 flex flex-col justify-between transition group">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold ${hasEvent ? 'text-miamiPink' : 'text-gray-400 theme-text-sub'} group-hover:text-miamiCyan">${i}</span>
+                            <span class="text-xs font-bold ${hasEvent ? 'text-pulsePink' : 'text-gray-400 theme-text-sub'} group-hover:text-pulseMint">${i}</span>
                             ${hasPhotos ? `<span class="text-[10px]" title="Party photos attached">📸</span>` : ''}
                         </div>
                         <div class="space-y-1">
-                            ${hasEvent ? `<span class="block text-[10px] bg-miamiPink text-white font-bold rounded px-1 py-0.5 text-center truncate">${dayEvents.length} Event${dayEvents.length > 1 ? 's' : ''}</span>` : `<span class="hidden sm:block text-[9px] text-gray-500 opacity-0 group-hover:opacity-100 text-center">+ Journal</span>`}
+                            ${hasEvent ? `<span class="block text-[10px] bg-pulsePink text-white font-bold rounded px-1 py-0.5 text-center truncate">${dayEvents.length} Event${dayEvents.length > 1 ? 's' : ''}</span>` : `<span class="hidden sm:block text-[9px] text-gray-500 opacity-0 group-hover:opacity-100 text-center">+ Journal</span>`}
                         </div>
                     </div>
                 `;
@@ -2026,7 +2029,7 @@
         function openDayJournal(day) {
             selectedJournalDay = day;
             const dateStr = `Nov ${day}, 2026`;
-            document.getElementById('journalDateTitle').innerHTML = `<i data-lucide="book-open" class="text-miamiCyan"></i> ${dateStr} Journal`;
+            document.getElementById('journalDateTitle').innerHTML = `<i data-lucide="book-open" class="text-pulseBlue"></i> ${dateStr} Journal`;
 
             const dayEvents = eventsData.filter(e => e.date && e.date.includes(`Nov ${day}`));
             const eventsListEl = document.getElementById('journalDayEventsList');
@@ -2037,9 +2040,9 @@
                     <div class="bg-black/40 theme-input p-3 rounded-xl border border-white/10 flex justify-between items-center">
                         <div>
                             <p class="text-xs font-bold text-white theme-text-main">${ev.title}</p>
-                            <p class="text-[11px] text-miamiCyan">📍 ${ev.venue} (${ev.zone || ev.town}) • 🕒 ${ev.time}</p>
+                            <p class="text-[11px] text-pulseMint">📍 ${ev.venue} (${ev.zone || ev.town}) • 🕒 ${ev.time}</p>
                         </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-miamiPink/20 text-miamiPink">${ev.category}</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-pulsePink/20 text-pulsePink">${ev.category}</span>
                     </div>
                 `).join('');
             }
@@ -2069,7 +2072,7 @@
                     <img src="${p.url}" class="w-full h-28 object-cover">
                     <div class="p-2">
                         <p class="text-[11px] font-semibold text-white theme-text-main truncate">${p.caption}</p>
-                        <p class="text-[10px] text-miamiCyan">by ${p.author}</p>
+                        <p class="text-[10px] text-pulseMint">by ${p.author}</p>
                     </div>
                 </div>
             `).join('');
@@ -2185,8 +2188,8 @@
                     lng = base[1] + Math.sin(angle) * radius;
                 }
 
-                const pinColor = item.isEvent ? '#06B6D4' : '#FF2A85';
-                const borderColor = item.isEvent ? '#FF2A85' : '#06B6D4';
+                const pinColor = item.isEvent ? '#2563EB' : '#10B981';
+                const borderColor = item.isEvent ? '#FF2A85' : '#10B981';
                 const customIcon = L.divIcon({
                     className: 'custom-pulse-pin',
                     html: `<div style="background-color:${pinColor}; width:14px; height:14px; border-radius:50%; border:2px solid ${borderColor}; box-shadow: 0 0 10px ${pinColor};"></div>`,
@@ -2196,7 +2199,7 @@
                 const marker = L.marker([lat, lng], { icon: customIcon }).addTo(mapInstance);
                 marker.bindPopup(`
                     <div style="min-width:160px;">
-                        <div style="font-size:10px; font-weight:800; color:#06B6D4; text-transform:uppercase;">${item.zone} • ${item.category}</div>
+                        <div style="font-size:10px; font-weight:800; color:#10B981; text-transform:uppercase;">${item.zone} • ${item.category}</div>
                         <div style="font-size:13px; font-weight:800; color:#fff; margin-top:2px;">${item.name}</div>
                         <div style="font-size:11px; color:#9CA3AF; margin-top:2px;">${item.address}</div>
                         <a href="https://maps.google.com/?q=${encodeURIComponent(item.name + ' ' + item.town)}" target="_blank" style="display:inline-block; margin-top:6px; font-size:11px; font-weight:700; color:#FF2A85; text-decoration:underline;">Open in Google Maps &rarr;</a>
@@ -2256,31 +2259,31 @@
             if (totalBadge) totalBadge.innerText = `${filtered.length} listings`;
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-miamiCard/60 theme-card rounded-2xl border border-white/10">
-                    <p class="text-sm text-gray-400 theme-text-sub">No businesses match your search. Click "+ Create Listing" to add one!</p>
+                grid.innerHTML = `<div class="col-span-full text-center py-12 bg-pulseCard/60 theme-card rounded-2xl border border-white/10">
+                    <p class="text-sm text-gray-400 theme-text-sub">No businesses match your search. Click "+ Add Venue" to add one!</p>
                 </div>`;
                 return;
             }
 
             grid.innerHTML = filtered.slice(0, 120).map(d => `
-                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/20 rounded-2xl p-5 hover:border-miamiPink/60 transition shadow-lg flex flex-col justify-between">
+                <div class="bg-pulseCard/90 theme-card backdrop-blur-md border border-pulseMint/30 rounded-2xl p-5 hover:border-pulsePink/60 transition shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="flex justify-between items-start mb-2 gap-2">
                             <h3 class="text-base font-bold text-white theme-text-main">${d.name}</h3>
-                            <span class="text-xs bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold whitespace-nowrap">${d.rating || '4.8 ⭐'}</span>
+                            <span class="text-xs bg-pulseMint/20 text-pulseMint px-2 py-0.5 rounded font-bold whitespace-nowrap">${d.rating || '4.8 ⭐'}</span>
                         </div>
-                        <p class="text-xs text-miamiPink font-semibold mb-1">${d.category}</p>
-                        <p class="text-xs text-gray-400 theme-text-sub mb-3 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-miamiCyan"></i> ${d.address}</p>
+                        <p class="text-xs text-pulsePink font-semibold mb-1">${d.category}</p>
+                        <p class="text-xs text-gray-400 theme-text-sub mb-3 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-pulseMint"></i> ${d.address}</p>
                     </div>
                     <div class="space-y-2 pt-2 border-t border-white/10">
                         <div class="flex gap-2">
-                            <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-miamiCyan/10 hover:bg-miamiCyan/20 text-miamiCyan border border-miamiCyan/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
+                            <a href="https://maps.google.com/?q=${encodeURIComponent(d.name + ' ' + d.town)}" target="_blank" class="flex-grow bg-pulseMint/10 hover:bg-pulseMint/25 text-pulseMint border border-pulseMint/40 text-center py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1">
                                 <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Maps
                             </a>
                             ${d.phone ? `<a href="tel:${d.phone}" class="bg-white/5 theme-pill hover:bg-white/10 text-gray-300 px-3 py-2 rounded-xl text-xs font-bold border border-white/10 flex items-center justify-center" title="${d.phone}">
                                 <i data-lucide="phone" class="w-3.5 h-3.5"></i>
                             </a>` : ''}
-                            ${d.website ? `<a href="${d.website.startsWith('http') ? d.website : 'https://' + d.website}" target="_blank" class="bg-miamiPink/10 hover:bg-miamiPink/20 text-miamiPink px-3 py-2 rounded-xl text-xs font-bold border border-miamiPink/30 flex items-center justify-center" title="Visit Website">
+                            ${d.website ? `<a href="${d.website.startsWith('http') ? d.website : 'https://' + d.website}" target="_blank" class="bg-pulsePink/10 hover:bg-pulsePink/20 text-pulsePink px-3 py-2 rounded-xl text-xs font-bold border border-pulsePink/30 flex items-center justify-center" title="Visit Website">
                                 <i data-lucide="globe" class="w-3.5 h-3.5"></i>
                             </a>` : ''}
                         </div>
@@ -2295,15 +2298,15 @@
             const list = document.getElementById('forumList');
             const filtered = forumData.filter(f => !currentTown || (f.town && f.town.toLowerCase().includes(currentTown.toLowerCase())));
             list.innerHTML = filtered.map(f => `
-                <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:border-miamiPink/50 transition flex justify-between items-center">
+                <div class="bg-pulseCard/90 theme-card backdrop-blur-md border border-white/10 rounded-2xl p-4 hover:border-pulsePink/50 transition flex justify-between items-center">
                     <div>
-                        <span class="text-[10px] bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
-                        <h4 class="text-sm font-bold text-white theme-text-main mt-1 hover:text-miamiPink cursor-pointer">${f.title}</h4>
+                        <span class="text-[10px] bg-pulseMint/20 text-pulseMint px-2 py-0.5 rounded font-bold uppercase tracking-wider">${f.category}</span>
+                        <h4 class="text-sm font-bold text-white theme-text-main mt-1 hover:text-pulsePink cursor-pointer">${f.title}</h4>
                         <p class="text-xs text-gray-400 theme-text-sub mt-1">Started by <span class="text-gray-300 theme-text-main font-semibold">${f.author}</span></p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="text-xs font-bold text-miamiPink bg-miamiPink/10 px-3 py-1.5 rounded-xl border border-miamiPink/30">${f.replies} replies</span>
-                        <button onclick="reportThread(${f.id}, '${f.title.replace(/'/g, "\\'")}')" class="bg-black/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-2 rounded-xl border border-white/10 transition text-xs flex items-center gap-1" title="Report spam">
+                        <span class="text-xs font-bold text-pulsePink bg-pulsePink/10 px-3 py-1.5 rounded-xl border border-pulsePink/30">${f.replies} replies</span>
+                        <button onclick="reportThread(${f.id}, '${f.title.replace(/'/g, "\'")}')" class="bg-black/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-2 rounded-xl border border-white/10 transition text-xs flex items-center gap-1" title="Report spam">
                             <i data-lucide="flag" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Report</span>
                         </button>
                     </div>
