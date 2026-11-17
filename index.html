@@ -29,7 +29,7 @@
             }
         }
     </script>
-    <!-- INSTANT THEME INITIALIZER (Prevents flash glitch) -->
+    <!-- ================= SECTION 1: INSTANT THEME INITIALIZER ================= -->
     <script>
         (function() {
             const manualOverride = localStorage.getItem('albufeira_manual_theme');
@@ -89,7 +89,7 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-300">
 
-    <!-- ================= TOP NAVIGATION ================= -->
+    <!-- ================= SECTION 2: TOP NAVIGATION & LIVE WEATHER TICKER ================= -->
     <header class="bg-miamiCard/90 backdrop-blur-md border-b border-miamiPink/30 sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
             <!-- Brand Logo -->
@@ -121,7 +121,7 @@
                     <input type="text" id="townInputFilter" value="Albufeira & Algarve" oninput="changeTown(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none w-36">
                 </div>
 
-                <!-- Auth Area -->
+                <!-- Persistent Auth UI Area -->
                 <div id="authArea">
                     <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
                         <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
@@ -130,7 +130,7 @@
             </div>
         </div>
 
-        <!-- Live Weather & Marine Banner -->
+        <!-- Live Weather & Marine API Banner -->
         <div class="bg-black/80 backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-between items-center text-gray-300">
             <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
@@ -144,7 +144,7 @@
             <span class="text-[11px] text-miamiPink font-bold hidden lg:inline">Open-Meteo Live API</span>
         </div>
 
-        <!-- Navigation Tabs -->
+        <!-- Navigation Tabs & Primary Action Buttons -->
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
                 <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
@@ -164,9 +164,9 @@
         </div>
     </header>
 
-    <!-- ================= MAIN CONTENT ================= -->
+    <!-- ================= SECTION 3: MAIN CONTENT TABS & VIEWS ================= -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-        <!-- EVENTS TAB -->
+        <!-- TAB 1: EVENTS & INTERACTIVE MAP -->
         <section id="tab-content-events" class="space-y-5">
             <div class="flex flex-col gap-3">
                 <div class="flex flex-wrap justify-between items-end gap-4">
@@ -178,7 +178,7 @@
                     </div>
                 </div>
 
-                <!-- Locations Bar -->
+                <!-- Algarve Municipalities & Locales Bar -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                     <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Location:</span>
                     <button onclick="filterZone('all')" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark transition cursor-pointer">All Algarve</button>
@@ -190,7 +190,7 @@
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
 
-                <!-- Categories Bar (Fully Restored) -->
+                <!-- Event Categories Filter Bar -->
                 <div class="flex gap-1.5 overflow-x-auto pb-2 scrollbar-thin">
                     <button onclick="filterEvents('all')" class="cat-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-miamiPink text-white whitespace-nowrap transition cursor-pointer">ALL EVENTS</button>
                     <button onclick="filterEvents('SEASONAL & HOLIDAY')" class="cat-filter-btn theme-pill px-3 py-1.5 rounded-lg text-xs font-bold bg-black/60 text-gray-200 border border-white/10 whitespace-nowrap transition cursor-pointer">SEASONAL & HOLIDAY</button>
@@ -206,7 +206,7 @@
                 </div>
             </div>
 
-            <!-- Map Container -->
+            <!-- Interactive Leaflet Map Container (Starts Clean) -->
             <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
@@ -217,11 +217,11 @@
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
             </div>
 
-            <!-- Events Grid -->
+            <!-- Dynamic Events Grid -->
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- CALENDAR & JOURNAL TAB -->
+        <!-- TAB 2: NOVEMBER 2026 CALENDAR & JOURNAL -->
         <section id="tab-content-calendar" class="space-y-6 hidden">
             <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/30 rounded-2xl p-6 shadow-xl">
                 <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
@@ -239,7 +239,7 @@
             </div>
         </section>
 
-        <!-- ARTICLES TAB -->
+        <!-- TAB 3: ARTICLES -->
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Local Articles & Stories</h2>
@@ -251,7 +251,7 @@
             </div>
         </section>
 
-        <!-- CLASSIFIEDS TAB -->
+        <!-- TAB 4: CLASSIFIEDS -->
         <section id="tab-content-classifieds" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Classifieds & Marketplace</h2>
@@ -262,7 +262,7 @@
             </div>
         </section>
 
-        <!-- FORUM TAB -->
+        <!-- TAB 5: FORUM -->
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Community Forum</h2>
@@ -271,7 +271,7 @@
             <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><p class="text-xs font-bold text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
         </section>
 
-        <!-- ESSENTIAL LINKS TAB -->
+        <!-- TAB 6: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
             <h2 class="text-2xl font-black text-white theme-text-main">Essential Algarve Links</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
@@ -281,7 +281,7 @@
             </div>
         </section>
 
-        <!-- EMERGENCY TAB -->
+        <!-- TAB 7: EMERGENCY & INFO -->
         <section id="tab-content-info" class="space-y-6 hidden">
             <h2 class="text-2xl font-black text-white theme-text-main">Emergency & Essential Contacts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -293,7 +293,7 @@
         </section>
     </main>
 
-    <!-- ================= MODALS ================= -->
+    <!-- ================= SECTION 4: MODALS & POPUPS ================= -->
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
@@ -378,7 +378,7 @@
         </div>
     </div>
 
-    <!-- ================= SCRIPT ENGINE ================= -->
+    <!-- ================= SECTION 5: JAVASCRIPT ENGINE & STATE MANAGEMENT ================= -->
     <script>
         let albufeiraMap = null;
         let registeredVenues = []; // Starts clean per user request
@@ -513,7 +513,7 @@
             registeredVenues.forEach(v => {
                 if (v.marker) albufeiraMap.removeLayer(v.marker);
                 
-                // Colorized if has active event, neutral slate grey otherwise
+                // Colorized if has active event (pink), neutral slate grey otherwise
                 let markerColor = v.hasEvent ? '#FF2A85' : '#64748B'; 
                 let svgIcon = L.divIcon({
                     className: 'custom-venue-pin',
