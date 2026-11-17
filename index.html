@@ -101,17 +101,12 @@
                 </div>
             </div>
 
-            <!-- Controls (Algarve Portal Live button removed) -->
+            <!-- Controls (Region button & Portal Live removed) -->
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
-
-                <div class="flex items-center gap-2 bg-black/40 theme-input p-1.5 rounded-xl border border-white/10">
-                    <span class="text-xs font-semibold px-2 text-miamiCyan flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Region:</span>
-                    <input type="text" id="townInputFilter" value="Albufeira & Algarve" oninput="changeTown(this.value)" class="bg-miamiCard theme-input text-xs font-bold text-white px-3 py-1.5 rounded-lg border border-miamiCyan/40 focus:outline-none w-36">
-                </div>
 
                 <!-- Persistent Auth UI Area -->
                 <div id="authArea">
@@ -592,11 +587,6 @@
                 container.style.display = 'none';
                 btn.textContent = 'Show Map';
             }
-        }
-
-        function changeTown(val) {
-            document.getElementById('bannerTown').textContent = val || 'Albufeira & Algarve';
-            document.getElementById('currentTownHeader').textContent = val || 'Albufeira & Algarve';
         }
 
         // Modal triggers
