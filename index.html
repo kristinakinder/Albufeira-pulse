@@ -55,7 +55,6 @@
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
 
-        /* Smoother, Slower Bubble Burst Pop-in Animation */
         @keyframes bubbleBurst {
             0% { transform: scale(0.3); opacity: 0; }
             50% { transform: scale(1.04); opacity: 1; }
@@ -100,10 +99,9 @@
 </head>
 <body class="min-h-screen flex flex-col font-sans transition-colors duration-300">
 
-    <!-- ================= SECTION 2: TOP NAVIGATION & LIVE WEATHER TICKER ================= -->
+    <!-- TOP NAVIGATION & LIVE WEATHER TICKER -->
     <header class="bg-miamiCard/90 backdrop-blur-md border-b border-miamiPink/30 sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
-            <!-- Brand Logo -->
             <div class="flex items-center gap-3">
                 <svg class="w-9 h-9 animate-pulse-color" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                 <div>
@@ -112,14 +110,11 @@
                 </div>
             </div>
 
-            <!-- Controls (Theme Toggle & Login Only) -->
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-amber-400/25 hover:bg-amber-400/35 text-amber-300 border border-amber-400/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
                     <span id="themeText">Day Mode</span>
                 </button>
-
-                <!-- Persistent Auth UI Area -->
                 <div id="authArea">
                     <button id="loginNavBtn" onclick="openLoginModal()" class="bg-black/60 theme-input hover:bg-white/10 text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/25 transition flex items-center gap-1.5 cursor-pointer">
                         <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
@@ -128,7 +123,7 @@
             </div>
         </div>
 
-        <!-- Live Weather & Marine API Banner -->
+        <!-- Live Weather Ticker -->
         <div class="bg-black/80 backdrop-blur-sm border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-between items-center text-gray-300">
             <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
@@ -142,10 +137,11 @@
             <span class="text-[11px] text-miamiPink font-bold hidden lg:inline">Open-Meteo Live API</span>
         </div>
 
-        <!-- Navigation Tabs & Primary Action Buttons -->
+        <!-- Navigation Tabs -->
         <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-white/5 bg-miamiCard/50 theme-card">
             <div class="flex gap-1.5 overflow-x-auto">
                 <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
+                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
                 <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar & Journal</button>
                 <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
                 <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-400 hover:bg-white/5 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
@@ -161,7 +157,7 @@
         </div>
     </header>
 
-    <!-- ================= SECTION 3: MAIN CONTENT TABS & VIEWS ================= -->
+    <!-- MAIN CONTENT AREA -->
     <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
         <!-- TAB 1: EVENTS & INTERACTIVE MAP -->
         <section id="tab-content-events" class="space-y-5">
@@ -175,7 +171,7 @@
                     </div>
                 </div>
 
-                <!-- Algarve Municipalities & Locales Bar -->
+                <!-- Location Filter Bar -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                     <span class="text-xs font-bold text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Location:</span>
                     <button onclick="filterZone('all')" class="zone-btn px-3 py-1 rounded-full text-xs font-bold bg-miamiCyan text-miamiDark transition cursor-pointer">All Algarve</button>
@@ -187,7 +183,7 @@
                     <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3 py-1 rounded-full text-xs font-bold bg-black/50 text-gray-200 border border-white/15 transition cursor-pointer">Vilamoura</button>
                 </div>
 
-                <!-- Combined & Reduced Categories Bar -->
+                <!-- Categories Bar -->
                 <div class="flex flex-wrap gap-1.5 pt-1">
                     <button onclick="filterEvents('all')" class="cat-filter-btn px-2.5 py-1 rounded-md text-[11px] font-bold bg-miamiPink text-white transition cursor-pointer">ALL</button>
                     <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-2.5 py-1 rounded-md text-[11px] font-bold bg-black/60 text-gray-200 border border-white/10 transition cursor-pointer">SOCIAL & MUSIC</button>
@@ -199,7 +195,7 @@
                 </div>
             </div>
 
-            <!-- Interactive Leaflet Map Container -->
+            <!-- Leaflet Map Container -->
             <div class="bg-miamiCard/90 theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
@@ -210,11 +206,32 @@
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
             </div>
 
-            <!-- Dynamic Events Grid -->
+            <!-- Events Grid -->
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- TAB 2: NOVEMBER 2026 CALENDAR & JOURNAL -->
+        <!-- TAB 2: VENUES & DIRECTORY LISTINGS (NEW PERSONAL PAGES & RATINGS) -->
+        <section id="tab-content-directory" class="space-y-6 hidden">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-black text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> Confirmed Venues & Directory Listings
+                    </h2>
+                    <p class="text-xs text-gray-400 theme-text-sub">Claimed venues featuring our editorial ratings, regular weekly schedules, and event archives.</p>
+                </div>
+            </div>
+            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- INDIVIDUAL VENUE PERSONAL PAGE VIEW -->
+        <section id="tab-content-venue-detail" class="space-y-6 hidden">
+            <button onclick="switchTab('directory')" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer">
+                ← Back to Directory
+            </button>
+            <div id="venueDetailContainer" class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+        </section>
+
+        <!-- TAB 3: NOVEMBER 2026 CALENDAR & JOURNAL -->
         <section id="tab-content-calendar" class="space-y-6 hidden">
             <div class="bg-miamiCard/90 theme-card backdrop-blur-md border border-miamiCyan/30 rounded-2xl p-6 shadow-xl">
                 <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
@@ -232,7 +249,7 @@
             </div>
         </section>
 
-        <!-- TAB 3: ARTICLES -->
+        <!-- TAB 4: ARTICLES -->
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Local Articles & Stories</h2>
@@ -244,7 +261,7 @@
             </div>
         </section>
 
-        <!-- TAB 4: CLASSIFIEDS -->
+        <!-- TAB 5: CLASSIFIEDS -->
         <section id="tab-content-classifieds" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Classifieds & Marketplace</h2>
@@ -255,7 +272,7 @@
             </div>
         </section>
 
-        <!-- TAB 5: FORUM -->
+        <!-- TAB 6: FORUM -->
         <section id="tab-content-forum" class="space-y-6 hidden">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-white theme-text-main">Community Forum</h2>
@@ -264,7 +281,7 @@
             <div class="bg-miamiCard theme-card p-4 rounded-xl border border-white/10"><p class="text-xs font-bold text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
         </section>
 
-        <!-- TAB 6: ESSENTIAL LINKS -->
+        <!-- TAB 7: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
             <div>
                 <h2 class="text-2xl font-black text-white theme-text-main">Essential Algarve & Albufeira Links</h2>
@@ -322,7 +339,7 @@
             </div>
         </section>
 
-        <!-- TAB 7: EMERGENCY & INFO -->
+        <!-- TAB 8: EMERGENCY & INFO -->
         <section id="tab-content-info" class="space-y-6 hidden">
             <h2 class="text-2xl font-black text-white theme-text-main">Emergency & Essential Contacts</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-3xl">
@@ -344,7 +361,7 @@
         </section>
     </main>
 
-    <!-- ================= SECTION 4: MODALS & POPUPS ================= -->
+    <!-- MODALS & POPUPS -->
     <!-- BUBBLE BURST WELCOME MODAL -->
     <div id="welcomeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiPink/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
@@ -374,7 +391,7 @@
         </div>
     </div>
 
-    <!-- LOGIN & USERNAME SETUP MODAL -->
+    <!-- LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-miamiCard theme-card border border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black text-white" id="loginModalTitle">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-400 hover:text-white font-bold cursor-pointer">✕</button></div>
@@ -395,12 +412,11 @@
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label class="block font-bold mb-1 text-gray-300">Location / Zone</label>
-                        <input type="text" id="newEventZone" required list="locList" value="Albufeira Old Town" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
-                        <datalist id="locList"><option value="Albufeira Old Town"><option value="Praça dos Pescadores"><option value="Albufeira Marina"><option value="The Strip"><option value="Guia"><option value="Vilamoura"></datalist>
+                        <input type="text" id="newEventZone" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white bg-opacity-70">
                     </div>
                     <div>
                         <label class="block font-bold mb-1 text-gray-300">Venue</label>
-                        <select id="newEventVenueSelect" required class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
+                        <select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white">
                             <option value="">Select a Venue...</option>
                         </select>
                     </div>
@@ -442,7 +458,6 @@
                     <div><label class="block font-bold mb-1 text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-3 py-2 text-white"></div>
                     <div><label class="block font-bold mb-1 text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-black/40 theme-input border border-white/20 rounded-xl px-2 py-2 text-emerald-400 font-bold text-center"></div>
                 </div>
-                <!-- Hidden coordinate storage captured seamlessly via map click or defaults -->
                 <input type="hidden" id="newVenueLat" value="37.0888">
                 <input type="hidden" id="newVenueLng" value="-8.2511">
                 
@@ -451,9 +466,8 @@
         </div>
     </div>
 
-    <!-- ================= SECTION 5: JAVASCRIPT ENGINE & STATE MANAGEMENT ================= -->
+    <!-- JAVASCRIPT ENGINE & STATE MANAGEMENT -->
     <script>
-        // Supabase Client Initialization with your Project URL & Publishable Key
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         let _supabaseClient = null;
@@ -464,7 +478,8 @@
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." }
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment." },
+            { title: "Yolo Resident DJ Night", venueName: "Yolo Club", zone: "The Strip", category: "NIGHTLIFE", date: "2026-11-21", time: "23:00 - 04:00", fee: "€10", desc: "The ultimate clubbing experience right in the middle of The Strip." }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -472,47 +487,53 @@
             initMap();
             loadVenuesFromSupabase();
             renderEventsGrid();
+            renderDirectoryGrid();
             generateCalendarDays();
             fetchLiveWeatherAndWaves();
             updateThemeButtonUI();
             checkExistingAuth();
         });
 
-        // Welcome Modal Functions
-        function closeWelcomeModal() {
-            document.getElementById('welcomeModal').classList.add('hidden');
-        }
-
-        function closeWelcomeModalAndLogin() {
-            closeWelcomeModal();
-            openLoginModal();
-        }
+        function closeWelcomeModal() { document.getElementById('welcomeModal').classList.add('hidden'); }
+        function closeWelcomeModalAndLogin() { closeWelcomeModal(); openLoginModal(); }
 
         // Fetch registered venues from Supabase public.directory table
         async function loadVenuesFromSupabase() {
-            if (!_supabaseClient) return;
-            try {
-                const { data, error } = await _supabaseClient.from('directory').select('*');
-                if (error) {
-                    console.error("Error fetching Supabase directory:", error);
-                    return;
+            // Default built-in fallback venues including correct Yolo Strip coordinate
+            registeredVenues = [
+                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, rating: "4.8/5", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, marker: null },
+                { name: "Libertos Club", address: "The Strip, Areias de São João", area: "The Strip", lat: 37.0910, lng: -8.2250, rating: "4.9/5", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", schedule: "Wed-Sat: 23:00 - 06:00", hasEvent: true, marker: null },
+                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, rating: "4.7/5", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, marker: null }
+            ];
+
+            if (_supabaseClient) {
+                try {
+                    const { data, error } = await _supabaseClient.from('directory').select('*');
+                    if (!error && data && data.length > 0) {
+                        data.forEach(item => {
+                            if (!registeredVenues.some(v => v.name.toLowerCase() === (item.name || '').toLowerCase())) {
+                                registeredVenues.push({
+                                    name: item.name || 'Unnamed Venue',
+                                    address: item.address || '',
+                                    area: item.zone || item.town || 'Albufeira',
+                                    lat: item.lat || 37.0888,
+                                    lng: item.lng || -8.2511,
+                                    rating: item.rating || '4.5/5',
+                                    image: item.image || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
+                                    schedule: item.schedule || 'Daily: 10:00 - 02:00',
+                                    hasEvent: false,
+                                    marker: null
+                                });
+                            }
+                        });
+                    }
+                } catch (err) {
+                    console.error("Supabase load warning:", err);
                 }
-                if (data && data.length > 0) {
-                    registeredVenues = data.map(item => ({
-                        name: item.name || 'Unnamed Venue',
-                        address: item.address || '',
-                        area: item.zone || item.town || 'Albufeira',
-                        lat: item.lat || 37.0888,
-                        lng: item.lng || -8.2511,
-                        hasEvent: false,
-                        marker: null
-                    }));
-                    refreshMapMarkers();
-                    updateVenueDropdown();
-                }
-            } catch (err) {
-                console.error("Failed connection to Supabase directory:", err);
             }
+            refreshMapMarkers();
+            updateVenueDropdown();
+            renderDirectoryGrid();
         }
 
         function updateVenueDropdown() {
@@ -527,7 +548,18 @@
             });
         }
 
-        // 1. Live Weather & Marine API Integration
+        // Auto-correct zone when selecting venue in Add Event modal
+        function onVenueDropdownChange() {
+            const venueSelect = document.getElementById('newEventVenueSelect');
+            const zoneInput = document.getElementById('newEventZone');
+            const selectedName = venueSelect.value;
+            const venueObj = registeredVenues.find(v => v.name === selectedName);
+            if (venueObj && zoneInput) {
+                zoneInput.value = venueObj.area;
+            }
+        }
+
+        // Live Weather & Marine API Integration
         async function fetchLiveWeatherAndWaves() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0888&longitude=-8.2511&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m');
@@ -536,18 +568,9 @@
                 const marineData = await marineRes.json();
                 
                 if (weatherData && weatherData.current) {
-                    const temp = weatherData.current.temperature_2m;
-                    const wind = weatherData.current.wind_speed_10m;
-                    const code = weatherData.current.weather_code;
-                    const precip = weatherData.current.precipitation;
-
-                    let condition = "Clear / Fair";
-                    if (code >= 51 || precip > 0) condition = "Rain / Showers 🌧️";
-                    else if (code >= 1 && code <= 3) condition = "Cloudy ☁️";
-
-                    document.getElementById('liveWeatherTemp').textContent = `${temp}°C`;
-                    document.getElementById('liveWeatherCondition').textContent = condition;
-                    document.getElementById('liveWeatherWind').textContent = `${wind} km/h`;
+                    document.getElementById('liveWeatherTemp').textContent = `${weatherData.current.temperature_2m}°C`;
+                    document.getElementById('liveWeatherCondition').textContent = weatherData.current.precipitation > 0 ? "Rain 🌧️" : "Clear / Fair ☀️";
+                    document.getElementById('liveWeatherWind').textContent = `${weatherData.current.wind_speed_10m} km/h`;
                 }
                 if (marineData && marineData.current && marineData.current.wave_height !== undefined) {
                     document.getElementById('liveWaveHeight').textContent = `${marineData.current.wave_height}m`;
@@ -555,15 +578,14 @@
                     document.getElementById('liveWaveHeight').textContent = "1.0m";
                 }
             } catch (err) {
-                console.error("Weather fetch error:", err);
                 document.getElementById('liveWeatherTemp').textContent = "20°C";
-                document.getElementById('liveWeatherCondition').textContent = "Cloudy ☁️";
+                document.getElementById('liveWeatherCondition').textContent = "Sunny ☀️";
                 document.getElementById('liveWaveHeight').textContent = "1.0m";
-                document.getElementById('liveWeatherWind').textContent = "18.9 km/h";
+                document.getElementById('liveWeatherWind').textContent = "14 km/h";
             }
         }
 
-        // 2. Events Grid Rendering
+        // Render Events Grid
         function renderEventsGrid(filterCat = 'all', filterZoneName = 'all') {
             const grid = document.getElementById('eventsGrid');
             if (!grid) return;
@@ -581,9 +603,6 @@
             }
 
             filtered.forEach(ev => {
-                const venueObj = registeredVenues.find(v => v.name.toLowerCase() === ev.venueName.toLowerCase());
-                const addressDisplay = venueObj && venueObj.address ? `📍 ${venueObj.address}` : `📍 ${ev.venueName} (${ev.zone})`;
-
                 const card = document.createElement('div');
                 card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl p-5 shadow-xl flex flex-col justify-between space-y-3';
                 card.innerHTML = `
@@ -593,12 +612,12 @@
                             <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
                         </div>
                         <h3 class="text-base font-black text-white theme-text-main mb-1">${ev.title}</h3>
-                        <p class="text-xs font-semibold text-gray-300 theme-text-sub mb-1">${addressDisplay}</p>
+                        <p class="text-xs font-semibold text-gray-300 theme-text-sub mb-1">📍 ${ev.venueName} (${ev.zone})</p>
                         <p class="text-xs text-slate-700 dark:text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
                     </div>
                     <div class="pt-3 border-t border-white/10 flex justify-between items-center text-[11px] text-gray-400">
                         <span>📅 ${ev.date} | ${ev.time}</span>
-                        <button onclick="alert('Event details & booking')" class="text-miamiPink font-bold hover:underline cursor-pointer">View Details →</button>
+                        <button onclick="openVenueDetailPage('${ev.venueName}')" class="text-miamiPink font-bold hover:underline cursor-pointer">View Venue →</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -608,7 +627,107 @@
         function filterEvents(cat) { renderEventsGrid(cat, 'all'); }
         function filterZone(zone) { renderEventsGrid('all', zone); }
 
-        // 3. Calendar Grid Generator
+        // Render Directory / Venues Grid with Ratings & Pictures
+        function renderDirectoryGrid() {
+            const grid = document.getElementById('directoryGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            registeredVenues.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'bg-miamiCard theme-card border border-miamiCyan/30 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-miamiPink transition';
+                card.onclick = () => openVenueDetailPage(v.name);
+                card.innerHTML = `
+                    <div>
+                        <div class="h-40 w-full overflow-hidden relative">
+                            <img src="${v.image}" alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-amber-400 text-xs font-black px-2.5 py-1 rounded-xl border border-amber-400/40 flex items-center gap-1">
+                                ⭐ ${v.rating}
+                            </span>
+                            <span class="absolute bottom-2 left-2 bg-miamiDark/80 text-miamiCyan text-[10px] font-black uppercase px-2 py-0.5 rounded-lg">
+                                ${v.area}
+                            </span>
+                        </div>
+                        <div class="p-5 space-y-2">
+                            <h3 class="text-lg font-black text-white theme-text-main">${v.name}</h3>
+                            <p class="text-xs text-gray-300 theme-text-sub">📍 ${v.address}</p>
+                            <p class="text-xs text-emerald-400 font-bold">🕒 ${v.schedule}</p>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 pt-2 border-t border-white/10 flex justify-between items-center text-xs">
+                        <span class="text-miamiPink font-bold">View Personal Page & Events</span>
+                        <span class="text-miamiCyan group-hover:translate-x-1 transition">→</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Open Individual Venue Personal Page with Regular, Upcoming & Past Events
+        function openVenueDetailPage(venueName) {
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || {
+                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", rating: "4.7/5", 
+                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily: 12:00 - 02:00"
+            };
+
+            const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
+            
+            const container = document.getElementById('venueDetailContainer');
+            container.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-white/10 pb-6">
+                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border border-miamiCyan/30 shadow-lg">
+                    <div class="space-y-3 w-full">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full border border-miamiCyan/40">${venue.area}</span>
+                                <h2 class="text-3xl font-black text-white theme-text-main mt-2">${venue.name}</h2>
+                            </div>
+                            <div class="bg-amber-400/20 text-amber-300 font-black text-sm px-3 py-1.5 rounded-xl border border-amber-400/40 flex items-center gap-1.5">
+                                ⭐ ${venue.rating} <span class="text-[10px] text-gray-300 font-normal">(Our Editorial Rating)</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-300 theme-text-sub">📍 ${venue.address}</p>
+                        <p class="text-xs font-bold text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4 pt-2">
+                    <h3 class="text-xl font-black text-white theme-text-main flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5 text-miamiPink"></i> Upcoming & Regular Events at ${venue.name}
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${venueEvents.length > 0 ? venueEvents.map(ev => `
+                            <div class="bg-black/30 theme-input p-4 rounded-2xl border border-white/10 space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-[10px] font-bold bg-miamiPink/20 text-miamiPink px-2.5 py-0.5 rounded-full">${ev.category}</span>
+                                    <span class="text-xs font-bold text-miamiCyan">${ev.fee}</span>
+                                </div>
+                                <h4 class="font-black text-base text-white theme-text-main">${ev.title}</h4>
+                                <p class="text-xs text-gray-300">${ev.desc}</p>
+                                <p class="text-[11px] text-gray-400 font-bold">📅 Date: ${ev.date} | Time: ${ev.time}</p>
+                            </div>
+                        `).join('') : `
+                            <p class="text-xs text-gray-400 italic">No specific upcoming special events scheduled right now. Check back soon or view their regular weekly schedule above!</p>
+                        `}
+                    </div>
+                </div>
+
+                <div class="space-y-4 pt-4 border-t border-white/10">
+                    <h3 class="text-lg font-black text-gray-400 flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4"></i> Past Events Archive
+                    </h3>
+                    <div class="bg-black/20 p-4 rounded-xl border border-white/5 text-xs text-gray-400 flex justify-between items-center">
+                        <span>Albufeira Summer Sunset Sessions (Archived October 2026)</span>
+                        <span class="text-emerald-400 font-bold">Completed Successfully</span>
+                    </div>
+                </div>
+            `;
+
+            switchTab('venue-detail');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Calendar Grid Generator
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
             if (!grid) return;
@@ -627,7 +746,7 @@
             }
         }
 
-        // 4. Map Initialization & Pin Drop Capture (Fixed with referrerPolicy for Firefox)
+        // Map Initialization
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
@@ -641,10 +760,7 @@
                 albufeiraMap.on('click', function(e) {
                     document.getElementById('newVenueLat').value = e.latlng.lat.toFixed(4);
                     document.getElementById('newVenueLng').value = e.latlng.lng.toFixed(4);
-                    const statusBox = document.getElementById('mapPinStatusText');
-                    if (statusBox) {
-                        statusBox.value = `Pin Dropped (${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)})`;
-                    }
+                    document.getElementById('mapPinStatusText').value = `Pin Dropped (${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)})`;
                 });
             }
         }
@@ -663,11 +779,11 @@
                 });
 
                 v.marker = L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap)
-                    .bindPopup(`<b>${v.name}</b><br>${v.address ? v.address + '<br>' : ''}${v.area}<br>${v.hasEvent ? '🎉 Active Event Running!' : '☕ No Events Scheduled'}`);
+                    .bindPopup(`<b>${v.name}</b><br>${v.address}<br>⭐ ${v.rating}<br><a href="#" onclick="openVenueDetailPage('${v.name}'); return false;" style="color:#06B6D4; font-weight:bold;">View Venue Page →</a>`);
             });
         }
 
-        // 5. Theme Engine
+        // Theme Engine
         function toggleManualDayNightMode() {
             const htmlTag = document.documentElement;
             let newMode = htmlTag.classList.contains('night-mode') ? 'day-mode' : 'night-mode';
@@ -685,14 +801,19 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // 6. Navigation & Modals
+        // Navigation Tabs
         function switchTab(tabId) {
-            ['events', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
-                document.getElementById('tab-content-' + t).classList.add('hidden');
-                document.getElementById('btn-' + t).className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer";
+            ['events', 'directory', 'venue-detail', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
+                const el = document.getElementById('tab-content-' + t);
+                if (el) el.classList.add('hidden');
+                const btn = document.getElementById('btn-' + t);
+                if (btn) btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-300 theme-text-sub hover:text-white flex items-center gap-1.5 transition cursor-pointer";
             });
-            document.getElementById('tab-content-' + tabId).classList.remove('hidden');
-            document.getElementById('btn-' + tabId).className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer";
+            const targetEl = document.getElementById('tab-content-' + tabId);
+            if (targetEl) targetEl.classList.remove('hidden');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-miamiPink text-white flex items-center gap-1.5 transition shadow-md cursor-pointer";
+            
             if (tabId === 'events' && albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 150);
             if (window.lucide) lucide.createIcons();
         }
@@ -710,7 +831,7 @@
             }
         }
 
-        // Modal triggers
+        // Modals
         function openModal() { document.getElementById('eventModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
         function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
@@ -755,12 +876,11 @@
             let targetVenue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
             if (targetVenue) {
                 targetVenue.hasEvent = true;
-            } else {
-                registeredVenues.push({ name: venueName, lat: 37.0888, lng: -8.2511, area: zone, hasEvent: true, marker: null });
             }
 
             refreshMapMarkers();
             renderEventsGrid();
+            renderDirectoryGrid();
             alert(`Event "${title}" successfully published!`);
             closeModal();
         }
@@ -829,14 +949,22 @@
             const lng = parseFloat(document.getElementById('newVenueLng').value);
             const area = document.getElementById('newVenueArea').value;
 
-            registeredVenues.push({ name, address, lat, lng, area, hasEvent: false, marker: null });
+            registeredVenues.push({ 
+                name, address, lat, lng, area, 
+                rating: '4.6/5', 
+                image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
+                schedule: 'Daily: 11:00 - 03:00',
+                hasEvent: false, 
+                marker: null 
+            });
             refreshMapMarkers();
             updateVenueDropdown();
+            renderDirectoryGrid();
 
             if (albufeiraMap) {
                 albufeiraMap.setView([lat, lng], 14);
             }
-            alert(`Venue "${name}" successfully pinned to map!`);
+            alert(`Venue "${name}" successfully added to directory and map!`);
             closeVenueModal();
         }
     </script>
