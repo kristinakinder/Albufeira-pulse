@@ -336,7 +336,9 @@
 
     <datalist id="zoneDatalist"></datalist>
 
-    <script>
+    <script type="module">
+        import { defaultZones, registeredVenues as importedVenues, registeredEvents as importedEvents } from './js/data.js';
+
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
         let _supabaseClient = null;
@@ -347,8 +349,9 @@
         let currentLang = localStorage.getItem('albufeira_lang') || 'en';
         let activeZoneFilter = 'all';
 
-        const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras"];
         let availableZones = [...defaultZones];
+        let registeredVenues = [...importedVenues];
+        let registeredEvents = [...importedEvents];
 
         const translations = {
             en: {
@@ -407,6 +410,7 @@
             applyTranslations();
             renderZoneButtons();
         }
+        window.toggleLanguage = toggleLanguage;
 
         function applyTranslations() {
             const t = translations[currentLang];
@@ -420,15 +424,6 @@
 
         let albufeiraMap = null;
         let mapMarkersGroup = null;
-        let registeredVenues = [
-            { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0881, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "", schedule: "Open 24/7", author: "Admin" },
-            { name: "Albufeira Marina Promenade", address: "Marina de Albufeira", area: "Albufeira Marina", lat: 37.0846, lng: -8.2683, website: "https://www.marinaalbufeira.com", image: "", schedule: "Daily", author: "Admin" },
-            { name: "Yolo Club", address: "Avenida Dr. Francisco Sá Carneiro", area: "Albufeira Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "", schedule: "22:00 - 06:00", author: "Admin" }
-        ]; 
-        let registeredEvents = [
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and acoustic sets at Fisherman's Square.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "Admin" },
-            { title: "Marina Sunset Live Session", venueName: "Albufeira Marina Promenade", zone: "Albufeira Marina", category: "MUSIC", date: "2026-11-22", time: "17:30", fee: "Free", desc: "Sunset chill-out DJ session overlooking the yachts.", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&auto=format&fit=crop&q=60", author: "Admin" }
-        ];
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
@@ -475,6 +470,7 @@
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
         }
+        window.filterZone = filterZone;
 
         function updateZoneDatalist() {
             const dl = document.getElementById('zoneDatalist');
@@ -486,10 +482,10 @@
             if (_supabaseClient) {
                 try {
                     const { data: dirData } = await _supabaseClient.from('directory').select('*');
-                    if (dirData && dirData.length > 0) registeredVenues = dirData;
+                    if (dirData && dirData.length > 0) registeredVenues = [...importedVenues, ...dirData];
                     const { data: evData } = await _supabaseClient.from('events').select('*');
-                    if (evData && evData.length > 0) registeredEvents = evData;
-                } catch (e) { console.log("Using fallback memory data."); }
+                    if (evData && evData.length > 0) registeredEvents = [...importedEvents, ...evData];
+                } catch (e) { console.log("Using imported memory data."); }
             }
             syncAvailableZones();
             refreshMapMarkers();
@@ -560,8 +556,9 @@
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
             if (!venue) return;
             switchTab('events');
-            if (albufeiraMap) albufeiraMap.setView([venue.lat, venue.lng], 16);
+            if (albufeiraMap) albufeiraMap.setView([venue.lat || 37.0881, venue.lng || -8.2520], 16);
         }
+        window.jumpToVenueOnMap = jumpToVenueOnMap;
 
         function openEventDetailPage(eventTitle) {
             const ev = registeredEvents.find(e => e.title.toLowerCase() === eventTitle.toLowerCase());
@@ -577,7 +574,7 @@
                         </div>
                         <h2 class="text-3xl font-black text-white">${ev.title}</h2>
                         <p class="text-sm font-bold text-gray-300">📅 ${ev.date} at ${ev.time}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${ev.venueName}')">
+                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${ev.venueName.replace(/'/g, "\\'")}')">
                             📍 Venue: <strong class="text-white underline">${ev.venueName}</strong> (${ev.zone}) → Click for Venue Info
                         </p>
                     </div>
@@ -589,6 +586,7 @@
             `;
             switchTab('event-detail');
         }
+        window.openEventDetailPage = openEventDetailPage;
 
         function renderDirectoryGrid() {
             const grid = document.getElementById('directoryGrid');
@@ -646,6 +644,7 @@
             };
             reader.readAsDataURL(file);
         }
+        window.uploadVenueLogoInline = uploadVenueLogoInline;
 
         function handleVenueImageFileSelect(e) {
             const file = e.target.files[0];
@@ -656,6 +655,7 @@
             };
             reader.readAsDataURL(file);
         }
+        window.handleVenueImageFileSelect = handleVenueImageFileSelect;
 
         function openVenueDetailPage(venueName) {
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "", schedule: "Daily" };
@@ -682,19 +682,20 @@
                         <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>
                         <h2 class="text-3xl font-black text-white">${venue.name}</h2>
                         <p class="text-sm font-bold text-gray-300">📍 ${venue.address}</p>
-                        <button onclick="jumpToVenueOnMap('${venue.name}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
+                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-4 pt-2">
                     <h3 class="text-xl font-black text-white">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
             switchTab('venue-detail');
             if (window.lucide) lucide.createIcons();
         }
+        window.openVenueDetailPage = openVenueDetailPage;
 
         function uploadVenueLogoInlineDetail(e, venueName) {
             const file = e.target.files[0];
@@ -714,6 +715,7 @@
             };
             reader.readAsDataURL(file);
         }
+        window.uploadVenueLogoInlineDetail = uploadVenueLogoInlineDetail;
 
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
@@ -726,7 +728,7 @@
                 cell.className = 'min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
                 cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs text-white">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
@@ -765,6 +767,7 @@
             localStorage.setItem('albufeira_manual_theme', newMode);
             updateThemeButtonUI();
         }
+        window.toggleManualDayNightMode = toggleManualDayNightMode;
 
         function updateThemeButtonUI() {
             const isNight = document.documentElement.classList.contains('night-mode');
@@ -800,6 +803,7 @@
                 }, 150);
             }
         }
+        window.switchTab = switchTab;
 
         function toggleEventsMap() {
             const container = document.getElementById('eventsMapContainer');
@@ -807,14 +811,22 @@
             container.style.display = isHidden ? 'block' : 'none';
             if (isHidden && albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 100);
         }
+        window.toggleEventsMap = toggleEventsMap;
 
         function openModal() { document.getElementById('eventModal').classList.remove('hidden'); }
+        window.openModal = openModal;
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
+        window.closeModal = closeModal;
         function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
+        window.openVenueModal = openVenueModal;
         function closeVenueModal() { document.getElementById('venueModal').classList.add('hidden'); }
+        window.closeVenueModal = closeVenueModal;
         function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
+        window.openLoginModal = openLoginModal;
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+        window.closeLoginModal = closeLoginModal;
         function openArticleModal() { alert("Admin Article Creator"); }
+        window.openArticleModal = openArticleModal;
 
         function updateVenueDropdown() {
             const select = document.getElementById('newEventVenueSelect');
@@ -832,6 +844,7 @@
             const venue = registeredVenues.find(v => v.name === document.getElementById('newEventVenueSelect').value);
             if (venue) document.getElementById('newEventZone').value = venue.area;
         }
+        window.onVenueDropdownChange = onVenueDropdownChange;
 
         async function handleEventSubmit(e) {
             e.preventDefault();
@@ -855,6 +868,7 @@
             generateCalendarDays();
             closeModal();
         }
+        window.handleEventSubmit = handleEventSubmit;
 
         async function handleVenueSubmit(e) {
             e.preventDefault();
@@ -877,6 +891,7 @@
             renderDirectoryGrid();
             closeVenueModal();
         }
+        window.handleVenueSubmit = handleVenueSubmit;
 
         async function handleLogin(e) { 
             e.preventDefault(); 
@@ -894,6 +909,7 @@
             if (resolvedName === 'Admin') document.getElementById('writeArticleBtn').classList.remove('hidden');
             closeLoginModal(); 
         }
+        window.handleLogin = handleLogin;
 
         async function checkExistingAuth() {
             const savedEmail = localStorage.getItem('albufeira_user_email');
@@ -937,6 +953,7 @@
             }
             if (window.lucide) lucide.createIcons();
         }
+        window.handleLogout = handleLogout;
 
         function postForumMessage() {
             const input = document.getElementById('forumInput');
@@ -950,6 +967,7 @@
             container.prepend(postDiv);
             input.value = '';
         }
+        window.postForumMessage = postForumMessage;
     </script>
 </body>
 </html>
