@@ -66,9 +66,7 @@
         html.day-mode .theme-pill { background-color: #E0F8FF !important; color: #00828F !important; border-color: rgba(0, 240, 255, 0.4) !important; }
         html.day-mode .weather-ticker { background-color: #334155 !important; border-color: #475569 !important; color: #F8FAFC !important; }
         .unified-row { background-color: #1E293B !important; color: #F8FAFC !important; border-color: rgba(0, 240, 255, 0.3) !important; }
-        #eventsAlbufeiraMap { height: 340px; width: 100%; border-radius: 1rem; z-index: 10; }
-        .interactive-zone { transition: all 0.3s ease; cursor: pointer; }
-        .interactive-zone:hover { filter: brightness(1.2); transform: scale(1.02); }
+        #eventsAlbufeiraMap { height: 380px; width: 100%; border-radius: 1rem; z-index: 10; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col transition-colors duration-300">
@@ -142,19 +140,22 @@
             <!-- Interactive Category Filter Row Underneath Events -->
             <div id="eventCategoryFilterBar" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-miamiCyan/20"></div>
 
-            <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-2">
+            <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-3">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Albufeira & Algarve Map</span>
+                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
                     </span>
                     <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
                 </div>
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
-                <div class="flex flex-wrap items-center gap-4 pt-2 text-[11px] font-bold text-gray-300">
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#FF007F] inline-block"></span> Restaurants</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#00F0FF] inline-block"></span> Bars & Cafés</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#A855F7] inline-block"></span> Nightclubs</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#F59E0B] inline-block"></span> Others / Culture</span>
+                <div class="flex flex-wrap items-center gap-4 pt-1 text-[11px] font-bold text-gray-300">
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#64748B] inline-block"></span> Other</span>
                 </div>
             </div>
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
@@ -298,17 +299,17 @@
         <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Happy Hour Live" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Sports & Quiz Night" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="">Select a Venue...</option></select></div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required value="2026-11-21" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="18:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                 </div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="HAPPY HOUR">Happy Hour</option><option value="MUSIC">Music</option><option value="ART & CULTURE">Art & Culture</option><option value="MARKETS">Markets</option><option value="SOCIAL">Social</option></select></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="HAPPY HOUR">Happy Hour</option><option value="MUSIC">Music</option><option value="LIVE SPORTS TV">Live Sports TV</option><option value="KARAOKE">Karaoke</option><option value="QUIZ">Quiz</option><option value="ART & CULTURE">Art & Culture</option><option value="MARKETS">Markets</option><option value="SOCIAL">Social</option></select></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
@@ -320,7 +321,7 @@
         <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Lounge Bar" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Sports Pub" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div>
@@ -332,7 +333,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Other">Other</option></select></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Live Sports TV">Live Sports TV</option><option value="Karaoke">Karaoke</option><option value="Quiz">Quiz</option><option value="Other">Other</option></select></div>
                 </div>
                 <input type="hidden" id="newVenueLat" value="37.0881">
                 <input type="hidden" id="newVenueLng" value="-8.2520">
@@ -382,7 +383,7 @@
                 addEvent: "+ Add Event",
                 zoneLabel: "Zone:",
                 zoneAll: "All",
-                mapTitle: "Interactive Albufeira Map",
+                mapTitle: "Interactive Algarve Venue Map",
                 hideMap: "Hide Map",
                 calendarHeader: "November 2026 Calendar"
             },
@@ -406,7 +407,7 @@
                 addEvent: "+ Adicionar Evento",
                 zoneLabel: "Zona:",
                 zoneAll: "Todos",
-                mapTitle: "Mapa Interativo de Albufeira",
+                mapTitle: "Mapa Interativo do Algarve",
                 hideMap: "Ocultar Mapa",
                 calendarHeader: "Calendário Novembro 2026"
             }
@@ -485,7 +486,7 @@
         function renderEventCategoryButtons() {
             const bar = document.getElementById('eventCategoryFilterBar');
             if (!bar) return;
-            const categories = ['all', 'HAPPY HOUR', 'MUSIC', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
+            const categories = ['all', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
             let html = `<span class="text-xs font-black text-miamiPink mr-1 flex items-center gap-1 shrink-0"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Category:</span>`;
             categories.forEach(cat => {
                 const isActive = activeEventCategoryFilter === cat;
@@ -787,20 +788,9 @@
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0950, -8.2500], 13);
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0950, -8.2500], 12);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
                 mapMarkersGroup = L.layerGroup().addTo(albufeiraMap);
-
-                // Add Interactive Albufeira Zone Polygon overlays
-                const oldTownZone = L.circle([37.0878, -8.2533], {
-                    color: '#00F0FF', fillColor: '#00F0FF', fillOpacity: 0.15, radius: 800
-                }).addTo(albufeiraMap).bindTooltip("<b>Albufeira Old Town</b><br>Click to filter zone", {sticky: true});
-                oldTownZone.on('click', () => filterZone('Albufeira Old Town'));
-
-                const stripZone = L.circle([37.0920, -8.2275], {
-                    color: '#FF007F', fillColor: '#FF007F', fillOpacity: 0.15, radius: 700
-                }).addTo(albufeiraMap).bindTooltip("<b>Albufeira Strip (S. João)</b><br>Click to filter zone", {sticky: true});
-                stripZone.on('click', () => filterZone('Albufeira'));
             }
         }
 
@@ -817,7 +807,10 @@
                     
                     if (group === 'Bar & Cafe') pinColor = '#00F0FF';
                     else if (group === 'Nightclub') pinColor = '#A855F7';
-                    else if (group === 'Other') pinColor = '#F59E0B';
+                    else if (group === 'Live Sports TV') pinColor = '#3B82F6';
+                    else if (group === 'Karaoke') pinColor = '#EC4899';
+                    else if (group === 'Quiz') pinColor = '#EAB308';
+                    else if (group === 'Other') pinColor = '#64748B';
 
                     let svgIcon = L.divIcon({
                         className: 'custom-pin',
