@@ -137,7 +137,6 @@
     <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
         <section id="tab-content-events" class="space-y-5">
             <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
-            <!-- Interactive Category Filter Row Underneath Events -->
             <div id="eventCategoryFilterBar" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-miamiCyan/20"></div>
 
             <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-3">
@@ -161,9 +160,32 @@
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
+        <!-- GoKunming Style Directory Section -->
         <section id="tab-content-directory" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
-            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="directorySearchInput" oninput="filterDirectoryList()" placeholder="Search venues by name or address..." class="theme-input border-2 rounded-xl px-3 py-1.5 text-xs font-medium w-64">
+                </div>
+            </div>
+
+            <!-- GoKunming Layout: Sidebar Categories + Vertical Listing -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                <!-- Sidebar Category Filter (GoKunming Style) -->
+                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 space-y-2 shadow-lg">
+                    <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-3 flex items-center gap-1.5">
+                        <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
+                    </h3>
+                    <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Vertical Listing Feed (GoKunming Style) -->
+                <div class="lg:col-span-3 space-y-3" id="directoryListContainer">
+                    <!-- Populated dynamically with compact rows -->
+                </div>
+            </div>
         </section>
 
         <section id="tab-content-venue-detail" class="space-y-6 hidden">
@@ -345,7 +367,7 @@
     <datalist id="zoneDatalist"></datalist>
 
     <script type="module">
-        import { defaultZones, registeredVenues as importedVenues, registeredEvents as importedEvents } from './js/data.js';
+        import { defaultZones, registeredVenues as importedVenues, registeredEvents as importedEvents } from './data.js';
 
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
@@ -357,6 +379,7 @@
         let currentLang = localStorage.getItem('albufeira_lang') || 'en';
         let activeZoneFilter = 'all';
         let activeEventCategoryFilter = 'all';
+        let activeDirectoryCategoryFilter = 'all';
 
         let availableZones = [...defaultZones];
         let registeredVenues = [...importedVenues];
@@ -444,6 +467,7 @@
             updateThemeButtonUI();
             checkExistingAuth();
             renderEventCategoryButtons();
+            renderDirectoryCategorySidebar();
 
             window.addEventListener('popstate', (event) => {
                 const targetTab = event.state && event.state.tab ? event.state.tab : 'events';
@@ -505,6 +529,27 @@
         }
         window.filterEventCategory = filterEventCategory;
 
+        function renderDirectoryCategorySidebar() {
+            const sidebar = document.getElementById('directoryCategorySidebar');
+            if (!sidebar) return;
+            const categories = ['all', 'Restaurant', 'Bar & Cafe', 'Nightclub', 'Live Sports TV', 'Karaoke', 'Quiz', 'Other'];
+            let html = '';
+            categories.forEach(cat => {
+                const isActive = activeDirectoryCategoryFilter === cat;
+                const label = cat === 'all' ? 'All Categories' : cat;
+                html += `<button onclick="filterDirectoryCategory('${cat}')" class="w-full text-left px-3 py-2 rounded-xl transition cursor-pointer flex items-center justify-between ${isActive ? 'bg-miamiCyan text-miamiDark font-black shadow' : 'hover:bg-miamiCyan/10 text-gray-300 font-bold'}"><span>${label}</span><span>→</span></button>`;
+            });
+            sidebar.innerHTML = html;
+        }
+        window.renderDirectoryCategorySidebar = renderDirectoryCategorySidebar;
+
+        function filterDirectoryCategory(cat) {
+            activeDirectoryCategoryFilter = cat;
+            renderDirectoryCategorySidebar();
+            renderDirectoryGrid();
+        }
+        window.filterDirectoryCategory = filterDirectoryCategory;
+
         function updateZoneDatalist() {
             const dl = document.getElementById('zoneDatalist');
             if (!dl) return;
@@ -565,7 +610,6 @@
                 return true;
             });
 
-            // Sort events by time/date closest to current time
             filtered.sort((a, b) => {
                 const dateA = new Date(`${a.date}T${a.time || '00:00'}`);
                 const dateB = new Date(`${b.date}T${b.time || '00:00'}`);
@@ -639,73 +683,68 @@
         window.openEventDetailPage = openEventDetailPage;
 
         function renderDirectoryGrid() {
-            const grid = document.getElementById('directoryGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            registeredVenues.forEach((v, index) => {
-                const card = document.createElement('div');
-                card.className = 'unified-row border-2 border-miamiCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between cursor-pointer hover:border-miamiCyan transition';
-                card.onclick = () => openVenueDetailPage(v.name);
+            const container = document.getElementById('directoryListContainer');
+            const searchInput = document.getElementById('directorySearchInput');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+
+            let filtered = registeredVenues.filter(v => {
+                if (activeDirectoryCategoryFilter !== 'all') {
+                    const nameLower = (v.name || '').toLowerCase();
+                    const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
+                    if (group !== activeDirectoryCategoryFilter) return false;
+                }
+                if (searchTerm && !v.name.toLowerCase().includes(searchTerm) && !v.address.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No venues found matching your criteria.</div>`;
+                return;
+            }
+
+            // GoKunming Style Compact Vertical List Rows
+            filtered.forEach((v, index) => {
+                const nameLower = (v.name || '').toLowerCase();
+                const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
                 
-                let imageAreaHtml = '';
+                const row = document.createElement('div');
+                row.className = 'unified-row border border-miamiCyan/30 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md hover:border-miamiCyan transition cursor-pointer';
+                row.onclick = () => openVenueDetailPage(v.name);
+
+                let thumbHtml = '';
                 if (v.image && v.image.trim() !== '') {
-                    imageAreaHtml = `<div class="h-40 w-full overflow-hidden relative bg-gray-800"><img src="${v.image}" class="w-full h-full object-cover"><span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span></div>`;
+                    thumbHtml = `<img src="${v.image}" class="w-20 h-20 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
                 } else {
-                    imageAreaHtml = `
-                        <div class="h-40 w-full bg-slate-800 flex flex-col items-center justify-center relative border-b border-miamiCyan/20 p-4 text-center">
-                            <span class="text-xs font-black text-miamiCyan mb-2">No Logo Uploaded</span>
-                            <label onclick="event.stopPropagation()" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-[10px] font-black px-3 py-1.5 rounded-lg cursor-pointer shadow inline-flex items-center gap-1">
-                                <i data-lucide="upload" class="w-3 h-3"></i> Upload Logo
-                                <input type="file" accept="image/*" class="hidden" onchange="uploadVenueLogoInline(event, ${index})">
-                            </label>
-                            <span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span>
-                        </div>
-                    `;
+                    thumbHtml = `<div class="w-20 h-20 rounded-xl bg-slate-800 border border-miamiCyan/30 flex items-center justify-center text-[10px] font-black text-miamiCyan text-center p-1 shrink-0">No Logo</div>`;
                 }
 
-                card.innerHTML = `
-                    <div>
-                        ${imageAreaHtml}
-                        <div class="p-5 space-y-2">
-                            <h3 class="text-lg font-black text-white">${v.name}</h3>
-                            <p class="text-xs font-bold text-gray-300">📍 ${v.address}</p>
-                            <p class="text-xs text-emerald-400 font-black">🕒 ${v.schedule || 'Daily'}</p>
+                row.innerHTML = `
+                    <div class="flex items-center gap-4 w-full">
+                        ${thumbHtml}
+                        <div class="space-y-1 w-full">
+                            <div class="flex items-center justify-between flex-wrap gap-2">
+                                <h3 class="text-base font-black text-white hover:text-miamiCyan transition">${v.name}</h3>
+                                <span class="bg-miamiCyan/20 text-miamiCyan text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">${group}</span>
+                            </div>
+                            <p class="text-xs font-bold text-gray-300 flex items-center gap-1">📍 ${v.address || v.area}</p>
+                            <p class="text-[11px] font-semibold text-emerald-400">🕒 ${v.schedule || 'Daily'} • Zone: ${v.area}</p>
                         </div>
                     </div>
-                    <div class="px-5 pb-4 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-xs text-gray-300 font-semibold"><span>View Venue Page</span><span class="text-miamiCyan font-black">→</span></div>
+                    <div class="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end pt-2 md:pt-0 border-t md:border-t-0 border-miamiCyan/20">
+                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
+                        <span class="text-xs font-black text-miamiPink">View →</span>
+                    </div>
                 `;
-                grid.appendChild(card);
+                container.appendChild(row);
             });
             if (window.lucide) lucide.createIcons();
         }
-
-        function uploadVenueLogoInline(e, venueIndex) {
-            e.stopPropagation();
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(uploadEvent) {
-                const base64Img = uploadEvent.target.result;
-                registeredVenues[venueIndex].image = base64Img;
-                if (_supabaseClient && registeredVenues[venueIndex].id) {
-                    await _supabaseClient.from('directory').update({ image: base64Img }).eq('id', registeredVenues[venueIndex].id);
-                }
-                renderDirectoryGrid();
-            };
-            reader.readAsDataURL(file);
-        }
-        window.uploadVenueLogoInline = uploadVenueLogoInline;
-
-        function handleVenueImageFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                document.getElementById('newVenueImage').value = evt.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-        window.handleVenueImageFileSelect = handleVenueImageFileSelect;
+        window.filterDirectoryList = renderDirectoryGrid;
 
         function openVenueDetailPage(venueName) {
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "", schedule: "Daily" };
@@ -718,10 +757,6 @@
             } else {
                 venueImageHtml = `<div class="w-full md:w-72 h-48 bg-slate-800 rounded-2xl border-2 border-miamiCyan/40 flex flex-col items-center justify-center text-center p-4">
                     <span class="text-xs font-black text-miamiCyan mb-2">No Logo Uploaded</span>
-                    <label class="bg-miamiCyan text-miamiDark text-[10px] font-black px-3 py-1.5 rounded-lg cursor-pointer shadow inline-flex items-center gap-1">
-                        <i data-lucide="upload" class="w-3 h-3"></i> Upload Logo
-                        <input type="file" accept="image/*" class="hidden" onchange="uploadVenueLogoInlineDetail(event, '${venue.name.replace(/'/g, "\\'")}')">
-                    </label>
                 </div>`;
             }
 
@@ -746,26 +781,6 @@
             if (window.lucide) lucide.createIcons();
         }
         window.openVenueDetailPage = openVenueDetailPage;
-
-        function uploadVenueLogoInlineDetail(e, venueName) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(uploadEvent) {
-                const base64Img = uploadEvent.target.result;
-                const v = registeredVenues.find(item => item.name.toLowerCase() === venueName.toLowerCase());
-                if (v) {
-                    v.image = base64Img;
-                    if (_supabaseClient && v.id) {
-                        await _supabaseClient.from('directory').update({ image: base64Img }).eq('id', v.id);
-                    }
-                }
-                renderDirectoryGrid();
-                openVenueDetailPage(venueName);
-            };
-            reader.readAsDataURL(file);
-        }
-        window.uploadVenueLogoInlineDetail = uploadVenueLogoInlineDetail;
 
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
@@ -801,7 +816,7 @@
             
             registeredVenues.forEach(v => {
                 if (v.lat && v.lng) {
-                    let pinColor = '#FF007F'; // default Restaurant pink
+                    let pinColor = '#FF007F';
                     const nameLower = (v.name || '').toLowerCase();
                     const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
                     
