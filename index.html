@@ -44,7 +44,8 @@
         })();
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 145px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 148px; }
+        @media (max-width: 768px) { body { padding-top: 195px; } }
         @keyframes pulseColor {
             0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
             50% { color: #00F0FF; transform: scale(1.2); filter: drop-shadow(0 0 14px #00F0FF); }
@@ -134,171 +135,252 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
-        <section id="tab-content-events" class="space-y-5">
-            <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
-            <div id="eventCategoryFilterBar" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-miamiCyan/20"></div>
+    <!-- Main Layout: 3-Column / 2-Column GoKunming Portal Layout with Persistent Right Vertical Sidebar -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left / Main Content Area (9 Columns on Desktop) -->
+            <div class="lg:col-span-9 space-y-6">
+                
+                <!-- EVENTS TAB -->
+                <section id="tab-content-events" class="space-y-5">
+                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
+                    <div id="eventCategoryFilterBar" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-miamiCyan/20"></div>
 
-            <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
-                    </span>
-                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
-                </div>
-                <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
-                <div class="flex flex-wrap items-center gap-4 pt-1 text-[11px] font-bold text-gray-300">
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#64748B] inline-block"></span> Other</span>
-                </div>
-            </div>
-            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </section>
-
-        <!-- GoKunming Style Directory Section -->
-        <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex justify-between items-center flex-wrap gap-4">
-                <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
-                <div class="flex items-center gap-2">
-                    <input type="text" id="directorySearchInput" oninput="filterDirectoryList()" placeholder="Search venues by name or address..." class="theme-input border-2 rounded-xl px-3 py-1.5 text-xs font-medium w-64">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 space-y-2 shadow-lg">
-                    <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-3 flex items-center gap-1.5">
-                        <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
-                    </h3>
-                    <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold"></div>
-                </div>
-
-                <div class="lg:col-span-3 space-y-3" id="directoryListContainer"></div>
-            </div>
-        </section>
-
-        <section id="tab-content-venue-detail" class="space-y-6 hidden">
-            <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md" data-i18n="backToDirectory">← Back to Directory</button>
-            <div id="venueDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
-        </section>
-
-        <section id="tab-content-event-detail" class="space-y-6 hidden">
-            <button onclick="switchTab('events')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Events</button>
-            <div id="eventDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
-        </section>
-
-        <section id="tab-content-calendar" class="space-y-6 hidden">
-            <div class="theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl">
-                <h2 class="text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
-                <div class="grid grid-cols-7 gap-2 text-center font-black text-sm mb-2">
-                    <div class="text-miamiPink">Mon</div><div class="text-miamiPink">Tue</div><div class="text-miamiPink">Wed</div><div class="text-miamiPink">Thu</div><div class="text-miamiPink">Fri</div><div class="text-miamiPink">Sat</div><div class="text-miamiCyan">Sun</div>
-                </div>
-                <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
-            </div>
-        </section>
-
-        <section id="tab-content-articles" class="space-y-6 hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-black theme-text-main">Local Articles & Culture</h2>
-                <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article (Admin Only)</button>
-            </div>
-            <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">Art & Culture</span>
-                <h3 class="font-black text-miamiPink text-base">ROOTS 2026: Territórios Íntimos, Paisagens Pós-Coloniais</h3>
-                <p class="text-xs text-gray-200 leading-relaxed">Official contemporary art exhibition curated by Mirian Tavares at Laboratório de Actividades Criativas (LAC) in Lagos, running from November 21 to December 30, 2026.</p>
-                <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
-            </div>
-        </section>
-
-        <section id="tab-content-classifieds" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main">Classifieds & Marketplace</h2>
-            <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-1">
-                <p class="text-xs font-bold text-white">Surfboard for Sale - €150. Ideal for Praia da Galé & Olhos de Água breaks.</p>
-                <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
-            </div>
-        </section>
-
-        <section id="tab-content-forum" class="space-y-6 hidden">
-            <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-4">
-                <div class="space-y-2">
-                    <textarea id="forumInput" rows="3" placeholder="Write a message to the Albufeira community..." class="w-full theme-input border-2 rounded-xl p-3 text-xs font-medium"></textarea>
-                    <button onclick="postForumMessage()" class="bg-miamiCyan text-miamiDark font-black text-xs px-4 py-2 rounded-xl shadow cursor-pointer">Post Message</button>
-                </div>
-                <div id="forumPostsContainer" class="space-y-3 pt-4 border-t border-miamiCyan/20">
-                    <div class="unified-row p-3 rounded-xl border border-miamiCyan/20 text-xs space-y-1">
-                        <p class="font-black text-miamiCyan">Admin</p>
-                        <p class="text-gray-200">Welcome to the Albufeira Pulse community forum!</p>
+                    <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
+                            </span>
+                            <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
+                        </div>
+                        <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
+                        <div class="flex flex-wrap items-center gap-4 pt-1 text-[11px] font-bold text-gray-300">
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
+                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#64748B] inline-block"></span> Other</span>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
+                    <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                </section>
 
-        <section id="tab-content-links" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
-                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
-                    <p class="text-gray-300">Municipal announcements and civic services.</p>
-                </a>
-                <a href="https://www.cp.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
-                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Trains (Albufeira-Ferreiras)</div>
-                    <p class="text-gray-300">National rail timetables and regional connections.</p>
-                </a>
-                <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
-                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
-                    <p class="text-gray-300">Regional bus timetables and route planner.</p>
-                </a>
-                <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 hover:border-amber-500 transition shadow-lg block space-y-2">
-                    <div class="text-amber-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
-                    <p class="text-gray-300">Official meteorological forecasts and warnings.</p>
-                </a>
-                <a href="https://www.marinaalbufeira.com/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
-                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="anchor" class="w-4 h-4"></i> Albufeira Marina</div>
-                    <p class="text-gray-300">Marina facilities, nautical events, and berthing.</p>
-                </a>
-                <a href="https://visitalbufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
-                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="compass" class="w-4 h-4"></i> Visit Albufeira Tourism</div>
-                    <p class="text-gray-300">Official tourist guides, culture, and beach maps.</p>
-                </a>
-            </div>
-        </section>
+                <!-- GOKUNMING-STYLE DIRECTORY TAB -->
+                <section id="tab-content-directory" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center flex-wrap gap-4">
+                        <div>
+                            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
+                            <p id="directoryCountLabel" class="text-xs font-bold text-miamiCyan mt-0.5">Loading directory...</p>
+                        </div>
+                        <div class="flex items-center gap-2 relative">
+                            <input type="text" id="directorySearchInput" list="venueAutocompleteList" oninput="filterDirectoryList()" placeholder="Start typing venue name or street..." class="theme-input border-2 rounded-xl px-3.5 py-2 text-xs font-medium w-72 focus:border-miamiCyan outline-none">
+                            <datalist id="venueAutocompleteList"></datalist>
+                            <button onclick="document.getElementById('directorySearchInput').value=''; filterDirectoryList();" class="text-xs font-bold text-gray-400 hover:text-miamiPink px-2 py-1 cursor-pointer" title="Clear Search">✕</button>
+                        </div>
+                    </div>
 
-        <section id="tab-content-info" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs max-w-5xl">
-                <div class="unified-row p-5 rounded-2xl border-2 border-red-500/40 space-y-2 shadow-lg">
-                    <p class="font-black text-red-400 text-sm mb-2">🚨 General Emergencies: 112</p>
-                    <p class="text-gray-300 font-medium">SNS 24 Health Line: <strong class="text-white">808 24 24 24</strong></p>
-                    <p class="text-gray-300 font-medium">Albufeira GNR Police: <strong class="text-white">289 583 310</strong></p>
-                    <p class="text-gray-300 font-medium">Albufeira Fire Brigade: <strong class="text-white">289 586 333</strong></p>
-                </div>
-                <div class="unified-row p-5 rounded-2xl border-2 border-miamiPink/40 space-y-2 shadow-lg">
-                    <p class="font-black text-miamiPink text-sm mb-2">🐾 Animal Welfare & Strays (Albufeira)</p>
-                    <p class="text-gray-300 font-medium">Municipal Vet Service: <strong class="text-white">289 599 622</strong> / <strong class="text-white">969 956 125</strong></p>
-                    <p class="text-gray-300 font-medium">Animal Welfare Center (Bem Estar Animal): <strong class="text-white">289 598 894</strong></p>
-                    <p class="text-gray-300 font-medium">Dead Animal / Roadway Removal (Luságua): <strong class="text-white">808 202 492</strong></p>
-                </div>
-                <div class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 space-y-2 shadow-lg">
-                    <p class="font-black text-amber-400 text-sm mb-2">🌲 Wildlife & Environmental Rescue</p>
-                    <p class="text-gray-300 font-medium">SEPNA (GNR Nature Protection): <strong class="text-white">213 217 291</strong></p>
-                    <p class="text-gray-300 font-medium">SOS Environment Line: <strong class="text-white">808 200 520</strong></p>
-                    <p class="text-gray-300 font-medium">RIAS (Algarve Wildlife Recovery Center): <strong class="text-white">927 659 313</strong></p>
-                </div>
-                <div class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 space-y-2 shadow-lg">
-                    <p class="font-black text-miamiCyan text-sm mb-2">🏛️ Municipal Services & Civil Protection</p>
-                    <p class="text-gray-300 font-medium">Albufeira Town Hall (Geral): <strong class="text-white">289 599 500</strong></p>
-                    <p class="text-gray-300 font-medium">Civil Protection Service: <strong class="text-white">289 599 503</strong></p>
-                    <p class="text-gray-300 font-medium">Water / Sanitation Emergencies: <strong class="text-white">289 599 534</strong></p>
-                </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+                        <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 space-y-2 shadow-lg">
+                            <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-3 flex items-center gap-1.5">
+                                <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
+                            </h3>
+                            <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold"></div>
+                        </div>
+
+                        <div class="md:col-span-3 space-y-3" id="directoryListContainer"></div>
+                    </div>
+                </section>
+
+                <!-- VENUE DETAIL PAGE -->
+                <section id="tab-content-venue-detail" class="space-y-6 hidden">
+                    <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md" data-i18n="backToDirectory">← Back to Directory</button>
+                    <div id="venueDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+                </section>
+
+                <!-- EVENT DETAIL PAGE -->
+                <section id="tab-content-event-detail" class="space-y-6 hidden">
+                    <button onclick="switchTab('events')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Events</button>
+                    <div id="eventDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+                </section>
+
+                <!-- FULL CALENDAR TAB -->
+                <section id="tab-content-calendar" class="space-y-6 hidden">
+                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl">
+                        <h2 class="text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
+                        <div class="grid grid-cols-7 gap-2 text-center font-black text-sm mb-2">
+                            <div class="text-miamiPink">Mon</div><div class="text-miamiPink">Tue</div><div class="text-miamiPink">Wed</div><div class="text-miamiPink">Thu</div><div class="text-miamiPink">Fri</div><div class="text-miamiPink">Sat</div><div class="text-miamiCyan">Sun</div>
+                        </div>
+                        <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
+                    </div>
+                </section>
+
+                <!-- ARTICLES TAB -->
+                <section id="tab-content-articles" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-black theme-text-main">Local Articles & Culture</h2>
+                        <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article (Admin Only)</button>
+                    </div>
+                    <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                        <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">Art & Culture</span>
+                        <h3 class="font-black text-miamiPink text-base">ROOTS 2026: Territórios Íntimos, Paisagens Pós-Coloniais</h3>
+                        <p class="text-xs text-gray-200 leading-relaxed">Official contemporary art exhibition curated by Mirian Tavares at Laboratório de Actividades Criativas (LAC) in Lagos, running from November 21 to December 30, 2026.</p>
+                        <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
+                    </div>
+                </section>
+
+                <!-- CLASSIFIEDS TAB WITH CATEGORIES (NO REAL ESTATE SALES) -->
+                <section id="tab-content-classifieds" class="space-y-6 hidden">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div>
+                            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="tag" class="text-miamiPink w-7 h-7"></i> Classifieds & Community Board</h2>
+                            <p class="text-xs text-gray-400 font-medium mt-0.5">Direct peer-to-peer listings. Strictly no real estate sales or agency spam.</p>
+                        </div>
+                        <button onclick="openClassifiedModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-lg shadow-[#FF007F]/40 transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Post Classified
+                        </button>
+                    </div>
+
+                    <!-- Classifieds Category Filter Pills -->
+                    <div id="classifiedCategoryBar" class="flex flex-wrap items-center gap-2 pb-2 border-b border-miamiCyan/20"></div>
+
+                    <!-- Classifieds List -->
+                    <div id="classifiedsListContainer" class="space-y-3"></div>
+                </section>
+
+                <!-- FORUM TAB WITH NEW THREAD BUTTON -->
+                <section id="tab-content-forum" class="space-y-6 hidden">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="message-square" class="text-miamiCyan w-7 h-7"></i> Albufeira Community Forum</h2>
+                        <button onclick="openNewThreadModal()" class="bg-miamiCyan hover:bg-opacity-90 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Start New Thread
+                        </button>
+                    </div>
+
+                    <div id="forumThreadsContainer" class="space-y-3"></div>
+                </section>
+
+                <!-- ESSENTIAL LINKS TAB -->
+                <section id="tab-content-links" class="space-y-6 hidden">
+                    <h2 class="text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+                        <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
+                            <p class="text-gray-300">Municipal announcements and civic services.</p>
+                        </a>
+                        <a href="https://www.cp.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Trains (Albufeira-Ferreiras)</div>
+                            <p class="text-gray-300">National rail timetables and regional connections.</p>
+                        </a>
+                        <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
+                            <p class="text-gray-300">Regional bus timetables and route planner.</p>
+                        </a>
+                        <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 hover:border-amber-500 transition shadow-lg block space-y-2">
+                            <div class="text-amber-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
+                            <p class="text-gray-300">Official meteorological forecasts and warnings.</p>
+                        </a>
+                        <a href="https://www.marinaalbufeira.com/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="anchor" class="w-4 h-4"></i> Albufeira Marina</div>
+                            <p class="text-gray-300">Marina facilities, nautical events, and berthing.</p>
+                        </a>
+                        <a href="https://visitalbufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="compass" class="w-4 h-4"></i> Visit Albufeira Tourism</div>
+                            <p class="text-gray-300">Official tourist guides, culture, and beach maps.</p>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- EMERGENCY CONTACTS TAB -->
+                <section id="tab-content-info" class="space-y-6 hidden">
+                    <h2 class="text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs max-w-5xl">
+                        <div class="unified-row p-5 rounded-2xl border-2 border-red-500/40 space-y-2 shadow-lg">
+                            <p class="font-black text-red-400 text-sm mb-2">🚨 General Emergencies: 112</p>
+                            <p class="text-gray-300 font-medium">SNS 24 Health Line: <strong class="text-white">808 24 24 24</strong></p>
+                            <p class="text-gray-300 font-medium">Albufeira GNR Police: <strong class="text-white">289 583 310</strong></p>
+                            <p class="text-gray-300 font-medium">Albufeira Fire Brigade: <strong class="text-white">289 586 333</strong></p>
+                        </div>
+                        <div class="unified-row p-5 rounded-2xl border-2 border-miamiPink/40 space-y-2 shadow-lg">
+                            <p class="font-black text-miamiPink text-sm mb-2">🐾 Animal Welfare & Strays (Albufeira)</p>
+                            <p class="text-gray-300 font-medium">Municipal Vet Service: <strong class="text-white">289 599 622</strong> / <strong class="text-white">969 956 125</strong></p>
+                            <p class="text-gray-300 font-medium">Animal Welfare Center (Bem Estar Animal): <strong class="text-white">289 598 894</strong></p>
+                            <p class="text-gray-300 font-medium">Dead Animal / Roadway Removal (Luságua): <strong class="text-white">808 202 492</strong></p>
+                        </div>
+                        <div class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 space-y-2 shadow-lg">
+                            <p class="font-black text-amber-400 text-sm mb-2">🌲 Wildlife & Environmental Rescue</p>
+                            <p class="text-gray-300 font-medium">SEPNA (GNR Nature Protection): <strong class="text-white">213 217 291</strong></p>
+                            <p class="text-gray-300 font-medium">SOS Environment Line: <strong class="text-white">808 200 520</strong></p>
+                            <p class="text-gray-300 font-medium">RIAS (Algarve Wildlife Recovery Center): <strong class="text-white">927 659 313</strong></p>
+                        </div>
+                        <div class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 space-y-2 shadow-lg">
+                            <p class="font-black text-miamiCyan text-sm mb-2">🏛️ Municipal Services & Civil Protection</p>
+                            <p class="text-gray-300 font-medium">Albufeira Town Hall (Geral): <strong class="text-white">289 599 500</strong></p>
+                            <p class="text-gray-300 font-medium">Civil Protection Service: <strong class="text-white">289 599 503</strong></p>
+                            <p class="text-gray-300 font-medium">Water / Sanitation Emergencies: <strong class="text-white">289 599 534</strong></p>
+                        </div>
+                    </div>
+                </section>
             </div>
-        </section>
+
+            <!-- GOKUNMING-STYLE PERSISTENT RIGHT VERTICAL SIDEBAR (3 Columns on Desktop) -->
+            <aside class="lg:col-span-3 space-y-5">
+                
+                <!-- 1. Mini Calendar Widget -->
+                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 shadow-lg space-y-3">
+                    <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                            <i data-lucide="calendar" class="w-4 h-4 text-miamiPink"></i> Nov 2026
+                        </h3>
+                        <button onclick="switchTab('calendar')" class="text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer">Full View →</button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-black text-gray-400">
+                        <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div class="text-miamiCyan">S</div>
+                    </div>
+                    <div id="sidebarMiniCalendar" class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold"></div>
+                </div>
+
+                <!-- 2. Today's Events Widget -->
+                <div class="theme-card border-2 border-miamiPink/30 rounded-2xl p-4 shadow-lg space-y-3">
+                    <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Today's Events
+                        </h3>
+                        <span class="text-[10px] font-bold text-gray-400">Nov 18</span>
+                    </div>
+                    <div id="sidebarTodaysEvents" class="space-y-2.5 text-xs"></div>
+                </div>
+
+                <!-- 3. Latest Forum Widget -->
+                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 shadow-lg space-y-3">
+                    <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                            <i data-lucide="message-square" class="w-4 h-4"></i> Latest Forum
+                        </h3>
+                        <button onclick="switchTab('forum')" class="text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer">All →</button>
+                    </div>
+                    <div id="sidebarLatestForum" class="space-y-2.5 text-xs"></div>
+                </div>
+
+                <!-- 4. Latest Classifieds Widget -->
+                <div class="theme-card border-2 border-miamiPink/30 rounded-2xl p-4 shadow-lg space-y-3">
+                    <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
+                            <i data-lucide="tag" class="w-4 h-4"></i> Latest Classifieds
+                        </h3>
+                        <button onclick="switchTab('classifieds')" class="text-[10px] font-bold text-miamiPink hover:underline cursor-pointer">All →</button>
+                    </div>
+                    <div id="sidebarLatestClassifieds" class="space-y-2.5 text-xs"></div>
+                </div>
+
+            </aside>
+        </div>
     </main>
 
-    <!-- Modals -->
+    <!-- MODALS -->
+    <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
@@ -310,36 +392,52 @@
         </div>
     </div>
 
+    <!-- Add Event Modal -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Sports & Quiz Night" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Sound Bowl Healing or SNS First Aid Course" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="">Select a Venue...</option></select></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><input type="text" id="newEventVenueInput" list="venueAutocompleteList" required placeholder="Type or select venue..." onchange="onVenueInputChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required value="2026-11-21" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required value="2026-11-18" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                 </div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="HAPPY HOUR">Happy Hour</option><option value="MUSIC">Music</option><option value="LIVE SPORTS TV">Live Sports TV</option><option value="KARAOKE">Karaoke</option><option value="QUIZ">Quiz</option><option value="ART & CULTURE">Art & Culture</option><option value="MARKETS">Markets</option><option value="SOCIAL">Social</option></select></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Category</label>
+                    <select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
+                        <option value="WELLNESS">Wellness (Yoga, Reiki, Sound Bowls)</option>
+                        <option value="HEALTH & FIRST AID">Health & First Aid (SNS Courses)</option>
+                        <option value="HAPPY HOUR">Happy Hour</option>
+                        <option value="MUSIC">Music</option>
+                        <option value="LIVE SPORTS TV">Live Sports TV</option>
+                        <option value="KARAOKE">Karaoke</option>
+                        <option value="QUIZ">Quiz</option>
+                        <option value="ART & CULTURE">Art & Culture</option>
+                        <option value="MARKETS">Markets</option>
+                        <option value="SOCIAL">Social</option>
+                    </select>
+                </div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional - leave blank if none)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
     </div>
 
+    <!-- Add Venue Modal -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Sports Pub" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Algarve Wellness Studio" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <input type="hidden" id="newVenueImage" value="">
+                <div><label class="block font-bold mb-1 theme-text-sub">Logo / Photo URL (Optional - leave blank if none)</label><input type="url" id="newVenueImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Live Sports TV">Live Sports TV</option><option value="Karaoke">Karaoke</option><option value="Quiz">Quiz</option><option value="Other">Other</option></select></div>
@@ -351,30 +449,71 @@
         </div>
     </div>
 
+    <!-- New Forum Thread Modal -->
+    <div id="newThreadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Start New Forum Thread</h3><button onclick="closeNewThreadModal()" class="font-bold cursor-pointer">✕</button></div>
+            <form onsubmit="handleNewThreadSubmit(event)" class="space-y-3 text-xs">
+                <div><label class="block font-bold mb-1 theme-text-sub">Thread Topic / Title</label><input type="text" id="newThreadTitle" required placeholder="e.g. Best places for sunset yoga in Albufeira?" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newThreadCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="General Discussion">General Discussion</option><option value="Recommendations">Recommendations</option><option value="Wellness & Health">Wellness & Health</option><option value="Nightlife & Dining">Nightlife & Dining</option><option value="Local Tips">Local Tips</option></select></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Message</label><textarea id="newThreadBody" rows="4" required placeholder="Write your post..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeNewThreadModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Post Thread</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Classified Modal -->
+    <div id="classifiedModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="theme-card border-2 border-miamiPink/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Post Community Classified</h3><button onclick="closeClassifiedModal()" class="font-bold cursor-pointer">✕</button></div>
+            <form onsubmit="handleClassifiedSubmit(event)" class="space-y-3 text-xs">
+                <div><label class="block font-bold mb-1 theme-text-sub">Title</label><input type="text" id="newClassifiedTitle" required placeholder="e.g. Room for Rent in Old Town / Surfboard / Hiking Group" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Category (No Real Estate Sales)</label>
+                    <select id="newClassifiedCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
+                        <option value="Rent">Rent (Rooms & Rentals Only - No Sales)</option>
+                        <option value="Job Offers">Job Offers</option>
+                        <option value="Buy & Sell">Buy & Sell</option>
+                        <option value="Socialise">Socialise / Meetups</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Price / Salary</label><input type="text" id="newClassifiedPrice" placeholder="e.g. €500/mo or €50" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Contact Info</label><input type="text" id="newClassifiedContact" required placeholder="Email or Phone" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                </div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Details</label><textarea id="newClassifiedDesc" rows="3" required placeholder="Describe your listing..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeClassifiedModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Listing</button></div>
+            </form>
+        </div>
+    </div>
+
     <datalist id="zoneDatalist"></datalist>
 
     <script>
-        // All 560 Husband-Collected Venues from Algarve dataset
+        // Full 558 Husband-Collected Venues Embedded Directly
         const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras", "Lagos", "Faro", "Tavira", "Portimão", "Monchique", "Olhão", "Silves", "Aljezur", "Lagoa", "Loulé", "Castro Marim", "Alcoutim", "Vila Real de Santo António", "Vila do Bispo", "São Brás de Alportel"];
         
-        let registeredVenues = [
-            { name: "Bar Vista Mar", address: "Albufeira", area: "Albufeira", website: "", lat: 37.07561, lng: -8.296397, schedule: "Daily", categoryGroup: "Bar & Cafe", image: "" },
-            { name: "Vista Mar", address: "Albufeira", area: "Albufeira", website: "", lat: 37.075764, lng: -8.296199, schedule: "Daily", categoryGroup: "Restaurant", image: "" },
-            { name: "Dom Diniz", address: "Estr. das Sesmarias, 8200-385 Albufeira", area: "Albufeira", website: "", lat: 37.080383, lng: -8.290375, schedule: "Daily", categoryGroup: "Restaurant", image: "" },
-            { name: "Oura Sports Bar", address: "The Strip, Albufeira", area: "Albufeira Strip", website: "", lat: 37.0920, lng: -8.2275, schedule: "Daily", categoryGroup: "Live Sports TV", image: "" },
-            { name: "Monroes Karaoke Bar", address: "Oura Strip, Albufeira", area: "Albufeira Strip", website: "", lat: 37.0925, lng: -8.2280, schedule: "Nightly", categoryGroup: "Karaoke", image: "" },
-            { name: "Irish Pub Quiz", address: "Old Town, Albufeira", area: "Albufeira Old Town", website: "", lat: 37.0878, lng: -8.2533, schedule: "Weekly", categoryGroup: "Quiz", image: "" },
-            // Expanded husband-collected venues up to 560 items
-            { name: "Restaurante O Lume", address: "Albufeira Old Town", area: "Albufeira Old Town", website: "", lat: 37.0872, lng: -8.2515, schedule: "Daily", categoryGroup: "Restaurant", image: "" },
-            { name: "Sueste Restaurante", address: "Marina de Albufeira", area: "Albufeira Marina", website: "", lat: 37.0850, lng: -8.2620, schedule: "Daily", categoryGroup: "Restaurant", image: "" },
-            { name: "Pineapple Bar", address: "Albufeira Strip", area: "Albufeira Strip", website: "", lat: 37.0915, lng: -8.2268, schedule: "Daily", categoryGroup: "Bar & Cafe", image: "" },
-            { name: "Wild & Co.", address: "Albufeira Strip", area: "Albufeira Strip", website: "", lat: 37.0930, lng: -8.2285, schedule: "Daily", categoryGroup: "Bar & Cafe", image: "" }
-        ];
+        let registeredVenues = [{"name": "Bar Vista Mar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.07561, "lng": -8.296397, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Vista Mar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.075764, "lng": -8.296199, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Dom Diniz", "address": "Estr. das Sesmarias, 8200-385 Albufeira, Portugal", "area": "Albufeira", "website": "", "lat": 37.080383, "lng": -8.290375, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Apolonia", "address": "Sítio Vale do Rabelho - Urbanização Setobra, Lote 53, 8200-416 Albufeira, Portugal", "area": "Albufeira", "website": "https://www.apolonia.com/en/", "lat": 37.082576, "lng": -8.312126, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Colibri 2", "address": "Estr. de Vale Rabelho 1, Galé, 8200-424 Albufeira, Portugal", "area": "Albufeira", "website": "", "lat": 37.083339, "lng": -8.309919, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Quinta da Galé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.079769, "lng": -8.304003, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pôr do Sol", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.079272, "lng": -8.298859, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Sardinha", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.076229, "lng": -8.277383, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Marinheiro", "address": "Albufeira", "area": "Albufeira", "website": "https://www.o-marinheiro.com/", "lat": 37.07967, "lng": -8.291758, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Seasons", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080899, "lng": -8.285032, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Grande Mundo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080758, "lng": -8.281996, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "City Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080758, "lng": -8.281853, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Margem Sul", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080698, "lng": -8.282621, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vila Joya", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.079963, "lng": -8.313794, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The New Dubliner", "address": "Albufeira", "area": "Albufeira", "website": "https://www.facebook.com/corcovads/", "lat": 37.079242, "lng": -8.300041, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Grelha do Ti Manel", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085638, "lng": -8.309107, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Mr. Singh", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086515, "lng": -8.309208, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Karahi", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092696, "lng": -8.310294, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Girissol", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093449, "lng": -8.310232, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Malibu", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09407, "lng": -8.309306, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Littrus", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095845, "lng": -8.309032, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Churrasqueira O Ribeirinho", "address": "E. N. 125 - Cortelhas", "area": "Albufeira", "website": "https://www.ribeirinho.pt/", "lat": 37.127968, "lng": -8.311999, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Marmeleiro", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.106545, "lng": -8.279578, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Grade", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127275, "lng": -8.301154, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Alfredo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127264, "lng": -8.30083, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "2 Irmãos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127874, "lng": -8.301139, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Churrasco", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127608, "lng": -8.30108, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Carlinhos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127614, "lng": -8.300807, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Aurélio", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127068, "lng": -8.295098, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Marreiro", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127206, "lng": -8.293726, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Algale", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.081624, "lng": -8.298603, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Brasserie", "address": "Albufeira", "area": "Albufeira", "website": "https://www.thebrasserie.pt", "lat": 37.08144, "lng": -8.298638, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Jompra", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.082591, "lng": -8.297262, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Alimentare", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083277, "lng": -8.29686, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sharky’s", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085059, "lng": -8.268579, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Nosolo Italia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08505, "lng": -8.268243, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "La Cantina del Borgo", "address": "Albufeira", "area": "Albufeira", "website": "https://cantina.ilborgo.pt", "lat": 37.075599, "lng": -8.283144, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pipas Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085035, "lng": -8.267319, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Del Sotto", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085, "lng": -8.266284, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O País", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.084992, "lng": -8.266216, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Boulevard", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083333, "lng": -8.28912, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sunshine", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083368, "lng": -8.284746, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Solar das Oliveiras", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087471, "lng": -8.292082, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Eucaliptos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085831, "lng": -8.284784, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Luau", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086526, "lng": -8.277807, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Salgadosmar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096075, "lng": -8.319028, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Museu dos Salgados", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098934, "lng": -8.317199, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Prima Pasta", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098706, "lng": -8.316453, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cabanitas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096617, "lng": -8.309618, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09409, "lng": -8.303304, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089729, "lng": -8.294969, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Barco", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089857, "lng": -8.294558, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Quinta da Saudade", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.10659, "lng": -8.324297, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Atlântico", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126623, "lng": -8.300318, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Palladium", "address": "12 Rua das Escolas", "area": "Albufeira", "website": "", "lat": 37.125012, "lng": -8.299526, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa Bitoque", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126076, "lng": -8.299377, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Damoney's Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126508, "lng": -8.299481, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Ramires", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.12635, "lng": -8.299264, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Casa do Mexilhão", "address": "20 Rua 25 de Abril", "area": "Albufeira", "website": "https://mexilhao.pt/", "lat": 37.126333, "lng": -8.298998, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Praia do Lourenço", "address": "Albufeira", "area": "Albufeira", "website": "https://lourencorestaurante.pt/", "lat": 37.076903, "lng": -8.309529, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "6º Parágrafo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.084993, "lng": -8.26607, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Penedo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085396, "lng": -8.255896, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café Rocha", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.129202, "lng": -8.276737, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092488, "lng": -8.310095, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Chinês Pine View", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090006, "lng": -8.168106, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Caravela", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089974, "lng": -8.168408, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Martins", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.106937, "lng": -8.230749, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Costa", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.10684, "lng": -8.230944, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Manjar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.115332, "lng": -8.230455, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurant Lá Em Casa Grill", "address": "Albufeira", "area": "Albufeira", "website": "https://www.facebook.com/pages/L%C3%A1-em-Casa-Grill/353262294861953?fref=nf", "lat": 37.108355, "lng": -8.230805, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café Lima", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.104765, "lng": -8.231369, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Poente", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.109313, "lng": -8.230403, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café Nascimento", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.107108, "lng": -8.230797, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Onda Azul", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088891, "lng": -8.246858, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Riviera", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090614, "lng": -8.2425, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack-Bar \"O Forno\"", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089462, "lng": -8.246649, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Florença", "address": "Quinta da Belavista", "area": "Albufeira", "website": "", "lat": 37.091767, "lng": -8.241531, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Isa's Pizzas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091287, "lng": -8.242647, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Jorge", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09213, "lng": -8.240898, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bitoque", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091506, "lng": -8.247518, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Doce que doce", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.102241, "lng": -8.228642, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack-Bar Vieira", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093281, "lng": -8.268585, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Net@Kafé", "address": "34-36 Avenida dos Descobrimentos", "area": "Albufeira", "website": "", "lat": 37.091416, "lng": -8.242364, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097745, "lng": -8.206644, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Varanda Restaurant", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093055, "lng": -8.207492, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Luís", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087521, "lng": -8.291281, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "American Diner 1", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097814, "lng": -8.228478, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "American Diner 2", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091398, "lng": -8.221971, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pizzeria Fratelli", "address": "Albufeira", "area": "Albufeira", "website": "https://fratelli.pt/pop/", "lat": 37.090355, "lng": -8.190603, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tavertino's", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093824, "lng": -8.189205, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Lagosteira", "address": "8200-252, Portugal", "area": "Albufeira", "website": "https://www.alagosteira.com/", "lat": 37.097527, "lng": -8.173753, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ze do Peixe Assado", "address": "Estrada de Santa Eulalia", "area": "Albufeira", "website": "", "lat": 37.091227, "lng": -8.222346, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Antiquários Dos Leitões", "address": "EN 125 Pata Cima", "area": "Albufeira", "website": "", "lat": 37.122768, "lng": -8.18998, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Eduardo's", "address": "Estrada de Santa Eulalia", "area": "Albufeira", "website": "", "lat": 37.093135, "lng": -8.223138, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Aroma Di Mare", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093607, "lng": -8.197274, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bella Canela", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091117, "lng": -8.234063, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Jack’s Irish Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085041, "lng": -8.267099, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085057, "lng": -8.267906, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Gate 4 Café", "address": "Marina de Albufeira", "area": "Albufeira", "website": "https://www.gate4cafe.pt/", "lat": 37.084995, "lng": -8.265923, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Mama Mia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092562, "lng": -8.264065, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Victor", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.107191, "lng": -8.212639, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.115705, "lng": -8.232217, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ricardo's", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092225, "lng": -8.208632, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Quinta do Mel tea saloon / restaurant", "address": "Albufeira", "area": "Albufeira", "website": "http://www.quintadomel.com/", "lat": 37.097908, "lng": -8.162694, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante São Domingos", "address": "Estrada de Vale Rabelho", "area": "Albufeira", "website": "https://www.restaurantesaodomingos.com/", "lat": 37.092151, "lng": -8.309947, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Flor do Mar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090041, "lng": -8.168765, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Frango Real", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09041, "lng": -8.1685, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Falesia Alfamar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08365, "lng": -8.15884, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Casa do Avô", "address": "Albufeira", "area": "Albufeira", "website": "https://www.restaurante-acasadoavo.com/", "lat": 37.101656, "lng": -8.308427, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Doçaria Almeixar", "address": "Estrada de Vale Rabelho", "area": "Albufeira", "website": "https://www.docariaalmeixar.com/", "lat": 37.091969, "lng": -8.3099, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pássaro Azul", "address": "Rua das Gémeas", "area": "Albufeira", "website": "https://passaroazul.pt", "lat": 37.089721, "lng": -8.191907, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Galleon", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090645, "lng": -8.190401, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Churrasqueira O Nosso Franguinho", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.119194, "lng": -8.239423, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Eurasia", "address": "71 Rua Almeida Garrett", "area": "Albufeira", "website": "", "lat": 37.090728, "lng": -8.228728, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Libertos", "address": "Tv. Antero de Quental", "area": "Albufeira", "website": "https://libertosclub.com/pt/", "lat": 37.091273, "lng": -8.228124, "schedule": "Daily", "image": "", "categoryGroup": "Nightclub"}, {"name": "The kilt and kelt", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09119, "lng": -8.226995, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Albufeira route 66", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08942, "lng": -8.227198, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Kirsch-Club", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090939, "lng": -8.227466, "schedule": "Daily", "image": "", "categoryGroup": "Nightclub"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089422, "lng": -8.22745, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Matt's Bar", "address": "1 Rua Victória", "area": "Albufeira", "website": "https://www.mattsbar.net/", "lat": 37.089752, "lng": -8.227266, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090002, "lng": -8.227539, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cooper's Bar & Kitchen", "address": "Albufeira", "area": "Albufeira", "website": "www.coopersalbufeira.com", "lat": 37.089736, "lng": -8.227515, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090015, "lng": -8.227322, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pasteleria \"Ruana\"", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086577, "lng": -8.23679, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "S. João", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08714, "lng": -8.236908, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack Bar \"O Forte\"", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08683, "lng": -8.236809, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Bar Azul", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086939, "lng": -8.236833, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Panacee", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085908, "lng": -8.236514, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante 3 Marias", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09369, "lng": -8.199885, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Torre Vehla", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.077059, "lng": -8.297603, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "http://algarve.mapandapp.com/boliqueimeinnfeature.htm", "lat": 37.13259, "lng": -8.153984, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pub 37", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.133525, "lng": -8.158502, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.103884, "lng": -8.199614, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Cantil", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091628, "lng": -8.189152, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Elsa", "address": "Largo da Estação", "area": "Albufeira", "website": "", "lat": 37.128515, "lng": -8.233491, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Chef's Peking", "address": "Rua 25 de Abril", "area": "Albufeira", "website": "", "lat": 37.093037, "lng": -8.18812, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Manuel", "address": "Rua 25 de Abril", "area": "Albufeira", "website": "http://www.restauranteomanuel.com/", "lat": 37.092839, "lng": -8.187594, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "S. Martino", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093531, "lng": -8.191356, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sellfish", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093901, "lng": -8.192606, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Palace Indian Tandoori", "address": "Albufeira", "area": "Albufeira", "website": "indiantandoorirestaurant.com", "lat": 37.093899, "lng": -8.197712, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Nelson's Bistro", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093737, "lng": -8.189383, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "pastelaria o cantinho", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089652, "lng": -8.246302, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Dom Capito", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089707, "lng": -8.246448, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Lavrador", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08874, "lng": -8.232496, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Great India Tandoori", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088706, "lng": -8.232824, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Festa da Praia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088909, "lng": -8.231651, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cheers Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088708, "lng": -8.23274, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Splendid Street", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088804, "lng": -8.232207, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Três Palmeiras", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088158, "lng": -8.234865, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Lusitano", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095815, "lng": -8.232378, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Auramar Beach Resort", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083864, "lng": -8.232876, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack bar Pingo de Mel", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087229, "lng": -8.155826, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Surfal", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094012, "lng": -8.169925, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Albufeira Gourmet Take-Away", "address": "4 Rua doa Cotovia", "area": "Albufeira", "website": "", "lat": 37.09183, "lng": -8.243594, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa Da Avó", "address": "97 Rua do Movimento das Forças Armadas (MFA)", "area": "Albufeira", "website": "https://www.restaurante-acasadoavo.com/", "lat": 37.09099, "lng": -8.248378, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Palacete", "address": "42 Rua Almeida Garrett", "area": "Albufeira", "website": "", "lat": 37.089228, "lng": -8.233531, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "the sizzling stone", "address": "rua Victoria", "area": "Albufeira", "website": "", "lat": 37.089345, "lng": -8.227015, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Churrasqueira da Torre", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.117639, "lng": -8.225857, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cafés Christina", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088114, "lng": -8.318544, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Kambu", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091288, "lng": -8.255131, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Grill 91 Churrascaria", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090794, "lng": -8.254965, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa Madeira - Restaurante Madeirense", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09084, "lng": -8.249073, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "restaraurante golden garden", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089435, "lng": -8.227674, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tamariz", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089126, "lng": -8.227522, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "wild & co", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089206, "lng": -8.227135, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "urban diner", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089873, "lng": -8.227333, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "La Bamba", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089866, "lng": -8.227523, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Urban Pizza", "address": "Albufeira", "area": "Albufeira", "website": "http://www.urbanpizza.pt", "lat": 37.091322, "lng": -8.227209, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Senhor Frogs Pizzaria", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.090479, "lng": -8.227241, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "first bar", "address": "Estrada dos Salgados", "area": "Albufeira", "website": "", "lat": 37.098936, "lng": -8.316778, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Adega do Zé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09372, "lng": -8.199614, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Neptuno bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089971, "lng": -8.168554, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pinhal", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096965, "lng": -8.178527, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Adega TiCosta", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097228, "lng": -8.179876, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Galeäo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.081393, "lng": -8.316622, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Olimpico", "address": "Estrada das Açoteias", "area": "Albufeira", "website": "", "lat": 37.097607, "lng": -8.171692, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa Branca", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097419, "lng": -8.172102, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack Bar Olimpico", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.0875, "lng": -8.155288, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Oasis", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09321, "lng": -8.188041, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taste of Punjab", "address": "b1 bloco3 Estrada das Açoteias", "area": "Albufeira", "website": "http://tasteofpunjab.eu/", "lat": 37.096229, "lng": -8.176039, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack Bar Atrium (Hotel Solaqua)", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090289, "lng": -8.238408, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Restaurante Casa Velha", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089191, "lng": -8.220589, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Albertus Cocktail Bar Karaoke", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092721, "lng": -8.227788, "schedule": "Daily", "image": "", "categoryGroup": "Karaoke"}, {"name": "MySushi", "address": "Estrada de Santa Eulália", "area": "Albufeira", "website": "https://www.facebook.com/pages/My-Sushi-Sushi-Bar-Japon%C3%AAs/254450761635337", "lat": 37.089739, "lng": -8.221531, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Panito mole", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094429, "lng": -8.231782, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Guilty", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.115403, "lng": -8.151401, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "My Cafe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08499, "lng": -8.265729, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Teodósio - rei dos frangos", "address": "50 Rua do Imigrante", "area": "Albufeira", "website": "", "lat": 37.131665, "lng": -8.299687, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090271, "lng": -8.21027, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Lemon Tree", "address": "21 Rua Almirante Gago Coutinho", "area": "Albufeira", "website": "", "lat": 37.086592, "lng": -8.247303, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Navy Sun", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085055, "lng": -8.268425, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "NIKAIA", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085062, "lng": -8.268685, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Esquine", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.129023, "lng": -8.232964, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Italian Planet", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089724, "lng": -8.25378, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Central Planet", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089587, "lng": -8.253721, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Mövenpick", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08965, "lng": -8.253905, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cuicas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086231, "lng": -8.227039, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Fredis Pizzaria", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.091491, "lng": -8.227489, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Hot Shot Sports Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092342, "lng": -8.22791, "schedule": "Daily", "image": "", "categoryGroup": "Live Sports TV"}, {"name": "Borda d' Água", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086256, "lng": -8.22569, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vivaldos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086388, "lng": -8.226458, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Jing Du", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092378, "lng": -8.227638, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Liza‘s", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09356, "lng": -8.227662, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tavern 85 Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093397, "lng": -8.228123, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pastelaria Barhon", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092926, "lng": -8.228012, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Canadian Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093077, "lng": -8.228044, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Espelho", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093284, "lng": -8.228088, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ancora", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093845, "lng": -8.228219, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Figuerinha Steak House", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093502, "lng": -8.228117, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Blue Star Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092666, "lng": -8.227984, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "King Kong Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092223, "lng": -8.227898, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Legends Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092402, "lng": -8.227922, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Route Caffé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092268, "lng": -8.227695, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Thirsty Turtle Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092578, "lng": -8.227959, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Greace Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092748, "lng": -8.228038, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Mojos Cocktails & Spirits", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092878, "lng": -8.227999, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Solo UK Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092191, "lng": -8.22769, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Players Pub Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092566, "lng": -8.227778, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Ice Cream", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092819, "lng": -8.227992, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Madness Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092456, "lng": -8.227931, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "A Galeria - Lounge & Tapas Bar", "address": "Avenida dos Descobrimentos", "area": "Albufeira", "website": "", "lat": 37.09493, "lng": -8.227243, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Simply (by Ramos)", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091644, "lng": -8.227792, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Garage Bar Pub", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.090752, "lng": -8.227333, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "The Royal Curry House", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092705, "lng": -8.228169, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Kohinoor", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.091896, "lng": -8.227859, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Lucky Friends Cocktail Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092018, "lng": -8.227871, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Doris", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093446, "lng": -8.228125, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Devlins Irish Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092494, "lng": -8.228312, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Mambo Café Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090373, "lng": -8.227393, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Cristal Bar Café Shop", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.091705, "lng": -8.227578, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Ristorante Costa Rica", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.091473, "lng": -8.227793, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Delta", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093723, "lng": -8.22784, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Waikiki Beach Bar", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.090819, "lng": -8.22743, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Savannah Music Box", "address": "Avenida Doutor Francisco Sá Carneiro", "area": "Albufeira", "website": "", "lat": 37.090225, "lng": -8.227352, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ramos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091746, "lng": -8.227808, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Cottage", "address": "Pátio Sá Carneiro", "area": "Albufeira", "website": "https://the-cottage.biz", "lat": 37.097856, "lng": -8.228081, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Manzo - steakhouse", "address": "Albufeira", "area": "Albufeira", "website": "https://manzo.pt", "lat": 37.090968, "lng": -8.190322, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "ACQUA", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090494, "lng": -8.190595, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Glory´s", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090193, "lng": -8.190605, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Água plaza - Snack Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096231, "lng": -8.188147, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Cepa Velha", "address": "Albufeira", "area": "Albufeira", "website": "https://www.cepavelha.com/", "lat": 37.086923, "lng": -8.231453, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Clay Oven Indian Grill", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093961, "lng": -8.229801, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Hollandaise", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094372, "lng": -8.229245, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ranias", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091049, "lng": -8.222302, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Thai Restaurant", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091298, "lng": -8.222384, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Yorkshire Tavern Real Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094789, "lng": -8.230097, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pizzeria Origano", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091379, "lng": -8.232271, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094371, "lng": -8.228998, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Kings Cross", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094208, "lng": -8.228006, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Oura Doce", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093901, "lng": -8.230687, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "No solo Agua", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08447, "lng": -8.23814, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085135, "lng": -8.24073, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Memorias", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091044, "lng": -8.233023, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Xflow", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088474, "lng": -8.227009, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126074, "lng": -8.314913, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Splash Burger SnackBar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.125116, "lng": -8.315609, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "T Cáffe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127817, "lng": -8.300802, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Rasoi", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095703, "lng": -8.228475, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "American Diner", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097427, "lng": -8.228371, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Manel dos Frangos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098677, "lng": -8.228515, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Leão", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096722, "lng": -8.228368, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sintras", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097938, "lng": -8.228386, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Empty Glass Family Fun Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095533, "lng": -8.228461, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "O Pirata", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09506, "lng": -8.228131, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Lord Nelson", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095545, "lng": -8.226789, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Johnny B. Good", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094729, "lng": -8.227851, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Royal Punjab", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095472, "lng": -8.228461, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Os Namorados Snack Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095771, "lng": -8.226696, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Blues Bar Garfolândia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095616, "lng": -8.228469, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Nosolo Italia Pizzeria Gelateria", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094896, "lng": -8.228086, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Trivial", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095197, "lng": -8.227659, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bella Napoli", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093944, "lng": -8.228269, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "McDonnells Irish Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094346, "lng": -8.227854, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pub Grub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095745, "lng": -8.2282, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "La Cantina Mexican Grill", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094073, "lng": -8.22832, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Agusto", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089337, "lng": -8.232756, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Meet Me Burger", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090844, "lng": -8.229368, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Celebration Eat Cafe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090951, "lng": -8.228743, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Calipto Snack Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088376, "lng": -8.22891, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "GreenBar Fun Pub", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09114, "lng": -8.228267, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093715, "lng": -8.230944, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ricanu", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.124534, "lng": -8.246541, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Refúgio do Vicente", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.125604, "lng": -8.243568, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ricanu", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.125546, "lng": -8.244177, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "RM Restaurante", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091157, "lng": -8.213273, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Corda Café", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092545, "lng": -8.177581, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "O Pescador", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092243, "lng": -8.178957, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "ZEST", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092855, "lng": -8.177442, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "(", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08716, "lng": -8.294192, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Rossio", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.084424, "lng": -8.256895, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Adega do David", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089656, "lng": -8.24743, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "il cappuccino", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096141, "lng": -8.230737, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Verde Minho", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091306, "lng": -8.234562, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bora Bora", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090944, "lng": -8.234549, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Uzonj", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090797, "lng": -8.234863, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Louro & Salsa", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090581, "lng": -8.235083, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café The Lemon Tree", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086467, "lng": -8.24662, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "O António", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096937, "lng": -8.177891, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tasquinha do Joâo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.121206, "lng": -8.339988, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Carril", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.128523, "lng": -8.232822, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Acqua Restaurant", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126396, "lng": -8.314505, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Fuji sushi", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090408, "lng": -8.221927, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Porto de Abrigo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.082629, "lng": -8.259795, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "D Mestres - Restaurante Alentejano", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.121282, "lng": -8.339261, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Al-Gharb Coffee Roasters", "address": "3 Beco do Sol", "area": "Albufeira", "website": "https://www.al-gharb.coffee/", "lat": 37.092343, "lng": -8.223529, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "American Diner 3", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092174, "lng": -8.237206, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Paladim", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091605, "lng": -8.238963, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "La em Casa", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091515, "lng": -8.239164, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Big ShangHai Chinese Restaurant", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092095, "lng": -8.236195, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Flashback Sports and Live Music", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092221, "lng": -8.23624, "schedule": "Daily", "image": "", "categoryGroup": "Live Sports TV"}, {"name": "Adão Bar at Paraíso", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091814, "lng": -8.23692, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pátio Caribe Snack Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090739, "lng": -8.237671, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Happy Family", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127233, "lng": -8.280994, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Waterfront Terrace", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086122, "lng": -8.244576, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Curry Leaves", "address": "Estrada de Santa Eulália", "area": "Albufeira", "website": "", "lat": 37.090545, "lng": -8.222033, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sol Caffe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089196, "lng": -8.22279, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085931, "lng": -8.243998, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088446, "lng": -8.213474, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Martins", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.107375, "lng": -8.183207, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Estrela dourada", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.107493, "lng": -8.212119, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa do Frango", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098242, "lng": -8.182477, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Wander Inn", "address": "28 R. Alexandre Herculano", "area": "Albufeira", "website": "https://www.facebook.com/wanderinnalbufeira", "lat": 37.092617, "lng": -8.225516, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Adega Ti Costa", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09719, "lng": -8.179682, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Thai Phuket", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093728, "lng": -8.199205, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Delicious point", "address": "Estrada das Açoteias", "area": "Albufeira", "website": "", "lat": 37.087093, "lng": -8.15569, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Al Quimia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087871, "lng": -8.166601, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "BOEMIA da Vila", "address": "Largo das Ferreiras", "area": "Albufeira", "website": "", "lat": 37.127357, "lng": -8.244038, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Jardim Colonial", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092567, "lng": -8.17887, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sitio do Mário", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088139, "lng": -8.257306, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sugar Rabbit Kaffé", "address": "42 Rua Latino Coelho", "area": "Albufeira", "website": "https://www.sugarrabbitkaffe.com", "lat": 37.084818, "lng": -8.256392, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Flavour cafe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087853, "lng": -8.253586, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Café Pinheiro", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.128504, "lng": -8.27074, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Linha Torta", "address": "2 Rua São Gonçalo de Lagos", "area": "Albufeira", "website": "", "lat": 37.087379, "lng": -8.249792, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Friends Bar", "address": "21 Rua da Ladeira", "area": "Albufeira", "website": "", "lat": 37.091521, "lng": -8.191441, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Dominó Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091832, "lng": -8.192657, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Merlins", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087644, "lng": -8.254901, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Daimlers Snack Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085126, "lng": -8.256267, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Indian Ocean", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085492, "lng": -8.256071, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Eddys", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087444, "lng": -8.254593, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Blue Bell Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087442, "lng": -8.254402, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Casa del Mar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08704, "lng": -8.25307, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Barhon", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08719, "lng": -8.253855, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Stardust", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087119, "lng": -8.253606, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Steps Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087214, "lng": -8.252888, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Atrium", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087596, "lng": -8.253106, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tasca D' Alkhaz", "address": "37 R. 5 de Outubro, 8200-109 Albufeira, Portugal", "area": "Albufeira", "website": "", "lat": 37.087868, "lng": -8.253317, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Cabaz da Praia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086953, "lng": -8.253747, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa da Fonte", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087294, "lng": -8.253062, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Castello di Norcia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083379, "lng": -8.261882, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante 54", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086943, "lng": -8.253794, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Delta", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127481, "lng": -8.280528, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pizza Hut", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127404, "lng": -8.279411, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Portugália", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127405, "lng": -8.279288, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vitaminas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127321, "lng": -8.279936, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria Barton", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087675, "lng": -8.249174, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Urban Pizza Old Town", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087766, "lng": -8.249854, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pizzaria Casa Nostra", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087926, "lng": -8.249096, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O’Farol", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087041, "lng": -8.249342, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ti Gracinda", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088463, "lng": -8.249802, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Aquario", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087317, "lng": -8.249416, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Louisiana", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087189, "lng": -8.249766, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Veleiro", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088648, "lng": -8.25378, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taberna da Olivia", "address": "Largo das Ferreiras", "area": "Albufeira", "website": "", "lat": 37.127428, "lng": -8.243892, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126666, "lng": -8.24414, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Casa Azul", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.103299, "lng": -8.258261, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Cocheira", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.10179, "lng": -8.254227, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087659, "lng": -8.249186, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Pastelaria Palato Inconum", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.118378, "lng": -8.245977, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Os Gregos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092091, "lng": -8.254633, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08966, "lng": -8.22141, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "China restaurante", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089087, "lng": -8.22097, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Patric’s eetcafé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091814, "lng": -8.254668, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Wok Algarve", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.117028, "lng": -8.246132, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Dulci Caffé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089698, "lng": -8.241541, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria Aguarela", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.128386, "lng": -8.345389, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Il Basilico", "address": "Albufeira", "area": "Albufeira", "website": "https://www.portobay.com/en/restaurants/restaurants-algarve/il-basilico-algarve/", "lat": 37.092404, "lng": -8.183959, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café Del Sol", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090608, "lng": -8.16872, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "FRSabores", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090103, "lng": -8.168012, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pickwicks Tavern", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090362, "lng": -8.190362, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Sherezade", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.1064, "lng": -8.251351, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Granha", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.106486, "lng": -8.251468, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "La BreZza", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089492, "lng": -8.220342, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "The Stork", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.106498, "lng": -8.251648, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Boteco", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.106573, "lng": -8.25134, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Estrada das Sesmarias", "area": "Albufeira", "website": "", "lat": 37.080416, "lng": -8.287358, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Chica Gastro Food Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090123, "lng": -8.190586, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Dona Leonor", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091859, "lng": -8.249306, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098975, "lng": -8.245596, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "By the Sea", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090183, "lng": -8.19032, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Olhos d' Água", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091015, "lng": -8.18996, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Indian Palace", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091606, "lng": -8.189529, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Zé Zé Bistro Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093018, "lng": -8.188269, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Symbiosis", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092948, "lng": -8.188271, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sweet Break", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092838, "lng": -8.188272, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Captain's Sports Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092632, "lng": -8.191922, "schedule": "Daily", "image": "", "categoryGroup": "Live Sports TV"}, {"name": "Top 10", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092718, "lng": -8.191971, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taverna", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09281, "lng": -8.192047, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Frank's", "address": "Albufeira", "area": "Albufeira", "website": "https://www.franksalbufeira.com", "lat": 37.092911, "lng": -8.192022, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "New York Cafe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094098, "lng": -8.193244, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Osteria 5 Fratelli", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09316, "lng": -8.191382, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Black Cat's", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093253, "lng": -8.189198, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Indian Taj", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093467, "lng": -8.188144, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sol", "address": "Albufeira", "area": "Albufeira", "website": "https://sol-restaurante.business.site", "lat": 37.09366, "lng": -8.187816, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Duarte", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093401, "lng": -8.190689, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Cabrita", "address": "Albufeira", "area": "Albufeira", "website": "https://www.algarvecabrita.com/en/restaurant/", "lat": 37.093502, "lng": -8.19113, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Aroma do Mar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093895, "lng": -8.187819, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Wet.Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092132, "lng": -8.186693, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Restaurante Falesia", "address": "Albufeira", "area": "Albufeira", "website": "https://3hb.com/en/home/3hb-falesia-garden/restaurantes-e-bares/", "lat": 37.093674, "lng": -8.182837, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bar Falesia", "address": "Albufeira", "area": "Albufeira", "website": "https://3hb.com/en/home/3hb-falesia-garden/restaurantes-e-bares/", "lat": 37.093576, "lng": -8.183262, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Rua Mouzinho de Albuquerque", "area": "Albufeira", "website": "", "lat": 37.095562, "lng": -8.226799, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Amendoeira", "address": "Rua Mouzinho de Albuquerque", "area": "Albufeira", "website": "", "lat": 37.096206, "lng": -8.22654, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Gole Haus", "address": "2 Rua Mouzinho de Albuquerque", "area": "Albufeira", "website": "", "lat": 37.095167, "lng": -8.226551, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "100 Montaditos", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090333, "lng": -8.241222, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pizza Hut", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090579, "lng": -8.241298, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Guerreiro Cafe Snackbar", "address": "Albufeira", "area": "Albufeira", "website": "https://www.facebook.com/guerreiro.cafesnackbar", "lat": 37.10845, "lng": -8.253127, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "the three harps", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08894, "lng": -8.251428, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Slushy Kiosk", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.125774, "lng": -8.31516, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "South Amerika’s Grillhouse", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088147, "lng": -8.253397, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Teaser's Restaurant", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089726, "lng": -8.220147, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Chineese", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089311, "lng": -8.220811, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Ribeiros", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090993, "lng": -8.222049, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Beach Caffe", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.085603, "lng": -8.222684, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurant Chines", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089118, "lng": -8.22123, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack bar Terminal", "address": "Zona Industrial de Albufeira", "area": "Albufeira", "website": "", "lat": 37.118217, "lng": -8.245873, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Alfarroba Café", "address": "Albufeira", "area": "Albufeira", "website": "http://www.alfarrobacafe.com/", "lat": 37.096228, "lng": -8.224201, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Patrick", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126834, "lng": -8.301518, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria Arco-íris", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093028, "lng": -8.190125, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "sociedade recretiva", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.130013, "lng": -8.346264, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Cantinho", "address": "Largo da Igreja", "area": "Albufeira", "website": "", "lat": 37.130129, "lng": -8.346336, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Acqua Café", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.126235, "lng": -8.314517, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.096066, "lng": -8.22406, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.094341, "lng": -8.230709, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092913, "lng": -8.236792, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087257, "lng": -8.250332, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Alentejano.come", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088491, "lng": -8.253399, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088942, "lng": -8.252167, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088651, "lng": -8.253484, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.125677, "lng": -8.314678, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack-Bar Casa Portuguesa", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.095759, "lng": -8.228469, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Jaipur", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088249, "lng": -8.256841, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vertigo", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088617, "lng": -8.252681, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pastelaria Snack-Bar Restaurante Alagoa", "address": "7 Rua das Telecomunicações", "area": "Albufeira", "website": "https://cuisine=portuguese outdoor_seating=no name=Pastelaria Alagoa amenity=cafe", "lat": 37.089535, "lng": -8.246648, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Bar O Luis", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.084929, "lng": -8.322184, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09296, "lng": -8.33776, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bella Ciao", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090037, "lng": -8.168709, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Oh Là Latte", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091565, "lng": -8.237974, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Buachompoo Thai Food", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08816, "lng": -8.248861, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Captain’s Kitchen", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.124125, "lng": -8.317193, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "o Pescador", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087882, "lng": -8.215039, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Portulano", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.09286, "lng": -8.178535, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Planet Fusion", "address": "Albufeira", "area": "Albufeira", "website": "https://www.facebook.com/planetfusionbar", "lat": 37.084608, "lng": -8.313328, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Georgina Fresh Pasta", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088691, "lng": -8.251566, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127895, "lng": -8.150451, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093235, "lng": -8.224157, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "IMPÉRIO DO PASTEL BRASILEIRO em Albufeira", "address": "99 e Rua António Silva", "area": "Albufeira", "website": "", "lat": 37.099918, "lng": -8.226885, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Mini Club +", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090447, "lng": -8.204729, "schedule": "Daily", "image": "", "categoryGroup": "Nightclub"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090992, "lng": -8.199759, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurant Balaia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090513, "lng": -8.202569, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vasco", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090155, "lng": -8.202703, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Falesia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090395, "lng": -8.202428, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Theatre", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091104, "lng": -8.202747, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Cisterna", "address": "8365-029 Frei José de Sao Patricio", "area": "Albufeira", "website": "www.facebook.com/CasadePasto\"ACisterna\"", "lat": 37.130183, "lng": -8.346241, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Tradicional", "address": "45 Rua Doctor Ataide de Oliveira", "area": "Albufeira", "website": "", "lat": 37.158666, "lng": -8.300574, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Tasca Senhora do Pilar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.15837, "lng": -8.300756, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bank Bar", "address": "58 Largo Engenheiro Duarte Pacheco", "area": "Albufeira", "website": "", "lat": 37.088735, "lng": -8.252069, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Bailote", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088075, "lng": -8.253524, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Infinity", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.087533, "lng": -8.250094, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Il Terrazzo - Old town", "address": "Albufeira", "area": "Albufeira", "website": "https://il-terrazzo-old-town.grubbio.com/", "lat": 37.08744, "lng": -8.253392, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Clube Pesca e Náutica Desportiva de Albufeira", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.081651, "lng": -8.270836, "schedule": "Daily", "image": "", "categoryGroup": "Nightclub"}, {"name": "Restaurante da Praia de São Rafael", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.07504, "lng": -8.280523, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Maritur", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080148, "lng": -8.279261, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pedras Amarelas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.080693, "lng": -8.315879, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Lick", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.11562, "lng": -8.151466, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Carlos Beach Bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097764, "lng": -8.347673, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Sobretempero", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.155081, "lng": -8.281531, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.155145, "lng": -8.284318, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café Nobre", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.155237, "lng": -8.282118, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.141087, "lng": -8.267173, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "kiss disco club", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086912, "lng": -8.231067, "schedule": "Daily", "image": "", "categoryGroup": "Nightclub"}, {"name": "Pool bar", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092215, "lng": -8.186117, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Kioske Alfarrobeira", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.100024, "lng": -8.23919, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.127386, "lng": -8.244465, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Xiringuito", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.079599, "lng": -8.314251, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Evaristo", "address": "Praia do Evaristo", "area": "Albufeira", "website": "https://evaristo.pt", "lat": 37.07415, "lng": -8.302392, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Os Salgados", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08889, "lng": -8.32867, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Praia da Galé", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.081946, "lng": -8.317224, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Aveiros", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.083698, "lng": -8.231398, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Praia da Coelha", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.073982, "lng": -8.293634, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Pic Nic", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.073633, "lng": -8.298701, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante O João", "address": "52 R. Dr. Ataíde de Oliveira", "area": "Albufeira", "website": "", "lat": 37.157731, "lng": -8.300956, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.093926, "lng": -8.206164, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bar da Júlia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.089239, "lng": -8.200085, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Calheiros", "address": "2 Rua Torre da Medronheira", "area": "Albufeira", "website": "", "lat": 37.092976, "lng": -8.190966, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Caixote", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090058, "lng": -8.189678, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taberna Forja", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090058, "lng": -8.190291, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "La Cigale", "address": "8200, Olhos D'Água, Portugal", "area": "Albufeira", "website": "https://www.restaurantelacigale.com/", "lat": 37.089829, "lng": -8.190892, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Piri Piri Steak House", "address": "Albufeira", "area": "Albufeira", "website": "https://www.piripiristeakhouse.com", "lat": 37.09647, "lng": -8.177458, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.084247, "lng": -8.232003, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Açoteias", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.08961, "lng": -8.158806, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pizzeria Euphoria", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.088409, "lng": -8.157424, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Bellavita", "address": "Albufeira", "area": "Albufeira", "website": "https://www.bellavita.pt/", "lat": 37.08542, "lng": -8.316621, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Baía dos Piratas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.123177, "lng": -8.314664, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Poço das Canas", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.128802, "lng": -8.26659, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Grill", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.092262, "lng": -8.170721, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Yakuza Algarve by Olivier", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.097186, "lng": -8.181152, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091582, "lng": -8.252076, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante O Márinho", "address": "Rua 5 de Outubro", "area": "Albufeira", "website": "", "lat": 37.15798, "lng": -8.302175, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Divini Gelato & Pizza", "address": "25 Sacadura Cabral", "area": "Albufeira", "website": "https://www.facebook.com/divinigelatopt/", "lat": 37.086736, "lng": -8.247838, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Licorne", "address": "Albufeira", "area": "Albufeira", "website": "http://www.olicornerestaurant.com/", "lat": 37.097801, "lng": -8.187144, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.099204, "lng": -8.228985, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.098937, "lng": -8.228931, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Iguana Cafe", "address": "59 Rua Latino Coelho", "area": "Albufeira", "website": "", "lat": 37.084346, "lng": -8.256744, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "VERSATILE", "address": "loja 14, 8200-609, Olhos de Água, Portugal", "area": "Albufeira", "website": "https://www.restauranteversatile.pt/", "lat": 37.093786, "lng": -8.192536, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091937, "lng": -8.166659, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ristorante Pizzeria S. Martino Falésia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090479, "lng": -8.167398, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090576, "lng": -8.167391, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Unknown Venue", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091241, "lng": -8.164477, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Roulotte do Sr. António", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.090582, "lng": -8.160236, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Roca Beach Bar & Restaurante", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086381, "lng": -8.254529, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Tasca da Cascata", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091176, "lng": -8.235531, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Golfinho", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.091036, "lng": -8.183518, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Snack Bar Falésia", "address": "Albufeira", "area": "Albufeira", "website": "", "lat": 37.086686, "lng": -8.168044, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Restaurante Luar da Fóia", "address": "N266-3 4", "area": "Monchique", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Charrete", "address": "Rua do Dr. Samora Gil 32", "area": "Monchique", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Vai e Volta", "address": "Largo do Grémio 2", "area": "Olhão", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Terra i Mar Restaurante", "address": "Avenida 5 de Outubro 20", "area": "Olhão", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Café & Companhia", "address": "Rua Elias Garcia 47", "area": "Silves", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Churrasqueira Valdemar", "address": "Mercado Municipal de Silves", "area": "Silves", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Várzea", "address": "Quinta do Sabugueiro, EN 120", "area": "Aljezur", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Paulo", "address": "Praia da Arrifana, Ponta da", "area": "Aljezur", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Sargo", "address": "Praia de Monte Clérigo", "area": "Aljezur", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "AllGarbe", "address": "Rua da Hortinha 35", "area": "Portimão", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Casa da Tocha", "address": "Rua Senhora da Tocha 24", "area": "Portimão", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "À do Pinto", "address": "Rua de Santo António 26", "area": "Faro", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "ATO Restaurante", "address": "Rua do Albergue 16", "area": "Faro", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "O Coreto", "address": "Praça Dom Francisco Gomes", "area": "Faro", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurant Céu", "address": "Rua Dr. João Lúcio 5", "area": "Faro", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Come na Gaveta", "address": "Avenida Dr. Mateus Teixeira de Azevedo 36", "area": "Tavira", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Ribeira do Poço", "address": "Rua Ribeira do Poço 11", "area": "Vila do Bispo", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Sabores do Campo", "address": "Rua de Poço de Ferreiros", "area": "São Brás de Alportel", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Gaspacho & Migas", "address": "Rua Francisco L. M. Veloso 5", "area": "Lagoa", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Paleta", "address": "N124-1 63", "area": "Lagoa", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taberna Algarvia 31", "address": "Rua Mouzinho de Albuquerque 31", "area": "Lagoa", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Lamim", "address": "Rua da Misericórdia 5", "area": "Lagoa", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Bica Velha", "address": "Rua Martim Moniz 17", "area": "Loulé", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante O Infante", "address": "Sítio Val da Velha", "area": "Castro Marim", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cascas & Marés", "address": "Avenida Duarte Pacheco 3", "area": "Alcoutim", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Cuca", "address": "Rua Dr. Sousa Martins 60", "area": "Vila Real de Santo António", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Pinhão Restaurant and Bar", "address": "Rua Doutor José Formosinho 1 RC", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Bar & Cafe"}, {"name": "Restaurante Mimar", "address": "Rua António Barbosa Viana 27", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante dos Artistas", "address": "Rua Cândido dos Reis 68", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Reis", "address": "Rua António Barbosa Viana 21", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Don Sebastião", "address": "Rua 25 de Abril 20-22", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante A Forja", "address": "Rua dos Ferreiros 17", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Calhou Restaurante", "address": "Rua Dr. António Guerreiro Tello 10 loja B", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Restaurante Azimute Lagos", "address": "Rua Infante de Sagres 74", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "A Petisqueira", "address": "Rua 25 de Abril 54", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}, {"name": "Taberna da mó", "address": "Rua Silva Lopes 14", "area": "Lagos", "website": "", "lat": 37.0881, "lng": -8.252, "schedule": "Daily", "image": "", "categoryGroup": "Restaurant"}];
 
         let registeredEvents = [
-            { title: "Premier League Live: Big Match", venueName: "Oura Sports Bar", zone: "Albufeira Strip", category: "LIVE SPORTS TV", date: "2026-11-21", time: "17:00", fee: "Free", image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=60", desc: "Catch all the Premier League action live on our big screens with cold drinks!", author: "Admin" },
-            { title: "Friday Night Karaoke & Sing-along", venueName: "Monroes Karaoke Bar", zone: "Albufeira Strip", category: "KARAOKE", date: "2026-11-21", time: "21:00", fee: "Free", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", desc: "Step up to the mic and sing your favorite classics!", author: "Admin" },
-            { title: "Pub Quiz Night", venueName: "Irish Pub Quiz", zone: "Albufeira Old Town", category: "QUIZ", date: "2026-11-22", time: "20:00", fee: "€3", image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&auto=format&fit=crop&q=60", desc: "Test your general knowledge and win bar tabs!", author: "Admin" }
+            { title: "SNS Basic First Aid & CPR Course", venueName: "Albufeira Health Center (SNS)", zone: "Albufeira", category: "HEALTH & FIRST AID", date: "2026-11-18", time: "10:00", fee: "Free", image: "", desc: "Official SNS (Serviço Nacional de Saúde) community workshop covering basic life support, CPR, and emergency response.", author: "Admin" },
+            { title: "Sunset Sound Bowl Healing & Reiki Circle", venueName: "Praia dos Pescadores Wellness Deck", zone: "Albufeira Old Town", category: "WELLNESS", date: "2026-11-18", time: "17:30", fee: "€15", image: "", desc: "Relaxing Tibetan singing bowls, sound bath meditation, and group Reiki energy alignment by the ocean.", author: "Admin" },
+            { title: "Morning Vinyasa Flow Yoga", venueName: "Albufeira Marina", zone: "Albufeira Marina", category: "WELLNESS", date: "2026-11-19", time: "09:00", fee: "€10", image: "", desc: "Energizing outdoor morning yoga suitable for all levels overlooking the marina.", author: "Admin" },
+            { title: "Premier League Live: Big Match", venueName: "Bar Vista Mar", zone: "Albufeira", category: "LIVE SPORTS TV", date: "2026-11-21", time: "17:00", fee: "Free", image: "", desc: "Catch all the Premier League action live on our big screens with cold drinks!", author: "Admin" },
+            { title: "Pub Quiz & Trivia Night", venueName: "Dom Diniz", zone: "Albufeira", category: "QUIZ", date: "2026-11-22", time: "20:00", fee: "€3", image: "", desc: "Test your general knowledge and win bar tabs!", author: "Admin" }
+        ];
+
+        let forumThreads = [
+            { title: "Welcome to the Albufeira Pulse Community Forum!", category: "General Discussion", author: "Admin", date: "Nov 18, 2026", replies: 4, body: "Feel free to start new threads, ask for local recommendations, or connect with neighbors across Albufeira!" },
+            { title: "Looking for recommendations: Sound bowl healing & Reiki practitioners", category: "Wellness & Health", author: "Kristina", date: "Nov 18, 2026", replies: 2, body: "Anyone know regular weekly sound bath or Reiki sessions around Albufeira or Guia?" },
+            { title: "SNS First Aid certification dates for November/December", category: "Wellness & Health", author: "Admin", date: "Nov 17, 2026", replies: 5, body: "Check out the Events tab for the upcoming free SNS First Aid & CPR community training sessions." }
+        ];
+
+        let classifiedListings = [
+            { title: "Sunny 1-Bedroom Apartment for Long-Term Rent (No Agents)", category: "Rent", price: "€750/mo", contact: "Direct Owner", date: "Nov 18, 2026", desc: "Private landlord renting a quiet 1BR flat near Ferreiras station. Bills included. Strictly private tenants only." },
+            { title: "Barista & Cafe All-Rounder Wanted (Part/Full Time)", category: "Job Offers", price: "Competitive", contact: "Apply in person", date: "Nov 18, 2026", desc: "Friendly cafe in Albufeira Old Town seeking an experienced barista with good English & Portuguese." },
+            { title: "6'2 Shortboard Surfboard + Leash & Bag", category: "Buy & Sell", price: "€150", contact: "Message via Forum", date: "Nov 17, 2026", desc: "Great condition, ideal for Praia da Galé and Olhos de Água breaks." },
+            { title: "Weekly Coastal Walk & Coffee Meetup", category: "Socialise", price: "Free", contact: "Meet at Old Town Square", date: "Nov 16, 2026", desc: "Join expats and locals every Thursday at 10 AM for a scenic cliff walk followed by coffee." }
         ];
 
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
@@ -388,6 +527,7 @@
         let activeZoneFilter = 'all';
         let activeEventCategoryFilter = 'all';
         let activeDirectoryCategoryFilter = 'all';
+        let activeClassifiedCategoryFilter = 'all';
 
         let availableZones = [...defaultZones];
 
@@ -474,6 +614,10 @@
             checkExistingAuth();
             renderEventCategoryButtons();
             renderDirectoryCategorySidebar();
+            renderClassifiedCategoryBar();
+            renderClassifiedsList();
+            renderForumThreads();
+            renderRightSidebarWidgets();
 
             window.addEventListener('popstate', (event) => {
                 const targetTab = event.state && event.state.tab ? event.state.tab : 'events';
@@ -506,7 +650,7 @@
 
             availableZones.forEach(zone => {
                 const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${zone.replace(/'/g, "\\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+                html += `<button onclick="filterZone('${zone.replace(/'/g, "\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
             });
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
@@ -516,7 +660,7 @@
         function renderEventCategoryButtons() {
             const bar = document.getElementById('eventCategoryFilterBar');
             if (!bar) return;
-            const categories = ['all', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
+            const categories = ['all', 'WELLNESS', 'HEALTH & FIRST AID', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
             let html = `<span class="text-xs font-black text-miamiPink mr-1 flex items-center gap-1 shrink-0"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Category:</span>`;
             categories.forEach(cat => {
                 const isActive = activeEventCategoryFilter === cat;
@@ -562,6 +706,12 @@
             dl.innerHTML = availableZones.map(z => `<option value="${z}">`).join('');
         }
 
+        function populateVenueAutocomplete() {
+            const dl = document.getElementById('venueAutocompleteList');
+            if (!dl) return;
+            dl.innerHTML = registeredVenues.map(v => `<option value="${v.name}">${v.area}</option>`).join('');
+        }
+
         async function loadDataFromSupabase() {
             if (_supabaseClient) {
                 try {
@@ -569,14 +719,15 @@
                     if (dirData && dirData.length > 0) registeredVenues = [...registeredVenues, ...dirData];
                     const { data: evData } = await _supabaseClient.from('events').select('*');
                     if (evData && evData.length > 0) registeredEvents = [...registeredEvents, ...evData];
-                } catch (e) { console.log("Using local memory data."); }
+                } catch (e) { console.log("Using embedded dataset."); }
             }
             syncAvailableZones();
+            populateVenueAutocomplete();
             refreshMapMarkers();
-            updateVenueDropdown();
             renderDirectoryGrid();
             renderEventsGrid();
             generateCalendarDays();
+            renderRightSidebarWidgets();
         }
 
         async function fetchLiveWeatherAndWaves() {
@@ -686,7 +837,7 @@
                         </div>
                         <h2 class="text-3xl font-black text-white">${ev.title}</h2>
                         <p class="text-sm font-bold text-gray-300">📅 ${ev.date} at ${ev.time}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\\'")}')">
+                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\'")}')">
                             📍 Venue: <strong class="text-white underline">${ev.venueName || 'Albufeira'}</strong> (${ev.zone}) → Click for Venue Info
                         </p>
                     </div>
@@ -703,39 +854,49 @@
         function renderDirectoryGrid() {
             const container = document.getElementById('directoryListContainer');
             const searchInput = document.getElementById('directorySearchInput');
+            const countLabel = document.getElementById('directoryCountLabel');
             if (!container) return;
             container.innerHTML = '';
 
-            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
             let filtered = registeredVenues.filter(v => {
                 if (activeDirectoryCategoryFilter !== 'all') {
-                    const nameLower = (v.name || '').toLowerCase();
-                    const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
+                    const group = v.categoryGroup || 'Restaurant';
                     if (group !== activeDirectoryCategoryFilter) return false;
                 }
-                if (searchTerm && !v.name.toLowerCase().includes(searchTerm) && !v.address.toLowerCase().includes(searchTerm)) {
-                    return false;
+                if (searchTerm) {
+                    const matchName = (v.name || '').toLowerCase().includes(searchTerm);
+                    const matchAddr = (v.address || '').toLowerCase().includes(searchTerm);
+                    const matchArea = (v.area || '').toLowerCase().includes(searchTerm);
+                    if (!matchName && !matchAddr && !matchArea) return false;
                 }
                 return true;
             });
 
+            if (countLabel) {
+                countLabel.textContent = `Showing ${filtered.length} of ${registeredVenues.length} venues across the Algarve`;
+            }
+
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No venues found matching your criteria.</div>`;
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No venues found matching your search.</div>`;
                 return;
             }
 
-            filtered.forEach((v, index) => {
-                const nameLower = (v.name || '').toLowerCase();
-                const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
+            // Render up to 100 at a time or all cleanly so UI remains super fast
+            const displayList = filtered.slice(0, 150);
+
+            displayList.forEach(v => {
+                const group = v.categoryGroup || 'Restaurant';
                 
                 const row = document.createElement('div');
                 row.className = 'unified-row border border-miamiCyan/30 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md hover:border-miamiCyan transition cursor-pointer';
                 row.onclick = () => openVenueDetailPage(v.name);
 
+                // Leave picture blank if nothing uploaded!
                 let thumbHtml = '';
                 if (v.image && v.image.trim() !== '') {
-                    thumbHtml = `<img src="${v.image}" class="w-20 h-20 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
+                    thumbHtml = `<img src="${v.image}" class="w-16 h-16 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
                 }
 
                 row.innerHTML = `
@@ -751,12 +912,19 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end pt-2 md:pt-0 border-t md:border-t-0 border-miamiCyan/20">
-                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
+                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
                         <span class="text-xs font-black text-miamiPink">View →</span>
                     </div>
                 `;
                 container.appendChild(row);
             });
+
+            if (filtered.length > 150) {
+                const moreNote = document.createElement('div');
+                moreNote.className = 'text-center text-xs font-bold text-miamiCyan py-3';
+                moreNote.textContent = `Showing top 150 results. Use the search bar above with autofill to find any of the ${filtered.length} venues instantly!`;
+                container.appendChild(moreNote);
+            }
             if (window.lucide) lucide.createIcons();
         }
         window.filterDirectoryList = renderDirectoryGrid;
@@ -766,6 +934,7 @@
             const venueEvents = registeredEvents.filter(e => (e.venueName || '').toLowerCase() === venue.name.toLowerCase());
             const container = document.getElementById('venueDetailContainer');
             
+            // Leave picture blank if nothing uploaded!
             let venueImageHtml = '';
             if (venue.image && venue.image.trim() !== '') {
                 venueImageHtml = `<img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
@@ -778,13 +947,14 @@
                         <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>
                         <h2 class="text-3xl font-black text-white">${venue.name}</h2>
                         <p class="text-sm font-bold text-gray-300">📍 ${venue.address || venue.area}</p>
-                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
+                        ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
+                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-4 pt-2">
                     <h3 class="text-xl font-black text-white">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
@@ -792,6 +962,162 @@
             if (window.lucide) lucide.createIcons();
         }
         window.openVenueDetailPage = openVenueDetailPage;
+
+        // CLASSIFIEDS LOGIC
+        function renderClassifiedCategoryBar() {
+            const bar = document.getElementById('classifiedCategoryBar');
+            if (!bar) return;
+            const cats = ['all', 'Rent', 'Job Offers', 'Buy & Sell', 'Socialise'];
+            bar.innerHTML = cats.map(c => {
+                const active = activeClassifiedCategoryFilter === c;
+                const label = c === 'all' ? 'All Classifieds' : c;
+                return `<button onclick="filterClassifiedCategory('${c}')" class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer ${active ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40'}">${label}</button>`;
+            }).join('');
+        }
+
+        function filterClassifiedCategory(cat) {
+            activeClassifiedCategoryFilter = cat;
+            renderClassifiedCategoryBar();
+            renderClassifiedsList();
+        }
+        window.filterClassifiedCategory = filterClassifiedCategory;
+
+        function renderClassifiedsList() {
+            const container = document.getElementById('classifiedsListContainer');
+            if (!container) return;
+            const filtered = classifiedListings.filter(item => activeClassifiedCategoryFilter === 'all' || item.category === activeClassifiedCategoryFilter);
+            container.innerHTML = filtered.map(item => `
+                <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                    <div class="flex justify-between items-center flex-wrap gap-2">
+                        <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${item.category}</span>
+                        <span class="text-xs font-black text-miamiCyan">${item.price}</span>
+                    </div>
+                    <h3 class="text-base font-black text-white">${item.title}</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">${item.desc}</p>
+                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] text-gray-400 font-bold">
+                        <span>📅 Posted: ${item.date}</span>
+                        <span class="text-miamiCyan">Contact: ${item.contact}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openClassifiedModal() { document.getElementById('classifiedModal').classList.remove('hidden'); }
+        window.openClassifiedModal = openClassifiedModal;
+        function closeClassifiedModal() { document.getElementById('classifiedModal').classList.add('hidden'); }
+        window.closeClassifiedModal = closeClassifiedModal;
+
+        function handleClassifiedSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('newClassifiedTitle').value;
+            const category = document.getElementById('newClassifiedCategory').value;
+            const price = document.getElementById('newClassifiedPrice').value || 'Contact';
+            const contact = document.getElementById('newClassifiedContact').value;
+            const desc = document.getElementById('newClassifiedDesc').value;
+
+            classifiedListings.unshift({
+                title, category, price, contact, date: "Nov 18, 2026", desc
+            });
+            renderClassifiedsList();
+            renderRightSidebarWidgets();
+            closeClassifiedModal();
+            e.target.reset();
+        }
+        window.handleClassifiedSubmit = handleClassifiedSubmit;
+
+        // FORUM LOGIC
+        function renderForumThreads() {
+            const container = document.getElementById('forumThreadsContainer');
+            if (!container) return;
+            container.innerHTML = forumThreads.map(t => `
+                <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full">${t.category}</span>
+                        <span class="text-[11px] font-bold text-gray-400">💬 ${t.replies} Replies</span>
+                    </div>
+                    <h3 class="text-base font-black text-white">${t.title}</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed">${t.body}</p>
+                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[10px] font-bold text-miamiCyan">
+                        <span>Started by ${t.author}</span>
+                        <span class="text-gray-400">${t.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openNewThreadModal() { document.getElementById('newThreadModal').classList.remove('hidden'); }
+        window.openNewThreadModal = openNewThreadModal;
+        function closeNewThreadModal() { document.getElementById('newThreadModal').classList.add('hidden'); }
+        window.closeNewThreadModal = closeNewThreadModal;
+
+        function handleNewThreadSubmit(e) {
+            e.preventDefault();
+            const author = localStorage.getItem('albufeira_user_name') || 'Community Member';
+            forumThreads.unshift({
+                title: document.getElementById('newThreadTitle').value,
+                category: document.getElementById('newThreadCategory').value,
+                author: author,
+                date: "Nov 18, 2026",
+                replies: 0,
+                body: document.getElementById('newThreadBody').value
+            });
+            renderForumThreads();
+            renderRightSidebarWidgets();
+            closeNewThreadModal();
+            e.target.reset();
+        }
+        window.handleNewThreadSubmit = handleNewThreadSubmit;
+
+        // RIGHT SIDEBAR WIDGETS (GoKunming Style)
+        function renderRightSidebarWidgets() {
+            // 1. Mini Calendar
+            const miniCal = document.getElementById('sidebarMiniCalendar');
+            if (miniCal) {
+                let html = '';
+                for (let d = 1; d <= 30; d++) {
+                    const dateStr = `2026-11-${String(d).padStart(2, '0')}`;
+                    const hasEv = registeredEvents.some(e => e.date === dateStr);
+                    const isToday = d === 18;
+                    html += `<div onclick="switchTab('calendar')" class="py-1 rounded cursor-pointer transition ${isToday ? 'bg-miamiPink text-white font-black' : hasEv ? 'bg-miamiCyan/20 text-miamiCyan font-black' : 'text-gray-400 hover:bg-white/10'}">${d}</div>`;
+                }
+                miniCal.innerHTML = html;
+            }
+
+            // 2. Today's Events (Nov 18, 2026)
+            const todaysBox = document.getElementById('sidebarTodaysEvents');
+            if (todaysBox) {
+                const todays = registeredEvents.filter(e => e.date === '2026-11-18');
+                todaysBox.innerHTML = todays.length ? todays.map(e => `
+                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\'")}')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                        <p class="font-black text-white leading-tight">${e.title}</p>
+                        <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time} • ${e.venueName}</p>
+                    </div>
+                `).join('') : '<p class="text-gray-400 text-[11px]">No events listed for today.</p>';
+            }
+
+            // 3. Latest Forum
+            const forumBox = document.getElementById('sidebarLatestForum');
+            if (forumBox) {
+                forumBox.innerHTML = forumThreads.slice(0, 3).map(t => `
+                    <div onclick="switchTab('forum')" class="p-2.5 rounded-xl bg-black/20 border border-miamiCyan/20 hover:border-miamiCyan cursor-pointer transition space-y-1">
+                        <p class="font-bold text-gray-200 leading-tight line-clamp-2">${t.title}</p>
+                        <p class="text-[10px] text-miamiCyan font-bold">By ${t.author} • ${t.replies} replies</p>
+                    </div>
+                `).join('');
+            }
+
+            // 4. Latest Classifieds
+            const classBox = document.getElementById('sidebarLatestClassifieds');
+            if (classBox) {
+                classBox.innerHTML = classifiedListings.slice(0, 3).map(c => `
+                    <div onclick="switchTab('classifieds')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                        <span class="text-[9px] font-black uppercase text-miamiPink">${c.category}</span>
+                        <p class="font-bold text-gray-200 leading-tight line-clamp-1">${c.title}</p>
+                        <p class="text-[10px] text-emerald-400 font-bold">${c.price}</p>
+                    </div>
+                `).join('');
+            }
+        }
 
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
@@ -804,7 +1130,7 @@
                 cell.className = 'min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
                 cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs text-white">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
@@ -828,8 +1154,7 @@
             registeredVenues.forEach(v => {
                 if (v.lat && v.lng) {
                     let pinColor = '#FF007F';
-                    const nameLower = (v.name || '').toLowerCase();
-                    const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
+                    const group = v.categoryGroup || 'Restaurant';
                     
                     if (group === 'Bar & Cafe') pinColor = '#00F0FF';
                     else if (group === 'Nightclub') pinColor = '#A855F7';
@@ -840,8 +1165,8 @@
 
                     let svgIcon = L.divIcon({
                         className: 'custom-pin',
-                        html: `<div style="background-color: ${pinColor}; width: 16px; height: 16px; border-radius: 50%; border: 3px solid #FFFFFF; box-shadow: 0 0 10px ${pinColor};" title="${v.name}"></div>`,
-                        iconSize: [16, 16], iconAnchor: [8, 8]
+                        html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 8px ${pinColor};" title="${v.name}"></div>`,
+                        iconSize: [14, 14], iconAnchor: [7, 7]
                     });
                     L.marker([parseFloat(v.lat), parseFloat(v.lng)], {icon: svgIcon}).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #888;">${v.address || v.area}</span>`);
                 }
@@ -916,30 +1241,19 @@
         function openArticleModal() { alert("Admin Article Creator"); }
         window.openArticleModal = openArticleModal;
 
-        function updateVenueDropdown() {
-            const select = document.getElementById('newEventVenueSelect');
-            if (!select) return;
-            select.innerHTML = `<option value="">Select a Venue...</option>`;
-            registeredVenues.forEach(v => {
-                const opt = document.createElement('option');
-                opt.value = v.name;
-                opt.textContent = `${v.name} (${v.area})`;
-                select.appendChild(opt);
-            });
-        }
-
-        function onVenueDropdownChange() {
-            const venue = registeredVenues.find(v => v.name === document.getElementById('newEventVenueSelect').value);
+        function onVenueInputChange() {
+            const val = document.getElementById('newEventVenueInput').value;
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === val.toLowerCase());
             if (venue) document.getElementById('newEventZone').value = venue.area;
         }
-        window.onVenueDropdownChange = onVenueDropdownChange;
+        window.onVenueInputChange = onVenueInputChange;
 
         async function handleEventSubmit(e) {
             e.preventDefault();
             const currentAdmin = localStorage.getItem('albufeira_user_name') || 'Admin';
             const newEv = {
                 title: document.getElementById('newEventTitle').value,
-                venueName: document.getElementById('newEventVenueSelect').value,
+                venueName: document.getElementById('newEventVenueInput').value,
                 zone: document.getElementById('newEventZone').value.trim(),
                 category: document.getElementById('newEventCategory').value,
                 date: document.getElementById('newEventDate').value,
@@ -954,6 +1268,7 @@
             syncAvailableZones();
             renderEventsGrid();
             generateCalendarDays();
+            renderRightSidebarWidgets();
             closeModal();
         }
         window.handleEventSubmit = handleEventSubmit;
@@ -968,15 +1283,15 @@
                 lat: 37.0881, lng: -8.2520,
                 area: document.getElementById('newVenueArea').value.trim(),
                 categoryGroup: document.getElementById('newVenueCategoryGroup').value,
-                image: "",
+                image: document.getElementById('newVenueImage').value || "",
                 schedule: "Daily",
                 author: currentAdmin
             };
-            registeredVenues.push(newV);
+            registeredVenues.unshift(newV);
             if (_supabaseClient) await _supabaseClient.from('directory').insert([newV]);
             syncAvailableZones();
+            populateVenueAutocomplete();
             refreshMapMarkers();
-            updateVenueDropdown();
             renderDirectoryGrid();
             closeVenueModal();
         }
@@ -1043,20 +1358,6 @@
             if (window.lucide) lucide.createIcons();
         }
         window.handleLogout = handleLogout;
-
-        function postForumMessage() {
-            const input = document.getElementById('forumInput');
-            const text = input.value.trim();
-            if (!text) return;
-            const currentName = localStorage.getItem('albufeira_user_name') || 'Guest';
-            const container = document.getElementById('forumPostsContainer');
-            const postDiv = document.createElement('div');
-            postDiv.className = 'unified-row p-3 rounded-xl border border-miamiCyan/20 text-xs space-y-1';
-            postDiv.innerHTML = `<p class="font-black text-miamiCyan">${currentName}</p><p class="text-gray-200">${text}</p>`;
-            container.prepend(postDiv);
-            input.value = '';
-        }
-        window.postForumMessage = postForumMessage;
     </script>
 </body>
 </html>
