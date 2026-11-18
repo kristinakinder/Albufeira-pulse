@@ -51,7 +51,7 @@
 
         @keyframes pulseColor {
             0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
-            50% { color: #00F0FF; transform: scale(1.15); filter: drop-shadow(0 0 14px #00F0FF); }
+            50% { color: #00F0FF; transform: scale(1.2); filter: drop-shadow(0 0 14px #00F0FF); }
             100% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
@@ -103,10 +103,11 @@
     <!-- TOP NAVIGATION & LIVE WEATHER TICKER -->
     <header class="backdrop-blur-md border-b sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
-            <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('events')">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-miamiCyan to-miamiPink flex items-center justify-center text-miamiDark font-black text-xl shadow-lg shadow-miamiPink/20">
-                    <svg class="w-6 h-6 animate-pulse-color" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                </div>
+            <!-- Free-floating Pulsating Heart & Title Home Button -->
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('events')" title="Return to Home">
+                <svg class="w-9 h-9 animate-pulse-color shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
                 <div>
                     <h1 class="text-lg font-black tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent group-hover:opacity-90">ALBUFEIRA PULSE</h1>
                     <p class="text-[10px] font-extrabold tracking-widest uppercase text-miamiCyan theme-text-sub">The Heartbeat of the Algarve</p>
@@ -120,7 +121,7 @@
                 </button>
                 <div id="authArea">
                     <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login / Register
                     </button>
                 </div>
             </div>
@@ -140,22 +141,24 @@
             <span class="text-[11px] text-miamiCyan font-bold hidden lg:inline">Open-Meteo API</span>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-miamiCyan/20 theme-card shadow-sm">
-            <div class="flex gap-1.5 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
-                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
-                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar</button>
-                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-emerald-600 hover:bg-emerald-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
-                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-purple-600 hover:bg-purple-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
-                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
-                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-sky-600 hover:bg-sky-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
-                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-amber-600 hover:bg-amber-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency Contacts</button>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="openVenueModal()" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black text-xs px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
+        <!-- Navigation Tabs (Unified Dark Grey Row) -->
+        <div class="w-full bg-[#1E293B] border-t border-miamiCyan/20 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 py-2.5">
+                <div class="flex gap-1.5 overflow-x-auto">
+                    <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
+                    <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
+                    <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar</button>
+                    <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
+                    <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
+                    <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
+                    <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
+                    <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency Contacts</button>
+                </div>
+                
+                <div class="flex items-center gap-2.5">
+                    <button onclick="openVenueModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-lg shadow-[#FF007F]/40 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
+                    <button onclick="openModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-lg shadow-[#FF007F]/40 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
+                </div>
             </div>
         </div>
     </header>
@@ -218,7 +221,7 @@
         <section id="tab-content-articles" class="space-y-6 hidden">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-black theme-text-main">Local Articles & Culture</h2>
-                <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article (Admin)</button>
+                <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article (Admin Only)</button>
             </div>
             <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
@@ -314,13 +317,21 @@
         </section>
     </main>
 
-    <!-- LOGIN MODAL -->
+    <!-- LOGIN & USER SELECTION MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Admin Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">User Login / Switch</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Admin Gmail Address</label><input type="email" id="loginEmailInput" required value="admin@albufeira-pulse.com" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" required value="********" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Select Profile / Role</label>
+                    <select id="loginRoleSelect" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-bold text-miamiCyan">
+                        <option value="Admin">Admin (Full Control: admin@albufeira-pulse.com)</option>
+                        <option value="João Silva">João Silva (Community User)</option>
+                        <option value="Maria Santos">Maria Santos (Community User)</option>
+                        <option value="Liam O'Connor">Liam O'Connor (Visitor User)</option>
+                    </select>
+                </div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Password / PIN</label><input type="password" required value="********" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Sign In</button>
             </form>
         </div>
@@ -348,14 +359,14 @@
                 </div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Publish Event</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
     </div>
 
     <!-- ADD VENUE MODAL -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-purple-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
                 <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Bar" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
@@ -365,9 +376,9 @@
                     <div><label class="block font-bold mb-1 theme-text-sub">Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Status</label><input type="text" readonly value="Pin Ready" class="w-full theme-input border-2 rounded-xl px-2 py-2 text-miamiCyan font-bold text-center"></div>
                 </div>
-                <input type="hidden" id="newVenueLat" value="37.0888">
-                <input type="hidden" id="newVenueLng" value="-8.2511">
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-700 text-white font-black cursor-pointer shadow">Pin to Map</button></div>
+                <input type="hidden" id="newVenueLat" value="37.0872">
+                <input type="hidden" id="newVenueLng" value="-8.2512">
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Pin to Map</button></div>
             </form>
         </div>
     </div>
@@ -384,8 +395,8 @@
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60", author: "admin@albufeira-pulse.com" },
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Praça dos Pescadores", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "admin@albufeira-pulse.com" }
+            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60", author: "Admin" },
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Praça dos Pescadores", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "Admin" }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -402,9 +413,9 @@
 
         async function loadVenuesFromSupabase() {
             registeredVenues = [
-                { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true, author: "admin@albufeira-pulse.com" },
-                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, author: "admin@albufeira-pulse.com" },
-                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Praça dos Pescadores", lat: 37.0882, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, author: "admin@albufeira-pulse.com" }
+                { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true, author: "Admin" },
+                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, author: "Admin" },
+                { name: "Praça dos Pescadores", address: "Praça dos Pescadores, Albufeira", area: "Praça dos Pescadores", lat: 37.0872, lng: -8.2512, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, author: "Admin" }
             ];
             refreshMapMarkers();
             updateVenueDropdown();
@@ -413,7 +424,7 @@
 
         async function fetchLiveWeatherAndWaves() {
             try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0888&longitude=-8.2511&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m');
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0872&longitude=-8.2512&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m');
                 const weatherData = await res.json();
                 if (weatherData && weatherData.current) {
                     document.getElementById('liveWeatherTemp').textContent = `${weatherData.current.temperature_2m}°C`;
@@ -448,7 +459,7 @@
                             <h3 class="text-base font-black text-white">${ev.title}</h3>
                             <p class="text-xs font-bold text-gray-300">📍 ${ev.venueName} (${ev.zone})</p>
                             <p class="text-xs text-gray-300">${ev.desc}</p>
-                            <p class="text-[10px] font-bold text-miamiCyan pt-1">Added by ${ev.author || 'admin@albufeira-pulse.com'}</p>
+                            <p class="text-[10px] font-bold text-miamiCyan pt-1">Added by ${ev.author || 'Admin'}</p>
                         </div>
                     </div>
                     <div class="px-5 pb-5 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] text-gray-300 font-medium">
@@ -467,7 +478,7 @@
             if (!venue) return;
             switchTab('events');
             if (albufeiraMap) {
-                albufeiraMap.setView([venue.lat, venue.lng], 16);
+                albufeiraMap.setView([venue.lat, venue.lng], 17);
             }
         }
 
@@ -489,7 +500,7 @@
                             <h3 class="text-lg font-black text-white">${v.name}</h3>
                             <p class="text-xs font-bold text-gray-300">📍 ${v.address}</p>
                             <p class="text-xs text-emerald-400 font-black">🕒 ${v.schedule}</p>
-                            <p class="text-[10px] font-bold text-miamiCyan">Added by ${v.author || 'admin@albufeira-pulse.com'}</p>
+                            <p class="text-[10px] font-bold text-miamiCyan">Added by ${v.author || 'Admin'}</p>
                             <div class="flex flex-wrap gap-3 pt-2">
                                 <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name}')" class="text-miamiCyan font-black text-xs hover:underline inline-flex items-center gap-1 cursor-pointer">📍 Show on Map →</button>
                                 ${websiteLink}
@@ -503,7 +514,7 @@
         }
 
         function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "admin@albufeira-pulse.com" };
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "Admin" };
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
@@ -514,14 +525,14 @@
                         <h2 class="text-3xl font-black text-white">${venue.name}</h2>
                         <p class="text-sm font-bold text-gray-300">📍 ${venue.address}</p>
                         <p class="text-xs font-black text-emerald-400">🕒 ${venue.schedule}</p>
-                        <p class="text-xs font-bold text-miamiCyan">Added by ${venue.author || 'admin@albufeira-pulse.com'}</p>
+                        <p class="text-xs font-bold text-miamiCyan">Added by ${venue.author || 'Admin'}</p>
                         <button onclick="jumpToVenueOnMap('${venue.name}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-4 pt-2">
                     <h3 class="text-xl font-black text-white">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p><p class="text-[10px] font-bold text-miamiCyan">Added by ${ev.author || 'admin@albufeira-pulse.com'}</p></div>`).join('')}
+                        ${venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc}</p><p class="text-[10px] font-bold text-miamiCyan">Added by ${ev.author || 'Admin'}</p></div>`).join('')}
                     </div>
                 </div>
             `;
@@ -543,7 +554,7 @@
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 13);
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0872, -8.2512], 14);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
             }
         }
@@ -556,7 +567,7 @@
                     html: `<div style="background-color: #00F0FF; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #FF007F;"></div>`,
                     iconSize: [16, 16]
                 });
-                L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap).bindPopup(`<b>${v.name}</b><br><span style="font-size:10px;">Added by ${v.author || 'admin@albufeira-pulse.com'}</span>`);
+                L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap).bindPopup(`<b>${v.name}</b><br><span style="font-size:10px;">Added by ${v.author || 'Admin'}</span>`);
             });
         }
 
@@ -615,7 +626,7 @@
 
         function handleEventSubmit(e) {
             e.preventDefault();
-            const currentAdmin = localStorage.getItem('albufeira_user') || 'admin@albufeira-pulse.com';
+            const currentUser = localStorage.getItem('albufeira_user') || 'Admin';
             registeredEvents.push({
                 title: document.getElementById('newEventTitle').value,
                 venueName: document.getElementById('newEventVenueSelect').value,
@@ -626,7 +637,7 @@
                 fee: document.getElementById('newEventFee').value,
                 image: document.getElementById('newEventImage').value || "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
                 desc: document.getElementById('newEventDesc').value,
-                author: currentAdmin
+                author: currentUser
             });
             renderEventsGrid();
             closeModal();
@@ -635,16 +646,16 @@
 
         function handleVenueSubmit(e) {
             e.preventDefault();
-            const currentAdmin = localStorage.getItem('albufeira_user') || 'admin@albufeira-pulse.com';
+            const currentUser = localStorage.getItem('albufeira_user') || 'Admin';
             registeredVenues.push({
                 name: document.getElementById('newVenueName').value,
                 address: document.getElementById('newVenueAddress').value,
                 website: document.getElementById('newVenueWebsite').value,
-                lat: 37.0888, lng: -8.2511,
+                lat: 37.0872, lng: -8.2512,
                 area: document.getElementById('newVenueArea').value,
                 image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
                 schedule: "Daily",
-                author: currentAdmin
+                author: currentUser
             });
             refreshMapMarkers();
             updateVenueDropdown();
@@ -655,10 +666,16 @@
 
         function handleLogin(e) { 
             e.preventDefault(); 
-            const emailInput = document.getElementById('loginEmailInput').value.trim() || 'admin@albufeira-pulse.com';
-            localStorage.setItem('albufeira_user', emailInput);
-            renderUserAuthUI(emailInput);
-            document.getElementById('writeArticleBtn').classList.remove('hidden');
+            const selectedUser = document.getElementById('loginRoleSelect').value;
+            localStorage.setItem('albufeira_user', selectedUser);
+            renderUserAuthUI(selectedUser);
+            
+            // Toggle admin-only article button
+            if (selectedUser === 'Admin') {
+                document.getElementById('writeArticleBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('writeArticleBtn').classList.add('hidden');
+            }
             closeLoginModal(); 
         }
 
@@ -666,17 +683,21 @@
             const savedUser = localStorage.getItem('albufeira_user');
             if (savedUser) {
                 renderUserAuthUI(savedUser);
-                document.getElementById('writeArticleBtn').classList.remove('hidden');
+                if (savedUser === 'Admin') {
+                    document.getElementById('writeArticleBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('writeArticleBtn').classList.add('hidden');
+                }
             }
         }
 
-        function renderUserAuthUI(email) {
+        function renderUserAuthUI(name) {
             const authArea = document.getElementById('authArea');
             if (!authArea) return;
             authArea.innerHTML = `
                 <div class="theme-card px-3.5 py-2 rounded-xl border border-miamiCyan/40 flex items-center gap-2 text-xs font-black theme-text-main shadow-sm">
                     <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
-                    <span>${email}</span>
+                    <span>${name}</span>
                     <button onclick="handleLogout()" class="text-red-500 hover:underline ml-2 text-[10px] font-bold cursor-pointer">Logout</button>
                 </div>
             `;
@@ -690,7 +711,7 @@
             if (authArea) {
                 authArea.innerHTML = `
                     <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login / Register
                     </button>
                 `;
             }
@@ -701,13 +722,13 @@
             const input = document.getElementById('forumInput');
             const text = input.value.trim();
             if (!text) return;
-            const currentAdmin = localStorage.getItem('albufeira_user') || 'admin@albufeira-pulse.com';
+            const currentUser = localStorage.getItem('albufeira_user') || 'Guest';
             const container = document.getElementById('forumPostsContainer');
             
             const postDiv = document.createElement('div');
             postDiv.className = 'unified-row p-3 rounded-xl border border-miamiCyan/20 text-xs space-y-1';
             postDiv.innerHTML = `
-                <p class="font-black text-miamiCyan">${currentAdmin}</p>
+                <p class="font-black text-miamiCyan">${currentUser}</p>
                 <p class="text-gray-200">${text}</p>
             `;
             container.prepend(postDiv);
