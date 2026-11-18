@@ -44,7 +44,7 @@
         })();
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 145px; }
         @keyframes pulseColor {
             0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
             50% { color: #00F0FF; transform: scale(1.2); filter: drop-shadow(0 0 14px #00F0FF); }
@@ -71,7 +71,7 @@
 </head>
 <body class="min-h-screen flex flex-col transition-colors duration-300">
 
-    <header class="w-full backdrop-blur-md border-b bg-[#0B0F19]/95 z-50 shadow-lg">
+    <header class="fixed top-0 left-0 w-full backdrop-blur-md border-b bg-[#0B0F19]/95 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('events')" title="Return to Home">
                 <svg class="w-9 h-9 animate-pulse-color shrink-0" viewBox="0 0 24 24" fill="currentColor">
@@ -169,22 +169,15 @@
                 </div>
             </div>
 
-            <!-- GoKunming Layout: Sidebar Categories + Vertical Listing -->
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-                <!-- Sidebar Category Filter (GoKunming Style) -->
                 <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 space-y-2 shadow-lg">
                     <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-3 flex items-center gap-1.5">
                         <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
                     </h3>
-                    <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold">
-                        <!-- Populated dynamically -->
-                    </div>
+                    <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold"></div>
                 </div>
 
-                <!-- Vertical Listing Feed (GoKunming Style) -->
-                <div class="lg:col-span-3 space-y-3" id="directoryListContainer">
-                    <!-- Populated dynamically with compact rows -->
-                </div>
+                <div class="lg:col-span-3 space-y-3" id="directoryListContainer"></div>
             </div>
         </section>
 
@@ -366,8 +359,23 @@
 
     <datalist id="zoneDatalist"></datalist>
 
-    <script type="module">
-        import { defaultZones, registeredVenues as importedVenues, registeredEvents as importedEvents } from './data.js';
+    <script>
+        // Embedded Data to prevent ES6 CORS / file:// module import crashes
+        const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras", "Lagos", "Faro", "Tavira", "Portimão", "Monchique", "Olhão", "Silves", "Aljezur", "Lagoa", "Loulé", "Castro Marim", "Alcoutim", "Vila Real de Santo António", "Vila do Bispo", "São Brás de Alportel"];
+        
+        let registeredVenues = [
+            { name: "Bar Vista Mar", address: "Albufeira", area: "Albufeira", website: "", lat: 37.07561, lng: -8.296397, schedule: "Daily", categoryGroup: "Bar & Cafe", image: "" },
+            { name: "Dom Diniz", address: "Estr. das Sesmarias, 8200-385 Albufeira", area: "Albufeira", website: "", lat: 37.080383, lng: -8.290375, schedule: "Daily", categoryGroup: "Restaurant", image: "" },
+            { name: "Oura Sports Bar", address: "The Strip, Albufeira", area: "Albufeira Strip", website: "", lat: 37.0920, lng: -8.2275, schedule: "Daily", categoryGroup: "Live Sports TV", image: "" },
+            { name: "Monroes Karaoke Bar", address: "Oura Strip, Albufeira", area: "Albufeira Strip", website: "", lat: 37.0925, lng: -8.2280, schedule: "Nightly", categoryGroup: "Karaoke", image: "" },
+            { name: "Irish Pub Quiz", address: "Old Town, Albufeira", area: "Albufeira Old Town", website: "", lat: 37.0878, lng: -8.2533, schedule: "Weekly", categoryGroup: "Quiz", image: "" }
+        ];
+
+        let registeredEvents = [
+            { title: "Premier League Live: Big Match", venueName: "Oura Sports Bar", zone: "Albufeira Strip", category: "LIVE SPORTS TV", date: "2026-11-21", time: "17:00", fee: "Free", image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&auto=format&fit=crop&q=60", desc: "Catch all the Premier League action live on our big screens with cold drinks!", author: "Admin" },
+            { title: "Friday Night Karaoke & Sing-along", venueName: "Monroes Karaoke Bar", zone: "Albufeira Strip", category: "KARAOKE", date: "2026-11-21", time: "21:00", fee: "Free", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", desc: "Step up to the mic and sing your favorite classics!", author: "Admin" },
+            { title: "Pub Quiz Night", venueName: "Irish Pub Quiz", zone: "Albufeira Old Town", category: "QUIZ", date: "2026-11-22", time: "20:00", fee: "€3", image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&auto=format&fit=crop&q=60", desc: "Test your general knowledge and win bar tabs!", author: "Admin" }
+        ];
 
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
@@ -382,8 +390,6 @@
         let activeDirectoryCategoryFilter = 'all';
 
         let availableZones = [...defaultZones];
-        let registeredVenues = [...importedVenues];
-        let registeredEvents = [...importedEvents];
 
         const translations = {
             en: {
@@ -560,10 +566,10 @@
             if (_supabaseClient) {
                 try {
                     const { data: dirData } = await _supabaseClient.from('directory').select('*');
-                    if (dirData && dirData.length > 0) registeredVenues = [...importedVenues, ...dirData];
+                    if (dirData && dirData.length > 0) registeredVenues = [...registeredVenues, ...dirData];
                     const { data: evData } = await _supabaseClient.from('events').select('*');
-                    if (evData && evData.length > 0) registeredEvents = [...importedEvents, ...evData];
-                } catch (e) { console.log("Using imported memory data."); }
+                    if (evData && evData.length > 0) registeredEvents = [...registeredEvents, ...evData];
+                } catch (e) { console.log("Using local memory data."); }
             }
             syncAvailableZones();
             refreshMapMarkers();
@@ -707,7 +713,6 @@
                 return;
             }
 
-            // GoKunming Style Compact Vertical List Rows
             filtered.forEach((v, index) => {
                 const nameLower = (v.name || '').toLowerCase();
                 const group = v.categoryGroup || (nameLower.includes('bar') || nameLower.includes('pub') || nameLower.includes('cafe') ? 'Bar & Cafe' : 'Restaurant');
