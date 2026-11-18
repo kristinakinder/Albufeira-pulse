@@ -813,7 +813,10 @@
             const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
             if (!venue) return;
             switchTab('events');
-            if (albufeiraMap) albufeiraMap.setView([venue.lat || 37.0881, venue.lng || -8.2520], 16);
+            if (albufeiraMap) {
+                albufeiraMap.setView([venue.lat || 37.0881, venue.lng || -8.2520], 16);
+                refreshMapMarkers(venue.name);
+            }
         }
         window.jumpToVenueOnMap = jumpToVenueOnMap;
 
@@ -1146,13 +1149,14 @@
             }
         }
 
-        function refreshMapMarkers() {
+        function refreshMapMarkers(selectedVenueName = null) {
             if (!albufeiraMap) initMap();
             if (!albufeiraMap || !mapMarkersGroup) return;
             mapMarkersGroup.clearLayers();
             
             registeredVenues.forEach(v => {
-                if (v.lat && v.lng) {
+                if (selectedVenueName && v.name.toLowerCase() !== selectedVenueName.toLowerCase()) return;
+                if (v.lat && v.lng && selectedVenueName) {
                     let pinColor = '#FF007F';
                     const group = v.categoryGroup || 'Restaurant';
                     
@@ -1168,7 +1172,8 @@
                         html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 8px ${pinColor};" title="${v.name}"></div>`,
                         iconSize: [14, 14], iconAnchor: [7, 7]
                     });
-                    L.marker([parseFloat(v.lat), parseFloat(v.lng)], {icon: svgIcon}).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #888;">${v.address || v.area}</span>`);
+                    const marker = L.marker([parseFloat(v.lat), parseFloat(v.lng)], {icon: svgIcon}).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #888;">${v.address || v.area}</span>`);
+                    marker.openPopup();
                 }
             });
         }
