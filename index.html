@@ -181,13 +181,8 @@
             </div>
             <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
                 <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">Art & Culture</span>
-                <h3 class="font-black text-miamiPink text-base">LAC Contemporary Art Exhibition: Cultural Horizons</h3>
-                <p class="text-xs text-gray-200 leading-relaxed">Exploring boundary-pushing contemporary visual arts and independent installations at Laboratório de Actividades Criativas in nearby Lagos.</p>
-                <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
-            </div>
-            <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                <h3 class="font-black text-miamiPink text-base">Albufeira Winter Coastal Walks & Heritage</h3>
-                <p class="text-xs text-gray-200 leading-relaxed">Explore the historic fishermen's quarter, Cerro da Vila Roman ruins, and cliffside trails between Olhos de Água and São Rafael.</p>
+                <h3 class="font-black text-miamiPink text-base">ROOTS 2026: Territórios Íntimos, Paisagens Pós-Coloniais</h3>
+                <p class="text-xs text-gray-200 leading-relaxed">Official contemporary art exhibition curated by Mirian Tavares at Laboratório de Actividades Criativas (LAC) in Lagos, running from November 21 to December 30, 2026.</p>
                 <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
             </div>
         </section>
@@ -298,8 +293,8 @@
                     <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="">Select a Venue...</option></select></div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required value="2026-11-20" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required value="2026-11-21" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="18:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                 </div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
@@ -313,7 +308,7 @@
         <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Bar" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Gallery" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div>
@@ -569,8 +564,8 @@
                     <img src="${ev.image}" class="w-full md:w-80 h-52 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">
                     <div class="space-y-3 w-full">
                         <div class="flex gap-2">
-                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${ev.category || 'EVENT'}</span>
-                            <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3 py-1 rounded-full">${ev.fee || 'Free'}</span>
+                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${ev.category || 'EVENT'}</span>
+                            <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3.5 py-1 rounded-full">${ev.fee || 'Free'}</span>
                         </div>
                         <h2 class="text-3xl font-black text-white">${ev.title}</h2>
                         <p class="text-sm font-bold text-gray-300">📅 ${ev.date} at ${ev.time}</p>
