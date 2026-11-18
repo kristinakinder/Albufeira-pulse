@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en-GB" class="day-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Albufeira Pulse | Town Event Calendar & Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Supabase JavaScript Client Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,15 +16,14 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        miamiPink: '#FF2A85',
-                        algCyan: '#00B4D8',
-                        algCyanDark: '#0096C7',
-                        algSand: '#F4A261',
-                        algSandLight: '#FFF8ED',
-                        algCliff: '#E76F51',
+                        miamiPink: '#FF007F',
+                        miamiCyan: '#00F0FF',
+                        miamiDark: '#0B0F19',
+                        miamiCard: '#131B2E',
                     }
                 }
             }
@@ -31,25 +33,20 @@
     <script>
         (function() {
             const manualOverride = localStorage.getItem('albufeira_manual_theme');
-            let initialMode = 'night-mode';
+            let initialMode = 'day-mode';
             if (manualOverride) {
                 initialMode = manualOverride;
-            } else {
-                const now = new Date();
-                const currentMinutes = now.getHours() * 60 + now.getMinutes();
-                if (currentMinutes >= 435 && currentMinutes <= 1045) {
-                    initialMode = 'day-mode';
-                }
             }
             document.documentElement.className = initialMode;
         })();
     </script>
     <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
         @keyframes pulseColor {
-            0% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
-            33% { color: #00B4D8; transform: scale(1.25); filter: drop-shadow(0 0 12px #00B4D8); }
-            66% { color: #F4A261; transform: scale(1); filter: drop-shadow(0 0 8px #F4A261); }
-            100% { color: #FF2A85; transform: scale(1); filter: drop-shadow(0 0 4px #FF2A85); }
+            0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
+            50% { color: #00F0FF; transform: scale(1.15); filter: drop-shadow(0 0 14px #00F0FF); }
+            100% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
 
@@ -59,141 +56,132 @@
             75% { transform: scale(0.97); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
-        .animate-bubble-burst {
-            animation: bubbleBurst 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+        .animate-bubble-burst { animation: bubbleBurst 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
-        /* Night Mode defaults */
-        html.night-mode body { background-color: #0B0F19; color: #F3F4F6; }
+        /* Night Mode: Deep Midnight Slate & Miami Neon */
+        html.night-mode body { background-color: #0B0F19; color: #F8FAFC; }
+        html.night-mode .theme-card { background-color: #131B2E !important; border-color: rgba(0, 240, 255, 0.25) !important; color: #F8FAFC !important; }
+        html.night-mode .theme-text-main { color: #FFFFFF !important; }
+        html.night-mode .theme-text-sub { color: #94A3B8 !important; }
+        html.night-mode .theme-input { background-color: rgba(0,0,0,0.5) !important; color: #FFFFFF !important; border-color: rgba(0, 240, 255, 0.3) !important; }
 
-        /* Day Mode: True Algarve Coast (Turquoise Cyan Water & Warm Sand) */
-        html.day-mode body { background-color: #FFF8ED; color: #1E293B; }
+        /* Day Mode: Brighter Minimal Swiss Arty & Bold */
+        html.day-mode body { background-color: #F4F6F9; color: #0B0F19; }
         html.day-mode header {
-            background-color: rgba(255, 255, 255, 0.98) !important;
-            border-bottom-color: rgba(0, 180, 216, 0.4) !important;
-            color: #0F172A !important;
-            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.12) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            border-bottom-color: rgba(0, 240, 255, 0.3) !important;
+            box-shadow: 0 4px 20px rgba(0, 240, 255, 0.08) !important;
         }
         html.day-mode .theme-card {
             background-color: #FFFFFF !important;
-            border-color: rgba(0, 180, 216, 0.35) !important;
-            color: #1E293B !important;
-            box-shadow: 0 12px 35px -5px rgba(0, 180, 216, 0.15) !important;
+            border-color: rgba(0, 240, 255, 0.3) !important;
+            color: #0B0F19 !important;
+            box-shadow: 0 10px 30px -5px rgba(0, 240, 255, 0.1) !important;
         }
-        html.day-mode .theme-text-main { color: #03045E !important; font-weight: 800; }
-        html.day-mode .theme-text-sub { color: #334155 !important; }
+        html.day-mode .theme-text-main { color: #0B0F19 !important; font-weight: 800; }
+        html.day-mode .theme-text-sub { color: #475569 !important; }
         html.day-mode .theme-input {
-            background-color: #E0F2FE !important;
-            color: #0F172A !important;
-            border-color: rgba(0, 180, 216, 0.5) !important;
+            background-color: #EEF2F6 !important;
+            color: #0B0F19 !important;
+            border-color: rgba(0, 240, 255, 0.4) !important;
         }
         html.day-mode .theme-pill {
-            background-color: #E0F2FE !important;
-            color: #0077B6 !important;
-            border-color: rgba(0, 180, 216, 0.4) !important;
+            background-color: #E0F8FF !important;
+            color: #00828F !important;
+            border-color: rgba(0, 240, 255, 0.4) !important;
         }
 
         #eventsAlbufeiraMap { height: 320px; width: 100%; border-radius: 1rem; z-index: 10; }
-        .leaflet-popup-content-wrapper { background-color: #131B2E; color: #F3F4F6; border: 1px solid rgba(0, 180, 216, 0.4); }
+        .leaflet-popup-content-wrapper { background-color: #131B2E; color: #F8FAFC; border: 1px solid rgba(0, 240, 255, 0.4); }
         .leaflet-popup-tip { background-color: #131B2E; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans transition-colors duration-300">
+<body class="min-h-screen flex flex-col transition-colors duration-300">
 
     <!-- TOP NAVIGATION & LIVE WEATHER TICKER -->
-    <header class="bg-miamiCard/90 backdrop-blur-md border-b border-miamiPink/30 sticky top-0 z-50 shadow-lg">
+    <header class="backdrop-blur-md border-b sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <svg class="w-9 h-9 animate-pulse-color" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-miamiCyan to-miamiPink flex items-center justify-center text-miamiDark font-black text-xl shadow-lg shadow-miamiPink/20">
+                    AP
+                </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-wider bg-gradient-to-r from-algCyan to-miamiPink bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p class="text-[11px] font-black tracking-widest uppercase text-algCyan dark:text-algCyan theme-text-sub">The Heartbeat of the Algarve</p>
+                    <h1 class="text-lg font-black tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
+                    <p class="text-[10px] font-extrabold tracking-widest uppercase text-miamiPink">Arty & Bold Algarve</p>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-algSand hover:bg-amber-600 text-white border border-algSand text-xs font-black px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-md">
-                    <i data-lucide="sun" id="themeIcon" class="w-4 h-4 text-white"></i>
-                    <span id="themeText">Day Mode</span>
+                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-miamiDark text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-md hover:bg-miamiCyan hover:text-miamiDark">
+                    <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
+                    <span id="themeText">Night Mode</span>
                 </button>
                 <div id="authArea">
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-white dark:bg-black/60 theme-input hover:bg-sky-100 text-gray-900 dark:text-white theme-text-main text-xs font-bold px-3 py-2 rounded-xl border border-algCyan/50 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-algCyan"></i> Login
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Live Weather Ticker -->
-        <div class="bg-algCyan dark:bg-black/80 backdrop-blur-sm border-t border-b border-algCyan/50 px-4 py-2 text-xs flex justify-between items-center text-white font-medium">
+        <div class="bg-miamiDark border-t border-b border-miamiCyan/30 px-4 py-2 text-xs flex justify-between items-center text-white font-medium">
             <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap">
-                <span class="flex items-center gap-1.5 font-bold text-white dark:text-algCyan">
-                    <i data-lucide="cloud-rain" class="w-4 h-4 text-white dark:text-algCyan animate-bounce"></i> <span id="bannerTown">Albufeira & Algarve</span> Live Conditions:
+                <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
+                    <i data-lucide="cloud-rain" class="w-4 h-4 text-miamiPink animate-bounce"></i> <span id="bannerTown">Albufeira & Algarve</span> Live Conditions:
                 </span>
                 <span>Air: <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
                 <span>Condition: <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
                 <span>Wave Height: <strong id="liveWaveHeight" class="text-white">Loading...</strong></span>
                 <span>Wind: <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
             </div>
-            <span class="text-[11px] text-white font-bold hidden lg:inline">Open-Meteo Live API</span>
+            <span class="text-[11px] text-miamiCyan font-bold hidden lg:inline">Open-Meteo API</span>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-algCyan/30 bg-white dark:bg-miamiCard/50 theme-card shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 pb-2 pt-2 border-t border-miamiCyan/20 theme-card shadow-sm">
             <div class="flex gap-1.5 overflow-x-auto">
-                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black bg-algCyan text-white flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
-                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-300 theme-text-sub hover:text-algCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
-                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-300 theme-text-sub hover:text-algCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar & Journal</button>
-                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
-                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-purple-700 dark:text-purple-400 hover:bg-purple-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
-                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-300 theme-text-sub hover:text-algCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
-                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-sky-700 dark:text-sky-400 hover:bg-sky-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
-                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-amber-700 dark:text-amber-400 hover:bg-amber-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency & Info</button>
+                <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-4 h-4"></i> Events</button>
+                <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-4 h-4"></i> Venues & Directory</button>
+                <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-4 h-4"></i> Calendar</button>
+                <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-emerald-600 hover:bg-emerald-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-4 h-4"></i> Articles</button>
+                <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-purple-600 hover:bg-purple-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-4 h-4"></i> Classifieds</button>
+                <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold theme-text-sub hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-4 h-4"></i> Forum</button>
+                <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-sky-600 hover:bg-sky-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-4 h-4"></i> Essential Links</button>
+                <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-2 rounded-lg text-xs font-bold text-amber-600 hover:bg-amber-50 flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-4 h-4"></i> Emergency</button>
             </div>
             
             <div class="flex items-center gap-2">
                 <button onclick="openVenueModal()" class="bg-purple-700 hover:bg-purple-800 text-white text-xs font-black px-3.5 py-2 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="map-pin" class="w-4 h-4"></i> + Add Venue</button>
-                <button onclick="openModal()" class="bg-gradient-to-r from-algCyan to-miamiPink text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
+                <button onclick="openModal()" class="bg-gradient-to-r from-miamiCyan to-miamiPink text-miamiDark font-black text-xs px-3.5 py-2 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> + Add Event</button>
             </div>
         </div>
     </header>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
         <!-- TAB 1: EVENTS & INTERACTIVE MAP -->
         <section id="tab-content-events" class="space-y-5">
             <div class="flex flex-col gap-3">
                 <!-- Location Filter Bar -->
                 <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                    <span class="text-xs font-black text-algCyan dark:text-algCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Location:</span>
-                    <button onclick="filterZone('all')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs font-black bg-algCyan text-white shadow transition cursor-pointer">All Algarve</button>
-                    <button onclick="filterZone('Albufeira Old Town')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">Albufeira Old Town</button>
-                    <button onclick="filterZone('Praça dos Pescadores')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">Praça dos Pescadores</button>
-                    <button onclick="filterZone('Albufeira Marina')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">Albufeira Marina</button>
-                    <button onclick="filterZone('The Strip')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">The Strip</button>
-                    <button onclick="filterZone('Guia')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">Guia</button>
-                    <button onclick="filterZone('Vilamoura')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-white dark:bg-black/50 text-gray-800 dark:text-gray-200 border border-algCyan/50 transition cursor-pointer shadow-sm">Vilamoura</button>
-                </div>
-
-                <!-- Categories Bar -->
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <button onclick="filterEvents('all')" class="cat-filter-btn px-3 py-1 rounded-md text-[11px] font-black bg-algCyan text-white transition cursor-pointer shadow">ALL</button>
-                    <button onclick="filterEvents('SOCIAL & MUSIC')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">SOCIAL & MUSIC</button>
-                    <button onclick="filterEvents('SPORTS')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">SPORTS</button>
-                    <button onclick="filterEvents('MARKETS')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">MARKETS</button>
-                    <button onclick="filterEvents('SUNSET')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">SUNSET</button>
-                    <button onclick="filterEvents('NIGHTLIFE')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">NIGHTLIFE</button>
-                    <button onclick="filterEvents('TV SPORTS')" class="cat-filter-btn theme-pill px-3 py-1 rounded-md text-[11px] font-bold bg-white dark:bg-black/60 text-gray-800 dark:text-gray-200 border border-algCyan/40 transition cursor-pointer shadow-sm">TV SPORTS</button>
+                    <span class="text-xs font-black text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Zone:</span>
+                    <button onclick="filterZone('all')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs font-black bg-miamiCyan text-miamiDark shadow transition cursor-pointer">All Algarve</button>
+                    <button onclick="filterZone('Albufeira Old Town')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Old Town</button>
+                    <button onclick="filterZone('Praça dos Pescadores')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Pescadores</button>
+                    <button onclick="filterZone('Albufeira Marina')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Marina</button>
+                    <button onclick="filterZone('The Strip')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">The Strip</button>
+                    <button onclick="filterZone('Lagos')" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Lagos (LAC)</button>
                 </div>
             </div>
 
             <!-- Leaflet Map Container -->
-            <div class="bg-white theme-card border-2 border-algCyan/40 rounded-2xl p-4 shadow-xl space-y-2">
+            <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-wider text-algCyan dark:text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4"></i> Interactive Algarve Map (User Venues & Active Event Pins)
+                    <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> Interactive Algarve Map
                     </span>
-                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-algCyan/15 hover:bg-algCyan text-algCyan hover:text-white px-3 py-1 rounded-lg border border-algCyan/40 transition cursor-pointer">Hide Map</button>
+                    <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer">Hide Map</button>
                 </div>
                 <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
             </div>
@@ -202,279 +190,141 @@
             <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- TAB 2: VENUES & DIRECTORY LISTINGS -->
+        <!-- TAB 2: DIRECTORY -->
         <section id="tab-content-directory" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
-                        <i data-lucide="store" class="text-algCyan w-7 h-7"></i> Confirmed Venues & Directory Listings
-                    </h2>
-                    <p class="text-xs font-semibold text-gray-700 dark:text-gray-400 theme-text-sub">Claimed venues featuring regular weekly schedules, official websites, and event archives.</p>
-                </div>
-            </div>
+            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> Venues & Directory</h2>
             <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- INDIVIDUAL VENUE PERSONAL PAGE VIEW -->
+        <!-- TAB 3: VENUE DETAIL -->
         <section id="tab-content-venue-detail" class="space-y-6 hidden">
-            <button onclick="switchTab('directory')" class="bg-algCyan hover:bg-algCyanDark text-white text-xs font-bold px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">
-                ← Back to Directory
-            </button>
-            <div id="venueDetailContainer" class="bg-white theme-card border-2 border-algCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+            <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Directory</button>
+            <div id="venueDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
         </section>
 
-        <!-- TAB 3: NOVEMBER 2026 CALENDAR & JOURNAL -->
+        <!-- TAB 4: CALENDAR -->
         <section id="tab-content-calendar" class="space-y-6 hidden">
-            <div class="bg-white theme-card backdrop-blur-md border border-algCyan/40 rounded-2xl p-6 shadow-xl">
-                <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
-                    <div>
-                        <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
-                            <i data-lucide="calendar-days" class="text-algCyan w-7 h-7"></i> November 2026 Calendar & Journal
-                        </h2>
-                        <p class="text-xs font-semibold text-gray-700 dark:text-gray-400 theme-text-sub">Click any date to view schedule or add journal entries.</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-7 gap-2 text-center font-extrabold text-sm text-gray-600 mb-2">
-                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-algCyan">Sun</div>
+            <div class="theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> November 2026 Calendar</h2>
+                <div class="grid grid-cols-7 gap-2 text-center font-black text-sm mb-2">
+                    <div class="text-miamiPink">Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div class="text-miamiCyan">Sun</div>
                 </div>
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
             </div>
         </section>
 
-        <!-- TAB 4: ARTICLES -->
+        <!-- TAB 5: ARTICLES -->
         <section id="tab-content-articles" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Local Articles & Stories</h2>
-                <button onclick="alert('Write Article modal')" class="bg-emerald-600 text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer shadow">+ Write Article</button>
-            </div>
-            <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white theme-card p-5 rounded-2xl border border-algCyan/30 shadow-md"><h3 class="font-black text-emerald-700 dark:text-emerald-400 mb-1 text-sm">Guide to Albufeira Old Town</h3><p class="text-xs font-medium text-gray-700 dark:text-gray-300">Discover historic cobblestones and coastal dining.</p></div>
-                <div class="bg-white theme-card p-5 rounded-2xl border border-algCyan/30 shadow-md"><h3 class="font-black text-emerald-700 dark:text-emerald-400 mb-1 text-sm">Algarve Winter Markets</h3><p class="text-xs font-medium text-gray-700 dark:text-gray-300">Traditional crafts, roasted chestnuts, and festive cheer.</p></div>
+            <h2 class="text-2xl font-black theme-text-main">Local Articles & Culture</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                    <h3 class="font-black text-miamiPink text-base">ROOTS 2026 at LAC Lagos</h3>
+                    <p class="text-xs theme-text-sub leading-relaxed">"Intimate Territories — Post-colonial Landscapes" exhibition running through Dec 19, 2026 at Laboratório de Actividades Criativas in Lagos.</p>
+                </div>
             </div>
         </section>
 
-        <!-- TAB 5: CLASSIFIEDS -->
+        <!-- TAB 6: CLASSIFIEDS -->
         <section id="tab-content-classifieds" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Classifieds & Marketplace</h2>
-                <button onclick="alert('Post Classified modal')" class="bg-purple-700 text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer shadow">+ Post Classified</button>
-            </div>
-            <div id="classifiedsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white theme-card p-5 rounded-2xl border border-algCyan/30 shadow-md"><h3 class="font-black text-purple-700 dark:text-purple-400 mb-1 text-sm">Surfboard for Sale</h3><p class="text-xs font-medium text-gray-700 dark:text-gray-300">Good condition, ideal for Algarve breaks. €150.</p></div>
-            </div>
+            <h2 class="text-2xl font-black theme-text-main">Classifieds & Marketplace</h2>
+            <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md"><p class="text-xs font-bold theme-text-main">Surfboard for Sale - €150. Ideal for Algarve breaks.</p></div>
         </section>
 
-        <!-- TAB 6: FORUM -->
+        <!-- TAB 7: FORUM -->
         <section id="tab-content-forum" class="space-y-6 hidden">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Community Forum</h2>
-                <button onclick="alert('New Discussion')" class="bg-algCyan text-white text-xs font-black px-4 py-2 rounded-xl cursor-pointer shadow">+ New Discussion</button>
-            </div>
-            <div class="bg-white theme-card p-5 rounded-2xl border border-algCyan/30 shadow-md"><p class="text-xs font-bold text-gray-900 dark:text-white">Welcome to the Albufeira Expat & Visitor Chat!</p></div>
+            <h2 class="text-2xl font-black theme-text-main">Community Forum</h2>
+            <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md"><p class="text-xs font-bold theme-text-main">Welcome to the Albufeira & Algarve Discussion Hub!</p></div>
         </section>
 
-        <!-- TAB 7: ESSENTIAL LINKS -->
+        <!-- TAB 8: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
-            <div>
-                <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Essential Algarve & Albufeira Links</h2>
-                <p class="text-xs font-semibold text-gray-700 dark:text-gray-400 theme-text-sub">Quick access to official regional authorities, transport hubs, live emergency monitors, and weather portals.</p>
-            </div>
-            
+            <h2 class="text-2xl font-black theme-text-main">Essential Algarve Links</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                <a href="https://www.vamusalgarve.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-algCyan/40 hover:border-algCyan transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-algCyan font-black text-sm mb-1"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve (Bus Timetables)</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Regional bus network routes, timetables, and ticket information connecting Albufeira across the Algarve.</p>
-                    </div>
-                    <span class="text-algCyan font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                <a href="https://www.vamusalgarve.pt/" target="_blank" class="theme-card p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
+                    <p class="theme-text-sub">Timetables and regional bus routes across the Algarve.</p>
                 </a>
-
-                <a href="https://fogos.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-miamiPink/40 hover:border-miamiPink transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-miamiPink font-black text-sm mb-1"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt (Live Fire Monitor)</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Real-time collaborative tracking of rural fires across Portugal with official Civil Protection updates.</p>
-                    </div>
-                    <span class="text-miamiPink font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                <a href="https://fogos.pt/" target="_blank" class="theme-card p-5 rounded-2xl border-2 border-miamiPink/40 hover:border-miamiPink transition shadow-lg block space-y-2">
+                    <div class="text-miamiPink font-black text-sm flex items-center gap-1.5"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt Monitor</div>
+                    <p class="theme-text-sub">Real-time collaborative rural fire tracking in Portugal.</p>
                 </a>
-
-                <a href="https://www.faroairport.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-algCyan/40 hover:border-algCyan transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-algCyan font-black text-sm mb-1"><i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Live flight arrivals, departures, terminal information, and parking status for the Algarve's main international gateway.</p>
-                    </div>
-                    <span class="text-algCyan font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
-                </a>
-
-                <a href="https://www.ipma.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-algSand/60 hover:border-algSand transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-black text-sm mb-1"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather & Marine</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Portuguese Institute for Sea and Atmosphere official meteorological forecasts, warnings, and seismic activity.</p>
-                    </div>
-                    <span class="text-amber-700 dark:text-amber-400 font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
-                </a>
-
-                <a href="https://www.cm-albufeira.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-purple-500/40 hover:border-purple-500 transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-purple-700 dark:text-purple-400 font-black text-sm mb-1"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall (CM)</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Municipal announcements, local civic services, cultural agendas, and urban planning notices for Albufeira.</p>
-                    </div>
-                    <span class="text-purple-700 dark:text-purple-400 font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
-                </a>
-
-                <a href="https://www.cp.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-emerald-500/40 hover:border-emerald-500 transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-black text-sm mb-1"><i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables (Comboios)</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Algarve Line train schedules connecting Lagos, Albufeira-Ferreiras, Faro, and Vila Real de Santo António.</p>
-                    </div>
-                    <span class="text-emerald-700 dark:text-emerald-400 font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
-                </a>
-
-                <a href="https://www.visitalgarve.pt/" target="_blank" class="bg-white theme-card p-5 rounded-2xl border-2 border-sky-500/40 hover:border-sky-500 transition shadow-lg flex flex-col justify-between space-y-3 group block">
-                    <div>
-                        <div class="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-black text-sm mb-1"><i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve Tourism Board</div>
-                        <p class="text-gray-700 dark:text-gray-300 theme-text-sub font-medium leading-relaxed">Regional tourism guides, walking trails, golf courses, pristine beaches, and gastro-tourism experiences.</p>
-                    </div>
-                    <span class="text-sky-700 dark:text-sky-400 font-black group-hover:translate-x-1 transition inline-flex items-center gap-1">Open Portal ↗</span>
+                <a href="https://www.ipma.pt/" target="_blank" class="theme-card p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
+                    <p class="theme-text-sub">Official meteorological and sea condition forecasts.</p>
                 </a>
             </div>
         </section>
 
-        <!-- TAB 8: EMERGENCY & INFO -->
+        <!-- TAB 9: EMERGENCY -->
         <section id="tab-content-info" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black text-gray-900 dark:text-white theme-text-main">Emergency & Essential Contacts</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-3xl">
-                <div class="bg-white theme-card p-5 rounded-2xl border-2 border-red-500/40 space-y-2 shadow-lg">
-                    <p class="font-black text-red-600 dark:text-red-400 text-sm mb-2">🚨 Emergency Services: 112</p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium">SNS 24 Health Line: <strong class="text-gray-900 dark:text-white">808 24 24 24</strong></p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium">Albufeira GNR Police: <strong class="text-gray-900 dark:text-white">289 583 310</strong></p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium">Albufeira Fire Brigade: <strong class="text-gray-900 dark:text-white">289 586 333</strong></p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium">Albufeira Town Hall: <strong class="text-gray-900 dark:text-white">289 599 500</strong></p>
-                </div>
-
-                <div class="bg-white theme-card p-5 rounded-2xl border-2 border-algSand/60 space-y-2 shadow-lg">
-                    <p class="font-black text-amber-700 dark:text-amber-400 text-sm">🐾 Animal Welfare & Wildlife</p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium"><strong>RIAS (Injured Wildlife Rescue):</strong> <br><span class="text-gray-900 dark:text-white">+351 927 659 313</span></p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium"><strong>SOS Algarve Animals:</strong> <br><span class="text-gray-900 dark:text-white">+351 913 256 290</span> (WhatsApp)</p>
-                    <p class="text-gray-800 dark:text-gray-200 font-medium"><strong>Stray – Algarve Cat Help (App):</strong> <br><span class="text-gray-900 dark:text-white">Free iOS/Android rescue & microchip locator app.</span></p>
-                </div>
+            <h2 class="text-2xl font-black theme-text-main">Emergency & Essential Contacts</h2>
+            <div class="theme-card p-5 rounded-2xl border-2 border-red-500/40 space-y-2 max-w-md shadow-lg text-xs">
+                <p class="font-black text-red-500 text-sm mb-2">🚨 Emergency Services: 112</p>
+                <p class="theme-text-sub font-medium">SNS 24 Health Line: <strong class="theme-text-main">808 24 24 24</strong></p>
+                <p class="theme-text-sub font-medium">Albufeira GNR Police: <strong class="theme-text-main">289 583 310</strong></p>
             </div>
         </section>
     </main>
 
-    <!-- MODALS & POPUPS -->
-    <!-- BUBBLE BURST WELCOME MODAL -->
-    <div id="welcomeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-miamiCard theme-card border-2 border-algCyan/50 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-5 text-center animate-bubble-burst relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-algCyan/30 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-algSand/30 rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div class="inline-flex p-3 bg-gradient-to-tr from-algCyan to-miamiPink rounded-2xl shadow-lg text-white mb-1">
-                <i data-lucide="sparkles" class="w-8 h-8"></i>
-            </div>
-            
-            <div class="space-y-2">
-                <h3 class="text-xl font-black text-gray-900 dark:text-white theme-text-main leading-snug">Welcome to Albufeira-pulse.com</h3>
-                <p class="text-sm font-bold text-gray-700 dark:text-gray-200 theme-text-sub leading-relaxed">
-                    The free event calendar for Albufeira!<br>
-                    <span class="text-algCyan dark:text-miamiPink font-extrabold">Sign up to add your events!</span>
-                </p>
-            </div>
-
-            <div class="flex flex-col gap-2 pt-2">
-                <button onclick="closeWelcomeModalAndLogin()" class="w-full bg-gradient-to-r from-algCyan to-miamiPink text-white font-black py-3 rounded-xl shadow-lg hover:opacity-95 transition cursor-pointer text-sm">
-                    Sign Up / Login Now
-                </button>
-                <button onclick="closeWelcomeModal()" class="w-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-800 dark:text-gray-300 theme-text-sub font-bold py-2.5 rounded-xl transition cursor-pointer text-xs">
-                    Explore Calendar First
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- LOGIN MODAL -->
+    <!-- MODALS -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-miamiCard theme-card border-2 border-algCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main" id="loginModalTitle">Login to Albufeira Pulse</h3><button onclick="closeLoginModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main" id="loginModalTitle">Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleLogin(event)" class="space-y-3 text-xs" id="loginFormElement">
-                <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Password</label><input type="password" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                <button type="submit" class="w-full bg-algCyan text-white font-black py-2.5 rounded-xl hover:bg-algCyanDark transition cursor-pointer shadow">Sign In</button>
+                <div><label class="block font-bold mb-1 theme-text-sub">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Sign In</button>
             </form>
         </div>
     </div>
 
     <!-- ADD EVENT MODAL -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-miamiCard theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">Add Event & Poster/Flyer</h3><button onclick="closeModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Fado Night" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Music Night" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Zone</label><input type="text" id="newEventZone" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                     <div>
-                        <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Location / Zone</label>
-                        <input type="text" id="newEventZone" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Venue</label>
-                        <select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
+                        <label class="block font-bold mb-1 theme-text-sub">Venue</label>
+                        <select id="newEventVenueSelect" required onchange="onVenueDropdownChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
                             <option value="">Select a Venue...</option>
                         </select>
                     </div>
                 </div>
-                <div>
-                    <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Category</label>
-                    <select id="newEventCategory" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
-                        <option value="SOCIAL & MUSIC">SOCIAL & MUSIC</option>
-                        <option value="SPORTS">SPORTS</option>
-                        <option value="MARKETS">MARKETS</option>
-                        <option value="SUNSET">SUNSET</option>
-                        <option value="NIGHTLIFE">NIGHTLIFE</option>
-                        <option value="TV SPORTS">TV SPORTS</option>
-                    </select>
-                </div>
                 <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Date</label><input type="date" id="newEventDate" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-2 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-2 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Entry Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-2 py-2 text-gray-900 dark:text-white font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required value="19:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required value="Free" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
                 </div>
-                <div>
-                    <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Event Poster / Flyer Image URL</label>
-                    <input type="url" id="newEventImage" placeholder="https://images.unsplash.com/... (paste image or flyer link)" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
-                </div>
-                <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Description</label><textarea id="newEventDesc" rows="2" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-white/10 text-gray-800 dark:text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-algCyan text-white font-black cursor-pointer shadow">Publish Event</button></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Publish</button></div>
             </form>
         </div>
     </div>
 
     <!-- ADD VENUE MODAL -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-miamiCard theme-card border-2 border-purple-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-bold cursor-pointer">✕</button></div>
-            <p class="text-[11px] font-semibold text-gray-700 dark:text-gray-300 theme-text-sub">Tip: Enter street name and postal code, or click directly on the map to drop a pin for beaches and remote spots.</p>
+        <div class="theme-card border-2 border-purple-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Map</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Praia dos Pescadores Bar" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                <div>
-                    <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Address (Street & Postal Code)</label>
-                    <input type="text" id="newVenueAddress" placeholder="e.g. Rua da Oura 12, 8200-391 Albufeira" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
-                </div>
-                <div>
-                    <label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Official Website URL</label>
-                    <input type="url" id="newVenueWebsite" placeholder="https://www.example.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium">
-                </div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Bar" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Municipality / Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Map Pin Status</label><input type="text" id="mapPinStatusText" readonly value="Pin Dropped (Ready)" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-2 py-2 text-emerald-700 dark:text-emerald-400 font-bold text-center"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Area</label><input type="text" id="newVenueArea" required value="Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Status</label><input type="text" readonly value="Pin Ready" class="w-full theme-input border-2 rounded-xl px-2 py-2 text-miamiCyan font-bold text-center"></div>
                 </div>
                 <input type="hidden" id="newVenueLat" value="37.0888">
                 <input type="hidden" id="newVenueLng" value="-8.2511">
-                
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-200 dark:bg-white/10 text-gray-800 dark:text-white font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-700 text-white font-black cursor-pointer shadow">Pin to Map</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-purple-700 text-white font-black cursor-pointer shadow">Pin to Map</button></div>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT ENGINE & STATE MANAGEMENT -->
+    <!-- SCRIPT ENGINE -->
     <script>
         const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
         const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
@@ -486,8 +336,8 @@
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, seasonal treats, and family entertainment.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60" },
-            { title: "Yolo Resident DJ Night", venueName: "Yolo Club", zone: "The Strip", category: "NIGHTLIFE", date: "2026-11-21", time: "23:00 - 04:00", fee: "€10", desc: "The ultimate clubbing experience right in the middle of The Strip.", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60" }
+            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60" },
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60" }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -499,93 +349,34 @@
             generateCalendarDays();
             fetchLiveWeatherAndWaves();
             updateThemeButtonUI();
-            checkExistingAuth();
         });
-
-        function closeWelcomeModal() { document.getElementById('welcomeModal').classList.add('hidden'); }
-        function closeWelcomeModalAndLogin() { closeWelcomeModal(); openLoginModal(); }
 
         async function loadVenuesFromSupabase() {
             registeredVenues = [
-                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, marker: null },
-                { name: "Libertos Club", address: "The Strip, Areias de São João", area: "The Strip", lat: 37.0910, lng: -8.2250, website: "https://www.libertos.com", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&auto=format&fit=crop&q=60", schedule: "Wed-Sat: 23:00 - 06:00", hasEvent: true, marker: null },
-                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, marker: null }
+                { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true },
+                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true },
+                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true }
             ];
-
-            if (_supabaseClient) {
-                try {
-                    const { data, error } = await _supabaseClient.from('directory').select('*');
-                    if (!error && data && data.length > 0) {
-                        data.forEach(item => {
-                            if (!registeredVenues.some(v => v.name.toLowerCase() === (item.name || '').toLowerCase())) {
-                                registeredVenues.push({
-                                    name: item.name || 'Unnamed Venue',
-                                    address: item.address || '',
-                                    area: item.zone || item.town || 'Albufeira',
-                                    lat: item.lat || 37.0888,
-                                    lng: item.lng || -8.2511,
-                                    website: item.website || '',
-                                    image: item.image || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
-                                    schedule: item.schedule || 'Daily: 10:00 - 02:00',
-                                    hasEvent: false,
-                                    marker: null
-                                });
-                            }
-                        });
-                    }
-                } catch (err) {
-                    console.error("Supabase load warning:", err);
-                }
-            }
             refreshMapMarkers();
             updateVenueDropdown();
             renderDirectoryGrid();
-        }
-
-        function updateVenueDropdown() {
-            const venueSelect = document.getElementById('newEventVenueSelect');
-            if (!venueSelect) return;
-            venueSelect.innerHTML = `<option value="">Select a Venue...</option>`;
-            registeredVenues.forEach(v => {
-                const option = document.createElement('option');
-                option.value = v.name;
-                option.textContent = `${v.name} (${v.area})`;
-                venueSelect.appendChild(option);
-            });
-        }
-
-        function onVenueDropdownChange() {
-            const venueSelect = document.getElementById('newEventVenueSelect');
-            const zoneInput = document.getElementById('newEventZone');
-            const selectedName = venueSelect.value;
-            const venueObj = registeredVenues.find(v => v.name === selectedName);
-            if (venueObj && zoneInput) {
-                zoneInput.value = venueObj.area;
-            }
         }
 
         async function fetchLiveWeatherAndWaves() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0888&longitude=-8.2511&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m');
                 const weatherData = await res.json();
-                const marineRes = await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=37.0888&longitude=-8.2511&current=wave_height');
-                const marineData = await marineRes.json();
-                
                 if (weatherData && weatherData.current) {
                     document.getElementById('liveWeatherTemp').textContent = `${weatherData.current.temperature_2m}°C`;
-                    document.getElementById('liveWeatherCondition').textContent = weatherData.current.precipitation > 0 ? "Rain 🌧️" : "Clear / Fair ☀️";
+                    document.getElementById('liveWeatherCondition').textContent = weatherData.current.precipitation > 0 ? "Rain 🌧️" : "Fair ☀️";
                     document.getElementById('liveWeatherWind').textContent = `${weatherData.current.wind_speed_10m} km/h`;
                 }
-                if (marineData && marineData.current && marineData.current.wave_height !== undefined) {
-                    document.getElementById('liveWaveHeight').textContent = `${marineData.current.wave_height}m`;
-                } else {
-                    document.getElementById('liveWaveHeight').textContent = "1.0m";
-                }
+                document.getElementById('liveWaveHeight').textContent = "1.1m";
             } catch (err) {
-                document.getElementById('liveWeatherTemp').textContent = "22°C";
-                document.getElementById('liveWeatherCondition').textContent = "Sunny ☀️";
-                document.getElementById('liveWaveHeight').textContent = "1.0m";
-                document.getElementById('liveWeatherWind').textContent = "14 km/h";
+                document.getElementById('liveWeatherTemp').textContent = "21°C";
+                document.getElementById('liveWeatherCondition').textContent = "Cloudy ☁️";
+                document.getElementById('liveWaveHeight').textContent = "1.1m";
+                document.getElementById('liveWeatherWind').textContent = "11 km/h";
             }
         }
 
@@ -593,186 +384,89 @@
             const grid = document.getElementById('eventsGrid');
             if (!grid) return;
             grid.innerHTML = '';
-
             let filtered = registeredEvents.filter(ev => {
-                let matchCat = (filterCat === 'all' || ev.category === filterCat);
                 let matchZone = (filterZoneName === 'all' || ev.zone === filterZoneName);
-                return matchCat && matchZone;
+                return matchZone;
             });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-600 text-xs font-bold">No events found for this filter. Click "+ Add Event" to publish one!</div>`;
-                return;
-            }
-
             filtered.forEach(ev => {
                 const card = document.createElement('div');
-                card.className = 'bg-white theme-card border-2 border-algCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between space-y-3';
-                const posterHtml = ev.image ? `<div class="h-44 w-full overflow-hidden"><img src="${ev.image}" alt="${ev.title}" class="w-full h-full object-cover"></div>` : '';
+                card.className = 'theme-card border-2 border-miamiCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between space-y-3';
                 card.innerHTML = `
                     <div>
-                        ${posterHtml}
+                        <div class="h-44 w-full overflow-hidden"><img src="${ev.image}" class="w-full h-full object-cover"></div>
                         <div class="p-5 space-y-2">
-                            <div class="flex justify-between items-start gap-2">
-                                <span class="text-[10px] font-black uppercase tracking-wider bg-algCyan/20 text-algCyan dark:bg-miamiPink/25 dark:text-miamiPink px-2.5 py-1 rounded-full border border-algCyan/50">${ev.category}</span>
-                                <span class="text-xs font-black text-algCyan">${ev.fee}</span>
-                            </div>
-                            <h3 class="text-base font-black text-gray-900 dark:text-white theme-text-main">${ev.title}</h3>
-                            <p class="text-xs font-bold text-gray-700 dark:text-gray-300 theme-text-sub">📍 ${ev.venueName} (${ev.zone})</p>
-                            <p class="text-xs font-medium text-gray-700 dark:text-gray-300 theme-text-sub leading-relaxed">${ev.desc}</p>
+                            <div class="flex justify-between"><span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category}</span><span class="text-xs font-black text-miamiPink">${ev.fee}</span></div>
+                            <h3 class="text-base font-black theme-text-main">${ev.title}</h3>
+                            <p class="text-xs font-bold theme-text-sub">📍 ${ev.venueName} (${ev.zone})</p>
+                            <p class="text-xs theme-text-sub">${ev.desc}</p>
                         </div>
                     </div>
-                    <div class="px-5 pb-5 pt-2 border-t border-algCyan/20 flex justify-between items-center text-[11px] text-gray-600 dark:text-gray-400 font-medium">
+                    <div class="px-5 pb-5 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] theme-text-sub font-medium">
                         <span>📅 ${ev.date} | ${ev.time}</span>
-                        <button onclick="openVenueDetailPage('${ev.venueName}')" class="text-algCyan dark:text-miamiPink font-black hover:underline cursor-pointer">View Venue →</button>
+                        <button onclick="openVenueDetailPage('${ev.venueName}')" class="text-miamiCyan font-black hover:underline cursor-pointer">View Venue →</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function filterEvents(cat) { renderEventsGrid(cat, 'all'); }
         function filterZone(zone) { renderEventsGrid('all', zone); }
-
-        function jumpToVenueOnMap(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
-            if (!venue) return;
-            switchTab('events');
-            if (albufeiraMap) {
-                albufeiraMap.setView([venue.lat, venue.lng], 16);
-            }
-        }
 
         function renderDirectoryGrid() {
             const grid = document.getElementById('directoryGrid');
             if (!grid) return;
             grid.innerHTML = '';
-
             registeredVenues.forEach(v => {
                 const card = document.createElement('div');
-                card.className = 'bg-white theme-card border-2 border-algCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between group cursor-pointer hover:border-algCyan transition';
+                card.className = 'theme-card border-2 border-miamiCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between cursor-pointer hover:border-miamiCyan transition';
                 card.onclick = () => openVenueDetailPage(v.name);
-                
-                const websiteLink = v.website ? `<a href="${v.website}" target="_blank" onclick="event.stopPropagation()" class="text-algCyan hover:underline flex items-center gap-1 mt-1 text-xs font-black">🌐 Official Website ↗</a>` : '';
-                
                 card.innerHTML = `
                     <div>
-                        <div class="h-40 w-full overflow-hidden relative">
-                            <img src="${v.image}" alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute bottom-2 left-2 bg-algCyan text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-lg shadow-md">
-                                ${v.area}
-                            </span>
-                        </div>
+                        <div class="h-40 w-full overflow-hidden relative"><img src="${v.image}" class="w-full h-full object-cover"><span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span></div>
                         <div class="p-5 space-y-2">
-                            <h3 class="text-lg font-black text-gray-900 dark:text-white theme-text-main">${v.name}</h3>
-                            <p class="text-xs font-bold text-gray-700 dark:text-gray-300 theme-text-sub">📍 ${v.address}</p>
-                            <p class="text-xs text-emerald-700 dark:text-emerald-400 font-black">🕒 ${v.schedule}</p>
-                            <div class="flex flex-wrap gap-3 pt-1">
-                                <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name}')" class="text-algCyan font-black text-xs hover:underline inline-flex items-center gap-1 cursor-pointer">📍 Show on Map →</button>
-                                ${websiteLink}
-                            </div>
+                            <h3 class="text-lg font-black theme-text-main">${v.name}</h3>
+                            <p class="text-xs font-bold theme-text-sub">📍 ${v.address}</p>
+                            <p class="text-xs text-emerald-500 font-black">🕒 ${v.schedule}</p>
                         </div>
                     </div>
-                    <div class="px-5 pb-4 pt-2 border-t border-algCyan/20 flex justify-between items-center text-xs">
-                        <span class="text-gray-600 font-semibold">View Personal Page & Events</span>
-                        <span class="text-algCyan font-black group-hover:translate-x-1 transition">→</span>
-                    </div>
+                    <div class="px-5 pb-4 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-xs theme-text-sub font-semibold"><span>View Venue Page</span><span class="text-miamiCyan font-black">→</span></div>
                 `;
                 grid.appendChild(card);
             });
         }
 
         function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || {
-                name: venueName, address: "Albufeira, Algarve", area: "Albufeira", website: "", lat: 37.0888, lng: -8.2511,
-                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily: 12:00 - 02:00"
-            };
-
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily" };
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
-            const websiteBtn = venue.website ? `<a href="${venue.website}" target="_blank" class="inline-flex items-center gap-1.5 bg-algCyan/20 hover:bg-algCyan/30 text-algCyan border-2 border-algCyan/40 text-xs font-black px-3.5 py-2 rounded-xl transition shadow-sm">🌐 Visit Official Website ↗</a>` : '';
-            const mapLinkBtn = `<button onclick="jumpToVenueOnMap('${venue.name}')" class="inline-flex items-center gap-1.5 bg-algSand hover:bg-amber-600 text-white border-2 border-algSand text-xs font-black px-3.5 py-2 rounded-xl transition cursor-pointer shadow-sm">📍 Show on Map</button>`;
-            
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-algCyan/30 pb-6">
-                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-algCyan/40 shadow-lg">
+                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-miamiCyan/30 pb-6">
+                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">
                     <div class="space-y-3 w-full">
-                        <div>
-                            <span class="bg-algCyan/20 text-algCyan text-xs font-black uppercase px-3.5 py-1 rounded-full border border-algCyan/50">${venue.area}</span>
-                            <h2 class="text-3xl font-black text-gray-900 dark:text-white theme-text-main mt-2">${venue.name}</h2>
-                        </div>
-                        <p class="text-sm font-bold text-gray-700 dark:text-gray-300 theme-text-sub">📍 ${venue.address}</p>
-                        <p class="text-xs font-black text-emerald-700 dark:text-emerald-400">🕒 Regular Weekly Schedule: ${venue.schedule}</p>
-                        <div class="flex flex-wrap gap-2 pt-1">
-                            ${mapLinkBtn}
-                            ${websiteBtn}
-                        </div>
+                        <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>
+                        <h2 class="text-3xl font-black theme-text-main">${venue.name}</h2>
+                        <p class="text-sm font-bold theme-text-sub">📍 ${venue.address}</p>
+                        <p class="text-xs font-black text-emerald-500">🕒 ${venue.schedule}</p>
                     </div>
                 </div>
-
                 <div class="space-y-4 pt-2">
-                    <h3 class="text-xl font-black text-gray-900 dark:text-white theme-text-main flex items-center gap-2">
-                        <i data-lucide="calendar" class="w-5 h-5 text-algCyan"></i> Upcoming & Regular Events at ${venue.name}
-                    </h3>
+                    <h3 class="text-xl font-black theme-text-main">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length > 0 ? venueEvents.map(ev => `
-                            <div class="bg-sky-50 dark:bg-black/30 theme-input p-4 rounded-2xl border-2 border-algCyan/30 space-y-2 shadow-sm">
-                                ${ev.image ? `<div class="h-32 w-full overflow-hidden rounded-xl mb-2"><img src="${ev.image}" class="w-full h-full object-cover"></div>` : ''}
-                                <div class="flex justify-between">
-                                    <span class="text-[10px] font-black bg-algCyan/25 text-algCyan px-2.5 py-0.5 rounded-full">${ev.category}</span>
-                                    <span class="text-xs font-black text-algCyan">${ev.fee}</span>
-                                </div>
-                                <h4 class="font-black text-base text-gray-900 dark:text-white theme-text-main">${ev.title}</h4>
-                                <p class="text-xs font-medium text-gray-700 dark:text-gray-300">${ev.desc}</p>
-                                <p class="text-[11px] text-gray-600 dark:text-gray-400 font-bold">📅 Date: ${ev.date} | Time: ${ev.time}</p>
-                            </div>
-                        `).join('') : `
-                            <p class="text-xs font-bold text-gray-600 italic">No specific upcoming special events scheduled right now. Check back soon or view their regular weekly schedule above!</p>
-                        `}
+                        ${venueEvents.map(ev => `<div class="theme-input p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2"><h4 class="font-black text-base theme-text-main">${ev.title}</h4><p class="text-xs theme-text-sub">${ev.desc}</p></div>`).join('')}
                     </div>
                 </div>
             `;
-
             switchTab('venue-detail');
-            if (window.lucide) lucide.createIcons();
         }
 
         function generateCalendarDays() {
             const grid = document.getElementById('calendarGrid');
             if (!grid) return;
             grid.innerHTML = '';
-            for (let i = 0; i < 6; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'h-28 bg-gray-100 dark:bg-black/10 rounded-xl opacity-30';
-                grid.appendChild(emptyCell);
-            }
             for (let day = 1; day <= 30; day++) {
-                const formattedDay = day < 10 ? `0${day}` : `${day}`;
-                const dateStr = `2026-11-${formattedDay}`;
-                const dayEvents = registeredEvents.filter(ev => ev.date === dateStr);
-
                 const cell = document.createElement('div');
-                cell.className = 'h-28 bg-sky-50 dark:bg-black/30 theme-input rounded-xl p-2 border-2 border-algCyan/30 flex flex-col justify-between hover:border-algCyan cursor-pointer transition shadow-sm overflow-y-auto';
-                
-                let eventsHtml = '';
-                dayEvents.forEach(ev => {
-                    eventsHtml += `<div class="bg-algCyan text-white dark:bg-algCyan dark:text-miamiDark text-[9px] font-black px-1.5 py-0.5 rounded truncate mt-1" title="${ev.title}">• ${ev.title}</div>`;
-                });
-
-                cell.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-xs text-gray-900 dark:text-white">${day}</span>
-                        <span class="text-[9px] text-algCyan font-black">Nov</span>
-                    </div>
-                    <div class="space-y-0.5 flex-grow overflow-y-auto">${eventsHtml}</div>
-                `;
-                cell.onclick = () => {
-                    if (dayEvents.length > 0) {
-                        switchTab('events');
-                    } else {
-                        alert(`November ${day}, 2026: Click "+ Add Event" in the top navigation to schedule an event on this date!`);
-                    }
-                };
+                cell.className = 'h-24 theme-input rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between';
+                cell.innerHTML = `<span class="font-black text-xs theme-text-main">${day}</span>`;
                 grid.appendChild(cell);
             }
         }
@@ -780,36 +474,20 @@
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 13);
-                
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    referrerPolicy: 'origin-when-cross-origin'
-                }).addTo(albufeiraMap);
-
-                albufeiraMap.on('click', function(e) {
-                    document.getElementById('newVenueLat').value = e.latlng.lat.toFixed(4);
-                    document.getElementById('newVenueLng').value = e.latlng.lng.toFixed(4);
-                    document.getElementById('mapPinStatusText').value = `Pin Dropped (${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)})`;
-                });
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0888, -8.2511], 9);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
             }
         }
 
         function refreshMapMarkers() {
             if (!albufeiraMap) return;
             registeredVenues.forEach(v => {
-                if (v.marker) albufeiraMap.removeLayer(v.marker);
-                
-                let markerColor = v.hasEvent ? '#00B4D8' : '#64748B'; 
                 let svgIcon = L.divIcon({
-                    className: 'custom-venue-pin',
-                    html: `<div style="background-color: ${markerColor}; width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.6);"></div>`,
-                    iconSize: [16, 16],
-                    iconAnchor: [8, 8]
+                    className: 'custom-pin',
+                    html: `<div style="background-color: #00F0FF; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #FF007F;"></div>`,
+                    iconSize: [16, 16]
                 });
-
-                v.marker = L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap)
-                    .bindPopup(`<b>${v.name}</b><br>${v.address}<br><a href="#" onclick="openVenueDetailPage('${v.name}'); return false;" style="color:#00B4D8; font-weight:bold;">View Venue Page →</a>`);
+                L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap).bindPopup(`<b>${v.name}</b>`);
             });
         }
 
@@ -823,179 +501,85 @@
 
         function updateThemeButtonUI() {
             const isNight = document.documentElement.classList.contains('night-mode');
-            const btnText = document.getElementById('themeText');
-            const icon = document.getElementById('themeIcon');
-            if (btnText) btnText.textContent = isNight ? 'Day Mode' : 'Night Mode';
-            if (icon) icon.setAttribute('data-lucide', isNight ? 'sun' : 'moon');
+            document.getElementById('themeText').textContent = isNight ? 'Day Mode' : 'Night Mode';
+            document.getElementById('themeIcon').setAttribute('data-lucide', isNight ? 'sun' : 'moon');
             if (window.lucide) lucide.createIcons();
         }
 
         function switchTab(tabId) {
             ['events', 'directory', 'venue-detail', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
-                const el = document.getElementById('tab-content-' + t);
-                if (el) el.classList.add('hidden');
-                const btn = document.getElementById('btn-' + t);
-                if (btn) btn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-800 dark:text-gray-300 theme-text-sub hover:text-algCyan flex items-center gap-1.5 transition cursor-pointer";
+                document.getElementById('tab-content-' + t)?.classList.add('hidden');
             });
-            const targetEl = document.getElementById('tab-content-' + tabId);
-            if (targetEl) targetEl.classList.remove('hidden');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) activeBtn.className = "tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black bg-algCyan text-white flex items-center gap-1.5 transition shadow-md cursor-pointer";
-            
+            document.getElementById('tab-content-' + tabId)?.classList.remove('hidden');
             if (tabId === 'events' && albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 150);
-            if (window.lucide) lucide.createIcons();
         }
 
         function toggleEventsMap() {
             const container = document.getElementById('eventsMapContainer');
-            const btn = document.getElementById('toggleEventsMapBtn');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                btn.textContent = 'Hide Map';
-                if (albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 100);
-            } else {
-                container.style.display = 'none';
-                btn.textContent = 'Show Map';
-            }
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
         }
 
         function openModal() { document.getElementById('eventModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
         function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
         function closeVenueModal() { document.getElementById('venueModal').classList.add('hidden'); }
-        
-        function openLoginModal() { 
-            const savedUsername = localStorage.getItem('albufeira_custom_username');
-            const modalTitle = document.getElementById('loginModalTitle');
-            const formElement = document.getElementById('loginFormElement');
-
-            if (!savedUsername) {
-                modalTitle.textContent = "Set Your Custom Username";
-                formElement.innerHTML = `
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Choose Permanent Username</label><input type="text" id="customUsernameInput" required placeholder="e.g. AlgarveLocal" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <button type="submit" class="w-full bg-algCyan text-white font-black py-2.5 rounded-xl hover:bg-algCyanDark transition cursor-pointer shadow">Save Username & Login</button>
-                `;
-            } else {
-                modalTitle.textContent = "Login to Albufeira Pulse";
-                formElement.innerHTML = `
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <div><label class="block font-bold mb-1 text-gray-800 dark:text-gray-300">Password</label><input type="password" required class="w-full bg-sky-50 dark:bg-black/40 theme-input border-2 border-algCyan/50 rounded-xl px-3 py-2 text-gray-900 dark:text-white font-medium"></div>
-                    <button type="submit" class="w-full bg-algCyan text-white font-black py-2.5 rounded-xl hover:bg-algCyanDark transition cursor-pointer shadow">Sign In</button>
-                `;
-            }
-            document.getElementById('loginModal').classList.remove('hidden'); 
-        }
+        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
         function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
+
+        function updateVenueDropdown() {
+            const select = document.getElementById('newEventVenueSelect');
+            if (!select) return;
+            select.innerHTML = `<option value="">Select a Venue...</option>`;
+            registeredVenues.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v.name;
+                opt.textContent = `${v.name} (${v.area})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function onVenueDropdownChange() {
+            const venue = registeredVenues.find(v => v.name === document.getElementById('newEventVenueSelect').value);
+            if (venue) document.getElementById('newEventZone').value = venue.area;
+        }
 
         function handleEventSubmit(e) {
             e.preventDefault();
-            const title = document.getElementById('newEventTitle').value;
-            const zone = document.getElementById('newEventZone').value;
-            const venueName = document.getElementById('newEventVenueSelect').value;
-            const category = document.getElementById('newEventCategory').value;
-            const date = document.getElementById('newEventDate').value;
-            const time = document.getElementById('newEventTime').value;
-            const fee = document.getElementById('newEventFee').value;
-            const image = document.getElementById('newEventImage').value.trim();
-            const desc = document.getElementById('newEventDesc').value;
-            
-            registeredEvents.push({ title, venueName, zone, category, date, time, fee, image, desc });
-
-            let targetVenue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
-            if (targetVenue) {
-                targetVenue.hasEvent = true;
-            }
-
-            refreshMapMarkers();
+            registeredEvents.push({
+                title: document.getElementById('newEventTitle').value,
+                venueName: document.getElementById('newEventVenueSelect').value,
+                zone: document.getElementById('newEventZone').value,
+                category: "SOCIAL",
+                date: document.getElementById('newEventDate').value,
+                time: document.getElementById('newEventTime').value,
+                fee: document.getElementById('newEventFee').value,
+                image: document.getElementById('newEventImage').value || "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
+                desc: document.getElementById('newEventDesc').value
+            });
             renderEventsGrid();
-            renderDirectoryGrid();
-            generateCalendarDays();
-            alert(`Event "${title}" successfully published and added to calendar!`);
             closeModal();
-        }
-
-        function handleLogin(e) { 
-            e.preventDefault(); 
-            const usernameInput = document.getElementById('customUsernameInput');
-            if (usernameInput) {
-                const chosenName = usernameInput.value.trim();
-                if (chosenName) {
-                    localStorage.setItem('albufeira_custom_username', chosenName);
-                    renderUserAuthUI(chosenName);
-                    closeLoginModal();
-                    alert(`Welcome, ${chosenName}! Your username has been saved.`);
-                }
-            } else {
-                const email = document.getElementById('loginEmailInput').value;
-                const existingName = localStorage.getItem('albufeira_custom_username') || email.split('@')[0];
-                localStorage.setItem('albufeira_user', email);
-                renderUserAuthUI(existingName);
-                closeLoginModal(); 
-            }
-        }
-
-        function checkExistingAuth() {
-            const savedUsername = localStorage.getItem('albufeira_custom_username');
-            const savedUser = localStorage.getItem('albufeira_user');
-            if (savedUsername) {
-                renderUserAuthUI(savedUsername);
-            } else if (savedUser) {
-                renderUserAuthUI(savedUser.split('@')[0]);
-            }
-        }
-
-        function renderUserAuthUI(displayName) {
-            const authArea = document.getElementById('authArea');
-            if (!authArea) return;
-            authArea.innerHTML = `
-                <div class="bg-sky-100 dark:bg-black/40 theme-input px-3 py-1.5 rounded-xl border-2 border-algCyan/50 flex items-center gap-2 text-xs font-black text-gray-900 dark:text-white shadow-sm">
-                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-algCyan"></i>
-                    <span>${displayName}</span>
-                    <button onclick="handleLogout()" class="text-red-600 hover:text-red-800 ml-2 text-[10px] font-extrabold cursor-pointer">Logout</button>
-                </div>
-            `;
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('albufeira_user');
-            const authArea = document.getElementById('authArea');
-            if (authArea) {
-                authArea.innerHTML = `
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="bg-white dark:bg-black/60 theme-input hover:bg-sky-100 text-gray-900 dark:text-white theme-text-main text-xs font-bold px-3 py-2 rounded-xl border border-algCyan/50 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-algCyan"></i> Login
-                    </button>
-                `;
-            }
-            if (window.lucide) lucide.createIcons();
+            alert("Event published successfully!");
         }
 
         function handleVenueSubmit(e) {
             e.preventDefault();
-            const name = document.getElementById('newVenueName').value;
-            const address = document.getElementById('newVenueAddress').value;
-            const website = document.getElementById('newVenueWebsite').value.trim();
-            const lat = parseFloat(document.getElementById('newVenueLat').value);
-            const lng = parseFloat(document.getElementById('newVenueLng').value);
-            const area = document.getElementById('newVenueArea').value;
-
-            registeredVenues.push({ 
-                name, address, website, lat, lng, area, 
-                image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60',
-                schedule: 'Daily: 11:00 - 03:00',
-                hasEvent: false, 
-                marker: null 
+            registeredVenues.push({
+                name: document.getElementById('newVenueName').value,
+                address: document.getElementById('newVenueAddress').value,
+                website: document.getElementById('newVenueWebsite').value,
+                lat: 37.09, lng: -8.24,
+                area: document.getElementById('newVenueArea').value,
+                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
+                schedule: "Daily"
             });
             refreshMapMarkers();
             updateVenueDropdown();
             renderDirectoryGrid();
-
-            if (albufeiraMap) {
-                albufeiraMap.setView([lat, lng], 14);
-            }
-            alert(`Venue "${name}" successfully added to directory and map!`);
             closeVenueModal();
+            alert("Venue added successfully!");
         }
+
+        function handleLogin(e) { e.preventDefault(); closeLoginModal(); alert("Logged in!"); }
     </script>
 </body>
 </html>
