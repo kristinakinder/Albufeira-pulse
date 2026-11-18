@@ -110,7 +110,7 @@
                 </svg>
                 <div>
                     <h1 class="text-lg font-black tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent group-hover:opacity-90">ALBUFEIRA PULSE</h1>
-                    <p id="siteSubtitle" class="text-[10px] font-extrabold tracking-widest uppercase text-miamiCyan theme-text-sub">The Heartbeat of the Algarve</p>
+                    <p id="siteSubtitle" class="text-[10px] font-extrabold tracking-widest uppercase text-miamiCyan theme-text-sub">The Heartbeat of Albufeira</p>
                 </div>
             </div>
 
@@ -136,7 +136,7 @@
         <div class="weather-ticker border-t border-b px-4 py-2 text-xs flex justify-between items-center font-medium">
             <div class="flex items-center gap-6 overflow-x-auto whitespace-nowrap">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
-                    <i data-lucide="cloud-rain" class="w-4 h-4 text-miamiPink animate-bounce"></i> <span id="bannerTown">Albufeira & Algarve</span> <span data-i18n="liveConditions">Live Conditions:</span>
+                    <i data-lucide="cloud-rain" class="w-4 h-4 text-miamiPink animate-bounce"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions">Live Conditions:</span>
                 </span>
                 <span><span data-i18n="air">Air:</span> <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
                 <span><span data-i18n="condition">Condition:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
@@ -173,24 +173,15 @@
         <!-- TAB 1: EVENTS & INTERACTIVE MAP -->
         <section id="tab-content-events" class="space-y-5">
             <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                    <span class="text-xs font-black text-miamiCyan mr-1 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> <span data-i18n="zoneLabel">Zone:</span></span>
-                    <button onclick="filterZone('all', this)" class="zone-btn px-3.5 py-1.5 rounded-full text-xs font-black bg-miamiCyan text-miamiDark shadow transition cursor-pointer" data-i18n="zoneAll">All Algarve</button>
-                    <button onclick="filterZone('General Albufeira', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm" data-i18n="zoneGeneral">General Albufeira</button>
-                    <button onclick="filterZone('Albufeira - Old Town', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm" data-i18n="zoneOldTown">Albufeira - Old Town</button>
-                    <button onclick="filterZone('Albufeira Marina', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm" data-i18n="zoneMarina">Albufeira Marina</button>
-                    <button onclick="filterZone('The Strip', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm" data-i18n="zoneStrip">The Strip</button>
-                    <button onclick="filterZone('Guia', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Guia</button>
-                    <button onclick="filterZone('Ferreiras', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Ferreiras</button>
-                    <button onclick="filterZone('Lagos', this)" class="zone-btn theme-pill px-3.5 py-1.5 rounded-full text-xs font-bold theme-card border border-miamiCyan/40 transition cursor-pointer shadow-sm">Lagos (LAC)</button>
-                </div>
+                <!-- Dynamic Zone Filter Bar -->
+                <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
             </div>
 
             <!-- Leaflet Map Container -->
             <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-2">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Map</span>
+                        <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Albufeira Map</span>
                     </span>
                     <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
                 </div>
@@ -232,8 +223,8 @@
             </div>
             <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                    <h3 class="font-black text-miamiPink text-base">ROOTS 2026 at LAC Lagos</h3>
-                    <p class="text-xs text-gray-200 leading-relaxed">"Intimate Territories — Post-colonial Landscapes" exhibition running through Dec 19, 2026 at Laboratório de Actividades Criativas in Lagos.</p>
+                    <h3 class="font-black text-miamiPink text-base">Albufeira Winter Coastal Walks & Heritage</h3>
+                    <p class="text-xs text-gray-200 leading-relaxed">Explore the historic fishermen's quarter, Cerro da Vila Roman ruins, and cliffside trails between Olhos de Água and São Rafael.</p>
                     <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
                 </div>
             </div>
@@ -243,7 +234,7 @@
         <section id="tab-content-classifieds" class="space-y-6 hidden">
             <h2 class="text-2xl font-black theme-text-main" data-i18n="classifiedsHeader">Classifieds & Marketplace</h2>
             <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-1">
-                <p class="text-xs font-bold text-white">Surfboard for Sale - €150. Ideal for Algarve breaks.</p>
+                <p class="text-xs font-bold text-white">Surfboard for Sale - €150. Ideal for Praia da Galé & Olhos de Água breaks.</p>
                 <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
             </div>
         </section>
@@ -255,13 +246,13 @@
             </div>
             <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-4">
                 <div class="space-y-2">
-                    <textarea id="forumInput" rows="3" placeholder="Write a message to the community..." class="w-full theme-input border-2 rounded-xl p-3 text-xs font-medium"></textarea>
+                    <textarea id="forumInput" rows="3" placeholder="Write a message to the Albufeira community..." class="w-full theme-input border-2 rounded-xl p-3 text-xs font-medium"></textarea>
                     <button onclick="postForumMessage()" class="bg-miamiCyan text-miamiDark font-black text-xs px-4 py-2 rounded-xl shadow cursor-pointer" data-i18n="postMessage">Post Message</button>
                 </div>
                 <div id="forumPostsContainer" class="space-y-3 pt-4 border-t border-miamiCyan/20">
                     <div class="unified-row p-3 rounded-xl border border-miamiCyan/20 text-xs space-y-1">
                         <p class="font-black text-miamiCyan">Admin</p>
-                        <p class="text-gray-200">Welcome to the Albufeira Pulse community forum! Feel free to share updates.</p>
+                        <p class="text-gray-200">Welcome to the Albufeira Pulse community forum! Feel free to share local updates.</p>
                     </div>
                 </div>
             </div>
@@ -269,11 +260,15 @@
 
         <!-- TAB 8: ESSENTIAL LINKS -->
         <section id="tab-content-links" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main" data-i18n="linksHeader">Essential Algarve Links</h2>
+            <h2 class="text-2xl font-black theme-text-main" data-i18n="linksHeader">Essential Albufeira & Algarve Links</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+                <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                    <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
+                    <p class="text-gray-300">Municipal announcements, Giro urban buses, and civic services.</p>
+                </a>
                 <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
                     <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
-                    <p class="text-gray-300">Timetables and regional bus routes across the Algarve.</p>
+                    <p class="text-gray-300">Regional bus timetables connecting Albufeira Bus Terminal across the Algarve.</p>
                 </a>
                 <a href="https://fogos.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiPink/40 hover:border-miamiPink transition shadow-lg block space-y-2">
                     <div class="text-miamiPink font-black text-sm flex items-center gap-1.5"><i data-lucide="flame" class="w-4 h-4"></i> Fogos.pt Monitor</div>
@@ -281,23 +276,19 @@
                 </a>
                 <a href="https://www.faroairport.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
                     <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="plane" class="w-4 h-4"></i> Faro Airport (FAO)</div>
-                    <p class="text-gray-300">Live flight arrivals, departures, and airport info.</p>
+                    <p class="text-gray-300">Live flight arrivals, departures, and airport transfers.</p>
                 </a>
                 <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 hover:border-amber-500 transition shadow-lg block space-y-2">
                     <div class="text-amber-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
-                    <p class="text-gray-300">Official meteorological and sea condition forecasts.</p>
-                </a>
-                <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-purple-500/40 hover:border-purple-500 transition shadow-lg block space-y-2">
-                    <div class="text-purple-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
-                    <p class="text-gray-300">Municipal announcements and civic services.</p>
+                    <p class="text-gray-300">Official meteorological and Albufeira coastal sea forecasts.</p>
                 </a>
                 <a href="https://www.cp.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-emerald-500/40 hover:border-emerald-500 transition shadow-lg block space-y-2">
-                    <div class="text-emerald-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Train Timetables</div>
-                    <p class="text-gray-300">Algarve Line train schedules and connections.</p>
+                    <div class="text-emerald-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Train (Ferreiras Station)</div>
+                    <p class="text-gray-300">Albufeira-Ferreiras train station schedules and connections.</p>
                 </a>
                 <a href="https://www.visitalgarve.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-sky-500/40 hover:border-sky-500 transition shadow-lg block space-y-2">
                     <div class="text-sky-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="compass" class="w-4 h-4"></i> Visit Algarve</div>
-                    <p class="text-gray-300">Regional tourism guides, walking trails, and beaches.</p>
+                    <p class="text-gray-300">Tourism guides, walking trails, and Blue Flag beaches.</p>
                 </a>
             </div>
         </section>
@@ -344,16 +335,8 @@
                 <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="e.g. Live Music Night" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-bold mb-1 theme-text-sub">Zone</label>
-                        <select id="newEventZone" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
-                            <option value="General Albufeira">General Albufeira</option>
-                            <option value="Albufeira - Old Town">Albufeira - Old Town</option>
-                            <option value="Albufeira Marina">Albufeira Marina</option>
-                            <option value="The Strip">The Strip</option>
-                            <option value="Guia">Guia</option>
-                            <option value="Ferreiras">Ferreiras</option>
-                            <option value="Lagos">Lagos</option>
-                        </select>
+                        <label class="block font-bold mb-1 theme-text-sub">Town / Zone</label>
+                        <input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
                     </div>
                     <div>
                         <label class="block font-bold mb-1 theme-text-sub">Venue</label>
@@ -384,16 +367,8 @@
                 <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block font-bold mb-1 theme-text-sub">Zone</label>
-                        <select id="newVenueArea" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
-                            <option value="General Albufeira">General Albufeira</option>
-                            <option value="Albufeira - Old Town">Albufeira - Old Town</option>
-                            <option value="Albufeira Marina">Albufeira Marina</option>
-                            <option value="The Strip">The Strip</option>
-                            <option value="Guia">Guia</option>
-                            <option value="Ferreiras">Ferreiras</option>
-                            <option value="Lagos">Lagos</option>
-                        </select>
+                        <label class="block font-bold mb-1 theme-text-sub">Town / Zone</label>
+                        <input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
                     </div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Status</label><input type="text" readonly value="Pin Ready" class="w-full theme-input border-2 rounded-xl px-2 py-2 text-miamiCyan font-bold text-center"></div>
                 </div>
@@ -403,6 +378,9 @@
             </form>
         </div>
     </div>
+
+    <!-- Shared Datalist for Dynamic Towns/Zones -->
+    <datalist id="zoneDatalist"></datalist>
 
     <!-- SCRIPT ENGINE -->
     <script>
@@ -414,9 +392,21 @@
         }
 
         let currentLang = localStorage.getItem('albufeira_lang') || 'en';
+        let activeZoneFilter = 'all';
+
+        const defaultZones = [
+            "Albufeira",
+            "Albufeira Old Town",
+            "Albufeira Marina",
+            "Albufeira Strip",
+            "Guia",
+            "Ferreiras"
+        ];
+        let availableZones = [...defaultZones];
+
         const translations = {
             en: {
-                subtitle: "The Heartbeat of the Algarve",
+                subtitle: "The Heartbeat of Albufeira",
                 login: "Login",
                 liveConditions: "Live Conditions:",
                 air: "Air:",
@@ -434,12 +424,8 @@
                 addVenue: "+ Add Venue",
                 addEvent: "+ Add Event",
                 zoneLabel: "Zone:",
-                zoneAll: "All Algarve",
-                zoneGeneral: "General Albufeira",
-                zoneOldTown: "Albufeira - Old Town",
-                zoneMarina: "Albufeira Marina",
-                zoneStrip: "The Strip",
-                mapTitle: "Interactive Algarve Map",
+                zoneAll: "All",
+                mapTitle: "Interactive Albufeira Map",
                 hideMap: "Hide Map",
                 showMap: "Show Map",
                 backToDirectory: "← Back to Directory",
@@ -449,7 +435,7 @@
                 classifiedsHeader: "Classifieds & Marketplace",
                 forumHeader: "Community Forum",
                 postMessage: "Post Message",
-                linksHeader: "Essential Algarve Links",
+                linksHeader: "Essential Albufeira & Algarve Links",
                 emergencyHeader: "Emergency Contacts & Essential Services",
                 loginModalTitle: "Login",
                 emailLabel: "Email",
@@ -457,7 +443,7 @@
                 addEventTitle: "Add Event & Poster"
             },
             pt: {
-                subtitle: "O Coração do Algarve",
+                subtitle: "O Coração de Albufeira",
                 login: "Entrar",
                 liveConditions: "Condições ao Vivo:",
                 air: "Ar:",
@@ -475,12 +461,8 @@
                 addVenue: "+ Adicionar Local",
                 addEvent: "+ Adicionar Evento",
                 zoneLabel: "Zona:",
-                zoneAll: "Todo o Algarve",
-                zoneGeneral: "Albufeira Geral",
-                zoneOldTown: "Albufeira - Centro Antigo",
-                zoneMarina: "Marina de Albufeira",
-                zoneStrip: "A Oura (Strip)",
-                mapTitle: "Mapa Interativo do Algarve",
+                zoneAll: "Todos",
+                mapTitle: "Mapa Interativo de Albufeira",
                 hideMap: "Ocultar Mapa",
                 showMap: "Mostrar Mapa",
                 backToDirectory: "← Voltar ao Diretório",
@@ -490,7 +472,7 @@
                 classifiedsHeader: "Classificados e Mercado",
                 forumHeader: "Fórum Comunitário",
                 postMessage: "Publicar Mensagem",
-                linksHeader: "Links Essenciais do Algarve",
+                linksHeader: "Links Essenciais de Albufeira",
                 emergencyHeader: "Contactos de Emergência e Serviços",
                 loginModalTitle: "Entrar",
                 emailLabel: "E-mail",
@@ -503,6 +485,7 @@
             currentLang = currentLang === 'en' ? 'pt' : 'en';
             localStorage.setItem('albufeira_lang', currentLang);
             applyTranslations();
+            renderZoneButtons();
         }
 
         function applyTranslations() {
@@ -519,8 +502,8 @@
         let mapMarkersGroup = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60", author: "Admin" },
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira - Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "Admin" }
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls, regional Algarve pastries, and live acoustic sets at Fisherman's Square.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "Admin" },
+            { title: "Marina Sunset Live Session", venueName: "Albufeira Marina Promenade", zone: "Albufeira Marina", category: "MUSIC", date: "2026-11-22", time: "17:30", fee: "Free", desc: "Sunset chill-out DJ session overlooking the colourful yachts at Marina de Albufeira.", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&auto=format&fit=crop&q=60", author: "Admin" }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -532,6 +515,44 @@
             updateThemeButtonUI();
             checkExistingAuth();
         });
+
+        function syncAvailableZones() {
+            const zoneSet = new Set(defaultZones);
+            registeredVenues.forEach(v => {
+                if (v.area && v.area.trim()) zoneSet.add(v.area.trim());
+            });
+            registeredEvents.forEach(e => {
+                if (e.zone && e.zone.trim()) zoneSet.add(e.zone.trim());
+            });
+            availableZones = Array.from(zoneSet);
+            renderZoneButtons();
+            updateZoneDatalist();
+        }
+
+        function renderZoneButtons() {
+            const bar = document.getElementById('zoneFilterBar');
+            if (!bar) return;
+            const t = translations[currentLang];
+
+            let html = `<span class="text-xs font-black text-miamiCyan mr-1 flex items-center gap-1 shrink-0"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> ${t.zoneLabel}</span>`;
+            
+            const allActive = activeZoneFilter === 'all';
+            html += `<button onclick="filterZone('all')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${allActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${t.zoneAll}</button>`;
+
+            availableZones.forEach(zone => {
+                const isActive = activeZoneFilter === zone;
+                html += `<button onclick="filterZone('${zone.replace(/'/g, "\\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+            });
+
+            bar.innerHTML = html;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function updateZoneDatalist() {
+            const dl = document.getElementById('zoneDatalist');
+            if (!dl) return;
+            dl.innerHTML = availableZones.map(z => `<option value="${z}">`).join('');
+        }
 
         async function loadDataFromSupabase() {
             if (_supabaseClient) {
@@ -551,15 +572,16 @@
 
             if (registeredVenues.length === 0) {
                 registeredVenues = [
-                    { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true, author: "Admin" },
-                    { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, author: "Admin" },
-                    { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira - Old Town", lat: 37.0881, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, author: "Admin" },
-                    { name: "Albufeira Marina Promenade", address: "Marina de Albufeira", area: "Albufeira Marina", lat: 37.0846, lng: -8.2683, website: "https://www.marinaalbufeira.com", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: false, author: "Admin" },
-                    { name: "Guia Village Square", address: "Largo da Guia", area: "Guia", lat: 37.1265, lng: -8.2994, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: false, author: "Admin" },
-                    { name: "Ferreiras Central Plaza", address: "Ferreiras, Albufeira", area: "Ferreiras", lat: 37.1278, lng: -8.2398, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: false, author: "Admin" }
+                    { name: "Praça dos Pescadores", address: "Fisherman's Beach Square, Albufeira", area: "Albufeira Old Town", lat: 37.0881, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, author: "Admin" },
+                    { name: "Albufeira Marina Promenade", address: "Marina de Albufeira", area: "Albufeira Marina", lat: 37.0846, lng: -8.2683, website: "https://www.marinaalbufeira.com", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: true, author: "Admin" },
+                    { name: "Yolo Club", address: "Avenida Dr. Francisco Sá Carneiro", area: "Albufeira Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: false, author: "Admin" },
+                    { name: "Guia Village Square", address: "Largo da Guia, Albufeira", area: "Guia", lat: 37.1265, lng: -8.2994, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: false, author: "Admin" },
+                    { name: "Ferreiras Central Plaza", address: "Ferreiras, Albufeira", area: "Ferreiras", lat: 37.1278, lng: -8.2398, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", schedule: "Daily", hasEvent: false, author: "Admin" },
+                    { name: "Albufeira Town Hall", address: "Rua do Município, Albufeira", area: "Albufeira", lat: 37.0910, lng: -8.2485, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Fri: 09:00 - 16:00", hasEvent: false, author: "Admin" }
                 ];
             }
 
+            syncAvailableZones();
             refreshMapMarkers();
             updateVenueDropdown();
             renderDirectoryGrid();
@@ -585,16 +607,16 @@
             }
         }
 
-        function renderEventsGrid(filterCat = 'all', filterZoneName = 'all') {
+        function renderEventsGrid(filterCat = 'all', filterZoneName = activeZoneFilter) {
             const grid = document.getElementById('eventsGrid');
             if (!grid) return;
             grid.innerHTML = '';
             let filtered = registeredEvents.filter(ev => {
                 if (filterZoneName === 'all') return true;
-                if (filterZoneName === 'General Albufeira') {
-                    return ev.zone.includes('Albufeira') || ev.zone === 'The Strip' || ev.zone === 'Guia' || ev.zone === 'Ferreiras';
+                if (filterZoneName === 'Albufeira') {
+                    return ev.zone.toLowerCase().includes('albufeira');
                 }
-                return ev.zone === filterZoneName;
+                return ev.zone.toLowerCase() === filterZoneName.toLowerCase();
             });
             filtered.forEach(ev => {
                 const card = document.createElement('div');
@@ -619,15 +641,9 @@
             });
         }
 
-        function filterZone(zone, btnEl) {
-            document.querySelectorAll('.zone-btn').forEach(btn => {
-                btn.classList.remove('bg-miamiCyan', 'text-miamiDark', 'font-black');
-                btn.classList.add('theme-pill', 'theme-card', 'font-bold');
-            });
-            if (btnEl) {
-                btnEl.classList.remove('theme-pill', 'theme-card', 'font-bold');
-                btnEl.classList.add('bg-miamiCyan', 'text-miamiDark', 'font-black');
-            }
+        function filterZone(zone) {
+            activeZoneFilter = zone;
+            renderZoneButtons();
             renderEventsGrid('all', zone);
         }
 
@@ -672,7 +688,7 @@
         }
 
         function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "Admin" };
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Albufeira", area: "Albufeira", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "Admin" };
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
@@ -731,7 +747,7 @@
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0950, -8.2500], 11);
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0950, -8.2500], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
                 mapMarkersGroup = L.layerGroup().addTo(albufeiraMap);
             }
@@ -832,10 +848,11 @@
         async function handleEventSubmit(e) {
             e.preventDefault();
             const currentAdmin = localStorage.getItem('albufeira_user_name') || 'Admin';
+            const enteredZone = document.getElementById('newEventZone').value.trim();
             const newEv = {
                 title: document.getElementById('newEventTitle').value,
                 venueName: document.getElementById('newEventVenueSelect').value,
-                zone: document.getElementById('newEventZone').value,
+                zone: enteredZone,
                 category: "SOCIAL",
                 date: document.getElementById('newEventDate').value,
                 time: document.getElementById('newEventTime').value,
@@ -848,6 +865,7 @@
             if (_supabaseClient) {
                 await _supabaseClient.from('events').insert([newEv]);
             }
+            syncAvailableZones();
             renderEventsGrid();
             generateCalendarDays();
             closeModal();
@@ -856,12 +874,13 @@
         async function handleVenueSubmit(e) {
             e.preventDefault();
             const currentAdmin = localStorage.getItem('albufeira_user_name') || 'Admin';
+            const enteredArea = document.getElementById('newVenueArea').value.trim();
             const newV = {
                 name: document.getElementById('newVenueName').value,
                 address: document.getElementById('newVenueAddress').value,
                 website: document.getElementById('newVenueWebsite').value,
                 lat: 37.0881, lng: -8.2520,
-                area: document.getElementById('newVenueArea').value,
+                area: enteredArea,
                 image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
                 schedule: "Daily",
                 author: currentAdmin
@@ -870,6 +889,7 @@
             if (_supabaseClient) {
                 await _supabaseClient.from('directory').insert([newV]);
             }
+            syncAvailableZones();
             refreshMapMarkers();
             updateVenueDropdown();
             renderDirectoryGrid();
