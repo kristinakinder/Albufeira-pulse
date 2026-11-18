@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-GB" class="day-mode">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,13 +29,20 @@
             }
         }
     </script>
-    <!-- ================= SECTION 1: INSTANT THEME INITIALIZER ================= -->
+    <!-- ================= SECTION 1: AUTO TIME-BASED THEME INITIALIZER ================= -->
     <script>
         (function() {
             const manualOverride = localStorage.getItem('albufeira_manual_theme');
-            let initialMode = 'day-mode';
+            let initialMode = 'night-mode';
             if (manualOverride) {
                 initialMode = manualOverride;
+            } else {
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                // Day mode active between 07:15 (435 min) and 17:25 (1045 min)
+                if (currentMinutes >= 435 && currentMinutes <= 1045) {
+                    initialMode = 'day-mode';
+                }
             }
             document.documentElement.className = initialMode;
         })();
@@ -49,14 +56,6 @@
             100% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
-
-        @keyframes bubbleBurst {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.04); opacity: 1; }
-            75% { transform: scale(0.97); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-bubble-burst { animation: bubbleBurst 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
         /* Night Mode: Deep Midnight Slate & Miami Neon */
         html.night-mode body { background-color: #0B0F19; color: #F8FAFC; }
@@ -107,18 +106,18 @@
                 </div>
                 <div>
                     <h1 class="text-lg font-black tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent">ALBUFEIRA PULSE</h1>
-                    <p class="text-[10px] font-extrabold tracking-widest uppercase text-miamiPink">Arty & Bold Algarve</p>
+                    <p class="text-[10px] font-extrabold tracking-widest uppercase text-miamiCyan theme-text-sub">The Heartbeat of the Algarve</p>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-2">
                 <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-miamiDark text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 cursor-pointer shadow-md hover:bg-miamiCyan hover:text-miamiDark">
                     <i data-lucide="sun" id="themeIcon" class="w-4 h-4"></i>
-                    <span id="themeText">Night Mode</span>
+                    <span id="themeText">Toggle Mode</span>
                 </button>
                 <div id="authArea">
                     <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
-                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login as Admin
                     </button>
                 </div>
             </div>
@@ -232,8 +231,21 @@
 
         <!-- TAB 7: FORUM -->
         <section id="tab-content-forum" class="space-y-6 hidden">
-            <h2 class="text-2xl font-black theme-text-main">Community Forum</h2>
-            <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md"><p class="text-xs font-bold theme-text-main">Welcome to the Albufeira & Algarve Discussion Hub!</p></div>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-black theme-text-main">Community Forum</h2>
+            </div>
+            <div class="theme-card p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-4">
+                <div class="space-y-2">
+                    <textarea id="forumInput" rows="3" placeholder="Write a message to the community..." class="w-full theme-input border-2 rounded-xl p-3 text-xs font-medium"></textarea>
+                    <button onclick="postForumMessage()" class="bg-miamiCyan text-miamiDark font-black text-xs px-4 py-2 rounded-xl shadow cursor-pointer">Post Message</button>
+                </div>
+                <div id="forumPostsContainer" class="space-y-3 pt-4 border-t border-miamiCyan/20">
+                    <div class="theme-input p-3 rounded-xl border border-miamiCyan/20 text-xs">
+                        <p class="font-black text-miamiCyan mb-1">Admin</p>
+                        <p class="theme-text-sub">Welcome to the Albufeira Pulse community forum! Feel free to share updates.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- TAB 8: ESSENTIAL LINKS -->
@@ -266,14 +278,14 @@
         </section>
     </main>
 
-    <!-- MODALS -->
+    <!-- LOGIN MODAL -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main" id="loginModalTitle">Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
-            <form onsubmit="handleLogin(event)" class="space-y-3 text-xs" id="loginFormElement">
-                <div><label class="block font-bold mb-1 theme-text-sub">Email</label><input type="email" id="loginEmailInput" required placeholder="user@albufeira-pulse.com" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Sign In</button>
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Admin Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
+            <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
+                <div><label class="block font-bold mb-1 theme-text-sub">Username</label><input type="text" id="loginUserInput" value="Admin" readonly class="w-full theme-input border-2 rounded-xl px-3 py-2 font-bold text-miamiCyan"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Password (Optional)</label><input type="password" placeholder="••••••••" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Sign In as Admin</button>
             </form>
         </div>
     </div>
@@ -300,7 +312,7 @@
                 </div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Publish</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
     </div>
@@ -336,8 +348,8 @@
         let albufeiraMap = null;
         let registeredVenues = []; 
         let registeredEvents = [
-            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60" },
-            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60" }
+            { title: "ROOTS 2026: Intimate Territories", venueName: "LAC Lagos", zone: "Lagos", category: "EXHIBITION", date: "2026-11-21", time: "18:00", fee: "Free", desc: "Post-colonial landscapes exhibition at Laboratório de Actividades Criativas in Lagos.", image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&auto=format&fit=crop&q=60", author: "Admin" },
+            { title: "Albufeira Winter Market & Crafts", venueName: "Praça dos Pescadores", zone: "Albufeira Old Town", category: "MARKETS", date: "2026-11-20", time: "10:00 - 20:00", fee: "Free", desc: "Craft stalls and seasonal treats.", image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600&auto=format&fit=crop&q=60", author: "Admin" }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -349,13 +361,14 @@
             generateCalendarDays();
             fetchLiveWeatherAndWaves();
             updateThemeButtonUI();
+            checkExistingAuth();
         });
 
         async function loadVenuesFromSupabase() {
             registeredVenues = [
-                { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true },
-                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true },
-                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true }
+                { name: "LAC Lagos", address: "Rua Dr. Republica, Lagos", area: "Lagos", lat: 37.1028, lng: -8.6731, website: "https://www.lac.org.pt", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=60", schedule: "Tue-Sat: 14:00 - 19:00", hasEvent: true, author: "Admin" },
+                { name: "Yolo Club", address: "Rua da Oura, The Strip", area: "The Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "Mon-Sun: 22:00 - 06:00", hasEvent: true, author: "Admin" },
+                { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0888, lng: -8.2511, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", hasEvent: true, author: "Admin" }
             ];
             refreshMapMarkers();
             updateVenueDropdown();
@@ -399,6 +412,7 @@
                             <h3 class="text-base font-black theme-text-main">${ev.title}</h3>
                             <p class="text-xs font-bold theme-text-sub">📍 ${ev.venueName} (${ev.zone})</p>
                             <p class="text-xs theme-text-sub">${ev.desc}</p>
+                            <p class="text-[10px] font-bold text-miamiCyan pt-1">Added by ${ev.author || 'Admin'}</p>
                         </div>
                     </div>
                     <div class="px-5 pb-5 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] theme-text-sub font-medium">
@@ -427,6 +441,7 @@
                             <h3 class="text-lg font-black theme-text-main">${v.name}</h3>
                             <p class="text-xs font-bold theme-text-sub">📍 ${v.address}</p>
                             <p class="text-xs text-emerald-500 font-black">🕒 ${v.schedule}</p>
+                            <p class="text-[10px] font-bold text-miamiCyan">Added by ${v.author || 'Admin'}</p>
                         </div>
                     </div>
                     <div class="px-5 pb-4 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-xs theme-text-sub font-semibold"><span>View Venue Page</span><span class="text-miamiCyan font-black">→</span></div>
@@ -436,7 +451,7 @@
         }
 
         function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily" };
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "Admin" };
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
             const container = document.getElementById('venueDetailContainer');
             container.innerHTML = `
@@ -447,12 +462,13 @@
                         <h2 class="text-3xl font-black theme-text-main">${venue.name}</h2>
                         <p class="text-sm font-bold theme-text-sub">📍 ${venue.address}</p>
                         <p class="text-xs font-black text-emerald-500">🕒 ${venue.schedule}</p>
+                        <p class="text-xs font-bold text-miamiCyan">Added by ${venue.author || 'Admin'}</p>
                     </div>
                 </div>
                 <div class="space-y-4 pt-2">
                     <h3 class="text-xl font-black theme-text-main">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.map(ev => `<div class="theme-input p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2"><h4 class="font-black text-base theme-text-main">${ev.title}</h4><p class="text-xs theme-text-sub">${ev.desc}</p></div>`).join('')}
+                        ${venueEvents.map(ev => `<div class="theme-input p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2"><h4 class="font-black text-base theme-text-main">${ev.title}</h4><p class="text-xs theme-text-sub">${ev.desc}</p><p class="text-[10px] font-bold text-miamiCyan">Added by ${ev.author || 'Admin'}</p></div>`).join('')}
                     </div>
                 </div>
             `;
@@ -487,7 +503,7 @@
                     html: `<div style="background-color: #00F0FF; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #FF007F;"></div>`,
                     iconSize: [16, 16]
                 });
-                L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap).bindPopup(`<b>${v.name}</b>`);
+                L.marker([v.lat, v.lng], {icon: svgIcon}).addTo(albufeiraMap).bindPopup(`<b>${v.name}</b><br><span style="font-size:10px;">Added by ${v.author || 'Admin'}</span>`);
             });
         }
 
@@ -545,6 +561,7 @@
 
         function handleEventSubmit(e) {
             e.preventDefault();
+            const currentAdmin = localStorage.getItem('albufeira_user') || 'Admin';
             registeredEvents.push({
                 title: document.getElementById('newEventTitle').value,
                 venueName: document.getElementById('newEventVenueSelect').value,
@@ -554,7 +571,8 @@
                 time: document.getElementById('newEventTime').value,
                 fee: document.getElementById('newEventFee').value,
                 image: document.getElementById('newEventImage').value || "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
-                desc: document.getElementById('newEventDesc').value
+                desc: document.getElementById('newEventDesc').value,
+                author: currentAdmin
             });
             renderEventsGrid();
             closeModal();
@@ -563,6 +581,7 @@
 
         function handleVenueSubmit(e) {
             e.preventDefault();
+            const currentAdmin = localStorage.getItem('albufeira_user') || 'Admin';
             registeredVenues.push({
                 name: document.getElementById('newVenueName').value,
                 address: document.getElementById('newVenueAddress').value,
@@ -570,7 +589,8 @@
                 lat: 37.09, lng: -8.24,
                 area: document.getElementById('newVenueArea').value,
                 image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
-                schedule: "Daily"
+                schedule: "Daily",
+                author: currentAdmin
             });
             refreshMapMarkers();
             updateVenueDropdown();
@@ -579,7 +599,62 @@
             alert("Venue added successfully!");
         }
 
-        function handleLogin(e) { e.preventDefault(); closeLoginModal(); alert("Logged in!"); }
+        function handleLogin(e) { 
+            e.preventDefault(); 
+            localStorage.setItem('albufeira_user', 'Admin');
+            renderUserAuthUI('Admin');
+            closeLoginModal(); 
+        }
+
+        function checkExistingAuth() {
+            const savedUser = localStorage.getItem('albufeira_user');
+            if (savedUser) {
+                renderUserAuthUI(savedUser);
+            }
+        }
+
+        function renderUserAuthUI(name) {
+            const authArea = document.getElementById('authArea');
+            if (!authArea) return;
+            authArea.innerHTML = `
+                <div class="theme-card px-3.5 py-2 rounded-xl border border-miamiCyan/40 flex items-center gap-2 text-xs font-black theme-text-main shadow-sm">
+                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
+                    <span>${name}</span>
+                    <button onclick="handleLogout()" class="text-red-500 hover:underline ml-2 text-[10px] font-bold cursor-pointer">Logout</button>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('albufeira_user');
+            const authArea = document.getElementById('authArea');
+            if (authArea) {
+                authArea.innerHTML = `
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm">
+                        <i data-lucide="user" class="w-3.5 h-3.5 text-miamiCyan"></i> Login as Admin
+                    </button>
+                `;
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function postForumMessage() {
+            const input = document.getElementById('forumInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const currentAdmin = localStorage.getItem('albufeira_user') || 'Admin';
+            const container = document.getElementById('forumPostsContainer');
+            
+            const postDiv = document.createElement('div');
+            postDiv.className = 'theme-input p-3 rounded-xl border border-miamiCyan/20 text-xs space-y-1';
+            postDiv.innerHTML = `
+                <p class="font-black text-miamiCyan">${currentAdmin}</p>
+                <p class="theme-text-sub">${text}</p>
+            `;
+            container.prepend(postDiv);
+            input.value = '';
+        }
     </script>
 </body>
 </html>
