@@ -180,6 +180,12 @@
                 <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article (Admin Only)</button>
             </div>
             <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">Art & Culture</span>
+                <h3 class="font-black text-miamiPink text-base">LAC Contemporary Art Exhibition: Cultural Horizons</h3>
+                <p class="text-xs text-gray-200 leading-relaxed">Exploring boundary-pushing contemporary visual arts and independent installations at Laboratório de Actividades Criativas in nearby Lagos.</p>
+                <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
+            </div>
+            <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
                 <h3 class="font-black text-miamiPink text-base">Albufeira Winter Coastal Walks & Heritage</h3>
                 <p class="text-xs text-gray-200 leading-relaxed">Explore the historic fishermen's quarter, Cerro da Vila Roman ruins, and cliffside trails between Olhos de Água and São Rafael.</p>
                 <p class="text-[10px] font-bold text-miamiCyan">Added by Admin</p>
@@ -280,6 +286,13 @@
                 <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="e.g. Bar" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Venue Logo / Image (Upload or URL)</label>
+                    <div class="flex gap-2 items-center">
+                        <input type="file" id="newVenueImageFile" accept="image/*" onchange="handleVenueImageFileSelect(event)" class="w-full theme-input border-2 rounded-xl px-3 py-1.5 text-[11px] font-medium cursor-pointer">
+                    </div>
+                    <input type="hidden" id="newVenueImage" value="">
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type new town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
                     <div><label class="block font-bold mb-1 theme-text-sub">Status</label><input type="text" readonly value="Pin Ready" class="w-full theme-input border-2 rounded-xl px-2 py-2 text-miamiCyan font-bold text-center"></div>
@@ -392,7 +405,6 @@
             updateThemeButtonUI();
             checkExistingAuth();
 
-            // History API Router setup
             window.addEventListener('popstate', (event) => {
                 const targetTab = event.state && event.state.tab ? event.state.tab : 'events';
                 switchTab(targetTab, false);
@@ -447,9 +459,9 @@
             }
             if (registeredVenues.length === 0) {
                 registeredVenues = [
-                    { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0881, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=60", schedule: "Open 24/7", author: "Admin" },
-                    { name: "Albufeira Marina Promenade", address: "Marina de Albufeira", area: "Albufeira Marina", lat: 37.0846, lng: -8.2683, website: "https://www.marinaalbufeira.com", image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&auto=format&fit=crop&q=60", schedule: "Daily", author: "Admin" },
-                    { name: "Yolo Club", address: "Avenida Dr. Francisco Sá Carneiro", area: "Albufeira Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&auto=format&fit=crop&q=60", schedule: "22:00 - 06:00", author: "Admin" }
+                    { name: "Praça dos Pescadores", address: "Fisherman's Beach Square", area: "Albufeira Old Town", lat: 37.0881, lng: -8.2520, website: "https://www.cm-albufeira.pt", image: "", schedule: "Open 24/7", author: "Admin" },
+                    { name: "Albufeira Marina Promenade", address: "Marina de Albufeira", area: "Albufeira Marina", lat: 37.0846, lng: -8.2683, website: "https://www.marinaalbufeira.com", image: "", schedule: "Daily", author: "Admin" },
+                    { name: "Yolo Club", address: "Avenida Dr. Francisco Sá Carneiro", area: "Albufeira Strip", lat: 37.0905, lng: -8.2255, website: "https://www.yoloclub.pt", image: "", schedule: "22:00 - 06:00", author: "Admin" }
                 ];
             }
             syncAvailableZones();
@@ -555,13 +567,30 @@
             const grid = document.getElementById('directoryGrid');
             if (!grid) return;
             grid.innerHTML = '';
-            registeredVenues.forEach(v => {
+            registeredVenues.forEach((v, index) => {
                 const card = document.createElement('div');
                 card.className = 'unified-row border-2 border-miamiCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between cursor-pointer hover:border-miamiCyan transition';
                 card.onclick = () => openVenueDetailPage(v.name);
+                
+                let imageAreaHtml = '';
+                if (v.image && v.image.trim() !== '') {
+                    imageAreaHtml = `<div class="h-40 w-full overflow-hidden relative bg-gray-800"><img src="${v.image}" class="w-full h-full object-cover"><span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span></div>`;
+                } else {
+                    imageAreaHtml = `
+                        <div class="h-40 w-full bg-slate-800 flex flex-col items-center justify-center relative border-b border-miamiCyan/20 p-4 text-center">
+                            <span class="text-xs font-black text-miamiCyan mb-2">No Logo Uploaded</span>
+                            <label onclick="event.stopPropagation()" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-[10px] font-black px-3 py-1.5 rounded-lg cursor-pointer shadow inline-flex items-center gap-1">
+                                <i data-lucide="upload" class="w-3 h-3"></i> Upload Logo
+                                <input type="file" accept="image/*" class="hidden" onchange="uploadVenueLogoInline(event, ${index})">
+                            </label>
+                            <span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span>
+                        </div>
+                    `;
+                }
+
                 card.innerHTML = `
                     <div>
-                        <div class="h-40 w-full overflow-hidden relative"><img src="${v.image}" class="w-full h-full object-cover"><span class="absolute bottom-2 left-2 bg-miamiCyan text-miamiDark text-[10px] font-black uppercase px-2.5 py-1 rounded-lg">${v.area}</span></div>
+                        ${imageAreaHtml}
                         <div class="p-5 space-y-2">
                             <h3 class="text-lg font-black text-white">${v.name}</h3>
                             <p class="text-xs font-bold text-gray-300">📍 ${v.address}</p>
@@ -572,15 +601,56 @@
                 `;
                 grid.appendChild(card);
             });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function uploadVenueLogoInline(e, venueIndex) {
+            e.stopPropagation();
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(uploadEvent) {
+                const base64Img = uploadEvent.target.result;
+                registeredVenues[venueIndex].image = base64Img;
+                if (_supabaseClient && registeredVenues[venueIndex].id) {
+                    await _supabaseClient.from('directory').update({ image: base64Img }).eq('id', registeredVenues[venueIndex].id);
+                }
+                renderDirectoryGrid();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleVenueImageFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                document.getElementById('newVenueImage').value = evt.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60", schedule: "Daily" };
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase()) || { name: venueName, address: "Algarve", area: "Algarve", image: "", schedule: "Daily" };
             const venueEvents = registeredEvents.filter(e => e.venueName.toLowerCase() === venue.name.toLowerCase());
             const container = document.getElementById('venueDetailContainer');
+            
+            let venueImageHtml = '';
+            if (venue.image && venue.image.trim() !== '') {
+                venueImageHtml = `<img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
+            } else {
+                venueImageHtml = `<div class="w-full md:w-72 h-48 bg-slate-800 rounded-2xl border-2 border-miamiCyan/40 flex flex-col items-center justify-center text-center p-4">
+                    <span class="text-xs font-black text-miamiCyan mb-2">No Logo Uploaded</span>
+                    <label class="bg-miamiCyan text-miamiDark text-[10px] font-black px-3 py-1.5 rounded-lg cursor-pointer shadow inline-flex items-center gap-1">
+                        <i data-lucide="upload" class="w-3 h-3"></i> Upload Logo
+                        <input type="file" accept="image/*" class="hidden" onchange="uploadVenueLogoInlineDetail(event, '${venue.name.replace(/'/g, "\\'")}')">
+                    </label>
+                </div>`;
+            }
+
             container.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-6 items-center border-b border-miamiCyan/30 pb-6">
-                    <img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">
+                    ${venueImageHtml}
                     <div class="space-y-3 w-full">
                         <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>
                         <h2 class="text-3xl font-black text-white">${venue.name}</h2>
@@ -596,6 +666,26 @@
                 </div>
             `;
             switchTab('venue-detail');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function uploadVenueLogoInlineDetail(e, venueName) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(uploadEvent) {
+                const base64Img = uploadEvent.target.result;
+                const v = registeredVenues.find(item => item.name.toLowerCase() === venueName.toLowerCase());
+                if (v) {
+                    v.image = base64Img;
+                    if (_supabaseClient && v.id) {
+                        await _supabaseClient.from('directory').update({ image: base64Img }).eq('id', v.id);
+                    }
+                }
+                renderDirectoryGrid();
+                openVenueDetailPage(venueName);
+            };
+            reader.readAsDataURL(file);
         }
 
         function generateCalendarDays() {
@@ -656,7 +746,6 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // Updated switchTab with History API pushState support
         function switchTab(tabId, pushState = true) {
             ['events', 'directory', 'venue-detail', 'event-detail', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
                 document.getElementById('tab-content-' + t)?.classList.add('hidden');
@@ -749,7 +838,7 @@
                 website: document.getElementById('newVenueWebsite').value,
                 lat: 37.0881, lng: -8.2520,
                 area: document.getElementById('newVenueArea').value.trim(),
-                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&auto=format&fit=crop&q=60",
+                image: document.getElementById('newVenueImage').value || "",
                 schedule: "Daily",
                 author: currentAdmin
             };
@@ -792,7 +881,6 @@
             }
         }
 
-        // Updated authentication UI with clean entrance/exit arrow icons matching palette
         function renderUserAuthUI(name) {
             const authArea = document.getElementById('authArea');
             if (!authArea) return;
