@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albufeira Pulse | Town Event Calendar & Directory</title>
+    <title>Albufeira-pulse / What's going on in Albufeira tonight</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,8 @@
                     colors: {
                         miamiPink: '#FF007F',
                         miamiCyan: '#00F0FF',
+                        dayTeal: '#0284C7',
+                        dayTealDark: '#0369A1',
                         miamiDark: '#0B0F19',
                         miamiCard: '#131B2E',
                     }
@@ -44,89 +46,130 @@
         })();
     </script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 170px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 145px; padding-bottom: 72px; }
+        @media (min-width: 1024px) { body { padding-bottom: 0; } }
+
+        /* Hide scrollbars on horizontal mobile swipe bars while keeping scrollability */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         @keyframes pulseColor {
             0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
-            50% { color: #00F0FF; transform: scale(1.2); filter: drop-shadow(0 0 14px #00F0FF); }
+            50% { color: #00F0FF; transform: scale(1.16); filter: drop-shadow(0 0 12px #00F0FF); }
             100% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
         }
         .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
+
+        /* NIGHT MODE */
         html.night-mode body { background-color: #0B0F19; color: #F8FAFC; }
         html.night-mode .theme-card { background-color: #131B2E !important; border-color: rgba(0, 240, 255, 0.25) !important; color: #F8FAFC !important; }
         html.night-mode .theme-text-main { color: #FFFFFF !important; }
         html.night-mode .theme-text-sub { color: #94A3B8 !important; }
+        html.night-mode .theme-accent-cyan { color: #00F0FF !important; }
         html.night-mode .theme-input { background-color: rgba(0,0,0,0.5) !important; color: #FFFFFF !important; border-color: rgba(0, 240, 255, 0.3) !important; }
         html.night-mode .weather-ticker { background-color: #0B0F19 !important; border-color: rgba(0, 240, 255, 0.3) !important; color: #FFFFFF !important; }
-        html.day-mode body { background-color: #F4F6F9; color: #0B0F19; }
-        html.day-mode header { background-color: rgba(255, 255, 255, 0.95) !important; border-bottom-color: rgba(0, 240, 255, 0.3) !important; box-shadow: 0 4px 20px rgba(0, 240, 255, 0.08) !important; }
-        html.day-mode .theme-card { background-color: #FFFFFF !important; border-color: rgba(0, 240, 255, 0.3) !important; color: #0B0F19 !important; box-shadow: 0 10px 30px -5px rgba(0, 240, 255, 0.1) !important; }
-        html.day-mode .theme-text-main { color: #0B0F19 !important; font-weight: 800; }
+        html.night-mode .nav-strip { background-color: #1E293B !important; border-color: rgba(0, 240, 255, 0.2) !important; }
+        html.night-mode .unified-row { background-color: #1E293B !important; color: #F8FAFC !important; border-color: rgba(0, 240, 255, 0.3) !important; }
+        html.night-mode .row-title { color: #FFFFFF !important; }
+        html.night-mode .row-body { color: #CBD5E1 !important; }
+        html.night-mode .row-meta { color: #94A3B8 !important; }
+
+        /* DAY MODE - High-Contrast Daylight Palette */
+        html.day-mode body { background-color: #F1F5F9; color: #0F172A; }
+        html.day-mode header { background-color: rgba(255, 255, 255, 0.98) !important; border-bottom-color: #CBD5E1 !important; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important; }
+        html.day-mode .theme-card { background-color: #FFFFFF !important; border-color: #CBD5E1 !important; color: #0F172A !important; box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.07) !important; }
+        html.day-mode .theme-text-main { color: #0F172A !important; font-weight: 800; }
         html.day-mode .theme-text-sub { color: #475569 !important; }
-        html.day-mode .theme-input { background-color: #EEF2F6 !important; color: #0B0F19 !important; border-color: rgba(0, 240, 255, 0.4) !important; }
-        html.day-mode .theme-pill { background-color: #E0F8FF !important; color: #00828F !important; border-color: rgba(0, 240, 255, 0.4) !important; }
-        html.day-mode .weather-ticker { background-color: #334155 !important; border-color: #475569 !important; color: #F8FAFC !important; }
-        .unified-row { background-color: #1E293B !important; color: #F8FAFC !important; border-color: rgba(0, 240, 255, 0.3) !important; }
-        #eventsAlbufeiraMap { height: 380px; width: 100%; border-radius: 1rem; z-index: 10; }
+        html.day-mode .theme-accent-cyan,
+        html.day-mode .text-miamiCyan { color: #0284C7 !important; }
+        html.day-mode .bg-miamiCyan { background-color: #0284C7 !important; color: #FFFFFF !important; }
+        html.day-mode .bg-miamiCyan\/20,
+        html.day-mode .bg-miamiCyan\/15 { background-color: #E0F2FE !important; }
+        html.day-mode .border-miamiCyan\/40,
+        html.day-mode .border-miamiCyan\/30,
+        html.day-mode .border-miamiCyan\/50 { border-color: #7DD3FC !important; }
+        html.day-mode .theme-input { background-color: #F8FAFC !important; color: #0F172A !important; border-color: #94A3B8 !important; }
+        html.day-mode .theme-pill { background-color: #FFFFFF !important; color: #0369A1 !important; border-color: #BAE6FD !important; }
+        html.day-mode .weather-ticker { background-color: #0F172A !important; border-color: #1E293B !important; color: #F8FAFC !important; }
+        html.day-mode .weather-ticker .text-miamiCyan { color: #38BDF8 !important; }
+        html.day-mode .nav-strip { background-color: #E2E8F0 !important; border-color: #CBD5E1 !important; }
+        html.day-mode .nav-strip .tab-btn:not(.bg-miamiCyan) { color: #1E293B !important; }
+        html.day-mode .nav-strip .tab-btn:not(.bg-miamiCyan):hover { color: #0284C7 !important; background-color: rgba(255,255,255,0.6); }
+        html.day-mode .unified-row { background-color: #FFFFFF !important; color: #0F172A !important; border-color: #CBD5E1 !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important; }
+        html.day-mode .row-title { color: #0F172A !important; }
+        html.day-mode .row-body { color: #334155 !important; }
+        html.day-mode .row-meta { color: #475569 !important; }
+        html.day-mode .text-emerald-400 { color: #059669 !important; }
+        html.day-mode .text-amber-400 { color: #D97706 !important; }
+        html.day-mode .text-red-400 { color: #DC2626 !important; }
+        html.day-mode .mobile-bottom-nav { background-color: rgba(255, 255, 255, 0.98) !important; border-top-color: #CBD5E1 !important; color: #0F172A !important; }
+
+        #eventsAlbufeiraMap { height: 260px; width: 100%; border-radius: 0.85rem; z-index: 10; }
+        @media (min-width: 768px) { #eventsAlbufeiraMap { height: 380px; border-radius: 1rem; } }
     </style>
 </head>
 <body class="min-h-screen flex flex-col transition-colors duration-300">
 
     <header id="mainHeader" class="fixed top-0 left-0 w-full backdrop-blur-md border-b bg-[#0B0F19]/95 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center gap-3">
-            <div class="flex items-center gap-3 cursor-pointer group" onclick="switchTab('events')" title="Return to Home">
-                <svg class="w-8 h-8 animate-pulse-color shrink-0" viewBox="0 0 24 24" fill="currentColor">
+        <!-- Top Brand & Utility Bar -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex justify-between items-center gap-2">
+            <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group min-w-0" onclick="switchTab('events')" title="Return to Home">
+                <svg class="w-7 h-7 sm:w-8 sm:h-8 animate-pulse-color shrink-0" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
-                <div>
-                    <h1 class="text-base font-black tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent group-hover:opacity-90">ALBUFEIRA PULSE</h1>
-                    <p id="siteSubtitle" class="text-[9px] font-extrabold tracking-widest uppercase text-miamiCyan theme-text-sub">The Heartbeat of Albufeira</p>
+                <div class="truncate">
+                    <h1 class="text-sm sm:text-base font-black tracking-wider sm:tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent group-hover:opacity-90 truncate">ALBUFEIRA PULSE</h1>
+                    <p id="siteSubtitle" class="text-[9px] font-extrabold tracking-wider uppercase text-miamiCyan theme-text-sub truncate">The Heartbeat of Albufeira</p>
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2">
-                <button onclick="toggleLanguage()" id="langToggleBtn" class="bg-miamiDark text-miamiCyan border border-miamiCyan/40 text-xs font-black px-2.5 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-md hover:bg-miamiCyan hover:text-miamiDark">
-                    <i data-lucide="globe" class="w-3 h-3"></i>
-                    <span id="langText">EN / PT</span>
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <button onclick="toggleLanguage()" id="langToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-black px-2 sm:px-2.5 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm">
+                    <i data-lucide="globe" class="w-3.5 h-3.5 text-miamiCyan"></i>
+                    <span id="langText">EN/PT</span>
                 </button>
-                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="bg-miamiDark text-miamiCyan border border-miamiCyan/40 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-md hover:bg-miamiCyan hover:text-miamiDark">
-                    <i data-lucide="sun" id="themeIcon" class="w-3.5 h-3.5"></i>
-                    <span id="themeText">Toggle Mode</span>
+                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-bold px-2 sm:px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm">
+                    <i data-lucide="sun" id="themeIcon" class="w-3.5 h-3.5 text-miamiPink"></i>
+                    <span id="themeText" class="hidden sm:inline">Day Mode</span>
                 </button>
                 <div id="authArea">
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1 cursor-pointer shadow-sm hover:border-miamiCyan">
-                        <i data-lucide="log-in" class="w-3 h-3 text-miamiCyan"></i> <span data-i18n="login">Login</span>
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1 cursor-pointer shadow-sm hover:border-miamiCyan">
+                        <i data-lucide="log-in" class="w-3.5 h-3.5 text-miamiCyan"></i> <span data-i18n="login">Login</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="weather-ticker border-t border-b px-4 py-1.5 text-xs flex justify-between items-center font-medium">
-            <div class="flex items-center gap-5 overflow-x-auto whitespace-nowrap">
-                <span class="flex items-center gap-1.5 font-bold text-miamiCyan">
-                    <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-miamiPink animate-bounce"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions">Live Conditions:</span>
+        <!-- Live Conditions Ticker -->
+        <div class="weather-ticker border-t border-b px-3 sm:px-4 py-1 text-[11px] sm:text-xs flex justify-between items-center font-medium">
+            <div class="flex items-center gap-4 sm:gap-5 overflow-x-auto no-scrollbar whitespace-nowrap">
+                <span class="flex items-center gap-1.5 font-bold text-miamiCyan shrink-0">
+                    <i data-lucide="sun-medium" class="w-3.5 h-3.5 text-miamiPink"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions" class="hidden sm:inline">Live Conditions:</span>
                 </span>
-                <span><span data-i18n="air">Air:</span> <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
-                <span><span data-i18n="condition">Condition:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
-                <span><span data-i18n="waveHeight">Wave Height:</span> <strong id="liveWaveHeight" class="text-white">Loading...</strong></span>
-                <span><span data-i18n="wind">Wind:</span> <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
+                <span class="shrink-0"><span data-i18n="air">Air:</span> <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
+                <span class="shrink-0"><span data-i18n="condition">Condition:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
+                <span class="shrink-0"><span data-i18n="wind">Wind:</span> <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
+                <span class="shrink-0 hidden md:inline"><span data-i18n="waveHeight">Wave Height:</span> <strong id="liveWaveHeight" class="text-white">—</strong></span>
             </div>
-            <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-miamiCyan hover:underline font-bold hidden lg:inline">Open-Meteo API ↗</a>
+            <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-miamiCyan hover:underline font-bold hidden lg:inline shrink-0">Open-Meteo API ↗</a>
         </div>
 
-        <div class="w-full bg-[#1E293B] border-t border-miamiCyan/20 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-between items-center gap-2 py-2">
-                <div class="flex gap-1 overflow-x-auto">
-                    <button onclick="switchTab('events')" id="btn-events" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1 transition shadow-md cursor-pointer"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> <span data-i18n="tabEvents">Events</span></button>
-                    <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="store" class="w-3.5 h-3.5"></i> <span data-i18n="tabDirectory">Venues & Directory</span></button>
-                    <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> <span data-i18n="tabCalendar">Calendar</span></button>
-                    <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i> <span data-i18n="tabArticles">Articles</span></button>
-                    <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="tag" class="w-3.5 h-3.5"></i> <span data-i18n="tabClassifieds">Classifieds</span></button>
-                    <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="message-square" class="w-3.5 h-3.5"></i> <span data-i18n="tabForum">Forum</span></button>
-                    <button onclick="switchTab('links')" id="btn-links" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> <span data-i18n="tabLinks">Essential Links</span></button>
-                    <button onclick="switchTab('info')" id="btn-info" class="tab-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1 transition cursor-pointer"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> <span data-i18n="tabEmergency">Emergency Contacts</span></button>
+        <!-- Horizontal Scrollable Tab Strip -->
+        <div class="nav-strip w-full bg-[#1E293B] border-t border-miamiCyan/20 shadow-sm">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 flex justify-between items-center gap-2 py-1.5 sm:py-2">
+                <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5 flex-1">
+                    <button onclick="switchTab('events')" id="btn-events" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-sm cursor-pointer"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> <span data-i18n="tabEvents">Events</span></button>
+                    <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-3.5 h-3.5"></i> <span data-i18n="tabDirectory">Venues</span></button>
+                    <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> <span data-i18n="tabCalendar">Calendar</span></button>
+                    <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-3.5 h-3.5"></i> <span data-i18n="tabClassifieds">Classifieds</span></button>
+                    <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-3.5 h-3.5"></i> <span data-i18n="tabForum">Forum</span></button>
+                    <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i> <span data-i18n="tabArticles">Articles</span></button>
+                    <button onclick="switchTab('links')" id="btn-links" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> <span data-i18n="tabLinks">Links</span></button>
+                    <button onclick="switchTab('info')" id="btn-info" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> <span data-i18n="tabEmergency">Emergency</span></button>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <!-- Desktop Quick Add Buttons -->
+                <div class="hidden sm:flex items-center gap-2 shrink-0">
                     <button onclick="openVenueModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 cursor-pointer"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span data-i18n="addVenue">+ Add Venue</span></button>
                     <button onclick="openModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 cursor-pointer"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span data-i18n="addEvent">+ Add Event</span></button>
                 </div>
@@ -134,58 +177,69 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-grow w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
             <!-- Left / Main Content Area (9 Columns on Desktop) -->
-            <div class="lg:col-span-9 space-y-6">
+            <div class="lg:col-span-9 space-y-4 sm:space-y-5">
+
+                <!-- Mobile Quick Action Row -->
+                <div class="flex sm:hidden gap-2">
+                    <button onclick="openModal()" class="flex-1 bg-[#FF007F] active:scale-95 text-white text-xs font-black py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> <span data-i18n="addEvent">+ Add Event</span>
+                    </button>
+                    <button onclick="openVenueModal()" class="flex-1 theme-card theme-text-main border border-[#FF007F]/50 active:scale-95 text-xs font-black py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-[#FF007F]"></i> <span data-i18n="addVenue">+ Add Venue</span>
+                    </button>
+                </div>
 
                 <!-- EVENTS TAB -->
-                <section id="tab-content-events" class="space-y-5">
-                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto pb-1"></div>
-                    <div id="eventCategoryFilterBar" class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-miamiCyan/20"></div>
+                <section id="tab-content-events" class="space-y-4 sm:space-y-5">
+                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
+                    <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
 
-                    <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl p-4 shadow-xl space-y-3">
+                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
                         <div class="flex justify-between items-center">
                             <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
                             </span>
-                            <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-3 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
+                            <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
                         </div>
                         <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
-                        <div class="flex flex-wrap items-center gap-4 pt-1 text-[11px] font-bold text-gray-300">
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
-                            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#64748B] inline-block"></span> Other</span>
+                        <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 text-[10px] sm:text-[11px] font-bold row-meta">
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#64748B] inline-block"></span> Other</span>
                         </div>
                     </div>
-                    <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                    <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
                 </section>
 
-                <!-- DIRECTORY TAB (EXCLUSIVE TO SUPABASE `directory` TABLE) -->
-                <section id="tab-content-directory" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center flex-wrap gap-4">
+                <!-- DIRECTORY TAB -->
+                <section id="tab-content-directory" class="space-y-4 sm:space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                         <div>
-                            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
+                            <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
                             <p id="directoryCountLabel" class="text-xs font-bold text-miamiCyan mt-0.5">Loading directory from Supabase...</p>
                         </div>
-                        <div class="flex items-center gap-2 relative">
-                            <input type="text" id="directorySearchInput" list="venueAutocompleteList" oninput="filterDirectoryList()" placeholder="Start typing venue name or street..." class="theme-input border-2 rounded-xl px-3.5 py-2 text-xs font-medium w-72 focus:border-miamiCyan outline-none">
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <input type="text" id="directorySearchInput" list="venueAutocompleteList" oninput="filterDirectoryList()" placeholder="Search venue name or street..." class="theme-input border-2 rounded-xl px-3.5 py-2 text-xs font-medium w-full sm:w-72 focus:border-miamiCyan outline-none">
                             <datalist id="venueAutocompleteList"></datalist>
-                            <button onclick="document.getElementById('directorySearchInput').value=''; filterDirectoryList();" class="text-xs font-bold text-gray-400 hover:text-miamiPink px-2 py-1 cursor-pointer" title="Clear Search">✕</button>
+                            <button onclick="document.getElementById('directorySearchInput').value=''; filterDirectoryList();" class="text-xs font-bold row-meta hover:text-miamiPink px-2.5 py-2 cursor-pointer" title="Clear Search">✕</button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
-                        <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 space-y-2 shadow-lg">
-                            <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-3 flex items-center gap-1.5">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 items-start">
+                        <!-- Horizontal pills on mobile, vertical sidebar on desktop -->
+                        <div class="theme-card border border-miamiCyan/30 rounded-2xl p-3 sm:p-4 space-y-2 shadow-md">
+                            <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-2 flex items-center gap-1.5">
                                 <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
                             </h3>
-                            <div id="directoryCategorySidebar" class="flex flex-col gap-1.5 text-xs font-bold"></div>
+                            <div id="directoryCategorySidebar" class="flex md:flex-col gap-1.5 overflow-x-auto no-scrollbar text-xs font-bold"></div>
                         </div>
 
                         <div class="md:col-span-3 space-y-3" id="directoryListContainer"></div>
@@ -193,58 +247,60 @@
                 </section>
 
                 <!-- VENUE DETAIL PAGE -->
-                <section id="tab-content-venue-detail" class="space-y-6 hidden">
+                <section id="tab-content-venue-detail" class="space-y-4 sm:space-y-6 hidden">
                     <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md" data-i18n="backToDirectory">← Back to Directory</button>
-                    <div id="venueDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+                    <div id="venueDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
                 </section>
 
                 <!-- EVENT DETAIL PAGE -->
-                <section id="tab-content-event-detail" class="space-y-6 hidden">
+                <section id="tab-content-event-detail" class="space-y-4 sm:space-y-6 hidden">
                     <button onclick="switchTab('events')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Events</button>
-                    <div id="eventDetailContainer" class="theme-card border-2 border-miamiCyan/50 rounded-3xl p-6 shadow-2xl space-y-6"></div>
+                    <div id="eventDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
                 </section>
 
                 <!-- FULL CALENDAR TAB -->
-                <section id="tab-content-calendar" class="space-y-6 hidden">
-                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-6 shadow-xl">
-                        <h2 class="text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-7 h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
-                        <div class="grid grid-cols-7 gap-2 text-center font-black text-sm mb-2">
-                            <div class="text-miamiPink">Mon</div><div class="text-miamiPink">Tue</div><div class="text-miamiPink">Wed</div><div class="text-miamiPink">Thu</div><div class="text-miamiPink">Fri</div><div class="text-miamiPink">Sat</div><div class="text-miamiCyan">Sun</div>
+                <section id="tab-content-calendar" class="space-y-4 sm:space-y-6 hidden">
+                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-6 shadow-xl overflow-x-auto">
+                        <h2 class="text-xl sm:text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
+                        <div class="min-w-[560px]">
+                            <div class="grid grid-cols-7 gap-1.5 sm:gap-2 text-center font-black text-xs sm:text-sm mb-2">
+                                <div class="text-miamiPink">Mon</div><div class="text-miamiPink">Tue</div><div class="text-miamiPink">Wed</div><div class="text-miamiPink">Thu</div><div class="text-miamiPink">Fri</div><div class="text-miamiPink">Sat</div><div class="text-miamiCyan">Sun</div>
+                            </div>
+                            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2"></div>
                         </div>
-                        <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
                     </div>
                 </section>
 
                 <!-- ARTICLES TAB -->
-                <section id="tab-content-articles" class="space-y-6 hidden">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-black theme-text-main">Local Articles & Culture</h2>
+                <section id="tab-content-articles" class="space-y-4 sm:space-y-6 hidden">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-xl sm:text-2xl font-black theme-text-main">Local Articles & Culture</h2>
                         <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article</button>
                     </div>
                     <div id="articlesListContainer" class="space-y-3"></div>
                 </section>
 
                 <!-- CLASSIFIEDS TAB -->
-                <section id="tab-content-classifieds" class="space-y-6 hidden">
-                    <div class="flex flex-wrap justify-between items-center gap-4">
+                <section id="tab-content-classifieds" class="space-y-4 sm:space-y-6 hidden">
+                    <div class="flex flex-wrap justify-between items-center gap-3">
                         <div>
-                            <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="tag" class="text-miamiPink w-7 h-7"></i> Classifieds & Community Board</h2>
-                            <p class="text-xs text-gray-400 font-medium mt-0.5">Direct peer-to-peer listings. Strictly no real estate sales or agency spam.</p>
+                            <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="tag" class="text-miamiPink w-6 h-6 sm:w-7 sm:h-7"></i> Classifieds & Community Board</h2>
+                            <p class="text-xs row-meta font-medium mt-0.5">Direct peer-to-peer listings. Strictly no real estate sales or agency spam.</p>
                         </div>
-                        <button onclick="openClassifiedModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-lg shadow-[#FF007F]/40 transition flex items-center gap-1.5 cursor-pointer">
+                        <button onclick="openClassifiedModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i> + Post Classified
                         </button>
                     </div>
 
-                    <div id="classifiedCategoryBar" class="flex flex-wrap items-center gap-2 pb-2 border-b border-miamiCyan/20"></div>
+                    <div id="classifiedCategoryBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
                     <div id="classifiedsListContainer" class="space-y-3"></div>
                 </section>
 
                 <!-- FORUM TAB -->
-                <section id="tab-content-forum" class="space-y-6 hidden">
-                    <div class="flex flex-wrap justify-between items-center gap-4">
-                        <h2 class="text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="message-square" class="text-miamiCyan w-7 h-7"></i> Albufeira Community Forum</h2>
-                        <button onclick="openNewThreadModal()" class="bg-miamiCyan hover:bg-opacity-90 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5 cursor-pointer">
+                <section id="tab-content-forum" class="space-y-4 sm:space-y-6 hidden">
+                    <div class="flex flex-wrap justify-between items-center gap-3">
+                        <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="message-square" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> Albufeira Community Forum</h2>
+                        <button onclick="openNewThreadModal()" class="bg-miamiCyan hover:bg-opacity-90 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i> + Start New Thread
                         </button>
                     </div>
@@ -253,114 +309,114 @@
                 </section>
 
                 <!-- ESSENTIAL LINKS TAB -->
-                <section id="tab-content-links" class="space-y-6 hidden">
-                    <h2 class="text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                        <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                <section id="tab-content-links" class="space-y-4 sm:space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                        <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
                             <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
-                            <p class="text-gray-300">Municipal announcements and civic services.</p>
+                            <p class="row-body">Municipal announcements and civic services.</p>
                         </a>
-                        <a href="https://www.cp.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                        <a href="https://www.cp.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
                             <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Trains (Albufeira-Ferreiras)</div>
-                            <p class="text-gray-300">National rail timetables and regional connections.</p>
+                            <p class="row-body">National rail timetables and regional connections.</p>
                         </a>
-                        <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                        <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
                             <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
-                            <p class="text-gray-300">Regional bus timetables and route planner.</p>
+                            <p class="row-body">Regional bus timetables and route planner.</p>
                         </a>
-                        <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 hover:border-amber-500 transition shadow-lg block space-y-2">
+                        <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-amber-500/40 hover:border-amber-500 transition shadow-md block space-y-1.5">
                             <div class="text-amber-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
-                            <p class="text-gray-300">Official meteorological forecasts and warnings.</p>
+                            <p class="row-body">Official meteorological forecasts and warnings.</p>
                         </a>
-                        <a href="https://www.marinaalbufeira.com/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                        <a href="https://www.marinaalbufeira.com/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
                             <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="anchor" class="w-4 h-4"></i> Albufeira Marina</div>
-                            <p class="text-gray-300">Marina facilities, nautical events, and berthing.</p>
+                            <p class="row-body">Marina facilities, nautical events, and berthing.</p>
                         </a>
-                        <a href="https://visitalbufeira.pt/" target="_blank" class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 hover:border-miamiCyan transition shadow-lg block space-y-2">
+                        <a href="https://visitalbufeira.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
                             <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="compass" class="w-4 h-4"></i> Visit Albufeira Tourism</div>
-                            <p class="text-gray-300">Official tourist guides, culture, and beach maps.</p>
+                            <p class="row-body">Official tourist guides, culture, and beach maps.</p>
                         </a>
                     </div>
                 </section>
 
                 <!-- EMERGENCY CONTACTS TAB -->
-                <section id="tab-content-info" class="space-y-6 hidden">
-                    <h2 class="text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs max-w-5xl">
-                        <div class="unified-row p-5 rounded-2xl border-2 border-red-500/40 space-y-2 shadow-lg">
+                <section id="tab-content-info" class="space-y-4 sm:space-y-6 hidden">
+                    <h2 class="text-xl sm:text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-5xl">
+                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-red-500/40 space-y-2 shadow-md">
                             <p class="font-black text-red-400 text-sm mb-2">🚨 General Emergencies: 112</p>
-                            <p class="text-gray-300 font-medium">SNS 24 Health Line: <strong class="text-white">808 24 24 24</strong></p>
-                            <p class="text-gray-300 font-medium">Albufeira GNR Police: <strong class="text-white">289 583 310</strong></p>
-                            <p class="text-gray-300 font-medium">Albufeira Fire Brigade: <strong class="text-white">289 586 333</strong></p>
+                            <p class="row-body font-medium">SNS 24 Health Line: <strong class="row-title">808 24 24 24</strong></p>
+                            <p class="row-body font-medium">Albufeira GNR Police: <strong class="row-title">289 583 310</strong></p>
+                            <p class="row-body font-medium">Albufeira Fire Brigade: <strong class="row-title">289 586 333</strong></p>
                         </div>
-                        <div class="unified-row p-5 rounded-2xl border-2 border-miamiPink/40 space-y-2 shadow-lg">
+                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiPink/40 space-y-2 shadow-md">
                             <p class="font-black text-miamiPink text-sm mb-2">🐾 Animal Welfare & Strays (Albufeira)</p>
-                            <p class="text-gray-300 font-medium">Municipal Vet Service: <strong class="text-white">289 599 622</strong> / <strong class="text-white">969 956 125</strong></p>
-                            <p class="text-gray-300 font-medium">Animal Welfare Center (Bem Estar Animal): <strong class="text-white">289 598 894</strong></p>
-                            <p class="text-gray-300 font-medium">Dead Animal / Roadway Removal (Luságua): <strong class="text-white">808 202 492</strong></p>
+                            <p class="row-body font-medium">Municipal Vet Service: <strong class="row-title">289 599 622</strong> / <strong class="row-title">969 956 125</strong></p>
+                            <p class="row-body font-medium">Animal Welfare Center (Bem Estar Animal): <strong class="row-title">289 598 894</strong></p>
+                            <p class="row-body font-medium">Dead Animal / Roadway Removal (Luságua): <strong class="row-title">808 202 492</strong></p>
                         </div>
-                        <div class="unified-row p-5 rounded-2xl border-2 border-amber-500/40 space-y-2 shadow-lg">
+                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-amber-500/40 space-y-2 shadow-md">
                             <p class="font-black text-amber-400 text-sm mb-2">🌲 Wildlife & Environmental Rescue</p>
-                            <p class="text-gray-300 font-medium">SEPNA (GNR Nature Protection): <strong class="text-white">213 217 291</strong></p>
-                            <p class="text-gray-300 font-medium">SOS Environment Line: <strong class="text-white">808 200 520</strong></p>
-                            <p class="text-gray-300 font-medium">RIAS (Algarve Wildlife Recovery Center): <strong class="text-white">927 659 313</strong></p>
+                            <p class="row-body font-medium">SEPNA (GNR Nature Protection): <strong class="row-title">213 217 291</strong></p>
+                            <p class="row-body font-medium">SOS Environment Line: <strong class="row-title">808 200 520</strong></p>
+                            <p class="row-body font-medium">RIAS (Algarve Wildlife Recovery Center): <strong class="row-title">927 659 313</strong></p>
                         </div>
-                        <div class="unified-row p-5 rounded-2xl border-2 border-miamiCyan/40 space-y-2 shadow-lg">
+                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 space-y-2 shadow-md">
                             <p class="font-black text-miamiCyan text-sm mb-2">🏛️ Municipal Services & Civil Protection</p>
-                            <p class="text-gray-300 font-medium">Albufeira Town Hall (Geral): <strong class="text-white">289 599 500</strong></p>
-                            <p class="text-gray-300 font-medium">Civil Protection Service: <strong class="text-white">289 599 503</strong></p>
-                            <p class="text-gray-300 font-medium">Water / Sanitation Emergencies: <strong class="text-white">289 599 534</strong></p>
+                            <p class="row-body font-medium">Albufeira Town Hall (Geral): <strong class="row-title">289 599 500</strong></p>
+                            <p class="row-body font-medium">Civil Protection Service: <strong class="row-title">289 599 503</strong></p>
+                            <p class="row-body font-medium">Water / Sanitation Emergencies: <strong class="row-title">289 599 534</strong></p>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <!-- PERSISTENT RIGHT VERTICAL SIDEBAR (3 Columns on Desktop) -->
-            <aside class="lg:col-span-3 space-y-5">
+            <!-- PERSISTENT RIGHT VERTICAL SIDEBAR (3 Columns on Desktop, Stacks Cleanly Below on Mobile) -->
+            <aside class="lg:col-span-3 space-y-4 sm:space-y-5">
 
                 <!-- 1. Mini Calendar Widget -->
-                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 shadow-lg space-y-3">
+                <div class="theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-md space-y-3">
                     <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
                         <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                             <i data-lucide="calendar" class="w-4 h-4 text-miamiPink"></i> Nov 2026
                         </h3>
-                        <button onclick="switchTab('calendar')" class="text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer">Full View →</button>
+                        <button onclick="switchTab('calendar')" class="text-[11px] font-bold text-miamiCyan hover:underline cursor-pointer">Full View →</button>
                     </div>
-                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-black text-gray-400">
+                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-black row-meta">
                         <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div class="text-miamiCyan">S</div>
                     </div>
                     <div id="sidebarMiniCalendar" class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold"></div>
                 </div>
 
                 <!-- 2. Today's Events Widget -->
-                <div class="theme-card border-2 border-miamiPink/30 rounded-2xl p-4 shadow-lg space-y-3">
+                <div class="theme-card border border-miamiPink/30 rounded-2xl p-4 shadow-md space-y-3">
                     <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
                         <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
                             <i data-lucide="sparkles" class="w-4 h-4"></i> Today's Events
                         </h3>
-                        <span id="sidebarTodayDateLabel" class="text-[10px] font-bold text-gray-400"></span>
+                        <span id="sidebarTodayDateLabel" class="text-[10px] font-bold row-meta"></span>
                     </div>
                     <div id="sidebarTodaysEvents" class="space-y-2.5 text-xs"></div>
                 </div>
 
                 <!-- 3. Latest Forum Widget -->
-                <div class="theme-card border-2 border-miamiCyan/30 rounded-2xl p-4 shadow-lg space-y-3">
+                <div class="theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-md space-y-3">
                     <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
                         <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                             <i data-lucide="message-square" class="w-4 h-4"></i> Latest Forum
                         </h3>
-                        <button onclick="switchTab('forum')" class="text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer">All →</button>
+                        <button onclick="switchTab('forum')" class="text-[11px] font-bold text-miamiCyan hover:underline cursor-pointer">All →</button>
                     </div>
                     <div id="sidebarLatestForum" class="space-y-2.5 text-xs"></div>
                 </div>
 
                 <!-- 4. Latest Classifieds Widget -->
-                <div class="theme-card border-2 border-miamiPink/30 rounded-2xl p-4 shadow-lg space-y-3">
+                <div class="theme-card border border-miamiPink/30 rounded-2xl p-4 shadow-md space-y-3">
                     <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
                         <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
                             <i data-lucide="tag" class="w-4 h-4"></i> Latest Classifieds
                         </h3>
-                        <button onclick="switchTab('classifieds')" class="text-[10px] font-bold text-miamiPink hover:underline cursor-pointer">All →</button>
+                        <button onclick="switchTab('classifieds')" class="text-[11px] font-bold text-miamiPink hover:underline cursor-pointer">All →</button>
                     </div>
                     <div id="sidebarLatestClassifieds" class="space-y-2.5 text-xs"></div>
                 </div>
@@ -369,14 +425,37 @@
         </div>
     </main>
 
+    <!-- MOBILE BOTTOM THUMB-NAV BAR -->
+    <nav class="mobile-bottom-nav lg:hidden fixed bottom-0 left-0 w-full bg-[#0B0F19]/95 backdrop-blur-md border-t border-miamiCyan/30 z-40 px-2 py-1.5 flex justify-around items-center text-[10px] font-bold shadow-2xl">
+        <button onclick="switchTab('events')" class="flex flex-col items-center gap-0.5 py-1 px-2 text-miamiCyan cursor-pointer">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>Events</span>
+        </button>
+        <button onclick="switchTab('directory')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiCyan cursor-pointer">
+            <i data-lucide="store" class="w-4 h-4"></i>
+            <span>Venues</span>
+        </button>
+        <button onclick="openModal()" class="flex flex-col items-center justify-center -mt-4 bg-[#FF007F] text-white w-11 h-11 rounded-full shadow-lg shadow-[#FF007F]/40 cursor-pointer" title="Add Event">
+            <i data-lucide="plus" class="w-5 h-5"></i>
+        </button>
+        <button onclick="switchTab('calendar')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiCyan cursor-pointer">
+            <i data-lucide="calendar-days" class="w-4 h-4"></i>
+            <span>Calendar</span>
+        </button>
+        <button onclick="switchTab('info')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiPink cursor-pointer">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-miamiPink"></i>
+            <span>SOS</span>
+        </button>
+    </nav>
+
     <!-- MODALS -->
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Login</h3><button onclick="closeLoginModal()" class="font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Login</h3><button onclick="closeLoginModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
             <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Email</label><input type="email" id="loginEmailInput" required placeholder="you@example.com" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" id="loginPasswordInput" required placeholder="Enter password" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Email</label><input type="email" id="loginEmailInput" required placeholder="you@example.com" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" id="loginPasswordInput" required placeholder="Enter password" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Login</button>
             </form>
         </div>
@@ -384,80 +463,80 @@
 
     <!-- Add Event Modal -->
     <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
             <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="Event title" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><input type="text" id="newEventVenueInput" list="venueAutocompleteList" required placeholder="Type or select venue..." onchange="onVenueInputChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="Event title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><input type="text" id="newEventVenueInput" list="venueAutocompleteList" required placeholder="Type or select venue..." onchange="onVenueInputChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required placeholder="19:00" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required placeholder="Free" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required placeholder="19:00" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required placeholder="Free" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
                 </div>
                 <div>
                     <label class="block font-bold mb-1 theme-text-sub">Category</label>
-                    <select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
-                        <option value="WELLNESS">Wellness (Yoga, Reiki, Sound Bowls)</option>
-                        <option value="HEALTH & FIRST AID">Health & First Aid (SNS Courses)</option>
+                    <select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium">
                         <option value="HAPPY HOUR">Happy Hour</option>
-                        <option value="MUSIC">Music</option>
+                        <option value="MUSIC">Music / Live DJ</option>
                         <option value="LIVE SPORTS TV">Live Sports TV</option>
                         <option value="KARAOKE">Karaoke</option>
-                        <option value="QUIZ">Quiz</option>
+                        <option value="QUIZ">Quiz Night</option>
+                        <option value="WELLNESS">Wellness (Yoga, Reiki, Sound Bowls)</option>
+                        <option value="HEALTH & FIRST AID">Health & First Aid (SNS Courses)</option>
                         <option value="ART & CULTURE">Art & Culture</option>
                         <option value="MARKETS">Markets</option>
                         <option value="SOCIAL">Social</option>
                     </select>
                 </div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
     </div>
 
     <!-- Add Venue Modal -->
     <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Directory</h3><button onclick="closeVenueModal()" class="font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Directory</h3><button onclick="closeVenueModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
             <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="Venue name" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" required placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Logo / Photo URL (Optional)</label><input type="url" id="newVenueImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2 py-2 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Live Sports TV">Live Sports TV</option><option value="Karaoke">Karaoke</option><option value="Quiz">Quiz</option><option value="Other">Other</option></select></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="Venue name" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" required placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Logo / Photo URL (Optional)</label><input type="url" id="newVenueImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Live Sports TV">Live Sports TV</option><option value="Karaoke">Karaoke</option><option value="Quiz">Quiz</option><option value="Other">Other</option></select></div>
                 </div>
                 <input type="hidden" id="newVenueLat" value="37.0881">
                 <input type="hidden" id="newVenueLng" value="-8.2520">
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Save Venue</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Save Venue</button></div>
             </form>
         </div>
     </div>
 
     <!-- Edit Venue Address Modal -->
     <div id="editAddressModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center">
                 <h3 class="text-lg font-black theme-text-main flex items-center gap-1.5">
                     <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> Add Street Name or Address
                 </h3>
-                <button onclick="closeEditAddressModal()" class="font-bold cursor-pointer">✕</button>
+                <button onclick="closeEditAddressModal()" class="font-bold p-1 cursor-pointer">✕</button>
             </div>
             <p id="editAddressVenueTitle" class="text-xs font-black text-miamiCyan"></p>
             <form onsubmit="handleEditAddressSubmit(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="editAddressVenueOriginalName">
                 <div>
                     <label class="block font-bold mb-1 theme-text-sub">Street Name & Number / Address</label>
-                    <input type="text" id="editAddressInput" required placeholder="e.g. Rua 25 de Abril, 14, Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium focus:border-miamiCyan outline-none">
+                    <input type="text" id="editAddressInput" required placeholder="e.g. Rua 25 de Abril, 14, Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium focus:border-miamiCyan outline-none">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeEditAddressModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
-                    <button type="submit" id="saveAddressBtn" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Save Address</button>
+                    <button type="button" onclick="closeEditAddressModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
+                    <button type="submit" id="saveAddressBtn" class="px-4 py-2.5 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Save Address</button>
                 </div>
             </form>
         </div>
@@ -465,38 +544,38 @@
 
     <!-- New Forum Thread Modal -->
     <div id="newThreadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Start New Forum Thread</h3><button onclick="closeNewThreadModal()" class="font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Start New Forum Thread</h3><button onclick="closeNewThreadModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
             <form onsubmit="handleNewThreadSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Thread Topic / Title</label><input type="text" id="newThreadTitle" required placeholder="Topic title" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newThreadCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"><option value="General Discussion">General Discussion</option><option value="Recommendations">Recommendations</option><option value="Wellness & Health">Wellness & Health</option><option value="Nightlife & Dining">Nightlife & Dining</option><option value="Local Tips">Local Tips</option></select></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Thread Topic / Title</label><input type="text" id="newThreadTitle" required placeholder="Topic title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newThreadCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"><option value="General Discussion">General Discussion</option><option value="Recommendations">Recommendations</option><option value="Nightlife & Dining">Nightlife & Dining</option><option value="Wellness & Health">Wellness & Health</option><option value="Local Tips">Local Tips</option></select></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Message</label><textarea id="newThreadBody" rows="4" required placeholder="Write your post..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeNewThreadModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Post Thread</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeNewThreadModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Post Thread</button></div>
             </form>
         </div>
     </div>
 
     <!-- Post Classified Modal -->
     <div id="classifiedModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiPink/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Post Community Classified</h3><button onclick="closeClassifiedModal()" class="font-bold cursor-pointer">✕</button></div>
+        <div class="theme-card border-2 border-miamiPink/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Post Community Classified</h3><button onclick="closeClassifiedModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
             <form onsubmit="handleClassifiedSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Title</label><input type="text" id="newClassifiedTitle" required placeholder="Listing title" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Title</label><input type="text" id="newClassifiedTitle" required placeholder="Listing title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 <div>
                     <label class="block font-bold mb-1 theme-text-sub">Category (No Real Estate Sales)</label>
-                    <select id="newClassifiedCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium">
+                    <select id="newClassifiedCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium">
                         <option value="Rent">Rent (Rooms & Rentals Only - No Sales)</option>
                         <option value="Job Offers">Job Offers</option>
                         <option value="Buy & Sell">Buy & Sell</option>
                         <option value="Socialise">Socialise / Meetups</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Price / Salary</label><input type="text" id="newClassifiedPrice" placeholder="e.g. €500/mo or €50" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Contact Info</label><input type="text" id="newClassifiedContact" required placeholder="Email or Phone" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div><label class="block font-bold mb-1 theme-text-sub">Price / Salary</label><input type="text" id="newClassifiedPrice" placeholder="e.g. €500/mo or €50" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
+                    <div><label class="block font-bold mb-1 theme-text-sub">Contact Info</label><input type="text" id="newClassifiedContact" required placeholder="Email or Phone" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 </div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Details</label><textarea id="newClassifiedDesc" rows="3" required placeholder="Describe your listing..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeClassifiedModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Listing</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeClassifiedModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Listing</button></div>
             </form>
         </div>
     </div>
@@ -507,7 +586,6 @@
         const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras", "Lagos", "Faro", "Tavira", "Portimão", "Monchique", "Olhão", "Silves", "Aljezur", "Lagoa", "Loulé", "Castro Marim", "Alcoutim", "Vila Real de Santo António", "Vila do Bispo", "São Brás de Alportel"];
         const ADDRESS_PLACEHOLDER = 'Enter street name or address...';
 
-        // Venues come exclusively from Supabase `directory` table; events/posts/classifieds start empty with no placeholders
         let registeredVenues = [];
         let registeredEvents = [];
         let forumThreads = [];
@@ -598,7 +676,7 @@
         function syncHeaderOffset() {
             const header = document.getElementById('mainHeader');
             if (header) {
-                document.body.style.paddingTop = `${header.offsetHeight + 16}px`;
+                document.body.style.paddingTop = `${header.offsetHeight + 12}px`;
             }
         }
         window.syncHeaderOffset = syncHeaderOffset;
@@ -607,19 +685,19 @@
             en: {
                 subtitle: "The Heartbeat of Albufeira",
                 login: "Login",
-                liveConditions: "Live Conditions:",
+                liveConditions: "Live:",
                 air: "Air:",
-                condition: "Condition:",
-                waveHeight: "Wave Height:",
+                condition: "Sky:",
+                waveHeight: "Waves:",
                 wind: "Wind:",
                 tabEvents: "Events",
-                tabDirectory: "Venues & Directory",
+                tabDirectory: "Venues",
                 tabCalendar: "Calendar",
                 tabArticles: "Articles",
                 tabClassifieds: "Classifieds",
                 tabForum: "Forum",
-                tabLinks: "Essential Links",
-                tabEmergency: "Emergency Contacts",
+                tabLinks: "Links",
+                tabEmergency: "Emergency",
                 addVenue: "+ Add Venue",
                 addEvent: "+ Add Event",
                 zoneLabel: "Zone:",
@@ -631,21 +709,21 @@
             pt: {
                 subtitle: "O Coração de Albufeira",
                 login: "Entrar",
-                liveConditions: "Condições ao Vivo:",
+                liveConditions: "Ao Vivo:",
                 air: "Ar:",
-                condition: "Estado:",
-                waveHeight: "Ondulação:",
+                condition: "Céu:",
+                waveHeight: "Ondas:",
                 wind: "Vento:",
                 tabEvents: "Eventos",
-                tabDirectory: "Locais e Diretório",
+                tabDirectory: "Locais",
                 tabCalendar: "Calendário",
                 tabArticles: "Artigos",
                 tabClassifieds: "Classificados",
                 tabForum: "Fórum",
-                tabLinks: "Links Essenciais",
-                tabEmergency: "Contactos de Emergência",
-                addVenue: "+ Adicionar Local",
-                addEvent: "+ Adicionar Evento",
+                tabLinks: "Links",
+                tabEmergency: "Emergência",
+                addVenue: "+ Local",
+                addEvent: "+ Evento",
                 zoneLabel: "Zona:",
                 zoneAll: "Todos",
                 mapTitle: "Mapa Interativo do Algarve",
@@ -667,7 +745,7 @@
         function applyTranslations() {
             const t = translations[currentLang];
             document.getElementById('siteSubtitle').textContent = t.subtitle;
-            document.getElementById('langText').textContent = currentLang === 'en' ? 'EN / PT' : 'PT / EN';
+            document.getElementById('langText').textContent = currentLang === 'en' ? 'EN/PT' : 'PT/EN';
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (t[key]) el.textContent = t[key];
@@ -728,11 +806,11 @@
             let html = `<span class="text-xs font-black text-miamiCyan mr-1 flex items-center gap-1 shrink-0"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> ${t.zoneLabel}</span>`;
 
             const allActive = activeZoneFilter === 'all';
-            html += `<button onclick="filterZone('all')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${allActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${t.zoneAll}</button>`;
+            html += `<button onclick="filterZone('all')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${allActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${t.zoneAll}</button>`;
 
             availableZones.forEach(zone => {
                 const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${zone.replace(/'/g, "\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+                html += `<button onclick="filterZone('${zone.replace(/'/g, "\'")}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
             });
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
@@ -742,11 +820,11 @@
         function renderEventCategoryButtons() {
             const bar = document.getElementById('eventCategoryFilterBar');
             if (!bar) return;
-            const categories = ['all', 'WELLNESS', 'HEALTH & FIRST AID', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
+            const categories = ['all', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'WELLNESS', 'HEALTH & FIRST AID', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
             let html = `<span class="text-xs font-black text-miamiPink mr-1 flex items-center gap-1 shrink-0"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Category:</span>`;
             categories.forEach(cat => {
                 const isActive = activeEventCategoryFilter === cat;
-                const label = cat === 'all' ? 'All Categories' : cat;
+                const label = cat === 'all' ? 'All' : cat;
                 html += `<button onclick="filterEventCategory('${cat}')" class="px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40 shadow-sm'}">${label}</button>`;
             });
             bar.innerHTML = html;
@@ -768,8 +846,8 @@
             let html = '';
             categories.forEach(cat => {
                 const isActive = activeDirectoryCategoryFilter === cat;
-                const label = cat === 'all' ? 'All Categories' : cat;
-                html += `<button onclick="filterDirectoryCategory('${cat}')" class="w-full text-left px-3 py-2 rounded-xl transition cursor-pointer flex items-center justify-between ${isActive ? 'bg-miamiCyan text-miamiDark font-black shadow' : 'hover:bg-miamiCyan/10 text-gray-300 font-bold'}"><span>${label}</span><span>→</span></button>`;
+                const label = cat === 'all' ? 'All' : cat;
+                html += `<button onclick="filterDirectoryCategory('${cat}')" class="shrink-0 md:w-full text-left px-3 py-1.5 md:py-2 rounded-xl transition cursor-pointer flex items-center justify-between gap-2 ${isActive ? 'bg-miamiCyan text-miamiDark font-black shadow' : 'hover:bg-miamiCyan/10 row-meta font-bold border border-transparent'}"><span>${label}</span><span class="hidden md:inline">→</span></button>`;
             });
             sidebar.innerHTML = html;
         }
@@ -864,7 +942,7 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="md:col-span-2 unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No events listed yet. Click "+ Add Event" to create one.</div>`;
+                grid.innerHTML = `<div class="md:col-span-2 unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No events listed yet. Click "+ Add Event" to create one.</div>`;
                 return;
             }
 
@@ -876,28 +954,28 @@
 
             filtered.forEach(ev => {
                 const card = document.createElement('div');
-                card.className = 'unified-row border-2 border-miamiCyan/40 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between space-y-3 cursor-pointer hover:border-miamiCyan transition';
+                card.className = 'unified-row border border-miamiCyan/40 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between space-y-2 cursor-pointer hover:border-miamiCyan transition';
                 card.onclick = () => openEventDetailPage(ev.title);
 
                 let imgHtml = '';
                 if (ev.image && ev.image.trim() !== '') {
-                    imgHtml = `<div class="h-44 w-full overflow-hidden"><img src="${ev.image}" class="w-full h-full object-cover"></div>`;
+                    imgHtml = `<div class="h-40 sm:h-44 w-full overflow-hidden"><img src="${ev.image}" class="w-full h-full object-cover"></div>`;
                 }
 
                 card.innerHTML = `
                     <div>
                         ${imgHtml}
-                        <div class="p-5 space-y-2">
-                            <div class="flex justify-between"><span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category || 'EVENT'}</span><span class="text-xs font-black text-miamiPink">${ev.fee || 'Free'}</span></div>
-                            <h3 class="text-base font-black text-white">${ev.title}</h3>
-                            <p class="text-xs font-bold text-gray-300">📍 ${ev.venueName || ''} ${ev.zone ? `(${ev.zone})` : ''}</p>
-                            <p class="text-xs text-gray-300">${ev.desc || ''}</p>
+                        <div class="p-4 sm:p-5 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category || 'EVENT'}</span><span class="text-xs font-black text-miamiPink">${ev.fee || 'Free'}</span></div>
+                            <h3 class="text-base font-black row-title">${ev.title}</h3>
+                            <p class="text-xs font-bold row-body">📍 ${ev.venueName || ''} ${ev.zone ? `(${ev.zone})` : ''}</p>
+                            <p class="text-xs row-body">${ev.desc || ''}</p>
                             <p class="text-[10px] font-bold text-miamiCyan pt-1">Added by ${ev.author || 'Member'}</p>
                         </div>
                     </div>
-                    <div class="px-5 pb-5 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] text-gray-300 font-medium">
+                    <div class="px-4 sm:px-5 pb-4 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] row-meta font-medium">
                         <span>📅 ${ev.date || ''} ${ev.time ? `| ${ev.time}` : ''}</span>
-                        <span class="text-miamiCyan font-black">View Event Details →</span>
+                        <span class="text-miamiCyan font-black">Details →</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -932,23 +1010,23 @@
             }
 
             container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-miamiCyan/30 pb-6">
+                <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
                     ${imgHtml}
                     <div class="space-y-3 w-full">
-                        <div class="flex gap-2">
-                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${ev.category || 'EVENT'}</span>
-                            <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3.5 py-1 rounded-full">${ev.fee || 'Free'}</span>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${ev.category || 'EVENT'}</span>
+                            <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3 py-1 rounded-full">${ev.fee || 'Free'}</span>
                         </div>
-                        <h2 class="text-3xl font-black text-white">${ev.title}</h2>
-                        <p class="text-sm font-bold text-gray-300">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
+                        <h2 class="text-2xl sm:text-3xl font-black row-title">${ev.title}</h2>
+                        <p class="text-sm font-bold row-body">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
                         <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\'")}')">
-                            📍 Venue: <strong class="text-white underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
+                            📍 Venue: <strong class="row-title underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
                         </p>
                     </div>
                 </div>
-                <div class="space-y-3 pt-2">
-                    <h3 class="text-xl font-black text-white">Event Description</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">${ev.desc || ''}</p>
+                <div class="space-y-2 pt-1">
+                    <h3 class="text-lg sm:text-xl font-black row-title">Event Description</h3>
+                    <p class="text-sm row-body leading-relaxed">${ev.desc || ''}</p>
                 </div>
             `;
             switchTab('event-detail');
@@ -979,11 +1057,11 @@
             });
 
             if (countLabel) {
-                countLabel.textContent = `Showing ${filtered.length} of ${registeredVenues.length} venues from Supabase directory`;
+                countLabel.textContent = `Showing ${filtered.length} of ${registeredVenues.length} venues`;
             }
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No venues in the Supabase directory table match your filter.</div>`;
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No venues match your filter.</div>`;
                 return;
             }
 
@@ -992,29 +1070,29 @@
             displayList.forEach(v => {
                 const group = v.categoryGroup || v.category_group || 'Restaurant';
                 const row = document.createElement('div');
-                row.className = 'unified-row border border-miamiCyan/30 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-md hover:border-miamiCyan transition cursor-pointer';
+                row.className = 'unified-row border border-miamiCyan/30 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 shadow-sm hover:border-miamiCyan transition cursor-pointer';
                 row.onclick = () => openVenueDetailPage(v.name);
 
                 let thumbHtml = '';
                 if (v.image && v.image.trim() !== '') {
-                    thumbHtml = `<img src="${v.image}" class="w-16 h-16 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
+                    thumbHtml = `<img src="${v.image}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
                 }
 
                 row.innerHTML = `
-                    <div class="flex items-center gap-4 w-full">
+                    <div class="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
                         ${thumbHtml}
-                        <div class="space-y-1 w-full">
-                            <div class="flex items-center justify-between flex-wrap gap-2">
-                                <h3 class="text-base font-black text-white hover:text-miamiCyan transition">${v.name}</h3>
-                                <span class="bg-miamiCyan/20 text-miamiCyan text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">${group}</span>
+                        <div class="space-y-1 w-full min-w-0">
+                            <div class="flex items-center justify-between flex-wrap gap-1.5">
+                                <h3 class="text-sm sm:text-base font-black row-title hover:text-miamiCyan transition">${v.name}</h3>
+                                <span class="bg-miamiCyan/20 text-miamiCyan text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shrink-0">${group}</span>
                             </div>
-                            <div class="text-xs font-bold text-gray-300">${renderAddressPromptHtml(v.name, v.address, false)}</div>
+                            <div class="text-xs font-bold row-body">${renderAddressPromptHtml(v.name, v.address, false)}</div>
                             <p class="text-[11px] font-semibold text-emerald-400">🕒 ${v.schedule || 'Daily'}${v.area ? ` • Zone: ${v.area}` : ''}</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end pt-2 md:pt-0 border-t md:border-t-0 border-miamiCyan/20">
+                    <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-miamiCyan/20">
                         <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
-                        <span class="text-xs font-black text-miamiPink">View →</span>
+                        <span class="text-xs font-black text-miamiPink px-1">View →</span>
                     </div>
                 `;
                 container.appendChild(row);
@@ -1042,20 +1120,20 @@
             }
 
             container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6 items-center border-b border-miamiCyan/30 pb-6">
+                <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
                     ${venueImageHtml}
                     <div class="space-y-3 w-full">
-                        ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>` : ''}
-                        <h2 class="text-3xl font-black text-white">${venue.name}</h2>
-                        <div class="text-sm font-bold text-gray-300">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
+                        ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${venue.area}</span>` : ''}
+                        <h2 class="text-2xl sm:text-3xl font-black row-title">${venue.name}</h2>
+                        <div class="text-sm font-bold row-body">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
                         ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
                         <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
-                <div class="space-y-4 pt-2">
-                    <h3 class="text-xl font-black text-white">Events at ${venue.name}</h3>
+                <div class="space-y-3 pt-1">
+                    <h3 class="text-lg sm:text-xl font-black row-title">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
@@ -1068,14 +1146,14 @@
             const container = document.getElementById('articlesListContainer');
             if (!container) return;
             if (!articlesList.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No articles published yet.</div>`;
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No articles published yet.</div>`;
                 return;
             }
             container.innerHTML = articlesList.map(a => `
-                <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
                     <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${a.category || 'Article'}</span>
                     <h3 class="font-black text-miamiPink text-base">${a.title}</h3>
-                    <p class="text-xs text-gray-200 leading-relaxed">${a.body}</p>
+                    <p class="text-xs row-body leading-relaxed">${a.body}</p>
                     <p class="text-[10px] font-bold text-miamiCyan">Added by ${a.author || 'Member'}</p>
                 </div>
             `).join('');
@@ -1087,8 +1165,8 @@
             const cats = ['all', 'Rent', 'Job Offers', 'Buy & Sell', 'Socialise'];
             bar.innerHTML = cats.map(c => {
                 const active = activeClassifiedCategoryFilter === c;
-                const label = c === 'all' ? 'All Classifieds' : c;
-                return `<button onclick="filterClassifiedCategory('${c}')" class="px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer ${active ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40'}">${label}</button>`;
+                const label = c === 'all' ? 'All' : c;
+                return `<button onclick="filterClassifiedCategory('${c}')" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer ${active ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40'}">${label}</button>`;
             }).join('');
         }
 
@@ -1104,19 +1182,19 @@
             if (!container) return;
             const filtered = classifiedListings.filter(item => activeClassifiedCategoryFilter === 'all' || item.category === activeClassifiedCategoryFilter);
             if (!filtered.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No classified listings yet. Click "+ Post Classified" to add one.</div>`;
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No classified listings yet. Click "+ Post Classified" to add one.</div>`;
                 return;
             }
             container.innerHTML = filtered.map(item => `
-                <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
                     <div class="flex justify-between items-center flex-wrap gap-2">
                         <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${item.category}</span>
                         <span class="text-xs font-black text-miamiCyan">${item.price}</span>
                     </div>
-                    <h3 class="text-base font-black text-white">${item.title}</h3>
-                    <p class="text-xs text-gray-300 leading-relaxed">${item.desc}</p>
-                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] text-gray-400 font-bold">
-                        <span>📅 Posted: ${item.date}</span>
+                    <h3 class="text-base font-black row-title">${item.title}</h3>
+                    <p class="text-xs row-body leading-relaxed">${item.desc}</p>
+                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] row-meta font-bold">
+                        <span>📅 ${item.date}</span>
                         <span class="text-miamiCyan">Contact: ${item.contact}</span>
                     </div>
                 </div>
@@ -1155,20 +1233,20 @@
             const container = document.getElementById('forumThreadsContainer');
             if (!container) return;
             if (!forumThreads.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs text-gray-400 font-bold">No forum threads yet. Click "+ Start New Thread" to begin a discussion.</div>`;
+                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No forum threads yet. Click "+ Start New Thread" to begin a discussion.</div>`;
                 return;
             }
             container.innerHTML = forumThreads.map(t => `
-                <div class="unified-row p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
+                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full">${t.category}</span>
-                        <span class="text-[11px] font-bold text-gray-400">💬 ${t.replies} Replies</span>
+                        <span class="text-[11px] font-bold row-meta">💬 ${t.replies} Replies</span>
                     </div>
-                    <h3 class="text-base font-black text-white">${t.title}</h3>
-                    <p class="text-xs text-gray-300 leading-relaxed">${t.body}</p>
+                    <h3 class="text-base font-black row-title">${t.title}</h3>
+                    <p class="text-xs row-body leading-relaxed">${t.body}</p>
                     <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[10px] font-bold text-miamiCyan">
                         <span>Started by ${t.author}</span>
-                        <span class="text-gray-400">${t.date}</span>
+                        <span class="row-meta">${t.date}</span>
                     </div>
                 </div>
             `).join('');
@@ -1208,7 +1286,7 @@
                     const dateStr = `2026-11-${String(d).padStart(2, '0')}`;
                     const hasEv = registeredEvents.some(e => e.date === dateStr);
                     const isToday = dateStr === todayIso;
-                    html += `<div onclick="switchTab('calendar')" class="py-1 rounded cursor-pointer transition ${isToday ? 'bg-miamiPink text-white font-black' : hasEv ? 'bg-miamiCyan/20 text-miamiCyan font-black' : 'text-gray-400 hover:bg-white/10'}">${d}</div>`;
+                    html += `<div onclick="switchTab('calendar')" class="py-1 rounded cursor-pointer transition ${isToday ? 'bg-miamiPink text-white font-black' : hasEv ? 'bg-miamiCyan/20 text-miamiCyan font-black' : 'row-meta hover:bg-miamiCyan/10'}">${d}</div>`;
                 }
                 miniCal.innerHTML = html;
             }
@@ -1217,32 +1295,32 @@
             if (todaysBox) {
                 const todays = registeredEvents.filter(e => e.date === todayIso);
                 todaysBox.innerHTML = todays.length ? todays.map(e => `
-                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\'")}')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
-                        <p class="font-black text-white leading-tight">${e.title}</p>
+                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\'")}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                        <p class="font-black row-title leading-tight">${e.title}</p>
                         <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time || ''} ${e.venueName ? `• ${e.venueName}` : ''}</p>
                     </div>
-                `).join('') : '<p class="text-gray-400 text-[11px]">No events listed for today.</p>';
+                `).join('') : '<p class="row-meta text-[11px]">No events listed for today.</p>';
             }
 
             const forumBox = document.getElementById('sidebarLatestForum');
             if (forumBox) {
                 forumBox.innerHTML = forumThreads.length ? forumThreads.slice(0, 3).map(t => `
-                    <div onclick="switchTab('forum')" class="p-2.5 rounded-xl bg-black/20 border border-miamiCyan/20 hover:border-miamiCyan cursor-pointer transition space-y-1">
-                        <p class="font-bold text-gray-200 leading-tight line-clamp-2">${t.title}</p>
+                    <div onclick="switchTab('forum')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiCyan/20 hover:border-miamiCyan cursor-pointer transition space-y-1">
+                        <p class="font-bold row-title leading-tight line-clamp-2">${t.title}</p>
                         <p class="text-[10px] text-miamiCyan font-bold">By ${t.author} • ${t.replies} replies</p>
                     </div>
-                `).join('') : '<p class="text-gray-400 text-[11px]">No forum posts yet.</p>';
+                `).join('') : '<p class="row-meta text-[11px]">No forum posts yet.</p>';
             }
 
             const classBox = document.getElementById('sidebarLatestClassifieds');
             if (classBox) {
                 classBox.innerHTML = classifiedListings.length ? classifiedListings.slice(0, 3).map(c => `
-                    <div onclick="switchTab('classifieds')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                    <div onclick="switchTab('classifieds')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
                         <span class="text-[9px] font-black uppercase text-miamiPink">${c.category}</span>
-                        <p class="font-bold text-gray-200 leading-tight line-clamp-1">${c.title}</p>
+                        <p class="font-bold row-title leading-tight line-clamp-1">${c.title}</p>
                         <p class="text-[10px] text-emerald-400 font-bold">${c.price}</p>
                     </div>
-                `).join('') : '<p class="text-gray-400 text-[11px]">No classifieds yet.</p>';
+                `).join('') : '<p class="row-meta text-[11px]">No classifieds yet.</p>';
             }
         }
 
@@ -1254,12 +1332,12 @@
                 const dateStr = `2026-11-${String(day).padStart(2, '0')}`;
                 const dayEvents = registeredEvents.filter(ev => ev.date === dateStr);
                 const cell = document.createElement('div');
-                cell.className = 'min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
+                cell.className = 'min-h-[95px] sm:min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
-                cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs text-white">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
+                cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs row-title">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
             }
         }
@@ -1296,7 +1374,7 @@
                         html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 8px ${pinColor};" title="${v.name}"></div>`,
                         iconSize: [14, 14], iconAnchor: [7, 7]
                     });
-                    const marker = L.marker([parseFloat(v.lat), parseFloat(v.lng)], { icon: svgIcon }).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #888;">${v.address || v.area || ''}</span>`);
+                    const marker = L.marker([parseFloat(v.lat), parseFloat(v.lng)], { icon: svgIcon }).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #555;">${v.address || v.area || ''}</span>`);
                     marker.openPopup();
                 }
             });
@@ -1325,19 +1403,21 @@
             document.getElementById('tab-content-' + tabId)?.classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-md');
+                btn.classList.remove('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-sm');
                 btn.classList.add('text-gray-200', 'font-bold');
             });
             const activeBtn = document.getElementById('btn-' + tabId);
             if (activeBtn) {
                 activeBtn.classList.remove('text-gray-200', 'font-bold');
-                activeBtn.classList.add('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-md');
+                activeBtn.classList.add('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-sm');
+                activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
 
             if (pushState) {
                 history.pushState({ tab: tabId }, "", `#${tabId}`);
             }
 
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             syncHeaderOffset();
 
             if (tabId === 'events' && albufeiraMap) {
@@ -1475,10 +1555,10 @@
             const authArea = document.getElementById('authArea');
             if (!authArea) return;
             authArea.innerHTML = `
-                <div class="theme-card px-3.5 py-2 rounded-xl border border-miamiCyan/40 flex items-center gap-2 text-xs font-black theme-text-main shadow-sm">
+                <div class="theme-card px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-miamiCyan/40 flex items-center gap-1.5 text-[11px] sm:text-xs font-black theme-text-main shadow-sm">
                     <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
-                    <span>${name}</span>
-                    <button onclick="handleLogout()" class="text-miamiPink hover:text-white transition ml-2 cursor-pointer flex items-center gap-1 text-[11px]" title="Logout">
+                    <span class="max-w-[80px] sm:max-w-none truncate">${name}</span>
+                    <button onclick="handleLogout()" class="text-miamiPink hover:opacity-75 transition ml-1 cursor-pointer flex items-center" title="Logout">
                         <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                     </button>
                 </div>
@@ -1494,7 +1574,7 @@
             const authArea = document.getElementById('authArea');
             if (authArea) {
                 authArea.innerHTML = `
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-xs font-bold px-3.5 py-2 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1.5 cursor-pointer shadow-sm hover:border-miamiCyan">
+                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1 cursor-pointer shadow-sm hover:border-miamiCyan">
                         <i data-lucide="log-in" class="w-3.5 h-3.5 text-miamiCyan"></i> <span data-i18n="login">Login</span>
                     </button>
                 `;
