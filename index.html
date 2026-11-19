@@ -30,26 +30,29 @@
         }
     </script>
     <script>
+        function getAutomaticThemeMode() {
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            // Daytime: 07:00 (420 mins) to 18:00 (1080 mins)
+            return (currentMinutes >= 420 && currentMinutes < 1080) ? 'day-mode' : 'night-mode';
+        }
+
+        function applyThemeMode(mode) {
+            document.documentElement.className = mode;
+        }
+
         (function() {
             const manualOverride = localStorage.getItem('albufeira_manual_theme');
-            let initialMode = 'night-mode';
-            if (manualOverride) {
-                initialMode = manualOverride;
-            } else {
-                const now = new Date();
-                const currentMinutes = now.getHours() * 60 + now.getMinutes();
-                if (currentMinutes >= 435 && currentMinutes <= 1045) {
-                    initialMode = 'day-mode';
-                }
-            }
-            document.documentElement.className = initialMode;
+            const initialMode = (manualOverride === 'day-mode' || manualOverride === 'night-mode')
+                ? manualOverride
+                : getAutomaticThemeMode();
+            applyThemeMode(initialMode);
         })();
     </script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 145px; padding-bottom: 72px; }
         @media (min-width: 1024px) { body { padding-bottom: 0; } }
 
-        /* Hide scrollbars on horizontal mobile swipe bars while keeping scrollability */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -104,6 +107,26 @@
         html.day-mode .text-red-400 { color: #DC2626 !important; }
         html.day-mode .mobile-bottom-nav { background-color: rgba(255, 255, 255, 0.98) !important; border-top-color: #CBD5E1 !important; color: #0F172A !important; }
 
+        .pulse-venue-pin {
+            background: transparent !important;
+            border: none !important;
+        }
+        .pulse-pin-dot {
+            background-color: #00F0FF;
+            width: 16px;
+            height: 16px;
+            border-radius: 9999px;
+            border: 3px solid #FF007F;
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.35), 0 0 12px rgba(255, 0, 127, 0.8);
+            transition: transform 0.2s ease;
+        }
+        .pulse-pin-dot.active-pin {
+            width: 22px;
+            height: 22px;
+            border-width: 4px;
+            box-shadow: 0 0 0 5px rgba(255, 0, 127, 0.4), 0 0 16px #00F0FF;
+        }
+
         #eventsAlbufeiraMap { height: 260px; width: 100%; border-radius: 0.85rem; z-index: 10; }
         @media (min-width: 768px) { #eventsAlbufeiraMap { height: 380px; border-radius: 1rem; } }
     </style>
@@ -128,7 +151,7 @@
                     <i data-lucide="globe" class="w-3.5 h-3.5 text-miamiCyan"></i>
                     <span id="langText">EN/PT</span>
                 </button>
-                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-bold px-2 sm:px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm">
+                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-bold px-2 sm:px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm" title="Switch Day / Night Mode">
                     <i data-lucide="sun" id="themeIcon" class="w-3.5 h-3.5 text-miamiPink"></i>
                     <span id="themeText" class="hidden sm:inline">Day Mode</span>
                 </button>
@@ -144,12 +167,13 @@
         <div class="weather-ticker border-t border-b px-3 sm:px-4 py-1 text-[11px] sm:text-xs flex justify-between items-center font-medium">
             <div class="flex items-center gap-4 sm:gap-5 overflow-x-auto no-scrollbar whitespace-nowrap">
                 <span class="flex items-center gap-1.5 font-bold text-miamiCyan shrink-0">
-                    <i data-lucide="sun-medium" class="w-3.5 h-3.5 text-miamiPink"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions" class="hidden sm:inline">Live Conditions:</span>
+                    <i data-lucide="sun-medium" class="w-3.5 h-3.5 text-miamiPink"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions" class="hidden sm:inline">Live:</span>
                 </span>
                 <span class="shrink-0"><span data-i18n="air">Air:</span> <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
-                <span class="shrink-0"><span data-i18n="condition">Condition:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
+                <span class="shrink-0"><span data-i18n="water">Water:</span> <strong id="liveWaterTemp" class="text-miamiCyan">Loading...</strong></span>
+                <span class="shrink-0"><span data-i18n="condition">Sky:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
                 <span class="shrink-0"><span data-i18n="wind">Wind:</span> <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
-                <span class="shrink-0 hidden md:inline"><span data-i18n="waveHeight">Wave Height:</span> <strong id="liveWaveHeight" class="text-white">—</strong></span>
+                <span class="shrink-0 hidden md:inline"><span data-i18n="waveHeight">Waves:</span> <strong id="liveWaveHeight" class="text-white">—</strong></span>
             </div>
             <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-miamiCyan hover:underline font-bold hidden lg:inline shrink-0">Open-Meteo API ↗</a>
         </div>
@@ -199,21 +223,19 @@
                     <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
 
                     <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center gap-2">
                             <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
                             </span>
-                            <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
+                            <div class="flex items-center gap-2">
+                                <span id="selectedMapVenueBadge" class="hidden text-[10px] font-black bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full"></span>
+                                <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
+                            </div>
                         </div>
                         <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
                         <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 text-[10px] sm:text-[11px] font-bold row-meta">
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#FF007F] inline-block"></span> Restaurant</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#00F0FF] inline-block"></span> Bar & Café</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#A855F7] inline-block"></span> Nightclub</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6] inline-block"></span> Live Sports TV</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#EC4899] inline-block"></span> Karaoke</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#EAB308] inline-block"></span> Quiz</span>
-                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#64748B] inline-block"></span> Other</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#00F0FF] border-2 border-[#FF007F] inline-block"></span> Venue Pin (Cyan / Pink)</span>
+                            <span>Click any venue's <strong>Map</strong> button to drop & focus its pin.</span>
                         </div>
                     </div>
                     <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
@@ -234,7 +256,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 items-start">
-                        <!-- Horizontal pills on mobile, vertical sidebar on desktop -->
                         <div class="theme-card border border-miamiCyan/30 rounded-2xl p-3 sm:p-4 space-y-2 shadow-md">
                             <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-2 flex items-center gap-1.5">
                                 <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
@@ -605,6 +626,18 @@
         let activeDirectoryCategoryFilter = 'all';
         let activeClassifiedCategoryFilter = 'all';
         let availableZones = [...defaultZones];
+        let focusedVenueName = null;
+
+        function syncAutoThemeIfUnlocked() {
+            const manualOverride = localStorage.getItem('albufeira_manual_theme');
+            if (!manualOverride) {
+                const autoMode = getAutomaticThemeMode();
+                if (document.documentElement.className !== autoMode) {
+                    applyThemeMode(autoMode);
+                    updateThemeButtonUI();
+                }
+            }
+        }
 
         function needsStreetAddress(addr) {
             if (!addr) return true;
@@ -613,7 +646,7 @@
         }
 
         function renderAddressPromptHtml(venueName, addressVal, isDetailView = false) {
-            const safeName = String(venueName || '').replace(/'/g, "\'");
+            const safeName = String(venueName || '').replace(/'/g, "\\'");
             if (needsStreetAddress(addressVal)) {
                 const sizeClass = isDetailView ? 'text-xs px-3 py-1.5 rounded-xl' : 'text-[11px] px-2.5 py-1 rounded-lg';
                 return `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="inline-flex items-center gap-1 ${sizeClass} bg-miamiPink/15 hover:bg-miamiPink text-miamiPink hover:text-white border border-miamiPink/50 font-black transition cursor-pointer" title="Click to add street name or address online">✏️ ${ADDRESS_PLACEHOLDER}</button>`;
@@ -687,6 +720,7 @@
                 login: "Login",
                 liveConditions: "Live:",
                 air: "Air:",
+                water: "Water:",
                 condition: "Sky:",
                 waveHeight: "Waves:",
                 wind: "Wind:",
@@ -711,6 +745,7 @@
                 login: "Entrar",
                 liveConditions: "Ao Vivo:",
                 air: "Ar:",
+                water: "Água:",
                 condition: "Céu:",
                 waveHeight: "Ondas:",
                 wind: "Vento:",
@@ -761,6 +796,9 @@
             syncHeaderOffset();
             window.addEventListener('resize', syncHeaderOffset);
 
+            // Re-check automatic day/night mode every minute if no manual override is saved
+            setInterval(syncAutoThemeIfUnlocked, 60000);
+
             const todayLabel = document.getElementById('sidebarTodayDateLabel');
             if (todayLabel) {
                 todayLabel.textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
@@ -810,7 +848,7 @@
 
             availableZones.forEach(zone => {
                 const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${zone.replace(/'/g, "\'")}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+                html += `<button onclick="filterZone('${zone.replace(/'/g, "\\'")}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
             });
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
@@ -896,7 +934,7 @@
 
             syncAvailableZones();
             populateVenueAutocomplete();
-            refreshMapMarkers();
+            refreshMapMarkers(focusedVenueName);
             renderDirectoryGrid();
             renderEventsGrid();
             generateCalendarDays();
@@ -905,19 +943,34 @@
 
         async function fetchLiveWeatherAndWaves() {
             try {
-                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0881&longitude=-8.2520&current=temperature_2m,precipitation,wind_speed_10m');
-                const weatherData = await res.json();
+                const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0881&longitude=-8.2520&current=temperature_2m,precipitation,wind_speed_10m');
+                const weatherData = await weatherRes.json();
                 if (weatherData && weatherData.current) {
                     document.getElementById('liveWeatherTemp').textContent = `${weatherData.current.temperature_2m}°C`;
                     document.getElementById('liveWeatherCondition').textContent = weatherData.current.precipitation > 0 ? "Rain 🌧️" : "Fair ☀️";
                     document.getElementById('liveWeatherWind').textContent = `${weatherData.current.wind_speed_10m} km/h`;
                 }
-                document.getElementById('liveWaveHeight').textContent = "—";
             } catch (err) {
                 document.getElementById('liveWeatherTemp').textContent = "—";
                 document.getElementById('liveWeatherCondition').textContent = "—";
-                document.getElementById('liveWaveHeight').textContent = "—";
                 document.getElementById('liveWeatherWind').textContent = "—";
+            }
+
+            try {
+                const marineRes = await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=37.0881&longitude=-8.2520&current=sea_surface_temperature,wave_height');
+                const marineData = await marineRes.json();
+                if (marineData && marineData.current) {
+                    const waterTemp = marineData.current.sea_surface_temperature;
+                    const waveHeight = marineData.current.wave_height;
+                    document.getElementById('liveWaterTemp').textContent = (waterTemp !== null && waterTemp !== undefined) ? `${waterTemp}°C` : "—";
+                    document.getElementById('liveWaveHeight').textContent = (waveHeight !== null && waveHeight !== undefined) ? `${waveHeight} m` : "—";
+                } else {
+                    document.getElementById('liveWaterTemp').textContent = "—";
+                    document.getElementById('liveWaveHeight').textContent = "—";
+                }
+            } catch (err) {
+                document.getElementById('liveWaterTemp').textContent = "—";
+                document.getElementById('liveWaveHeight').textContent = "—";
             }
         }
 
@@ -988,14 +1041,44 @@
             renderEventsGrid();
         }
 
-        function jumpToVenueOnMap(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
-            if (!venue) return;
-            switchTab('events');
-            if (albufeiraMap) {
-                albufeiraMap.setView([venue.lat || 37.0881, venue.lng || -8.2520], 16);
-                refreshMapMarkers(venue.name);
+        function getVenueCoords(venue) {
+            const lat = parseFloat(venue.lat);
+            const lng = parseFloat(venue.lng);
+            if (!Number.isNaN(lat) && !Number.isNaN(lng) && lat !== 0 && lng !== 0) {
+                return [lat, lng];
             }
+            // Deterministic slight offset around Albufeira center if venue has no coordinates yet
+            const nameStr = String(venue.name || 'venue');
+            let hash = 0;
+            for (let i = 0; i < nameStr.length; i++) {
+                hash = ((hash << 5) - hash) + nameStr.charCodeAt(i);
+                hash |= 0;
+            }
+            const latOffset = ((Math.abs(hash) % 140) - 70) * 0.0001;
+            const lngOffset = ((Math.abs(hash >> 4) % 140) - 70) * 0.0001;
+            return [37.0881 + latOffset, -8.2520 + lngOffset];
+        }
+
+        function jumpToVenueOnMap(venueName) {
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).toLowerCase());
+            if (!venue) return;
+            focusedVenueName = venue.name;
+            switchTab('events');
+
+            const mapContainer = document.getElementById('eventsMapContainer');
+            if (mapContainer && mapContainer.style.display === 'none') {
+                mapContainer.style.display = 'block';
+            }
+
+            setTimeout(() => {
+                initMap();
+                if (albufeiraMap) {
+                    albufeiraMap.invalidateSize();
+                    const [lat, lng] = getVenueCoords(venue);
+                    albufeiraMap.setView([lat, lng], 16);
+                    refreshMapMarkers(venue.name);
+                }
+            }, 160);
         }
         window.jumpToVenueOnMap = jumpToVenueOnMap;
 
@@ -1019,7 +1102,7 @@
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-black row-title">${ev.title}</h2>
                         <p class="text-sm font-bold row-body">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\'")}')">
+                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\\'")}')">
                             📍 Venue: <strong class="row-title underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
                         </p>
                     </div>
@@ -1091,7 +1174,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-miamiCyan/20">
-                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
+                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition cursor-pointer">Map</button>
                         <span class="text-xs font-black text-miamiPink px-1">View →</span>
                     </div>
                 `;
@@ -1127,13 +1210,13 @@
                         <h2 class="text-2xl sm:text-3xl font-black row-title">${venue.name}</h2>
                         <div class="text-sm font-bold row-body">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
                         ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
-                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
+                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-3 pt-1">
                     <h3 class="text-lg sm:text-xl font-black row-title">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
@@ -1295,7 +1378,7 @@
             if (todaysBox) {
                 const todays = registeredEvents.filter(e => e.date === todayIso);
                 todaysBox.innerHTML = todays.length ? todays.map(e => `
-                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\'")}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
                         <p class="font-black row-title leading-tight">${e.title}</p>
                         <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time || ''} ${e.venueName ? `• ${e.venueName}` : ''}</p>
                     </div>
@@ -1335,7 +1418,7 @@
                 cell.className = 'min-h-[95px] sm:min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
                 cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs row-title">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
@@ -1345,7 +1428,7 @@
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0950, -8.2500], 12);
+                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0881, -8.2520], 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
                 mapMarkersGroup = L.layerGroup().addTo(albufeiraMap);
             }
@@ -1356,25 +1439,49 @@
             if (!albufeiraMap || !mapMarkersGroup) return;
             mapMarkersGroup.clearLayers();
 
-            registeredVenues.forEach(v => {
-                if (selectedVenueName && v.name.toLowerCase() !== selectedVenueName.toLowerCase()) return;
-                if (v.lat && v.lng && selectedVenueName) {
-                    let pinColor = '#FF007F';
-                    const group = v.categoryGroup || v.category_group || 'Restaurant';
+            const badge = document.getElementById('selectedMapVenueBadge');
+            if (selectedVenueName) {
+                focusedVenueName = selectedVenueName;
+                if (badge) {
+                    badge.textContent = `📍 ${selectedVenueName}`;
+                    badge.classList.remove('hidden');
+                }
+            } else if (badge) {
+                badge.classList.add('hidden');
+            }
 
-                    if (group === 'Bar & Cafe') pinColor = '#00F0FF';
-                    else if (group === 'Nightclub') pinColor = '#A855F7';
-                    else if (group === 'Live Sports TV') pinColor = '#3B82F6';
-                    else if (group === 'Karaoke') pinColor = '#EC4899';
-                    else if (group === 'Quiz') pinColor = '#EAB308';
-                    else if (group === 'Other') pinColor = '#64748B';
+            // Show pins for venues with explicit coordinates, plus always show the selected venue pin
+            const venuesToRender = registeredVenues.filter(v => {
+                const isSelected = selectedVenueName && v.name.toLowerCase() === selectedVenueName.toLowerCase();
+                const hasRealCoords = v.lat !== undefined && v.lng !== undefined && v.lat !== null && v.lng !== null && !Number.isNaN(parseFloat(v.lat)) && !Number.isNaN(parseFloat(v.lng)) && !(parseFloat(v.lat) === 0 && parseFloat(v.lng) === 0);
+                return isSelected || hasRealCoords;
+            });
 
-                    const svgIcon = L.divIcon({
-                        className: 'custom-pin',
-                        html: `<div style="background-color: ${pinColor}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFFFFF; box-shadow: 0 0 8px ${pinColor};" title="${v.name}"></div>`,
-                        iconSize: [14, 14], iconAnchor: [7, 7]
-                    });
-                    const marker = L.marker([parseFloat(v.lat), parseFloat(v.lng)], { icon: svgIcon }).addTo(mapMarkersGroup).bindPopup(`<b>${v.name}</b><br><span style="font-size: 10px; color: #555;">${v.address || v.area || ''}</span>`);
+            venuesToRender.forEach(v => {
+                const isSelected = selectedVenueName && v.name.toLowerCase() === selectedVenueName.toLowerCase();
+                const [lat, lng] = getVenueCoords(v);
+
+                const pinIcon = L.divIcon({
+                    className: 'pulse-venue-pin',
+                    html: `<div class="pulse-pin-dot ${isSelected ? 'active-pin' : ''}" title="${v.name}"></div>`,
+                    iconSize: isSelected ? [22, 22] : [16, 16],
+                    iconAnchor: isSelected ? [11, 11] : [8, 8]
+                });
+
+                const safeName = String(v.name || '').replace(/'/g, "\\'");
+                const popupHtml = `
+                    <div style="min-width: 150px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                        <div style="font-weight: 800; font-size: 13px; color: #0F172A;">${v.name}</div>
+                        <div style="font-size: 11px; color: #475569; margin-top: 2px;">${v.address || v.area || 'Albufeira'}</div>
+                        <button onclick="openVenueDetailPage('${safeName}')" style="margin-top: 6px; background: #FF007F; color: #FFFFFF; border: none; border-radius: 6px; padding: 3px 8px; font-size: 10px; font-weight: 800; cursor: pointer;">View Venue →</button>
+                    </div>
+                `;
+
+                const marker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: isSelected ? 1000 : 0 })
+                    .addTo(mapMarkersGroup)
+                    .bindPopup(popupHtml);
+
+                if (isSelected) {
                     marker.openPopup();
                 }
             });
@@ -1383,7 +1490,7 @@
         function toggleManualDayNightMode() {
             const htmlTag = document.documentElement;
             const newMode = htmlTag.classList.contains('night-mode') ? 'day-mode' : 'night-mode';
-            htmlTag.className = newMode;
+            applyThemeMode(newMode);
             localStorage.setItem('albufeira_manual_theme', newMode);
             updateThemeButtonUI();
         }
@@ -1391,8 +1498,10 @@
 
         function updateThemeButtonUI() {
             const isNight = document.documentElement.classList.contains('night-mode');
-            document.getElementById('themeText').textContent = isNight ? 'Day Mode' : 'Night Mode';
-            document.getElementById('themeIcon').setAttribute('data-lucide', isNight ? 'sun' : 'moon');
+            const themeText = document.getElementById('themeText');
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeText) themeText.textContent = isNight ? 'Day Mode' : 'Night Mode';
+            if (themeIcon) themeIcon.setAttribute('data-lucide', isNight ? 'sun' : 'moon');
             if (window.lucide) lucide.createIcons();
         }
 
@@ -1423,7 +1532,7 @@
             if (tabId === 'events' && albufeiraMap) {
                 setTimeout(() => {
                     albufeiraMap.invalidateSize();
-                    refreshMapMarkers();
+                    refreshMapMarkers(focusedVenueName);
                 }, 150);
             }
         }
@@ -1433,7 +1542,12 @@
             const container = document.getElementById('eventsMapContainer');
             const isHidden = container.style.display === 'none';
             container.style.display = isHidden ? 'block' : 'none';
-            if (isHidden && albufeiraMap) setTimeout(() => albufeiraMap.invalidateSize(), 100);
+            if (isHidden && albufeiraMap) {
+                setTimeout(() => {
+                    albufeiraMap.invalidateSize();
+                    refreshMapMarkers(focusedVenueName);
+                }, 100);
+            }
         }
         window.toggleEventsMap = toggleEventsMap;
 
@@ -1513,7 +1627,7 @@
             }
             syncAvailableZones();
             populateVenueAutocomplete();
-            refreshMapMarkers();
+            refreshMapMarkers(focusedVenueName);
             renderDirectoryGrid();
             closeVenueModal();
             e.target.reset();
