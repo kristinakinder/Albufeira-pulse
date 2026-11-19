@@ -512,6 +512,7 @@
                         <option value="SOCIAL">Social</option>
                     </select>
                 </div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Upload Event Flyer / Poster (JPG only, max 3 MB)</label><input type="file" id="eventPosterInput" accept="image/jpeg,.jpg,.jpeg" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium text-xs"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
@@ -1631,39 +1632,91 @@
         }
         window.onVenueInputChange = onVenueInputChange;
 
+        async function uploadModeratedPoster(file) {
+            if (!file) return null;
+
+            const isJpeg = file.type === 'image/jpeg' || file.type === 'image/pjpeg';
+            if (!isJpeg || file.size === 0 || file.size > 3 * 1024 * 1024) {
+                throw new Error('Please choose a valid JPG/JPEG image under 3 MB.');
+            }
+
+            const header = new Uint8Array(await file.slice(0, 3).arrayBuffer());
+            if (header[0] !== 0xff || header[1] !== 0xd8 || header[2] !== 0xff) {
+                throw new Error('File header is not a valid JPEG image.');
+            }
+
+            const formData = new FormData();
+            formData.append('poster', file);
+
+            const response = await fetch(
+                `${SUPABASE_URL}/functions/v1/moderate-poster`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+                        apikey: SUPABASE_PUBLISHABLE_KEY,
+                    },
+                    body: formData,
+                }
+            );
+
+            const result = await response.json();
+            if (!response.ok || !result.approved) {
+                throw new Error(result.reason || 'Poster was rejected by content moderation.');
+            }
+
+            return result.posterUrl;
+        }
+
         async function handleEventSubmit(e) {
             e.preventDefault();
             const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
-            const newEv = {
-                title: document.getElementById('newEventTitle').value,
-                venueName: document.getElementById('newEventVenueInput').value,
-                zone: document.getElementById('newEventZone').value.trim(),
-                category: document.getElementById('newEventCategory').value,
-                date: document.getElementById('newEventDate').value,
-                time: document.getElementById('newEventTime').value,
-                fee: document.getElementById('newEventFee').value,
-                image: document.getElementById('newEventImage').value || "",
-                desc: document.getElementById('newEventDesc').value,
-                author: currentAuthor
-            };
+            const posterFile = document.getElementById('eventPosterInput')?.files?.[0];
+            let imageUrl = document.getElementById('newEventImage').value || "";
 
-            if (_supabaseClient) {
-                const { data, error } = await _supabaseClient.from('events').insert([newEv]).select();
-                if (!error && Array.isArray(data) && data.length > 0) {
-                    registeredEvents.push(data[0]);
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = true;
+
+            try {
+                if (posterFile) {
+                    imageUrl = await uploadModeratedPoster(posterFile);
+                }
+
+                const newEv = {
+                    title: document.getElementById('newEventTitle').value,
+                    venueName: document.getElementById('newEventVenueInput').value,
+                    zone: document.getElementById('newEventZone').value.trim(),
+                    category: document.getElementById('newEventCategory').value,
+                    date: document.getElementById('newEventDate').value,
+                    time: document.getElementById('newEventTime').value,
+                    fee: document.getElementById('newEventFee').value,
+                    image: imageUrl,
+                    desc: document.getElementById('newEventDesc').value,
+                    author: currentAuthor
+                };
+
+                if (_supabaseClient) {
+                    const { data, error } = await _supabaseClient.from('events').insert([newEv]).select();
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        registeredEvents.push(data[0]);
+                    } else {
+                        registeredEvents.push(newEv);
+                    }
                 } else {
                     registeredEvents.push(newEv);
                 }
-            } else {
-                registeredEvents.push(newEv);
-            }
 
-            syncAvailableZones();
-            renderEventsGrid();
-            generateCalendarDays();
-            renderRightSidebarWidgets();
-            closeModal();
-            e.target.reset();
+                syncAvailableZones();
+                renderEventsGrid();
+                generateCalendarDays();
+                renderRightSidebarWidgets();
+                closeModal();
+                e.target.reset();
+            } catch (err) {
+                alert(err.message || 'Unable to upload event flyer.');
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
         }
         window.handleEventSubmit = handleEventSubmit;
 
