@@ -413,7 +413,7 @@
                     </select>
                 </div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium"></textarea></div>
+                <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
@@ -435,6 +435,30 @@
                 <input type="hidden" id="newVenueLat" value="37.0881">
                 <input type="hidden" id="newVenueLng" value="-8.2520">
                 <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Save Venue</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Venue Address Modal -->
+    <div id="editAddressModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-black theme-text-main flex items-center gap-1.5">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> Add Street Name or Address
+                </h3>
+                <button onclick="closeEditAddressModal()" class="font-bold cursor-pointer">✕</button>
+            </div>
+            <p id="editAddressVenueTitle" class="text-xs font-black text-miamiCyan"></p>
+            <form onsubmit="handleEditAddressSubmit(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="editAddressVenueOriginalName">
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Street Name & Number / Address</label>
+                    <input type="text" id="editAddressInput" required placeholder="e.g. Rua 25 de Abril, 14, Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium focus:border-miamiCyan outline-none">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeEditAddressModal()" class="px-4 py-2 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
+                    <button type="submit" id="saveAddressBtn" class="px-4 py-2 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Save Address</button>
+                </div>
             </form>
         </div>
     </div>
@@ -481,6 +505,7 @@
 
     <script>
         const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras", "Lagos", "Faro", "Tavira", "Portimão", "Monchique", "Olhão", "Silves", "Aljezur", "Lagoa", "Loulé", "Castro Marim", "Alcoutim", "Vila Real de Santo António", "Vila do Bispo", "São Brás de Alportel"];
+        const ADDRESS_PLACEHOLDER = 'Enter street name or address...';
 
         // Venues come exclusively from Supabase `directory` table; events/posts/classifieds start empty with no placeholders
         let registeredVenues = [];
@@ -502,6 +527,73 @@
         let activeDirectoryCategoryFilter = 'all';
         let activeClassifiedCategoryFilter = 'all';
         let availableZones = [...defaultZones];
+
+        function needsStreetAddress(addr) {
+            if (!addr) return true;
+            const trimmed = String(addr).trim();
+            return !trimmed || trimmed.toLowerCase() === 'albufeira' || trimmed.toLowerCase() === 'n/a' || trimmed === ADDRESS_PLACEHOLDER;
+        }
+
+        function renderAddressPromptHtml(venueName, addressVal, isDetailView = false) {
+            const safeName = String(venueName || '').replace(/'/g, "\'");
+            if (needsStreetAddress(addressVal)) {
+                const sizeClass = isDetailView ? 'text-xs px-3 py-1.5 rounded-xl' : 'text-[11px] px-2.5 py-1 rounded-lg';
+                return `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="inline-flex items-center gap-1 ${sizeClass} bg-miamiPink/15 hover:bg-miamiPink text-miamiPink hover:text-white border border-miamiPink/50 font-black transition cursor-pointer" title="Click to add street name or address online">✏️ ${ADDRESS_PLACEHOLDER}</button>`;
+            }
+            const editBtn = `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="ml-1.5 text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer" title="Edit address">Edit</button>`;
+            return `<span class="inline-flex items-center flex-wrap">📍 ${addressVal}${editBtn}</span>`;
+        }
+
+        function openEditAddressModal(venueName) {
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).toLowerCase());
+            if (!venue) return;
+            document.getElementById('editAddressVenueOriginalName').value = venue.name;
+            document.getElementById('editAddressVenueTitle').textContent = `${venue.name} (${venue.area || 'Albufeira'})`;
+            const currentAddr = needsStreetAddress(venue.address) ? '' : venue.address;
+            document.getElementById('editAddressInput').value = currentAddr;
+            document.getElementById('editAddressModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('editAddressInput').focus(), 50);
+            if (window.lucide) lucide.createIcons();
+        }
+        window.openEditAddressModal = openEditAddressModal;
+
+        function closeEditAddressModal() {
+            document.getElementById('editAddressModal').classList.add('hidden');
+        }
+        window.closeEditAddressModal = closeEditAddressModal;
+
+        async function handleEditAddressSubmit(e) {
+            e.preventDefault();
+            const originalName = document.getElementById('editAddressVenueOriginalName').value;
+            const newAddr = document.getElementById('editAddressInput').value.trim();
+            if (!newAddr) return;
+
+            const saveBtn = document.getElementById('saveAddressBtn');
+            if (saveBtn) saveBtn.disabled = true;
+
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === originalName.toLowerCase());
+            if (venue) {
+                venue.address = newAddr;
+                if (_supabaseClient) {
+                    try {
+                        if (venue.id !== undefined && venue.id !== null) {
+                            await _supabaseClient.from('directory').update({ address: newAddr }).eq('id', venue.id);
+                        } else {
+                            await _supabaseClient.from('directory').update({ address: newAddr }).eq('name', venue.name);
+                        }
+                    } catch (err) {}
+                }
+            }
+
+            if (saveBtn) saveBtn.disabled = false;
+            closeEditAddressModal();
+            renderDirectoryGrid();
+            const detailSection = document.getElementById('tab-content-venue-detail');
+            if (detailSection && !detailSection.classList.contains('hidden')) {
+                openVenueDetailPage(originalName);
+            }
+        }
+        window.handleEditAddressSubmit = handleEditAddressSubmit;
 
         function syncHeaderOffset() {
             const header = document.getElementById('mainHeader');
@@ -640,7 +732,7 @@
 
             availableZones.forEach(zone => {
                 const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${zone.replace(/'/g, "\\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+                html += `<button onclick="filterZone('${zone.replace(/'/g, "\'")}')" class="zone-btn px-3.5 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
             });
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
@@ -849,7 +941,7 @@
                         </div>
                         <h2 class="text-3xl font-black text-white">${ev.title}</h2>
                         <p class="text-sm font-bold text-gray-300">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\\'")}')">
+                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\'")}')">
                             📍 Venue: <strong class="text-white underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
                         </p>
                     </div>
@@ -916,12 +1008,12 @@
                                 <h3 class="text-base font-black text-white hover:text-miamiCyan transition">${v.name}</h3>
                                 <span class="bg-miamiCyan/20 text-miamiCyan text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">${group}</span>
                             </div>
-                            <p class="text-xs font-bold text-gray-300 flex items-center gap-1">📍 ${v.address || v.area || ''}</p>
+                            <div class="text-xs font-bold text-gray-300">${renderAddressPromptHtml(v.name, v.address, false)}</div>
                             <p class="text-[11px] font-semibold text-emerald-400">🕒 ${v.schedule || 'Daily'}${v.area ? ` • Zone: ${v.area}` : ''}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end pt-2 md:pt-0 border-t md:border-t-0 border-miamiCyan/20">
-                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
+                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition">Map</button>
                         <span class="text-xs font-black text-miamiPink">View →</span>
                     </div>
                 `;
@@ -955,15 +1047,15 @@
                     <div class="space-y-3 w-full">
                         ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3.5 py-1 rounded-full">${venue.area}</span>` : ''}
                         <h2 class="text-3xl font-black text-white">${venue.name}</h2>
-                        <p class="text-sm font-bold text-gray-300">📍 ${venue.address || venue.area || ''}</p>
+                        <div class="text-sm font-bold text-gray-300">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
                         ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
-                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
+                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-4 pt-2">
                     <h3 class="text-xl font-black text-white">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border-2 border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><h4 class="font-black text-base text-white">${ev.title}</h4><p class="text-xs text-gray-300">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs text-gray-400">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
@@ -1125,7 +1217,7 @@
             if (todaysBox) {
                 const todays = registeredEvents.filter(e => e.date === todayIso);
                 todaysBox.innerHTML = todays.length ? todays.map(e => `
-                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\'")}')" class="p-2.5 rounded-xl bg-black/20 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
                         <p class="font-black text-white leading-tight">${e.title}</p>
                         <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time || ''} ${e.venueName ? `• ${e.venueName}` : ''}</p>
                     </div>
@@ -1165,7 +1257,7 @@
                 cell.className = 'min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiDark/80 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
                 cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs text-white">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
@@ -1316,9 +1408,10 @@
         async function handleVenueSubmit(e) {
             e.preventDefault();
             const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
+            const rawAddr = document.getElementById('newVenueAddress').value.trim();
             const newV = {
                 name: document.getElementById('newVenueName').value,
-                address: document.getElementById('newVenueAddress').value,
+                address: rawAddr || ADDRESS_PLACEHOLDER,
                 website: document.getElementById('newVenueWebsite').value,
                 lat: 37.0881,
                 lng: -8.2520,
