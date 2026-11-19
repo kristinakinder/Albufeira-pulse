@@ -181,7 +181,7 @@
         <!-- Horizontal Scrollable Tab Strip -->
         <div class="nav-strip w-full bg-[#1E293B] border-t border-miamiCyan/20 shadow-sm">
             <div class="max-w-7xl mx-auto px-3 sm:px-4 flex justify-between items-center gap-2 py-1.5 sm:py-2">
-                <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5 flex-1">
+                <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5 flex-1 min-w-0">
                     <button onclick="switchTab('events')" id="btn-events" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-sm cursor-pointer"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> <span data-i18n="tabEvents">Events</span></button>
                     <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-3.5 h-3.5"></i> <span data-i18n="tabDirectory">Venues</span></button>
                     <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> <span data-i18n="tabCalendar">Calendar</span></button>
@@ -204,8 +204,8 @@
     <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-grow w-full">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
-            <!-- Left / Main Content Area (9 Columns on Desktop) -->
-            <div class="lg:col-span-9 space-y-4 sm:space-y-5">
+            <!-- Left / Main Content Area (min-w-0 prevents horizontal bars from clipping behind sidebar) -->
+            <div class="lg:col-span-9 min-w-0 space-y-4 sm:space-y-5">
 
                 <!-- Mobile Quick Action Row -->
                 <div class="flex sm:hidden gap-2">
@@ -218,12 +218,12 @@
                 </div>
 
                 <!-- EVENTS TAB -->
-                <section id="tab-content-events" class="space-y-4 sm:space-y-5">
-                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
-                    <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
+                <section id="tab-content-events" class="space-y-4 sm:space-y-5 min-w-0">
+                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-1"></div>
+                    <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
 
-                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
-                        <div class="flex justify-between items-center gap-2">
+                    <div id="eventsMapCard" class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
+                        <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
                                 <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
                             </span>
@@ -242,7 +242,7 @@
                 </section>
 
                 <!-- DIRECTORY TAB -->
-                <section id="tab-content-directory" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-directory" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
@@ -268,19 +268,19 @@
                 </section>
 
                 <!-- VENUE DETAIL PAGE -->
-                <section id="tab-content-venue-detail" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-venue-detail" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md" data-i18n="backToDirectory">← Back to Directory</button>
                     <div id="venueDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
                 </section>
 
                 <!-- EVENT DETAIL PAGE -->
-                <section id="tab-content-event-detail" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-event-detail" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <button onclick="switchTab('events')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Events</button>
                     <div id="eventDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
                 </section>
 
                 <!-- FULL CALENDAR TAB -->
-                <section id="tab-content-calendar" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-calendar" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-6 shadow-xl overflow-x-auto">
                         <h2 class="text-xl sm:text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
                         <div class="min-w-[560px]">
@@ -293,7 +293,7 @@
                 </section>
 
                 <!-- ARTICLES TAB -->
-                <section id="tab-content-articles" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-articles" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-xl sm:text-2xl font-black theme-text-main">Local Articles & Culture</h2>
                         <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article</button>
@@ -302,7 +302,7 @@
                 </section>
 
                 <!-- CLASSIFIEDS TAB -->
-                <section id="tab-content-classifieds" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-classifieds" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <div class="flex flex-wrap justify-between items-center gap-3">
                         <div>
                             <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="tag" class="text-miamiPink w-6 h-6 sm:w-7 sm:h-7"></i> Classifieds & Community Board</h2>
@@ -318,7 +318,7 @@
                 </section>
 
                 <!-- FORUM TAB -->
-                <section id="tab-content-forum" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-forum" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <div class="flex flex-wrap justify-between items-center gap-3">
                         <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="message-square" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> Albufeira Community Forum</h2>
                         <button onclick="openNewThreadModal()" class="bg-miamiCyan hover:bg-opacity-90 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
@@ -330,7 +330,7 @@
                 </section>
 
                 <!-- ESSENTIAL LINKS TAB -->
-                <section id="tab-content-links" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-links" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <h2 class="text-xl sm:text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
                         <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
@@ -361,7 +361,7 @@
                 </section>
 
                 <!-- EMERGENCY CONTACTS TAB -->
-                <section id="tab-content-info" class="space-y-4 sm:space-y-6 hidden">
+                <section id="tab-content-info" class="space-y-4 sm:space-y-6 hidden min-w-0">
                     <h2 class="text-xl sm:text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-5xl">
                         <div class="unified-row p-4 sm:p-5 rounded-2xl border border-red-500/40 space-y-2 shadow-md">
@@ -393,7 +393,7 @@
             </div>
 
             <!-- PERSISTENT RIGHT VERTICAL SIDEBAR (3 Columns on Desktop, Stacks Cleanly Below on Mobile) -->
-            <aside class="lg:col-span-3 space-y-4 sm:space-y-5">
+            <aside class="lg:col-span-3 min-w-0 space-y-4 sm:space-y-5">
 
                 <!-- 1. Mini Calendar Widget -->
                 <div class="theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-md space-y-3">
@@ -501,12 +501,11 @@
                     <label class="block font-bold mb-1 theme-text-sub">Category</label>
                     <select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium">
                         <option value="HAPPY HOUR">Happy Hour</option>
-                        <option value="MUSIC">Music / Live DJ</option>
+                        <option value="LIVE MUSIC">Live Music</option>
+                        <option value="SPORTS">Sports</option>
                         <option value="LIVE SPORTS TV">Live Sports TV</option>
-                        <option value="KARAOKE">Karaoke</option>
-                        <option value="QUIZ">Quiz Night</option>
-                        <option value="WELLNESS">Wellness (Yoga, Reiki, Sound Bowls)</option>
-                        <option value="HEALTH & FIRST AID">Health & First Aid (SNS Courses)</option>
+                        <option value="QUIZ">Quiz</option>
+                        <option value="WELLNESS">Wellness</option>
                         <option value="ART & CULTURE">Art & Culture</option>
                         <option value="MARKETS">Markets</option>
                         <option value="SOCIAL">Social</option>
@@ -635,6 +634,7 @@
                 if (document.documentElement.className !== autoMode) {
                     applyThemeMode(autoMode);
                     updateThemeButtonUI();
+                    updateMapTileLayer();
                 }
             }
         }
@@ -789,6 +789,8 @@
 
         let albufeiraMap = null;
         let mapMarkersGroup = null;
+        let mapTileLayer = null;
+        let activeTileMode = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             if (window.lucide) lucide.createIcons();
@@ -796,7 +798,6 @@
             syncHeaderOffset();
             window.addEventListener('resize', syncHeaderOffset);
 
-            // Re-check automatic day/night mode every minute if no manual override is saved
             setInterval(syncAutoThemeIfUnlocked, 60000);
 
             const todayLabel = document.getElementById('sidebarTodayDateLabel');
@@ -858,7 +859,7 @@
         function renderEventCategoryButtons() {
             const bar = document.getElementById('eventCategoryFilterBar');
             if (!bar) return;
-            const categories = ['all', 'HAPPY HOUR', 'MUSIC', 'LIVE SPORTS TV', 'KARAOKE', 'QUIZ', 'WELLNESS', 'HEALTH & FIRST AID', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
+            const categories = ['all', 'HAPPY HOUR', 'LIVE MUSIC', 'SPORTS', 'LIVE SPORTS TV', 'QUIZ', 'WELLNESS', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
             let html = `<span class="text-xs font-black text-miamiPink mr-1 flex items-center gap-1 shrink-0"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Category:</span>`;
             categories.forEach(cat => {
                 const isActive = activeEventCategoryFilter === cat;
@@ -1047,38 +1048,63 @@
             if (!Number.isNaN(lat) && !Number.isNaN(lng) && lat !== 0 && lng !== 0) {
                 return [lat, lng];
             }
-            // Deterministic slight offset around Albufeira center if venue has no coordinates yet
+            const zoneCenters = {
+                'albufeira strip': [37.0916, -8.2243],
+                'albufeira marina': [37.0844, -8.2636],
+                'albufeira old town': [37.0886, -8.2529],
+                'albufeira': [37.0881, -8.2520],
+                'guia': [37.1275, -8.2928],
+                'ferreiras': [37.1319, -8.2456],
+                'lagos': [37.1028, -8.6730],
+                'faro': [37.0194, -7.9322],
+                'tavira': [37.1264, -7.6486],
+                'portimão': [37.1364, -8.5377]
+            };
+            const areaKey = String(venue.area || venue.address || '').toLowerCase();
+            let baseCoords = [37.0881, -8.2520];
+            for (const key of Object.keys(zoneCenters)) {
+                if (areaKey.includes(key)) {
+                    baseCoords = zoneCenters[key];
+                    break;
+                }
+            }
             const nameStr = String(venue.name || 'venue');
             let hash = 0;
             for (let i = 0; i < nameStr.length; i++) {
                 hash = ((hash << 5) - hash) + nameStr.charCodeAt(i);
                 hash |= 0;
             }
-            const latOffset = ((Math.abs(hash) % 140) - 70) * 0.0001;
-            const lngOffset = ((Math.abs(hash >> 4) % 140) - 70) * 0.0001;
-            return [37.0881 + latOffset, -8.2520 + lngOffset];
+            const latOffset = ((Math.abs(hash) % 100) - 50) * 0.0001;
+            const lngOffset = ((Math.abs(hash >> 4) % 100) - 50) * 0.0001;
+            return [baseCoords[0] + latOffset, baseCoords[1] + lngOffset];
         }
 
         function jumpToVenueOnMap(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).toLowerCase());
+            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).trim().toLowerCase());
             if (!venue) return;
             focusedVenueName = venue.name;
-            switchTab('events');
+            switchTab('events', true, false);
 
             const mapContainer = document.getElementById('eventsMapContainer');
             if (mapContainer && mapContainer.style.display === 'none') {
                 mapContainer.style.display = 'block';
             }
 
+            const mapCard = document.getElementById('eventsMapCard');
+            if (mapCard) {
+                mapCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
             setTimeout(() => {
                 initMap();
+                updateMapTileLayer();
                 if (albufeiraMap) {
                     albufeiraMap.invalidateSize();
                     const [lat, lng] = getVenueCoords(venue);
                     albufeiraMap.setView([lat, lng], 16);
                     refreshMapMarkers(venue.name);
                 }
-            }, 160);
+            }, 180);
         }
         window.jumpToVenueOnMap = jumpToVenueOnMap;
 
@@ -1425,11 +1451,35 @@
             }
         }
 
+        function updateMapTileLayer() {
+            if (!albufeiraMap || typeof L === 'undefined') return;
+            const isNight = document.documentElement.classList.contains('night-mode');
+            const desiredMode = isNight ? 'night' : 'day';
+            if (activeTileMode === desiredMode && mapTileLayer) return;
+
+            if (mapTileLayer) {
+                albufeiraMap.removeLayer(mapTileLayer);
+            }
+
+            if (isNight) {
+                mapTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap &copy; CARTO',
+                    maxZoom: 19
+                }).addTo(albufeiraMap);
+            } else {
+                mapTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap',
+                    maxZoom: 19
+                }).addTo(albufeiraMap);
+            }
+            activeTileMode = desiredMode;
+        }
+
         function initMap() {
             const mapContainer = document.getElementById('eventsAlbufeiraMap');
             if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
                 albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0881, -8.2520], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(albufeiraMap);
+                updateMapTileLayer();
                 mapMarkersGroup = L.layerGroup().addTo(albufeiraMap);
             }
         }
@@ -1437,28 +1487,28 @@
         function refreshMapMarkers(selectedVenueName = null) {
             if (!albufeiraMap) initMap();
             if (!albufeiraMap || !mapMarkersGroup) return;
+            updateMapTileLayer();
             mapMarkersGroup.clearLayers();
 
+            const targetName = selectedVenueName || focusedVenueName;
             const badge = document.getElementById('selectedMapVenueBadge');
-            if (selectedVenueName) {
-                focusedVenueName = selectedVenueName;
+            if (targetName) {
                 if (badge) {
-                    badge.textContent = `📍 ${selectedVenueName}`;
+                    badge.textContent = `📍 ${targetName}`;
                     badge.classList.remove('hidden');
                 }
             } else if (badge) {
                 badge.classList.add('hidden');
             }
 
-            // Show pins for venues with explicit coordinates, plus always show the selected venue pin
             const venuesToRender = registeredVenues.filter(v => {
-                const isSelected = selectedVenueName && v.name.toLowerCase() === selectedVenueName.toLowerCase();
+                const isSelected = targetName && v.name.toLowerCase() === targetName.toLowerCase();
                 const hasRealCoords = v.lat !== undefined && v.lng !== undefined && v.lat !== null && v.lng !== null && !Number.isNaN(parseFloat(v.lat)) && !Number.isNaN(parseFloat(v.lng)) && !(parseFloat(v.lat) === 0 && parseFloat(v.lng) === 0);
                 return isSelected || hasRealCoords;
             });
 
             venuesToRender.forEach(v => {
-                const isSelected = selectedVenueName && v.name.toLowerCase() === selectedVenueName.toLowerCase();
+                const isSelected = targetName && v.name.toLowerCase() === targetName.toLowerCase();
                 const [lat, lng] = getVenueCoords(v);
 
                 const pinIcon = L.divIcon({
@@ -1493,6 +1543,7 @@
             applyThemeMode(newMode);
             localStorage.setItem('albufeira_manual_theme', newMode);
             updateThemeButtonUI();
+            updateMapTileLayer();
         }
         window.toggleManualDayNightMode = toggleManualDayNightMode;
 
@@ -1505,7 +1556,7 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        function switchTab(tabId, pushState = true) {
+        function switchTab(tabId, pushState = true, shouldScrollTop = true) {
             ['events', 'directory', 'venue-detail', 'event-detail', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
                 document.getElementById('tab-content-' + t)?.classList.add('hidden');
             });
@@ -1526,11 +1577,15 @@
                 history.pushState({ tab: tabId }, "", `#${tabId}`);
             }
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (shouldScrollTop) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
             syncHeaderOffset();
 
-            if (tabId === 'events' && albufeiraMap) {
+            if (tabId === 'events') {
                 setTimeout(() => {
+                    initMap();
+                    updateMapTileLayer();
                     albufeiraMap.invalidateSize();
                     refreshMapMarkers(focusedVenueName);
                 }, 150);
@@ -1542,8 +1597,10 @@
             const container = document.getElementById('eventsMapContainer');
             const isHidden = container.style.display === 'none';
             container.style.display = isHidden ? 'block' : 'none';
-            if (isHidden && albufeiraMap) {
+            if (isHidden) {
                 setTimeout(() => {
+                    initMap();
+                    updateMapTileLayer();
                     albufeiraMap.invalidateSize();
                     refreshMapMarkers(focusedVenueName);
                 }, 100);
