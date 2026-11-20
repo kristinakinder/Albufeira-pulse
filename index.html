@@ -549,8 +549,14 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                     <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required placeholder="19:00" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required placeholder="Free" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
+                    <div>
+                        <label class="block font-bold mb-1 theme-text-sub">Time</label>
+                        <input type="text" id="newEventTime" list="timePresetsList" required placeholder="Select or type (e.g. 19:00)" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 theme-text-sub">Fee (Default: Free)</label>
+                        <input type="text" id="newEventFee" list="feePresetsList" placeholder="Free" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium">
+                    </div>
                 </div>
                 <div>
                     <label class="block font-bold mb-1 theme-text-sub">Category</label>
@@ -569,7 +575,7 @@
                 <div><label class="block font-bold mb-1 theme-text-sub">Upload Event Flyer / Poster (JPG only, max 3 MB)</label><input type="file" id="eventPosterInput" accept="image/jpeg,.jpg,.jpeg" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium text-xs"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
                 <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
+                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" id="publishEventBtn" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
             </form>
         </div>
     </div>
@@ -710,6 +716,32 @@
     </div>
 
     <datalist id="zoneDatalist"></datalist>
+    <datalist id="timePresetsList">
+        <option value="09:00"></option>
+        <option value="10:00"></option>
+        <option value="11:00"></option>
+        <option value="12:00"></option>
+        <option value="13:00"></option>
+        <option value="14:00"></option>
+        <option value="15:00"></option>
+        <option value="16:00"></option>
+        <option value="17:00"></option>
+        <option value="18:00"></option>
+        <option value="19:00"></option>
+        <option value="20:00"></option>
+        <option value="21:00"></option>
+        <option value="21:30"></option>
+        <option value="22:00"></option>
+        <option value="23:00"></option>
+    </datalist>
+    <datalist id="feePresetsList">
+        <option value="Free"></option>
+        <option value="€5"></option>
+        <option value="€10"></option>
+        <option value="€15"></option>
+        <option value="€20"></option>
+        <option value="Donation"></option>
+    </datalist>
 
     <script>
         const REPORT_EMAIL = 'support@albufeira-pulse.com';
@@ -1696,10 +1728,14 @@
             };
 
             if (_supabaseClient) {
-                const { data, error } = await _supabaseClient.from('classifieds').insert([newItem]).select();
-                if (!error && Array.isArray(data) && data.length > 0) {
-                    classifiedListings = [...data, ...classifiedListings];
-                } else {
+                try {
+                    const { data, error } = await _supabaseClient.from('classifieds').insert([newItem]).select();
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        classifiedListings = [...data, ...classifiedListings];
+                    } else {
+                        classifiedListings.unshift(newItem);
+                    }
+                } catch (err) {
                     classifiedListings.unshift(newItem);
                 }
             } else {
@@ -1760,10 +1796,14 @@
             };
 
             if (_supabaseClient) {
-                const { data, error } = await _supabaseClient.from('forum_threads').insert([newThread]).select();
-                if (!error && Array.isArray(data) && data.length > 0) {
-                    forumThreads = [...data, ...forumThreads];
-                } else {
+                try {
+                    const { data, error } = await _supabaseClient.from('forum_threads').insert([newThread]).select();
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        forumThreads = [...data, ...forumThreads];
+                    } else {
+                        forumThreads.unshift(newThread);
+                    }
+                } catch (err) {
                     forumThreads.unshift(newThread);
                 }
             } else {
@@ -1976,7 +2016,11 @@
         }
         window.toggleEventsMap = toggleEventsMap;
 
-        function openModal() { document.getElementById('eventModal').classList.remove('hidden'); }
+        function openModal() {
+            const feeEl = document.getElementById('newEventFee');
+            if (feeEl && !feeEl.value.trim()) feeEl.value = 'Free';
+            document.getElementById('eventModal').classList.remove('hidden');
+        }
         window.openModal = openModal;
         function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
         window.closeModal = closeModal;
@@ -2038,34 +2082,46 @@
             e.preventDefault();
             const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
             const posterFile = document.getElementById('eventPosterInput')?.files?.[0];
-            let imageUrl = document.getElementById('newEventImage').value || "";
+            let imageUrl = document.getElementById('newEventImage').value.trim() || "";
+            const feeInputVal = document.getElementById('newEventFee').value.trim();
 
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('publishEventBtn') || e.target.querySelector('button[type="submit"]');
             if (submitBtn) submitBtn.disabled = true;
 
             try {
                 if (posterFile) {
-                    imageUrl = await uploadModeratedPoster(posterFile);
+                    try {
+                        const uploadedUrl = await uploadModeratedPoster(posterFile);
+                        if (uploadedUrl) imageUrl = uploadedUrl;
+                    } catch (uploadErr) {
+                        if (!imageUrl) {
+                            alert(uploadErr.message || 'Poster upload failed; publishing event without poster.');
+                        }
+                    }
                 }
 
                 const newEv = {
-                    title: document.getElementById('newEventTitle').value,
-                    venueName: document.getElementById('newEventVenueInput').value,
+                    title: document.getElementById('newEventTitle').value.trim(),
+                    venueName: document.getElementById('newEventVenueInput').value.trim(),
                     zone: document.getElementById('newEventZone').value.trim(),
                     category: document.getElementById('newEventCategory').value,
                     date: document.getElementById('newEventDate').value,
-                    time: document.getElementById('newEventTime').value,
-                    fee: document.getElementById('newEventFee').value,
+                    time: document.getElementById('newEventTime').value.trim(),
+                    fee: feeInputVal || 'Free',
                     image: imageUrl,
-                    desc: document.getElementById('newEventDesc').value,
+                    desc: document.getElementById('newEventDesc').value.trim(),
                     author: currentAuthor
                 };
 
                 if (_supabaseClient) {
-                    const { data, error } = await _supabaseClient.from('events').insert([newEv]).select();
-                    if (!error && Array.isArray(data) && data.length > 0) {
-                        registeredEvents.push(data[0]);
-                    } else {
+                    try {
+                        const { data, error } = await _supabaseClient.from('events').insert([newEv]).select();
+                        if (!error && Array.isArray(data) && data.length > 0) {
+                            registeredEvents.push(data[0]);
+                        } else {
+                            registeredEvents.push(newEv);
+                        }
+                    } catch (dbErr) {
                         registeredEvents.push(newEv);
                     }
                 } else {
@@ -2078,8 +2134,6 @@
                 renderRightSidebarWidgets();
                 closeModal();
                 e.target.reset();
-            } catch (err) {
-                alert(err.message || 'Unable to upload event flyer.');
             } finally {
                 if (submitBtn) submitBtn.disabled = false;
             }
@@ -2117,10 +2171,14 @@
                 };
 
                 if (_supabaseClient) {
-                    const { data, error } = await _supabaseClient.from('directory').insert([newV]).select();
-                    if (!error && Array.isArray(data) && data.length > 0) {
-                        registeredVenues = [...data, ...registeredVenues];
-                    } else {
+                    try {
+                        const { data, error } = await _supabaseClient.from('directory').insert([newV]).select();
+                        if (!error && Array.isArray(data) && data.length > 0) {
+                            registeredVenues = [...data, ...registeredVenues];
+                        } else {
+                            registeredVenues.unshift(newV);
+                        }
+                    } catch (dbErr) {
                         registeredVenues.unshift(newV);
                     }
                 } else {
