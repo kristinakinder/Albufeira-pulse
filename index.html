@@ -470,6 +470,43 @@
     </nav>
 
     <!-- MODALS -->
+    <!-- Report / Complaint Reason Picker Modal (Sends to support@albufeira-pulse.com) -->
+    <div id="reportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="theme-card border-2 border-amber-500/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-black theme-text-main flex items-center gap-1.5">
+                    <span>🚩</span> Report / Complaint
+                </h3>
+                <button onclick="closeReportModal()" class="font-bold p-1 cursor-pointer">✕</button>
+            </div>
+            <p id="reportTargetSummary" class="text-xs font-bold text-miamiCyan"></p>
+            <form onsubmit="handleReportSubmit(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="reportItemType">
+                <input type="hidden" id="reportItemTitle">
+                <input type="hidden" id="reportItemContext">
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Reason / Complaint Category</label>
+                    <select id="reportReasonSelect" required class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium focus:border-miamiCyan outline-none">
+                        <option value="Incorrect or outdated info">Incorrect or outdated info</option>
+                        <option value="Wrong location, address, or time">Wrong location, address, or time</option>
+                        <option value="Spam, scam, or prohibited listing">Spam, scam, or prohibited listing</option>
+                        <option value="Inappropriate or offensive content">Inappropriate or offensive content</option>
+                        <option value="Duplicate or broken listing">Duplicate or broken listing</option>
+                        <option value="Other complaint / feedback">Other complaint / feedback</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold mb-1 theme-text-sub">Additional Details (Optional)</label>
+                    <textarea id="reportDetailsInput" rows="3" placeholder="Tell support@albufeira-pulse.com what needs fixing..." class="w-full theme-input border-2 rounded-xl p-3 font-medium focus:border-miamiCyan outline-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeReportModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
+                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-miamiPink text-white font-black cursor-pointer shadow">Send via Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4">
@@ -605,6 +642,67 @@
     <datalist id="zoneDatalist"></datalist>
 
     <script>
+        const REPORT_EMAIL = 'support@albufeira-pulse.com';
+
+        function escapeJsSingleQuote(str) {
+            return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+
+        function openReportModal(itemType, itemTitle, extraContext = '') {
+            document.getElementById('reportItemType').value = itemType || 'Listing';
+            document.getElementById('reportItemTitle').value = itemTitle || 'N/A';
+            document.getElementById('reportItemContext').value = extraContext || '';
+            document.getElementById('reportReasonSelect').selectedIndex = 0;
+            document.getElementById('reportDetailsInput').value = '';
+            document.getElementById('reportTargetSummary').textContent = `${itemType || 'Item'}: ${itemTitle || 'Listing'}`;
+            document.getElementById('reportModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('reportReasonSelect')?.focus(), 50);
+        }
+        window.openReportModal = openReportModal;
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+        window.closeReportModal = closeReportModal;
+
+        function handleReportSubmit(e) {
+            e.preventDefault();
+            const itemType = document.getElementById('reportItemType').value;
+            const itemTitle = document.getElementById('reportItemTitle').value;
+            const extraContext = document.getElementById('reportItemContext').value;
+            const reason = document.getElementById('reportReasonSelect').value;
+            const details = document.getElementById('reportDetailsInput').value.trim();
+
+            const subject = encodeURIComponent(`Report [${reason}] - ${itemTitle}`);
+            const body = encodeURIComponent(
+                [
+                    `Reason / Complaint: ${reason}`,
+                    `Item Type: ${itemType}`,
+                    `Title / Name: ${itemTitle}`,
+                    extraContext ? `Context: ${extraContext}` : '',
+                    `Page URL: ${window.location.href}`,
+                    `Reported At: ${new Date().toISOString()}`,
+                    '',
+                    'Details:',
+                    details || '(No extra details provided)'
+                ].filter(Boolean).join('\n')
+            );
+
+            closeReportModal();
+            window.location.href = `mailto:${REPORT_EMAIL}?subject=${subject}&body=${body}`;
+        }
+        window.handleReportSubmit = handleReportSubmit;
+
+        function renderReportButtonHtml(itemType, itemTitle, extraContext = '', compact = true) {
+            const safeType = escapeJsSingleQuote(itemType);
+            const safeTitle = escapeJsSingleQuote(itemTitle);
+            const safeCtx = escapeJsSingleQuote(extraContext);
+            const sizing = compact
+                ? 'text-[10px] px-2 py-1 rounded-lg'
+                : 'text-xs px-3 py-1.5 rounded-xl';
+            return `<button type="button" onclick="event.stopPropagation(); openReportModal('${safeType}', '${safeTitle}', '${safeCtx}')" class="inline-flex items-center gap-1 ${sizing} font-bold border border-amber-500/40 text-amber-400 hover:bg-amber-500/15 transition cursor-pointer shrink-0" title="Report to ${REPORT_EMAIL}">🚩 Report</button>`;
+        }
+
         const defaultZones = ["Albufeira", "Albufeira Old Town", "Albufeira Marina", "Albufeira Strip", "Guia", "Ferreiras", "Lagos", "Faro", "Tavira", "Portimão", "Monchique", "Olhão", "Silves", "Aljezur", "Lagoa", "Loulé", "Castro Marim", "Alcoutim", "Vila Real de Santo António", "Vila do Bispo", "São Brás de Alportel"];
         const ADDRESS_PLACEHOLDER = 'Enter street name or address...';
 
@@ -647,7 +745,7 @@
         }
 
         function renderAddressPromptHtml(venueName, addressVal, isDetailView = false) {
-            const safeName = String(venueName || '').replace(/'/g, "\\'");
+            const safeName = escapeJsSingleQuote(venueName);
             if (needsStreetAddress(addressVal)) {
                 const sizeClass = isDetailView ? 'text-xs px-3 py-1.5 rounded-xl' : 'text-[11px] px-2.5 py-1 rounded-lg';
                 return `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="inline-flex items-center gap-1 ${sizeClass} bg-miamiPink/15 hover:bg-miamiPink text-miamiPink hover:text-white border border-miamiPink/50 font-black transition cursor-pointer" title="Click to add street name or address online">✏️ ${ADDRESS_PLACEHOLDER}</button>`;
@@ -845,7 +943,7 @@
 
             availableZones.forEach(zone => {
                 const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${zone.replace(/'/g, "\\'")}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
+                html += `<button onclick="filterZone('${escapeJsSingleQuote(zone)}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
             });
             bar.innerHTML = html;
             if (window.lucide) lucide.createIcons();
@@ -1024,11 +1122,19 @@
                     imgHtml = `<div class="h-40 sm:h-44 w-full overflow-hidden"><img src="${ev.image}" class="w-full h-full object-cover"></div>`;
                 }
 
+                const eventCtx = [ev.venueName, ev.zone, ev.date].filter(Boolean).join(' | ');
+
                 card.innerHTML = `
                     <div>
                         ${imgHtml}
                         <div class="p-4 sm:p-5 space-y-2">
-                            <div class="flex justify-between items-center"><span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category || 'EVENT'}</span><span class="text-xs font-black text-miamiPink">${ev.fee || 'Free'}</span></div>
+                            <div class="flex justify-between items-center gap-2">
+                                <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category || 'EVENT'}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-black text-miamiPink">${ev.fee || 'Free'}</span>
+                                    ${renderReportButtonHtml('Event', ev.title, eventCtx, true)}
+                                </div>
+                            </div>
                             <h3 class="text-base font-black row-title">${ev.title}</h3>
                             <p class="text-xs font-bold row-body">📍 ${ev.venueName || ''} ${ev.zone ? `(${ev.zone})` : ''}</p>
                             <p class="text-xs row-body">${ev.desc || ''}</p>
@@ -1125,17 +1231,22 @@
                 imgHtml = `<img src="${ev.image}" class="w-full md:w-80 h-52 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
             }
 
+            const eventCtx = [ev.venueName, ev.zone, ev.date, ev.time].filter(Boolean).join(' | ');
+
             container.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
                     ${imgHtml}
                     <div class="space-y-3 w-full">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${ev.category || 'EVENT'}</span>
-                            <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3 py-1 rounded-full">${ev.fee || 'Free'}</span>
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${ev.category || 'EVENT'}</span>
+                                <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3 py-1 rounded-full">${ev.fee || 'Free'}</span>
+                            </div>
+                            ${renderReportButtonHtml('Event', ev.title, eventCtx, false)}
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-black row-title">${ev.title}</h2>
                         <p class="text-sm font-bold row-body">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${(ev.venueName || '').replace(/'/g, "\\'")}')">
+                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${escapeJsSingleQuote(ev.venueName || '')}')">
                             📍 Venue: <strong class="row-title underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
                         </p>
                     </div>
@@ -1194,6 +1305,9 @@
                     thumbHtml = `<img src="${v.image}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
                 }
 
+                const venueCtx = [group, v.area, v.address].filter(Boolean).join(' | ');
+                const safeName = escapeJsSingleQuote(v.name);
+
                 row.innerHTML = `
                     <div class="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
                         ${thumbHtml}
@@ -1207,7 +1321,8 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-miamiCyan/20">
-                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${v.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition cursor-pointer">Map</button>
+                        ${renderReportButtonHtml('Venue', v.name, venueCtx, true)}
+                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${safeName}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition cursor-pointer">Map</button>
                         <span class="text-xs font-black text-miamiPink px-1">View →</span>
                     </div>
                 `;
@@ -1235,21 +1350,27 @@
                 venueImageHtml = `<img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
             }
 
+            const venueCtx = [venue.area, venue.address].filter(Boolean).join(' | ');
+            const safeName = escapeJsSingleQuote(venue.name);
+
             container.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
                     ${venueImageHtml}
                     <div class="space-y-3 w-full">
-                        ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${venue.area}</span>` : ''}
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${venue.area}</span>` : '<span></span>'}
+                            ${renderReportButtonHtml('Venue', venue.name, venueCtx, false)}
+                        </div>
                         <h2 class="text-2xl sm:text-3xl font-black row-title">${venue.name}</h2>
                         <div class="text-sm font-bold row-body">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
                         ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
-                        <button onclick="jumpToVenueOnMap('${venue.name.replace(/'/g, "\\'")}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
+                        <button onclick="jumpToVenueOnMap('${safeName}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
                     </div>
                 </div>
                 <div class="space-y-3 pt-1">
                     <h3 class="text-lg sm:text-xl font-black row-title">Events at ${venue.name}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
+                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${escapeJsSingleQuote(ev.title)}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
                     </div>
                 </div>
             `;
@@ -1265,14 +1386,20 @@
                 container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No articles published yet.</div>`;
                 return;
             }
-            container.innerHTML = articlesList.map(a => `
-                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                    <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${a.category || 'Article'}</span>
-                    <h3 class="font-black text-miamiPink text-base">${a.title}</h3>
-                    <p class="text-xs row-body leading-relaxed">${a.body}</p>
-                    <p class="text-[10px] font-bold text-miamiCyan">Added by ${a.author || 'Member'}</p>
-                </div>
-            `).join('');
+            container.innerHTML = articlesList.map(a => {
+                const artCtx = [a.category, a.author].filter(Boolean).join(' | ');
+                return `
+                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${a.category || 'Article'}</span>
+                            ${renderReportButtonHtml('Article', a.title, artCtx, true)}
+                        </div>
+                        <h3 class="font-black text-miamiPink text-base">${a.title}</h3>
+                        <p class="text-xs row-body leading-relaxed">${a.body}</p>
+                        <p class="text-[10px] font-bold text-miamiCyan">Added by ${a.author || 'Member'}</p>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderClassifiedCategoryBar() {
@@ -1301,20 +1428,26 @@
                 container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No classified listings yet. Click "+ Post Classified" to add one.</div>`;
                 return;
             }
-            container.innerHTML = filtered.map(item => `
-                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                    <div class="flex justify-between items-center flex-wrap gap-2">
-                        <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${item.category}</span>
-                        <span class="text-xs font-black text-miamiCyan">${item.price}</span>
+            container.innerHTML = filtered.map(item => {
+                const classCtx = [item.category, item.price, item.author].filter(Boolean).join(' | ');
+                return `
+                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${item.category}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-black text-miamiCyan">${item.price}</span>
+                                ${renderReportButtonHtml('Classified', item.title, classCtx, true)}
+                            </div>
+                        </div>
+                        <h3 class="text-base font-black row-title">${item.title}</h3>
+                        <p class="text-xs row-body leading-relaxed">${item.desc}</p>
+                        <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] row-meta font-bold">
+                            <span>📅 ${item.date || ''}</span>
+                            <span class="text-miamiCyan">Contact: ${item.contact}</span>
+                        </div>
                     </div>
-                    <h3 class="text-base font-black row-title">${item.title}</h3>
-                    <p class="text-xs row-body leading-relaxed">${item.desc}</p>
-                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] row-meta font-bold">
-                        <span>📅 ${item.date || ''}</span>
-                        <span class="text-miamiCyan">Contact: ${item.contact}</span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function openClassifiedModal() { document.getElementById('classifiedModal').classList.remove('hidden'); }
@@ -1360,20 +1493,26 @@
                 container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No forum threads yet. Click "+ Start New Thread" to begin a discussion.</div>`;
                 return;
             }
-            container.innerHTML = forumThreads.map(t => `
-                <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full">${t.category}</span>
-                        <span class="text-[11px] font-bold row-meta">💬 ${t.replies || 0} Replies</span>
+            container.innerHTML = forumThreads.map(t => {
+                const threadCtx = [t.category, t.author].filter(Boolean).join(' | ');
+                return `
+                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full">${t.category}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold row-meta">💬 ${t.replies || 0} Replies</span>
+                                ${renderReportButtonHtml('Forum Thread', t.title, threadCtx, true)}
+                            </div>
+                        </div>
+                        <h3 class="text-base font-black row-title">${t.title}</h3>
+                        <p class="text-xs row-body leading-relaxed">${t.body}</p>
+                        <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[10px] font-bold text-miamiCyan">
+                            <span>Started by ${t.author}</span>
+                            <span class="row-meta">${t.date || ''}</span>
+                        </div>
                     </div>
-                    <h3 class="text-base font-black row-title">${t.title}</h3>
-                    <p class="text-xs row-body leading-relaxed">${t.body}</p>
-                    <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[10px] font-bold text-miamiCyan">
-                        <span>Started by ${t.author}</span>
-                        <span class="row-meta">${t.date || ''}</span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function openNewThreadModal() { document.getElementById('newThreadModal').classList.remove('hidden'); }
@@ -1431,7 +1570,7 @@
             if (todaysBox) {
                 const todays = registeredEvents.filter(e => e.date === todayIso);
                 todaysBox.innerHTML = todays.length ? todays.map(e => `
-                    <div onclick="openEventDetailPage('${e.title.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
+                    <div onclick="openEventDetailPage('${escapeJsSingleQuote(e.title)}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
                         <p class="font-black row-title leading-tight">${e.title}</p>
                         <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time || ''} ${e.venueName ? `• ${e.venueName}` : ''}</p>
                     </div>
@@ -1471,7 +1610,7 @@
                 cell.className = 'min-h-[95px] sm:min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
                 let eventsHTML = '';
                 dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${ev.title.replace(/'/g, "\\'")}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
+                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${escapeJsSingleQuote(ev.title)}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
                 });
                 cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs row-title">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
                 grid.appendChild(cell);
@@ -1523,7 +1662,7 @@
                     iconAnchor: isSelected ? [11, 11] : [8, 8]
                 });
 
-                const safeName = String(v.name || '').replace(/'/g, "\\'");
+                const safeName = escapeJsSingleQuote(v.name || '');
                 const popupHtml = `
                     <div style="min-width: 150px; font-family: 'Plus Jakarta Sans', sans-serif;">
                         <div style="font-weight: 800; font-size: 13px; color: #0F172A;">${v.name}</div>
