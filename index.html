@@ -222,6 +222,23 @@
                     <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-1"></div>
                     <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
 
+                    <!-- TOP & UPCOMING EVENTS BANNER -->
+                    <div id="topUpcomingEventsBanner" class="hidden theme-card border-2 border-miamiPink/40 rounded-2xl p-3.5 sm:p-4 shadow-xl space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="inline-flex items-center gap-1 text-[10px] font-black uppercase bg-miamiPink text-white px-2.5 py-1 rounded-full shadow-sm">
+                                    <i data-lucide="flame" class="w-3 h-3"></i> Spotlight
+                                </span>
+                                <div class="inline-flex rounded-xl p-0.5 bg-black/20 border border-miamiCyan/30 text-[11px] font-black">
+                                    <button type="button" id="bannerModeTopBtn" onclick="setEventBannerMode('top')" class="px-3 py-1 rounded-lg bg-miamiCyan text-miamiDark transition cursor-pointer">Top Events</button>
+                                    <button type="button" id="bannerModeUpcomingBtn" onclick="setEventBannerMode('upcoming')" class="px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer">Upcoming Events</button>
+                                </div>
+                            </div>
+                            <button type="button" onclick="toggleEventBanner()" id="toggleEventBannerBtn" class="text-[11px] font-black text-miamiCyan hover:underline cursor-pointer">Hide Banner</button>
+                        </div>
+                        <div id="eventBannerCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+                    </div>
+
                     <div id="eventsMapCard" class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
                         <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
@@ -643,6 +660,8 @@
 
     <script>
         const REPORT_EMAIL = 'support@albufeira-pulse.com';
+        let eventBannerMode = 'top';
+        let eventBannerCollapsed = false;
 
         function escapeJsSingleQuote(str) {
             return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
@@ -1081,7 +1100,112 @@
             }
         }
 
+        function setEventBannerMode(mode) {
+            eventBannerMode = mode === 'upcoming' ? 'upcoming' : 'top';
+            const topBtn = document.getElementById('bannerModeTopBtn');
+            const upBtn = document.getElementById('bannerModeUpcomingBtn');
+            if (topBtn && upBtn) {
+                if (eventBannerMode === 'top') {
+                    topBtn.className = 'px-3 py-1 rounded-lg bg-miamiCyan text-miamiDark transition cursor-pointer';
+                    upBtn.className = 'px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer';
+                } else {
+                    upBtn.className = 'px-3 py-1 rounded-lg bg-miamiPink text-white transition cursor-pointer';
+                    topBtn.className = 'px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer';
+                }
+            }
+            renderTopUpcomingBanner();
+        }
+        window.setEventBannerMode = setEventBannerMode;
+
+        function toggleEventBanner() {
+            eventBannerCollapsed = !eventBannerCollapsed;
+            const cardsEl = document.getElementById('eventBannerCardsContainer');
+            const toggleBtn = document.getElementById('toggleEventBannerBtn');
+            if (cardsEl) cardsEl.classList.toggle('hidden', eventBannerCollapsed);
+            if (toggleBtn) toggleBtn.textContent = eventBannerCollapsed ? 'Show Banner' : 'Hide Banner';
+        }
+        window.toggleEventBanner = toggleEventBanner;
+
+        function parseEventTimestamp(ev) {
+            const rawDate = String(ev?.date || '').trim();
+            const rawTime = String(ev?.time || '00:00').trim().slice(0, 5);
+            const dt = new Date(`${rawDate}T${/^\d{2}:\d{2}$/.test(rawTime) ? rawTime : '00:00'}`);
+            return Number.isNaN(dt.getTime()) ? Number.MAX_SAFE_INTEGER : dt.getTime();
+        }
+
+        function scoreTopEvent(ev) {
+            let score = 0;
+            if (ev?.image && String(ev.image).trim() !== '') score += 3;
+            const cat = String(ev?.category || '').toUpperCase();
+            if (['LIVE MUSIC', 'SPORTS', 'LIVE SPORTS TV', 'HAPPY HOUR'].includes(cat)) score += 2;
+            const fee = String(ev?.fee || '').toLowerCase();
+            if (fee.includes('free') || fee.includes('grátis')) score += 1;
+            const ts = parseEventTimestamp(ev);
+            if (ts !== Number.MAX_SAFE_INTEGER && ts >= Date.now() - 86400000) score += 2;
+            return score;
+        }
+
+        function renderTopUpcomingBanner() {
+            const banner = document.getElementById('topUpcomingEventsBanner');
+            const container = document.getElementById('eventBannerCardsContainer');
+            if (!banner || !container) return;
+
+            if (!Array.isArray(registeredEvents) || registeredEvents.length === 0) {
+                banner.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            banner.classList.remove('hidden');
+            container.classList.toggle('hidden', eventBannerCollapsed);
+
+            const sortedByDate = [...registeredEvents].sort((a, b) => parseEventTimestamp(a) - parseEventTimestamp(b));
+            let picked = [];
+
+            if (eventBannerMode === 'upcoming') {
+                const startOfToday = new Date();
+                startOfToday.setHours(0, 0, 0, 0);
+                const futureOrToday = sortedByDate.filter(ev => {
+                    const ts = parseEventTimestamp(ev);
+                    return ts !== Number.MAX_SAFE_INTEGER && ts >= startOfToday.getTime();
+                });
+                picked = (futureOrToday.length > 0 ? futureOrToday : sortedByDate).slice(0, 3);
+            } else {
+                picked = [...registeredEvents]
+                    .sort((a, b) => (scoreTopEvent(b) - scoreTopEvent(a)) || (parseEventTimestamp(a) - parseEventTimestamp(b)))
+                    .slice(0, 3);
+            }
+
+            container.innerHTML = picked.map((ev, idx) => {
+                const badgeText = eventBannerMode === 'upcoming'
+                    ? (idx === 0 ? 'Next Up' : 'Upcoming')
+                    : `Top #${idx + 1}`;
+                const safeTitle = escapeJsSingleQuote(ev.title || '');
+                const imgThumb = (ev.image && String(ev.image).trim() !== '')
+                    ? `<img src="${ev.image}" alt="${ev.title || ''}" class="w-14 h-14 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`
+                    : `<div class="w-14 h-14 rounded-xl bg-miamiCyan/15 border border-miamiCyan/30 flex items-center justify-center text-lg font-black text-miamiCyan shrink-0">★</div>`;
+
+                return `
+                    <div onclick="openEventDetailPage('${safeTitle}')" class="unified-row border border-miamiCyan/35 hover:border-miamiPink rounded-xl p-3 cursor-pointer transition flex items-center gap-3 min-w-0">
+                        ${imgThumb}
+                        <div class="min-w-0 flex-1 space-y-0.5">
+                            <div class="flex items-center justify-between gap-1.5">
+                                <span class="text-[9px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded-full truncate">${badgeText} • ${ev.category || 'EVENT'}</span>
+                                <span class="text-[10px] font-black text-miamiPink shrink-0">${ev.fee || 'Free'}</span>
+                            </div>
+                            <h4 class="text-xs sm:text-sm font-black row-title truncate">${ev.title || 'Event'}</h4>
+                            <p class="text-[11px] font-bold row-body truncate">📍 ${ev.venueName || ev.zone || 'Albufeira'}</p>
+                            <p class="text-[10px] row-meta font-semibold truncate">📅 ${ev.date || ''} ${ev.time ? `• ${ev.time}` : ''}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (window.lucide) lucide.createIcons();
+        }
+
         function renderEventsGrid() {
+            renderTopUpcomingBanner();
             const grid = document.getElementById('eventsGrid');
             if (!grid) return;
             grid.innerHTML = '';
@@ -1106,11 +1230,7 @@
                 return;
             }
 
-            filtered.sort((a, b) => {
-                const dateA = new Date(`${a.date}T${a.time || '00:00'}`);
-                const dateB = new Date(`${b.date}T${b.time || '00:00'}`);
-                return dateA - dateB;
-            });
+            filtered.sort((a, b) => parseEventTimestamp(a) - parseEventTimestamp(b));
 
             filtered.forEach(ev => {
                 const card = document.createElement('div');
