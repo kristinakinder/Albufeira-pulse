@@ -47,45 +47,39 @@
       font-family: 'Outfit', sans-serif;
     }
 
-    /* Toony Oldschool 70s Holiday Sticker Styling */
+    /* Level Architectural Tag Styling */
     .vice-sticker {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 12px;
-      border-radius: 999px;
+      padding: 3px 10px;
+      border-radius: 8px;
       font-family: 'Outfit', sans-serif;
-      font-weight: 800;
+      font-weight: 700;
       font-size: 0.72rem;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      border: 2.5px solid #fffdf7;
-      box-shadow: 3px 3px 0px #050711, 0 0 12px rgba(255, 42, 133, 0.35);
-      transform: rotate(-2deg);
-      transition: transform 0.15s ease;
-    }
-
-    .vice-sticker:hover {
-      transform: rotate(0deg) scale(1.04);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-elevated);
+      color: var(--text-main);
     }
 
     .sticker-pink {
-      background: linear-gradient(135deg, #ff2a85, #ff6b4a);
-      color: #ffffff;
+      background: rgba(255, 42, 133, 0.16);
+      border-color: rgba(255, 42, 133, 0.45);
+      color: #ff7ab2;
     }
 
     .sticker-cyan {
-      background: linear-gradient(135deg, #00d2ff, #00f0ff);
-      color: #07111a;
-      box-shadow: 3px 3px 0px #050711, 0 0 12px rgba(0, 240, 255, 0.35);
-      transform: rotate(2deg);
+      background: rgba(0, 240, 255, 0.14);
+      border-color: rgba(0, 240, 255, 0.42);
+      color: var(--neon-cyan);
     }
 
     .sticker-amber {
-      background: linear-gradient(135deg, #ffb800, #ff6b4a);
-      color: #160c00;
-      box-shadow: 3px 3px 0px #050711;
-      transform: rotate(-1.5deg);
+      background: rgba(255, 184, 0, 0.16);
+      border-color: rgba(255, 184, 0, 0.45);
+      color: var(--neon-amber);
     }
 
     /* Header & Nav */
@@ -120,9 +114,7 @@
       font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      background: linear-gradient(90deg, #ff2a85 0%, #ffb800 48%, #00f0ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
     }
 
     .nav-tabs {
@@ -541,6 +533,56 @@
       margin-top: 18px;
     }
 
+    footer {
+      max-width: 1280px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+
+    .impressum-box {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 22px;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+
+    .impressum-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .impressum-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .impressum-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .impressum-sub {
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--neon-cyan);
+      margin-bottom: 4px;
+    }
+
     .empty-state {
       text-align: center;
       padding: 40px 20px;
@@ -563,20 +605,23 @@
       <div class="brand">
         <img id="brandLogoImg" src="logo.png" alt="Albufeira Pulse Logo" style="height: 40px; width: auto; object-fit: contain; display: none;" onload="this.style.display='inline-block'" onerror="this.style.display='none'" />
         <span class="brand-title">Albufeira Pulse</span>
-        <span class="vice-sticker sticker-pink">Albufeira '76</span>
-        <span class="vice-sticker sticker-cyan">Sun & Neon</span>
       </div>
 
       <nav class="nav-tabs" aria-label="Primary Sections">
-        <button class="nav-btn active" data-tab="events">Events</button>
-        <button class="nav-btn" data-tab="venues">Venues & Map</button>
-        <button class="nav-btn" data-tab="classifieds">Classifieds</button>
-        <button class="nav-btn" data-tab="forum">Forum</button>
-        <button class="nav-btn" data-tab="links">Useful Links</button>
-        <button class="nav-btn" data-tab="emergency">Emergency Contacts</button>
+        <button class="nav-btn active" data-tab="events" data-i18n="nav.home">Home</button>
+        <button class="nav-btn" data-tab="events" data-i18n="nav.events">Events</button>
+        <button class="nav-btn" data-tab="venues" data-i18n="nav.venues">Venues & Map</button>
+        <button class="nav-btn" data-tab="classifieds" data-i18n="nav.classifieds">Classifieds</button>
+        <button class="nav-btn" data-tab="forum" data-i18n="nav.forum">Forum</button>
+        <button class="nav-btn" data-tab="links" data-i18n="nav.links">Useful Links</button>
+        <button class="nav-btn" data-tab="emergency" data-i18n="nav.emergency">Emergency Contacts</button>
       </nav>
 
       <div class="admin-bar">
+        <div class="filter-pills" id="langSwitcher" role="group" aria-label="Idioma / Language">
+          <button id="langEnBtn" class="pill-btn active" type="button" data-lang="en">EN</button>
+          <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
+        </div>
         <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
         <button id="adminToggleBtn" class="btn-secondary" type="button">Admin Sign In</button>
       </div>
@@ -588,15 +633,15 @@
     <section id="section-events" class="section-view active">
       <div class="toolbar">
         <div class="filter-pills" id="eventCategoryFilters">
-          <button class="pill-btn active" data-category="ALL">All</button>
-          <button class="pill-btn" data-category="MARKETS">Markets</button>
-          <button class="pill-btn" data-category="MUSIC & NIGHTLIFE">Music & Nightlife</button>
-          <button class="pill-btn" data-category="ARTS & CULTURE">Arts & Culture</button>
-          <button class="pill-btn" data-category="FAMILY & FESTIVALS">Family & Festivals</button>
-          <button class="pill-btn" data-category="SPORTS & OUTDOORS">Sports & Outdoors</button>
+          <button class="pill-btn active" data-category="ALL" data-i18n="cat.all">All</button>
+          <button class="pill-btn" data-category="MARKETS" data-i18n="cat.markets">Markets</button>
+          <button class="pill-btn" data-category="MUSIC & NIGHTLIFE" data-i18n="cat.music">Music & Nightlife</button>
+          <button class="pill-btn" data-category="ARTS & CULTURE" data-i18n="cat.arts">Arts & Culture</button>
+          <button class="pill-btn" data-category="FAMILY & FESTIVALS" data-i18n="cat.family">Family & Festivals</button>
+          <button class="pill-btn" data-category="SPORTS & OUTDOORS" data-i18n="cat.sports">Sports & Outdoors</button>
         </div>
 
-        <button id="openAddEventBtn" class="btn-primary" type="button">+ Add Event</button>
+        <button id="openAddEventBtn" class="btn-primary" type="button" data-i18n="btn.addEvent">+ Add Event</button>
       </div>
 
       <div id="eventsGrid" class="grid-cards"></div>
@@ -606,7 +651,7 @@
     <section id="section-venues" class="section-view">
       <div class="toolbar">
         <div class="filter-pills" id="venueZoneFilters">
-          <button class="pill-btn active" data-zone="ALL">All Albufeira Zones</button>
+          <button class="pill-btn active" data-zone="ALL" data-i18n="zone.all">All Albufeira Zones</button>
           <button class="pill-btn" data-zone="Albufeira">Albufeira</button>
           <button class="pill-btn" data-zone="Old Town">Old Town</button>
           <button class="pill-btn" data-zone="Areias São João / The Strip">Areias São João / The Strip</button>
@@ -624,10 +669,10 @@
     <section id="section-classifieds" class="section-view">
       <div class="toolbar">
         <div>
-          <h2 style="font-size: 1.3rem;">Albufeira Classifieds</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Local listings, rentals, items, and services in Albufeira.</p>
+          <h2 style="font-size: 1.3rem;" data-i18n="cls.title">Albufeira Classifieds</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="cls.subtitle">Local listings, rentals, items, and services in Albufeira.</p>
         </div>
-        <button id="openAddClassifiedBtn" class="btn-primary" type="button">+ Post Listing</button>
+        <button id="openAddClassifiedBtn" class="btn-primary" type="button" data-i18n="btn.postListing">+ Post Listing</button>
       </div>
       <div id="classifiedsGrid" class="grid-cards"></div>
     </section>
@@ -636,10 +681,10 @@
     <section id="section-forum" class="section-view">
       <div class="toolbar">
         <div>
-          <h2 style="font-size: 1.3rem;">Albufeira Community Forum</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Local discussions, tips, and neighborhood updates.</p>
+          <h2 style="font-size: 1.3rem;" data-i18n="frm.title">Albufeira Community Forum</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="frm.subtitle">Local discussions, tips, and neighborhood updates.</p>
         </div>
-        <button id="openAddThreadBtn" class="btn-primary" type="button">+ New Thread</button>
+        <button id="openAddThreadBtn" class="btn-primary" type="button" data-i18n="btn.newThread">+ New Thread</button>
       </div>
       <div id="forumGrid" class="grid-cards"></div>
     </section>
@@ -648,9 +693,9 @@
     <section id="section-links" class="section-view">
       <div class="toolbar">
         <div>
-          <span class="vice-sticker sticker-amber" style="margin-bottom: 6px;">Albufeira Field Guide</span>
-          <h2 style="font-size: 1.35rem; margin-top: 4px;">Useful Links & Local Essentials</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Official municipal, transport, tourist offices, and practical Albufeira tips.</p>
+          <span class="vice-sticker sticker-amber" style="margin-bottom: 6px;" data-i18n="lnk.badge">Albufeira Field Guide</span>
+          <h2 style="font-size: 1.35rem; margin-top: 4px;" data-i18n="lnk.title">Useful Links & Local Essentials</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="lnk.subtitle">Official municipal, transport, tourist offices, and practical Albufeira tips.</p>
         </div>
       </div>
 
@@ -680,12 +725,12 @@
       <div class="emergency-banner">
         <div>
           <span class="vice-sticker sticker-amber">Contactos Úteis de Emergência</span>
-          <h2 style="margin-top: 8px; font-size: 1.35rem;">Albufeira & Portugal Emergency Directory</h2>
+          <h2 style="margin-top: 8px; font-size: 1.35rem;" data-i18n="emg.title">Albufeira & Portugal Emergency Directory</h2>
           <p style="color: var(--text-muted); font-size: 0.9rem;">
             Mantenha a calma e informe de forma simples e clara a situação. A proteção civil é uma responsabilidade de todos!
           </p>
         </div>
-        <a class="phone-link" href="tel:112" style="font-size: 1rem; padding: 9px 16px;">Emergency 112</a>
+        <a class="phone-link" href="tel:112" style="font-size: 1rem; padding: 9px 16px;" data-i18n="emg.call112">Emergency 112</a>
       </div>
 
       <div id="emergencyGrid" class="emergency-grid"></div>
@@ -914,6 +959,32 @@
       </form>
     </div>
   </div>
+
+  <footer>
+    <div class="impressum-box" aria-label="Impressum e Nota Legal">
+      <div class="impressum-header">
+        <span class="impressum-title">Impressum &amp; Nota Legal — Projeto Comunitário Não Comercial (Albufeira)</span>
+        <span class="vice-sticker sticker-cyan">Sem Fins Comerciais</span>
+      </div>
+      <p>
+        <strong>Nota informativa (Português de Portugal):</strong> Este sítio web constitui um projeto comunitário, informativo e <strong>sem fins comerciais</strong> dedicado à divulgação local em Albufeira. As informações disponibilizadas (agenda, espaços, classificados, fórum, ligações úteis e contactos) têm caráter meramente indicativo e podem sofrer alterações sem aviso prévio.
+      </p>
+      <div class="impressum-grid">
+        <div>
+          <div class="impressum-sub">Responsabilidade Editorial &amp; Gestão</div>
+          <p>Projeto gerido a título não comercial por <strong>Kris</strong> e <strong>Lex</strong>. Os conteúdos submetidos por utilizadores nos classificados ou no fórum são da responsabilidade dos respetivos autores.</p>
+        </div>
+        <div>
+          <div class="impressum-sub">Proteção de Dados (RGPD) &amp; Direitos</div>
+          <p>Em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD) e a legislação aplicável em Portugal, não se pretende recolha comercial de dados pessoais. Para pedidos de retificação ou remoção de conteúdos, contacte a administração do projeto.</p>
+        </div>
+        <div>
+          <div class="impressum-sub">Emergências &amp; Entidades Oficiais</div>
+          <p>Este portal não substitui serviços oficiais nem linhas de emergência. Em caso de perigo imediato ou emergência médica, ligue <strong>112</strong> ou consulte os serviços oficiais competentes.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     // =========================================================================
@@ -1202,7 +1273,7 @@
           : eventsData.filter((ev) => (ev.category || "").toUpperCase() === activeCategory);
 
       if (!filtered.length) {
-        grid.innerHTML = `<div class="empty-state">No Albufeira events found in this category yet.</div>`;
+        grid.innerHTML = `<div class="empty-state">${t("event.empty")}</div>`;
         return;
       }
 
@@ -1215,7 +1286,7 @@
             : "";
 
           const editButtonHtml = canEdit
-            ? `<button class="btn-edit" type="button" onclick="openEditEventModal(${ev.id})">Edit Event</button>`
+            ? `<button class="btn-edit" type="button" onclick="openEditEventModal(${ev.id})">${t("event.editBtn")}</button>`
             : "";
 
           return `
@@ -1232,9 +1303,9 @@
                 </p>
                 <p class="card-desc">${escapeHtml(ev.desc || "")}</p>
                 <div class="card-footer">
-                  <span>Fee: <strong>${escapeHtml(ev.fee || "Free")}</strong></span>
+                  <span>${t("event.feeLabel")} <strong>${escapeHtml(ev.fee || "Free")}</strong></span>
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span>By ${escapeHtml(ev.author || "Admin")}</span>
+                    <span>${t("event.byPrefix")} ${escapeHtml(ev.author || "Admin")}</span>
                     ${editButtonHtml}
                   </div>
                 </div>
@@ -1253,7 +1324,7 @@
           : venuesData.filter((v) => (v.zone || "").toLowerCase() === activeZone.toLowerCase());
 
       if (!filtered.length) {
-        grid.innerHTML = `<div class="empty-state">No venues found in this Albufeira zone.</div>`;
+        grid.innerHTML = `<div class="empty-state">${t("venue.empty")}</div>`;
       } else {
         grid.innerHTML = filtered
           .map(
@@ -1625,14 +1696,21 @@
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const targetTab = btn.dataset.tab;
-        document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
+        const isHomeBtn = btn.textContent.trim().toLowerCase() === "home";
+        document.querySelectorAll(".nav-btn").forEach((b) => {
+          const matchesTab = b.dataset.tab === targetTab;
+          const bIsHome = b.textContent.trim().toLowerCase() === "home";
+          b.classList.toggle("active", matchesTab && (isHomeBtn ? bIsHome : !bIsHome));
+        });
 
         document.querySelectorAll(".section-view").forEach((sec) => sec.classList.remove("active"));
         document.getElementById(`section-${targetTab}`).classList.add("active");
 
         if (targetTab === "venues") {
           initOrUpdateMap();
+        }
+        if (isHomeBtn) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       });
     });
@@ -1731,7 +1809,7 @@
       const grid = document.getElementById("classifiedsGrid");
       if (!grid) return;
       if (!classifiedsData.length) {
-        grid.innerHTML = `<div class="empty-state">No classifieds posted yet. Click <strong>+ Post Listing</strong> to add one.</div>`;
+        grid.innerHTML = `<div class="empty-state">${t("cls.empty")}</div>`;
         return;
       }
       grid.innerHTML = classifiedsData
@@ -1756,7 +1834,7 @@
       const grid = document.getElementById("forumGrid");
       if (!grid) return;
       if (!forumThreadsData.length) {
-        grid.innerHTML = `<div class="empty-state">No forum threads yet. Click <strong>+ New Thread</strong> to start a conversation.</div>`;
+        grid.innerHTML = `<div class="empty-state">${t("frm.empty")}</div>`;
         return;
       }
       grid.innerHTML = forumThreadsData
@@ -1789,7 +1867,7 @@
             <h3 class="card-title">${escapeHtml(lnk.title)}</h3>
             <p class="card-desc">${escapeHtml(lnk.desc)}</p>
             <div class="card-footer">
-              <a href="${escapeHtml(lnk.url)}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan); font-weight: 700; text-decoration: none;">Open Link ↗</a>
+              <a href="${escapeHtml(lnk.url)}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan); font-weight: 700; text-decoration: none;">${t("link.open")}</a>
             </div>
           </div>
         </article>
@@ -1857,10 +1935,140 @@
       renderForum();
     });
 
+
+    // =========================================================================
+    // 9. BILINGUAL SUPPORT (EN / EUROPEAN PORTUGUESE)
+    // =========================================================================
+    let currentLang = sessionStorage.getItem("albufeira_lang") || "en";
+
+    const I18N = {
+      en: {
+        "nav.home": "Home",
+        "nav.events": "Events",
+        "nav.venues": "Venues & Map",
+        "nav.classifieds": "Classifieds",
+        "nav.forum": "Forum",
+        "nav.links": "Useful Links",
+        "nav.emergency": "Emergency Contacts",
+        "cat.all": "All",
+        "cat.markets": "Markets",
+        "cat.music": "Music & Nightlife",
+        "cat.arts": "Arts & Culture",
+        "cat.family": "Family & Festivals",
+        "cat.sports": "Sports & Outdoors",
+        "btn.addEvent": "+ Add Event",
+        "zone.all": "All Albufeira Zones",
+        "cls.title": "Albufeira Classifieds",
+        "cls.subtitle": "Local listings, rentals, items, and services in Albufeira.",
+        "btn.postListing": "+ Post Listing",
+        "frm.title": "Albufeira Community Forum",
+        "frm.subtitle": "Local discussions, tips, and neighborhood updates.",
+        "btn.newThread": "+ New Thread",
+        "lnk.badge": "Albufeira Field Guide",
+        "lnk.title": "Useful Links & Local Essentials",
+        "lnk.subtitle": "Official municipal, transport, tourist offices, and practical Albufeira tips.",
+        "emg.title": "Albufeira & Portugal Emergency Directory",
+        "emg.call112": "Emergency 112",
+        "admin.locked": "Admin: Locked",
+        "admin.activePrefix": "Admin:",
+        "admin.signIn": "Admin Sign In",
+        "admin.signOut": "Sign Out",
+        "event.feeLabel": "Fee:",
+        "event.byPrefix": "By",
+        "event.editBtn": "Edit Event",
+        "event.empty": "No Albufeira events found in this category yet.",
+        "venue.empty": "No venues found in this Albufeira zone.",
+        "cls.empty": "No classifieds posted yet. Click <strong>+ Post Listing</strong> to add one.",
+        "frm.empty": "No forum threads yet. Click <strong>+ New Thread</strong> to start a conversation.",
+        "link.open": "Open Link ↗"
+      },
+      pt: {
+        "nav.home": "Início",
+        "nav.events": "Eventos",
+        "nav.venues": "Espaços e Mapa",
+        "nav.classifieds": "Classificados",
+        "nav.forum": "Fórum",
+        "nav.links": "Ligações Úteis",
+        "nav.emergency": "Contactos de Emergência",
+        "cat.all": "Todos",
+        "cat.markets": "Mercados",
+        "cat.music": "Música e Noite",
+        "cat.arts": "Artes e Cultura",
+        "cat.family": "Família e Festas",
+        "cat.sports": "Desporto e Ar Livre",
+        "btn.addEvent": "+ Adicionar Evento",
+        "zone.all": "Todas as Zonas de Albufeira",
+        "cls.title": "Classificados de Albufeira",
+        "cls.subtitle": "Anúncios locais, arrendamentos, artigos e serviços em Albufeira.",
+        "btn.postListing": "+ Publicar Anúncio",
+        "frm.title": "Fórum Comunitário de Albufeira",
+        "frm.subtitle": "Conversas locais, dicas e novidades do bairro.",
+        "btn.newThread": "+ Novo Tópico",
+        "lnk.badge": "Guia Prático de Albufeira",
+        "lnk.title": "Ligações Úteis e Essenciais Locais",
+        "lnk.subtitle": "Câmara municipal, transportes, postos de turismo e informações práticas em Albufeira.",
+        "emg.title": "Diretório de Emergência — Albufeira e Portugal",
+        "emg.call112": "Emergência 112",
+        "admin.locked": "Admin: Bloqueado",
+        "admin.activePrefix": "Admin:",
+        "admin.signIn": "Entrar Admin",
+        "admin.signOut": "Sair",
+        "event.feeLabel": "Entrada:",
+        "event.byPrefix": "Por",
+        "event.editBtn": "Editar Evento",
+        "event.empty": "Ainda não existem eventos em Albufeira nesta categoria.",
+        "venue.empty": "Não foram encontrados espaços nesta zona de Albufeira.",
+        "cls.empty": "Ainda não há classificados. Clique em <strong>+ Publicar Anúncio</strong> para adicionar.",
+        "frm.empty": "Ainda não há tópicos no fórum. Clique em <strong>+ Novo Tópico</strong> para iniciar uma conversa.",
+        "link.open": "Abrir Ligação ↗"
+      }
+    };
+
+    function t(key) {
+      const dict = I18N[currentLang] || I18N.en;
+      return dict[key] || I18N.en[key] || key;
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang === "pt" ? "pt" : "en";
+      sessionStorage.setItem("albufeira_lang", currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.getElementById("langEnBtn").classList.toggle("active", currentLang === "en");
+      document.getElementById("langPtBtn").classList.toggle("active", currentLang === "pt");
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (I18N[currentLang] && I18N[currentLang][key]) {
+          el.textContent = I18N[currentLang][key];
+        }
+      });
+
+      const badge = document.getElementById("adminStatusBadge");
+      const btn = document.getElementById("adminToggleBtn");
+      if (isAuthorizedAdmin()) {
+        badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
+        btn.textContent = t("admin.signOut");
+      } else {
+        badge.textContent = t("admin.locked");
+        btn.textContent = t("admin.signIn");
+      }
+
+      renderEvents();
+      renderVenues();
+      renderClassifieds();
+      renderForum();
+      renderUsefulLinks();
+    }
+
+    document.getElementById("langEnBtn").addEventListener("click", () => applyLanguage("en"));
+    document.getElementById("langPtBtn").addEventListener("click", () => applyLanguage("pt"));
+
     // Boot
     updateAdminUI();
     loadInitialData();
     loadCommunitySections();
+    applyLanguage(currentLang);
   </script>
 </body>
 </html>
