@@ -1,2135 +1,1392 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albufeira-pulse / What's going on in Albufeira tonight</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        miamiPink: '#FF007F',
-                        miamiCyan: '#00F0FF',
-                        dayTeal: '#0284C7',
-                        dayTealDark: '#0369A1',
-                        miamiDark: '#0B0F19',
-                        miamiCard: '#131B2E',
-                    }
-                }
-            }
-        }
-    </script>
-    <script>
-        function getAutomaticThemeMode() {
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            // Daytime: 07:00 (420 mins) to 18:00 (1080 mins)
-            return (currentMinutes >= 420 && currentMinutes < 1080) ? 'day-mode' : 'night-mode';
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Albufeira Pulse — Local Guide, Events & Emergency Directory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg-dark: #090b16;
+      --bg-card: #121629;
+      --bg-elevated: #191f38;
+      --neon-pink: #ff2a85;
+      --neon-cyan: #00f0ff;
+      --neon-amber: #ffb800;
+      --neon-purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(255, 255, 255, 0.09);
+    }
 
-        function applyThemeMode(mode) {
-            document.documentElement.className = mode;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        (function() {
-            const manualOverride = localStorage.getItem('albufeira_manual_theme');
-            const initialMode = (manualOverride === 'day-mode' || manualOverride === 'night-mode')
-                ? manualOverride
-                : getAutomaticThemeMode();
-            applyThemeMode(initialMode);
-        })();
-    </script>
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; padding-top: 145px; padding-bottom: 72px; }
-        @media (min-width: 1024px) { body { padding-bottom: 0; } }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(255, 42, 133, 0.16), transparent 36%),
+        radial-gradient(circle at 88% 12%, rgba(0, 240, 255, 0.14), transparent 38%),
+        linear-gradient(180deg, #090b16 0%, #0d1022 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    h1, h2, h3, h4, .sticker-badge {
+      font-family: 'Outfit', sans-serif;
+    }
 
-        @keyframes pulseColor {
-            0% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
-            50% { color: #00F0FF; transform: scale(1.16); filter: drop-shadow(0 0 12px #00F0FF); }
-            100% { color: #FF007F; transform: scale(1); filter: drop-shadow(0 0 6px #FF007F); }
-        }
-        .animate-pulse-color { animation: pulseColor 3s infinite ease-in-out; }
+    /* Miami Vice Sticker Styling */
+    .vice-sticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 2px solid #ffffff;
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.65), 0 0 12px rgba(255, 42, 133, 0.35);
+      transform: rotate(-1.5deg);
+    }
 
-        /* NIGHT MODE */
-        html.night-mode body { background-color: #0B0F19; color: #F8FAFC; }
-        html.night-mode .theme-card { background-color: #131B2E !important; border-color: rgba(0, 240, 255, 0.25) !important; color: #F8FAFC !important; }
-        html.night-mode .theme-text-main { color: #FFFFFF !important; }
-        html.night-mode .theme-text-sub { color: #94A3B8 !important; }
-        html.night-mode .theme-accent-cyan { color: #00F0FF !important; }
-        html.night-mode .theme-input { background-color: rgba(0,0,0,0.5) !important; color: #FFFFFF !important; border-color: rgba(0, 240, 255, 0.3) !important; }
-        html.night-mode .weather-ticker { background-color: #0B0F19 !important; border-color: rgba(0, 240, 255, 0.3) !important; color: #FFFFFF !important; }
-        html.night-mode .nav-strip { background-color: #1E293B !important; border-color: rgba(0, 240, 255, 0.2) !important; }
-        html.night-mode .unified-row { background-color: #1E293B !important; color: #F8FAFC !important; border-color: rgba(0, 240, 255, 0.3) !important; }
-        html.night-mode .row-title { color: #FFFFFF !important; }
-        html.night-mode .row-body { color: #CBD5E1 !important; }
-        html.night-mode .row-meta { color: #94A3B8 !important; }
+    .sticker-pink {
+      background: linear-gradient(135deg, #ff2a85, #ff5e9e);
+      color: #ffffff;
+    }
 
-        /* DAY MODE - High-Contrast Daylight Palette */
-        html.day-mode body { background-color: #F1F5F9; color: #0F172A; }
-        html.day-mode header { background-color: rgba(255, 255, 255, 0.98) !important; border-bottom-color: #CBD5E1 !important; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important; }
-        html.day-mode .theme-card { background-color: #FFFFFF !important; border-color: #CBD5E1 !important; color: #0F172A !important; box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.07) !important; }
-        html.day-mode .theme-text-main { color: #0F172A !important; font-weight: 800; }
-        html.day-mode .theme-text-sub { color: #475569 !important; }
-        html.day-mode .theme-accent-cyan,
-        html.day-mode .text-miamiCyan { color: #0284C7 !important; }
-        html.day-mode .bg-miamiCyan { background-color: #0284C7 !important; color: #FFFFFF !important; }
-        html.day-mode .bg-miamiCyan\/20,
-        html.day-mode .bg-miamiCyan\/15 { background-color: #E0F2FE !important; }
-        html.day-mode .border-miamiCyan\/40,
-        html.day-mode .border-miamiCyan\/30,
-        html.day-mode .border-miamiCyan\/50 { border-color: #7DD3FC !important; }
-        html.day-mode .theme-input { background-color: #F8FAFC !important; color: #0F172A !important; border-color: #94A3B8 !important; }
-        html.day-mode .theme-pill { background-color: #FFFFFF !important; color: #0369A1 !important; border-color: #BAE6FD !important; }
-        html.day-mode .weather-ticker { background-color: #0F172A !important; border-color: #1E293B !important; color: #F8FAFC !important; }
-        html.day-mode .weather-ticker .text-miamiCyan { color: #38BDF8 !important; }
-        html.day-mode .nav-strip { background-color: #E2E8F0 !important; border-color: #CBD5E1 !important; }
-        html.day-mode .nav-strip .tab-btn:not(.bg-miamiCyan) { color: #1E293B !important; }
-        html.day-mode .nav-strip .tab-btn:not(.bg-miamiCyan):hover { color: #0284C7 !important; background-color: rgba(255,255,255,0.6); }
-        html.day-mode .unified-row { background-color: #FFFFFF !important; color: #0F172A !important; border-color: #CBD5E1 !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important; }
-        html.day-mode .row-title { color: #0F172A !important; }
-        html.day-mode .row-body { color: #334155 !important; }
-        html.day-mode .row-meta { color: #475569 !important; }
-        html.day-mode .text-emerald-400 { color: #059669 !important; }
-        html.day-mode .text-amber-400 { color: #D97706 !important; }
-        html.day-mode .text-red-400 { color: #DC2626 !important; }
-        html.day-mode .mobile-bottom-nav { background-color: rgba(255, 255, 255, 0.98) !important; border-top-color: #CBD5E1 !important; color: #0F172A !important; }
+    .sticker-cyan {
+      background: linear-gradient(135deg, #00d2ff, #00f0ff);
+      color: #07111a;
+      box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.65), 0 0 12px rgba(0, 240, 255, 0.35);
+      transform: rotate(1.5deg);
+    }
 
-        .pulse-venue-pin {
-            background: transparent !important;
-            border: none !important;
-        }
-        .pulse-pin-dot {
-            background-color: #00F0FF;
-            width: 16px;
-            height: 16px;
-            border-radius: 9999px;
-            border: 3px solid #FF007F;
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.35), 0 0 12px rgba(255, 0, 127, 0.8);
-            transition: transform 0.2s ease;
-        }
-        .pulse-pin-dot.active-pin {
-            width: 22px;
-            height: 22px;
-            border-width: 4px;
-            box-shadow: 0 0 0 5px rgba(255, 0, 127, 0.4), 0 0 16px #00F0FF;
-        }
+    .sticker-amber {
+      background: linear-gradient(135deg, #ffb800, #ff7b00);
+      color: #160c00;
+      transform: rotate(-1deg);
+    }
 
-        #eventsAlbufeiraMap { height: 260px; width: 100%; border-radius: 0.85rem; z-index: 10; }
-        @media (min-width: 768px) { #eventsAlbufeiraMap { height: 380px; border-radius: 1rem; } }
-    </style>
+    /* Header & Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(9, 11, 22, 0.85);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, #ff2a85 0%, #ffb800 45%, #00f0ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      border-color: rgba(0, 240, 255, 0.45);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(255, 42, 133, 0.22), rgba(0, 240, 255, 0.18));
+      color: #ffffff;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.2);
+    }
+
+    .admin-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .admin-status {
+      font-size: 0.78rem;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .admin-status.active {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+
+    .section-view {
+      display: none;
+    }
+
+    .section-view.active {
+      display: block;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .pill-btn.active {
+      background: var(--neon-pink);
+      color: #ffffff;
+      border-color: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 42, 133, 0.45);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 42, 133, 0.35);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.84rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--neon-cyan);
+    }
+
+    .btn-edit {
+      background: rgba(0, 240, 255, 0.14);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-edit:hover {
+      background: var(--neon-cyan);
+      color: #07111a;
+    }
+
+    /* Grids & Cards */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 240, 255, 0.35);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Map */
+    #albufeiraMap {
+      width: 100%;
+      height: 360px;
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    /* Emergency Contacts */
+    .emergency-banner {
+      background: linear-gradient(120deg, rgba(255, 42, 133, 0.18), rgba(0, 240, 255, 0.14));
+      border: 1px solid rgba(255, 42, 133, 0.45);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .emergency-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+
+    .emergency-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--neon-pink);
+      border-radius: 14px;
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .emergency-card.cyan-accent {
+      border-left-color: var(--neon-cyan);
+    }
+
+    .emergency-card.amber-accent {
+      border-left-color: var(--neon-amber);
+    }
+
+    .emergency-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .emergency-cat {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .emergency-phones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .phone-link {
+      display: inline-block;
+      background: var(--bg-elevated);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      padding: 5px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .phone-link:hover {
+      background: var(--neon-cyan);
+      color: #07111a;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 15, 0.78);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input, select, textarea {
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--neon-cyan);
+    }
+
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 16px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col transition-colors duration-300">
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-title">Albufeira Pulse</span>
+        <span class="vice-sticker sticker-pink">Albufeira Only</span>
+        <span class="vice-sticker sticker-cyan">Vice Edition</span>
+      </div>
 
-    <header id="mainHeader" class="fixed top-0 left-0 w-full backdrop-blur-md border-b bg-[#0B0F19]/95 z-50 shadow-lg">
-        <!-- Top Brand & Utility Bar -->
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex justify-between items-center gap-2">
-            <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group min-w-0" onclick="switchTab('events')" title="Return to Home">
-                <svg class="w-7 h-7 sm:w-8 sm:h-8 animate-pulse-color shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                <div class="truncate">
-                    <h1 class="text-sm sm:text-base font-black tracking-wider sm:tracking-widest uppercase bg-gradient-to-r from-miamiCyan to-miamiPink bg-clip-text text-transparent group-hover:opacity-90 truncate">ALBUFEIRA PULSE</h1>
-                    <p id="siteSubtitle" class="text-[9px] font-extrabold tracking-wider uppercase text-miamiCyan theme-text-sub truncate">The Heartbeat of Albufeira</p>
-                </div>
-            </div>
+      <nav class="nav-tabs" aria-label="Primary Sections">
+        <button class="nav-btn active" data-tab="events">Events</button>
+        <button class="nav-btn" data-tab="venues">Venues & Map</button>
+        <button class="nav-btn" data-tab="emergency">Emergency Contacts</button>
+      </nav>
 
-            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                <button onclick="toggleLanguage()" id="langToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-black px-2 sm:px-2.5 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm">
-                    <i data-lucide="globe" class="w-3.5 h-3.5 text-miamiCyan"></i>
-                    <span id="langText">EN/PT</span>
-                </button>
-                <button onclick="toggleManualDayNightMode()" id="themeToggleBtn" class="theme-card theme-text-main border border-miamiCyan/40 text-[11px] sm:text-xs font-bold px-2 sm:px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer shadow-sm" title="Switch Day / Night Mode">
-                    <i data-lucide="sun" id="themeIcon" class="w-3.5 h-3.5 text-miamiPink"></i>
-                    <span id="themeText" class="hidden sm:inline">Day Mode</span>
-                </button>
-                <div id="authArea">
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1 cursor-pointer shadow-sm hover:border-miamiCyan">
-                        <i data-lucide="log-in" class="w-3.5 h-3.5 text-miamiCyan"></i> <span data-i18n="login">Login</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Live Conditions Ticker -->
-        <div class="weather-ticker border-t border-b px-3 sm:px-4 py-1 text-[11px] sm:text-xs flex justify-between items-center font-medium">
-            <div class="flex items-center gap-4 sm:gap-5 overflow-x-auto no-scrollbar whitespace-nowrap">
-                <span class="flex items-center gap-1.5 font-bold text-miamiCyan shrink-0">
-                    <i data-lucide="sun-medium" class="w-3.5 h-3.5 text-miamiPink"></i> <span id="bannerTown">Albufeira</span> <span data-i18n="liveConditions" class="hidden sm:inline">Live:</span>
-                </span>
-                <span class="shrink-0"><span data-i18n="air">Air:</span> <strong id="liveWeatherTemp" class="text-white">Loading...</strong></span>
-                <span class="shrink-0"><span data-i18n="water">Water:</span> <strong id="liveWaterTemp" class="text-miamiCyan">Loading...</strong></span>
-                <span class="shrink-0"><span data-i18n="condition">Sky:</span> <strong id="liveWeatherCondition" class="text-white">Loading...</strong></span>
-                <span class="shrink-0"><span data-i18n="wind">Wind:</span> <strong id="liveWeatherWind" class="text-white">Loading...</strong></span>
-                <span class="shrink-0 hidden md:inline"><span data-i18n="waveHeight">Waves:</span> <strong id="liveWaveHeight" class="text-white">—</strong></span>
-            </div>
-            <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="text-[11px] text-miamiCyan hover:underline font-bold hidden lg:inline shrink-0">Open-Meteo API ↗</a>
-        </div>
-
-        <!-- Horizontal Scrollable Tab Strip -->
-        <div class="nav-strip w-full bg-[#1E293B] border-t border-miamiCyan/20 shadow-sm">
-            <div class="max-w-7xl mx-auto px-3 sm:px-4 flex justify-between items-center gap-2 py-1.5 sm:py-2">
-                <div class="flex gap-1.5 overflow-x-auto no-scrollbar py-0.5 flex-1 min-w-0">
-                    <button onclick="switchTab('events')" id="btn-events" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-black bg-miamiCyan text-miamiDark flex items-center gap-1.5 transition shadow-sm cursor-pointer"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> <span data-i18n="tabEvents">Events</span></button>
-                    <button onclick="switchTab('directory')" id="btn-directory" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="store" class="w-3.5 h-3.5"></i> <span data-i18n="tabDirectory">Venues</span></button>
-                    <button onclick="switchTab('calendar')" id="btn-calendar" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> <span data-i18n="tabCalendar">Calendar</span></button>
-                    <button onclick="switchTab('classifieds')" id="btn-classifieds" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="tag" class="w-3.5 h-3.5"></i> <span data-i18n="tabClassifieds">Classifieds</span></button>
-                    <button onclick="switchTab('forum')" id="btn-forum" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="message-square" class="w-3.5 h-3.5"></i> <span data-i18n="tabForum">Forum</span></button>
-                    <button onclick="switchTab('articles')" id="btn-articles" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="newspaper" class="w-3.5 h-3.5"></i> <span data-i18n="tabArticles">Articles</span></button>
-                    <button onclick="switchTab('links')" id="btn-links" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="external-link" class="w-3.5 h-3.5"></i> <span data-i18n="tabLinks">Links</span></button>
-                    <button onclick="switchTab('info')" id="btn-info" class="tab-btn shrink-0 px-3 py-1.5 rounded-lg text-xs font-bold text-gray-200 hover:text-miamiCyan flex items-center gap-1.5 transition cursor-pointer"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> <span data-i18n="tabEmergency">Emergency</span></button>
-                </div>
-
-                <!-- Desktop Quick Add Buttons -->
-                <div class="hidden sm:flex items-center gap-2 shrink-0">
-                    <button onclick="openVenueModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 cursor-pointer"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> <span data-i18n="addVenue">+ Add Venue</span></button>
-                    <button onclick="openModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-[11px] font-black px-3 py-1.5 rounded-xl shadow-md transition flex items-center gap-1 cursor-pointer"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span data-i18n="addEvent">+ Add Event</span></button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-grow w-full">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
-
-            <!-- Left / Main Content Area -->
-            <div class="lg:col-span-9 min-w-0 space-y-4 sm:space-y-5">
-
-                <!-- Mobile Quick Action Row -->
-                <div class="flex sm:hidden gap-2">
-                    <button onclick="openModal()" class="flex-1 bg-[#FF007F] active:scale-95 text-white text-xs font-black py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> <span data-i18n="addEvent">+ Add Event</span>
-                    </button>
-                    <button onclick="openVenueModal()" class="flex-1 theme-card theme-text-main border border-[#FF007F]/50 active:scale-95 text-xs font-black py-2.5 px-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
-                        <i data-lucide="map-pin" class="w-4 h-4 text-[#FF007F]"></i> <span data-i18n="addVenue">+ Add Venue</span>
-                    </button>
-                </div>
-
-                <!-- EVENTS TAB -->
-                <section id="tab-content-events" class="space-y-4 sm:space-y-5 min-w-0">
-                    <div id="zoneFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-1"></div>
-                    <div id="eventCategoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto lg:flex-wrap lg:overflow-visible no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
-
-                    <!-- TOP & UPCOMING EVENTS BANNER -->
-                    <div id="topUpcomingEventsBanner" class="hidden theme-card border-2 border-miamiPink/40 rounded-2xl p-3.5 sm:p-4 shadow-xl space-y-3">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="inline-flex items-center gap-1 text-[10px] font-black uppercase bg-miamiPink text-white px-2.5 py-1 rounded-full shadow-sm">
-                                    <i data-lucide="flame" class="w-3 h-3"></i> Spotlight
-                                </span>
-                                <div class="inline-flex rounded-xl p-0.5 bg-black/20 border border-miamiCyan/30 text-[11px] font-black">
-                                    <button type="button" id="bannerModeTopBtn" onclick="setEventBannerMode('top')" class="px-3 py-1 rounded-lg bg-miamiCyan text-miamiDark transition cursor-pointer">Top Events</button>
-                                    <button type="button" id="bannerModeUpcomingBtn" onclick="setEventBannerMode('upcoming')" class="px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer">Upcoming Events</button>
-                                </div>
-                            </div>
-                            <button type="button" onclick="toggleEventBanner()" id="toggleEventBannerBtn" class="text-[11px] font-black text-miamiCyan hover:underline cursor-pointer">Hide Banner</button>
-                        </div>
-                        <div id="eventBannerCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
-                    </div>
-
-                    <div id="eventsMapCard" class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-4 shadow-lg space-y-2.5">
-                        <div class="flex justify-between items-center gap-2 flex-wrap">
-                            <span class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                                <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> <span data-i18n="mapTitle">Interactive Algarve Venue Map</span>
-                            </span>
-                            <div class="flex items-center gap-2">
-                                <span id="selectedMapVenueBadge" class="hidden text-[10px] font-black bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full"></span>
-                                <button type="button" onclick="toggleEventsMap()" id="toggleEventsMapBtn" class="text-[11px] font-black bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark px-2.5 py-1 rounded-lg border border-miamiCyan/40 transition cursor-pointer" data-i18n="hideMap">Hide Map</button>
-                            </div>
-                        </div>
-                        <div id="eventsMapContainer"><div id="eventsAlbufeiraMap"></div></div>
-                        <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-1 text-[10px] sm:text-[11px] font-bold row-meta">
-                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#00F0FF] border-2 border-[#FF007F] inline-block"></span> Venue Pin (Cyan / Pink)</span>
-                            <span>Click any venue's <strong>Map</strong> button to drop & focus its pin.</span>
-                        </div>
-                    </div>
-                    <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
-                </section>
-
-                <!-- DIRECTORY TAB -->
-                <section id="tab-content-directory" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                        <div>
-                            <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="store" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="tabDirectory">Venues & Directory</span></h2>
-                            <p id="directoryCountLabel" class="text-xs font-bold text-miamiCyan mt-0.5">Loading directory from Supabase...</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <input type="text" id="directorySearchInput" list="venueAutocompleteList" oninput="filterDirectoryList()" placeholder="Search venue name or street..." class="theme-input border-2 rounded-xl px-3.5 py-2 text-xs font-medium w-full sm:w-72 focus:border-miamiCyan outline-none">
-                            <datalist id="venueAutocompleteList"></datalist>
-                            <button onclick="document.getElementById('directorySearchInput').value=''; filterDirectoryList();" class="text-xs font-bold row-meta hover:text-miamiPink px-2.5 py-2 cursor-pointer" title="Clear Search">✕</button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 items-start">
-                        <div class="theme-card border border-miamiCyan/30 rounded-2xl p-3 sm:p-4 space-y-2 shadow-md">
-                            <h3 class="text-xs font-black uppercase text-miamiCyan tracking-wider mb-2 flex items-center gap-1.5">
-                                <i data-lucide="list-filter" class="w-4 h-4"></i> Categories
-                            </h3>
-                            <div id="directoryCategorySidebar" class="flex md:flex-col gap-1.5 overflow-x-auto no-scrollbar text-xs font-bold"></div>
-                        </div>
-
-                        <div class="md:col-span-3 space-y-3" id="directoryListContainer"></div>
-                    </div>
-                </section>
-
-                <!-- VENUE DETAIL PAGE -->
-                <section id="tab-content-venue-detail" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <button onclick="switchTab('directory')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md" data-i18n="backToDirectory">← Back to Directory</button>
-                    <div id="venueDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
-                </section>
-
-                <!-- EVENT DETAIL PAGE -->
-                <section id="tab-content-event-detail" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <button onclick="switchTab('events')" class="bg-miamiCyan hover:bg-opacity-80 text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow-md">← Back to Events</button>
-                    <div id="eventDetailContainer" class="theme-card border border-miamiCyan/50 rounded-3xl p-4 sm:p-6 shadow-xl space-y-6"></div>
-                </section>
-
-                <!-- FULL CALENDAR TAB -->
-                <section id="tab-content-calendar" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <div class="theme-card border border-miamiCyan/40 rounded-2xl p-3 sm:p-6 shadow-xl overflow-x-auto">
-                        <h2 class="text-xl sm:text-2xl font-black theme-text-main mb-4 flex items-center gap-2"><i data-lucide="calendar-days" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> <span data-i18n="calendarHeader">November 2026 Calendar</span></h2>
-                        <div class="min-w-[560px]">
-                            <div class="grid grid-cols-7 gap-1.5 sm:gap-2 text-center font-black text-xs sm:text-sm mb-2">
-                                <div class="text-miamiPink">Mon</div><div class="text-miamiPink">Tue</div><div class="text-miamiPink">Wed</div><div class="text-miamiPink">Thu</div><div class="text-miamiPink">Fri</div><div class="text-miamiPink">Sat</div><div class="text-miamiCyan">Sun</div>
-                            </div>
-                            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2"></div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ARTICLES TAB -->
-                <section id="tab-content-articles" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <div class="flex justify-between items-center mb-2">
-                        <h2 class="text-xl sm:text-2xl font-black theme-text-main">Local Articles & Culture</h2>
-                        <button id="writeArticleBtn" onclick="openArticleModal()" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow cursor-pointer">+ Write Article</button>
-                    </div>
-                    <div id="articlesListContainer" class="space-y-3"></div>
-                </section>
-
-                <!-- CLASSIFIEDS TAB -->
-                <section id="tab-content-classifieds" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <div class="flex flex-wrap justify-between items-center gap-3">
-                        <div>
-                            <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="tag" class="text-miamiPink w-6 h-6 sm:w-7 sm:h-7"></i> Classifieds & Community Board</h2>
-                            <p class="text-xs row-meta font-medium mt-0.5">Direct peer-to-peer listings. Strictly no real estate sales or agency spam.</p>
-                        </div>
-                        <button onclick="openClassifiedModal()" class="bg-[#FF007F] hover:bg-[#e00070] text-white text-xs font-black px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
-                            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Post Classified
-                        </button>
-                    </div>
-
-                    <div id="classifiedCategoryBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2 border-b border-miamiCyan/20"></div>
-                    <div id="classifiedsListContainer" class="space-y-3"></div>
-                </section>
-
-                <!-- FORUM TAB -->
-                <section id="tab-content-forum" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <div class="flex flex-wrap justify-between items-center gap-3">
-                        <h2 class="text-xl sm:text-2xl font-black theme-text-main flex items-center gap-2"><i data-lucide="message-square" class="text-miamiCyan w-6 h-6 sm:w-7 sm:h-7"></i> Albufeira Community Forum</h2>
-                        <button onclick="openNewThreadModal()" class="bg-miamiCyan hover:bg-opacity-90 text-miamiDark text-xs font-black px-4 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer">
-                            <i data-lucide="plus-circle" class="w-4 h-4"></i> + Start New Thread
-                        </button>
-                    </div>
-
-                    <div id="forumThreadsContainer" class="space-y-3"></div>
-                </section>
-
-                <!-- ESSENTIAL LINKS TAB -->
-                <section id="tab-content-links" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <h2 class="text-xl sm:text-2xl font-black theme-text-main">Essential Albufeira & Algarve Links</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
-                        <a href="https://www.cm-albufeira.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
-                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="landmark" class="w-4 h-4"></i> Albufeira Town Hall</div>
-                            <p class="row-body">Municipal announcements and civic services.</p>
-                        </a>
-                        <a href="https://www.cp.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
-                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="train" class="w-4 h-4"></i> CP Trains (Albufeira-Ferreiras)</div>
-                            <p class="row-body">National rail timetables and regional connections.</p>
-                        </a>
-                        <a href="https://www.vamusalgarve.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
-                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="bus" class="w-4 h-4"></i> Vamus Algarve Bus</div>
-                            <p class="row-body">Regional bus timetables and route planner.</p>
-                        </a>
-                        <a href="https://www.ipma.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-amber-500/40 hover:border-amber-500 transition shadow-md block space-y-1.5">
-                            <div class="text-amber-400 font-black text-sm flex items-center gap-1.5"><i data-lucide="sun" class="w-4 h-4"></i> IPMA Weather</div>
-                            <p class="row-body">Official meteorological forecasts and warnings.</p>
-                        </a>
-                        <a href="https://www.marinaalbufeira.com/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
-                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="anchor" class="w-4 h-4"></i> Albufeira Marina</div>
-                            <p class="row-body">Marina facilities, nautical events, and berthing.</p>
-                        </a>
-                        <a href="https://visitalbufeira.pt/" target="_blank" class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 hover:border-miamiCyan transition shadow-md block space-y-1.5">
-                            <div class="text-miamiCyan font-black text-sm flex items-center gap-1.5"><i data-lucide="compass" class="w-4 h-4"></i> Visit Albufeira Tourism</div>
-                            <p class="row-body">Official tourist guides, culture, and beach maps.</p>
-                        </a>
-                    </div>
-                </section>
-
-                <!-- EMERGENCY CONTACTS TAB -->
-                <section id="tab-content-info" class="space-y-4 sm:space-y-6 hidden min-w-0">
-                    <h2 class="text-xl sm:text-2xl font-black theme-text-main">Emergency Contacts & Essential Services</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs max-w-5xl">
-                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-red-500/40 space-y-2 shadow-md">
-                            <p class="font-black text-red-400 text-sm mb-2">🚨 General Emergencies: 112</p>
-                            <p class="row-body font-medium">SNS 24 Health Line: <strong class="row-title">808 24 24 24</strong></p>
-                            <p class="row-body font-medium">Albufeira GNR Police: <strong class="row-title">289 583 310</strong></p>
-                            <p class="row-body font-medium">Albufeira Fire Brigade: <strong class="row-title">289 586 333</strong></p>
-                        </div>
-                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiPink/40 space-y-2 shadow-md">
-                            <p class="font-black text-miamiPink text-sm mb-2">🐾 Animal Welfare & Strays (Albufeira)</p>
-                            <p class="row-body font-medium">Municipal Vet Service: <strong class="row-title">289 599 622</strong> / <strong class="row-title">969 956 125</strong></p>
-                            <p class="row-body font-medium">Animal Welfare Center (Bem Estar Animal): <strong class="row-title">289 598 894</strong></p>
-                            <p class="row-body font-medium">Dead Animal / Roadway Removal (Luságua): <strong class="row-title">808 202 492</strong></p>
-                        </div>
-                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-amber-500/40 space-y-2 shadow-md">
-                            <p class="font-black text-amber-400 text-sm mb-2">🌲 Wildlife & Environmental Rescue</p>
-                            <p class="row-body font-medium">SEPNA (GNR Nature Protection): <strong class="row-title">213 217 291</strong></p>
-                            <p class="row-body font-medium">SOS Environment Line: <strong class="row-title">808 200 520</strong></p>
-                            <p class="row-body font-medium">RIAS (Algarve Wildlife Recovery Center): <strong class="row-title">927 659 313</strong></p>
-                        </div>
-                        <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/40 space-y-2 shadow-md">
-                            <p class="font-black text-miamiCyan text-sm mb-2">🏛️ Municipal Services & Civil Protection</p>
-                            <p class="row-body font-medium">Albufeira Town Hall (Geral): <strong class="row-title">289 599 500</strong></p>
-                            <p class="row-body font-medium">Civil Protection Service: <strong class="row-title">289 599 503</strong></p>
-                            <p class="row-body font-medium">Water / Sanitation Emergencies: <strong class="row-title">289 599 534</strong></p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- PERSISTENT RIGHT VERTICAL SIDEBAR -->
-            <aside class="lg:col-span-3 min-w-0 space-y-4 sm:space-y-5">
-
-                <!-- 1. Mini Calendar Widget -->
-                <div class="theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-md space-y-3">
-                    <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
-                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                            <i data-lucide="calendar" class="w-4 h-4 text-miamiPink"></i> Nov 2026
-                        </h3>
-                        <button onclick="switchTab('calendar')" class="text-[11px] font-bold text-miamiCyan hover:underline cursor-pointer">Full View →</button>
-                    </div>
-                    <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-black row-meta">
-                        <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div class="text-miamiCyan">S</div>
-                    </div>
-                    <div id="sidebarMiniCalendar" class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold"></div>
-                </div>
-
-                <!-- 2. Today's Events Widget -->
-                <div class="theme-card border border-miamiPink/30 rounded-2xl p-4 shadow-md space-y-3">
-                    <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
-                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
-                            <i data-lucide="sparkles" class="w-4 h-4"></i> Today's Events
-                        </h3>
-                        <span id="sidebarTodayDateLabel" class="text-[10px] font-bold row-meta"></span>
-                    </div>
-                    <div id="sidebarTodaysEvents" class="space-y-2.5 text-xs"></div>
-                </div>
-
-                <!-- 3. Latest Forum Widget -->
-                <div class="theme-card border border-miamiCyan/30 rounded-2xl p-4 shadow-md space-y-3">
-                    <div class="flex justify-between items-center border-b border-miamiCyan/20 pb-2">
-                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiCyan flex items-center gap-1.5">
-                            <i data-lucide="message-square" class="w-4 h-4"></i> Latest Forum
-                        </h3>
-                        <button onclick="switchTab('forum')" class="text-[11px] font-bold text-miamiCyan hover:underline cursor-pointer">All →</button>
-                    </div>
-                    <div id="sidebarLatestForum" class="space-y-2.5 text-xs"></div>
-                </div>
-
-                <!-- 4. Latest Classifieds Widget -->
-                <div class="theme-card border border-miamiPink/30 rounded-2xl p-4 shadow-md space-y-3">
-                    <div class="flex justify-between items-center border-b border-miamiPink/20 pb-2">
-                        <h3 class="text-xs font-black uppercase tracking-wider text-miamiPink flex items-center gap-1.5">
-                            <i data-lucide="tag" class="w-4 h-4"></i> Latest Classifieds
-                        </h3>
-                        <button onclick="switchTab('classifieds')" class="text-[11px] font-bold text-miamiPink hover:underline cursor-pointer">All →</button>
-                    </div>
-                    <div id="sidebarLatestClassifieds" class="space-y-2.5 text-xs"></div>
-                </div>
-
-            </aside>
-        </div>
-    </main>
-
-    <!-- MOBILE BOTTOM THUMB-NAV BAR -->
-    <nav class="mobile-bottom-nav lg:hidden fixed bottom-0 left-0 w-full bg-[#0B0F19]/95 backdrop-blur-md border-t border-miamiCyan/30 z-40 px-2 py-1.5 flex justify-around items-center text-[10px] font-bold shadow-2xl">
-        <button onclick="switchTab('events')" class="flex flex-col items-center gap-0.5 py-1 px-2 text-miamiCyan cursor-pointer">
-            <i data-lucide="calendar" class="w-4 h-4"></i>
-            <span>Events</span>
-        </button>
-        <button onclick="switchTab('directory')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiCyan cursor-pointer">
-            <i data-lucide="store" class="w-4 h-4"></i>
-            <span>Venues</span>
-        </button>
-        <button onclick="openModal()" class="flex flex-col items-center justify-center -mt-4 bg-[#FF007F] text-white w-11 h-11 rounded-full shadow-lg shadow-[#FF007F]/40 cursor-pointer" title="Add Event">
-            <i data-lucide="plus" class="w-5 h-5"></i>
-        </button>
-        <button onclick="switchTab('calendar')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiCyan cursor-pointer">
-            <i data-lucide="calendar-days" class="w-4 h-4"></i>
-            <span>Calendar</span>
-        </button>
-        <button onclick="switchTab('info')" class="flex flex-col items-center gap-0.5 py-1 px-2 row-meta hover:text-miamiPink cursor-pointer">
-            <i data-lucide="shield-alert" class="w-4 h-4 text-miamiPink"></i>
-            <span>SOS</span>
-        </button>
-    </nav>
-
-    <!-- MODALS -->
-    <!-- Report / Complaint Reason Picker Modal (Sends to support@albufeira-pulse.com) -->
-    <div id="reportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-amber-500/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-black theme-text-main flex items-center gap-1.5">
-                    <span>🚩</span> Report / Complaint
-                </h3>
-                <button onclick="closeReportModal()" class="font-bold p-1 cursor-pointer">✕</button>
-            </div>
-            <p id="reportTargetSummary" class="text-xs font-bold text-miamiCyan"></p>
-            <form onsubmit="handleReportSubmit(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="reportItemType">
-                <input type="hidden" id="reportItemTitle">
-                <input type="hidden" id="reportItemContext">
-                <div>
-                    <label class="block font-bold mb-1 theme-text-sub">Reason / Complaint Category</label>
-                    <select id="reportReasonSelect" required class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium focus:border-miamiCyan outline-none">
-                        <option value="Incorrect or outdated info">Incorrect or outdated info</option>
-                        <option value="Wrong location, address, or time">Wrong location, address, or time</option>
-                        <option value="Spam, scam, or prohibited listing">Spam, scam, or prohibited listing</option>
-                        <option value="Inappropriate or offensive content">Inappropriate or offensive content</option>
-                        <option value="Duplicate or broken listing">Duplicate or broken listing</option>
-                        <option value="Other complaint / feedback">Other complaint / feedback</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-bold mb-1 theme-text-sub">Additional Details (Optional)</label>
-                    <textarea id="reportDetailsInput" rows="3" placeholder="Tell support@albufeira-pulse.com what needs fixing..." class="w-full theme-input border-2 rounded-xl p-3 font-medium focus:border-miamiCyan outline-none"></textarea>
-                </div>
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeReportModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
-                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-miamiPink text-white font-black cursor-pointer shadow">Send via Email</button>
-                </div>
-            </form>
-        </div>
+      <div class="admin-bar">
+        <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
+        <button id="adminToggleBtn" class="btn-secondary" type="button">Admin Sign In</button>
+      </div>
     </div>
+  </header>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/40 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Login / Profile</h3><button onclick="closeLoginModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
-            <form onsubmit="handleLogin(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Email</label><input type="email" id="loginEmailInput" required placeholder="you@example.com" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Display Name (Optional)</label><input type="text" id="loginNameInput" placeholder="Your name" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Password</label><input type="password" id="loginPasswordInput" required placeholder="Enter password" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <button type="submit" class="w-full bg-miamiCyan text-miamiDark font-black py-2.5 rounded-xl hover:opacity-90 transition cursor-pointer shadow">Save Profile & Login</button>
-            </form>
+  <main>
+    <!-- EVENTS SECTION -->
+    <section id="section-events" class="section-view active">
+      <div class="toolbar">
+        <div class="filter-pills" id="eventCategoryFilters">
+          <button class="pill-btn active" data-category="ALL">All</button>
+          <button class="pill-btn" data-category="MARKETS">Markets</button>
+          <button class="pill-btn" data-category="MUSIC & NIGHTLIFE">Music & Nightlife</button>
+          <button class="pill-btn" data-category="ARTS & CULTURE">Arts & Culture</button>
+          <button class="pill-btn" data-category="FAMILY & FESTIVALS">Family & Festivals</button>
+          <button class="pill-btn" data-category="SPORTS & OUTDOORS">Sports & Outdoors</button>
         </div>
-    </div>
 
-    <!-- Add Event Modal -->
-    <div id="eventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiPink/40 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Event & Poster</h3><button onclick="closeModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
-            <form onsubmit="handleEventSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Event Title</label><input type="text" id="newEventTitle" required placeholder="Event title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newEventZone" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Venue</label><input type="text" id="newEventVenueInput" list="venueAutocompleteList" required placeholder="Type or select venue..." onchange="onVenueInputChange()" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Date</label><input type="date" id="newEventDate" required class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Time</label><input type="text" id="newEventTime" required placeholder="19:00" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Fee</label><input type="text" id="newEventFee" required placeholder="Free" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"></div>
-                </div>
-                <div>
-                    <label class="block font-bold mb-1 theme-text-sub">Category</label>
-                    <select id="newEventCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium">
-                        <option value="HAPPY HOUR">Happy Hour</option>
-                        <option value="LIVE MUSIC">Live Music</option>
-                        <option value="SPORTS">Sports</option>
-                        <option value="LIVE SPORTS TV">Live Sports TV</option>
-                        <option value="QUIZ">Quiz</option>
-                        <option value="WELLNESS">Wellness</option>
-                        <option value="ART & CULTURE">Art & Culture</option>
-                        <option value="MARKETS">Markets</option>
-                        <option value="SOCIAL">Social</option>
-                    </select>
-                </div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Upload Event Flyer / Poster (JPG only, max 3 MB)</label><input type="file" id="eventPosterInput" accept="image/jpeg,.jpg,.jpeg" class="w-full theme-input border-2 rounded-xl px-3 py-2 font-medium text-xs"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Image URL (Optional)</label><input type="url" id="newEventImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Description</label><textarea id="newEventDesc" rows="2" required class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Event</button></div>
-            </form>
+        <button id="openAddEventBtn" class="btn-primary" type="button">+ Add Event</button>
+      </div>
+
+      <div id="eventsGrid" class="grid-cards"></div>
+    </section>
+
+    <!-- VENUES & MAP SECTION -->
+    <section id="section-venues" class="section-view">
+      <div class="toolbar">
+        <div class="filter-pills" id="venueZoneFilters">
+          <button class="pill-btn active" data-zone="ALL">All Albufeira Zones</button>
+          <button class="pill-btn" data-zone="Albufeira">Albufeira</button>
+          <button class="pill-btn" data-zone="Old Town">Old Town</button>
+          <button class="pill-btn" data-zone="Areias São João / The Strip">Areias São João / The Strip</button>
+          <button class="pill-btn" data-zone="Olhos de Água">Olhos de Água</button>
+          <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
+          <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
-    </div>
+      </div>
 
-    <!-- Add Venue Modal -->
-    <div id="venueModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-[#FF007F]/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Add Venue to Directory</h3><button onclick="closeVenueModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
-            <form onsubmit="handleVenueSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Venue Name</label><input type="text" id="newVenueName" required placeholder="Venue name" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Address</label><input type="text" id="newVenueAddress" required placeholder="Street & Town" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Website</label><input type="url" id="newVenueWebsite" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Logo / Photo URL (Optional)</label><input type="url" id="newVenueImage" placeholder="https://..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Town / Zone</label><input type="text" id="newVenueArea" list="zoneDatalist" required placeholder="Select or type town..." class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Category Type</label><select id="newVenueCategoryGroup" class="w-full theme-input border-2 rounded-xl px-2.5 py-2.5 font-medium"><option value="Restaurant">Restaurant</option><option value="Bar & Cafe">Bar & Café</option><option value="Nightclub">Nightclub</option><option value="Live Sports TV">Live Sports TV</option><option value="Karaoke">Karaoke</option><option value="Quiz">Quiz</option><option value="Other">Other</option></select></div>
-                </div>
-                <input type="hidden" id="newVenueLat" value="37.0955">
-                <input type="hidden" id="newVenueLng" value="-8.2505">
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeVenueModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Save Venue</button></div>
-            </form>
+      <div id="albufeiraMap"></div>
+      <div id="venuesGrid" class="grid-cards"></div>
+    </section>
+
+    <!-- EMERGENCY CONTACTS SECTION -->
+    <section id="section-emergency" class="section-view">
+      <div class="emergency-banner">
+        <div>
+          <span class="vice-sticker sticker-amber">Contactos Úteis de Emergência</span>
+          <h2 style="margin-top: 8px; font-size: 1.35rem;">Albufeira & Portugal Emergency Directory</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Mantenha a calma e informe de forma simples e clara a situação. A proteção civil é uma responsabilidade de todos!
+          </p>
         </div>
-    </div>
+        <a class="phone-link" href="tel:112" style="font-size: 1rem; padding: 9px 16px;">Emergency 112</a>
+      </div>
 
-    <!-- Edit Venue Address Modal -->
-    <div id="editAddressModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-black theme-text-main flex items-center gap-1.5">
-                    <i data-lucide="map-pin" class="w-4 h-4 text-miamiPink"></i> Add Street Name or Address
-                </h3>
-                <button onclick="closeEditAddressModal()" class="font-bold p-1 cursor-pointer">✕</button>
+      <div id="emergencyGrid" class="emergency-grid"></div>
+    </section>
+  </main>
+
+  <!-- ADD / EDIT EVENT MODAL -->
+  <div id="eventModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="eventModalTitle" style="font-size: 1.25rem;">Add Event</h3>
+        <button id="closeEventModalBtn" class="btn-secondary" type="button">✕</button>
+      </div>
+
+      <form id="eventForm">
+        <input type="hidden" id="editEventId" />
+        <input type="hidden" id="eventLat" value="37.0955" />
+        <input type="hidden" id="eventLng" value="-8.2505" />
+
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="eventTitle">Event Title *</label>
+            <input id="eventTitle" name="title" type="text" required placeholder="e.g., Albufeira Mercadinho Natal" />
+          </div>
+
+          <div class="form-group">
+            <label for="eventZone">Town / Zone *</label>
+            <select id="eventZone" name="zone" required>
+              <option value="Albufeira" selected>Albufeira</option>
+              <option value="Central / Lidl">Central / Lidl</option>
+              <option value="Old Town">Old Town</option>
+              <option value="Areias São João / The Strip">Areias São João / The Strip</option>
+              <option value="Olhos de Água">Olhos de Água</option>
+              <option value="Santa Eulália">Santa Eulália</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="eventVenue">Venue *</label>
+            <input id="eventVenue" name="venueName" list="albufeiraVenueList" type="text" required placeholder="Espaço Multiusos de Albufeira" />
+            <datalist id="albufeiraVenueList"></datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="eventDate">Date *</label>
+            <input id="eventDate" name="date" type="date" required />
+          </div>
+
+          <div class="form-group">
+            <label for="eventTime">Time *</label>
+            <select id="eventTime" name="time" required>
+              <option value="08:00">08:00</option>
+              <option value="08:30">08:30</option>
+              <option value="09:00">09:00</option>
+              <option value="09:30">09:30</option>
+              <option value="10:00">10:00</option>
+              <option value="10:30">10:30</option>
+              <option value="11:00">11:00</option>
+              <option value="11:30">11:30</option>
+              <option value="12:00">12:00</option>
+              <option value="12:30">12:30</option>
+              <option value="13:00">13:00</option>
+              <option value="13:30">13:30</option>
+              <option value="14:00">14:00</option>
+              <option value="14:00 - 19:00">14:00 - 19:00</option>
+              <option value="14:30">14:30</option>
+              <option value="15:00">15:00</option>
+              <option value="15:30">15:30</option>
+              <option value="16:00">16:00</option>
+              <option value="16:30">16:30</option>
+              <option value="17:00">17:00</option>
+              <option value="17:30">17:30</option>
+              <option value="18:00">18:00</option>
+              <option value="18:30">18:30</option>
+              <option value="19:00">19:00</option>
+              <option value="19:30">19:30</option>
+              <option value="20:00">20:00</option>
+              <option value="20:30">20:30</option>
+              <option value="21:00">21:00</option>
+              <option value="21:30">21:30</option>
+              <option value="22:00">22:00</option>
+              <option value="22:30">22:30</option>
+              <option value="23:00">23:00</option>
+              <option value="All Day">All Day</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="eventFee">Fee</label>
+            <input id="eventFee" name="fee" type="text" value="Free" placeholder="Free or €10" />
+          </div>
+
+          <div class="form-group">
+            <label for="eventCategory">Category *</label>
+            <select id="eventCategory" name="category" required>
+              <option value="MARKETS" selected>MARKETS</option>
+              <option value="MUSIC & NIGHTLIFE">MUSIC & NIGHTLIFE</option>
+              <option value="ARTS & CULTURE">ARTS & CULTURE</option>
+              <option value="FAMILY & FESTIVALS">FAMILY & FESTIVALS</option>
+              <option value="SPORTS & OUTDOORS">SPORTS & OUTDOORS</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label for="eventImage">Image URL (Optional)</label>
+            <input id="eventImage" name="image" type="url" placeholder="https://..." />
+          </div>
+
+          <div class="form-group full">
+            <label for="eventDesc">Description</label>
+            <textarea id="eventDesc" name="desc" placeholder="Describe the Albufeira event..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="cancelEventBtn" class="btn-secondary" type="button">Cancel</button>
+          <button id="submitEventBtn" class="btn-primary" type="submit">Publish Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN SIGN-IN MODAL -->
+  <div id="adminModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 id="adminModalTitle" style="font-size: 1.2rem;">Admin Access (Me or Alex)</h3>
+        <button id="closeAdminModalBtn" class="btn-secondary" type="button">✕</button>
+      </div>
+      <form id="adminLoginForm">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label for="adminNameSelect">Select Admin</label>
+          <select id="adminNameSelect" required>
+            <option value="Me">Me</option>
+            <option value="Alex">Alex</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="adminPasscodeInput">Admin Passcode</label>
+          <input id="adminPasscodeInput" type="password" required placeholder="Enter admin passcode" />
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px;">
+          Only authenticated admins (Me or Alex) can edit existing events.
+        </p>
+        <div class="modal-actions">
+          <button id="cancelAdminBtn" class="btn-secondary" type="button">Cancel</button>
+          <button class="btn-primary" type="submit">Unlock Admin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. SUPABASE CONFIGURATION & ADMIN AUTHENTICATION
+    // =========================================================================
+    const SUPABASE_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "YOUR_ANON_KEY";
+    const ADMIN_PASSCODE = window.ALBUFEIRA_ADMIN_PASSCODE || "albufeira-admin";
+    const ALLOWED_ADMINS = ["me", "alex"];
+
+    const supabaseClient =
+      window.supabase && !SUPABASE_URL.includes("YOUR_PROJECT")
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        : null;
+
+    let currentAdmin = sessionStorage.getItem("albufeira_admin_user") || "";
+
+    function isAuthorizedAdmin() {
+      return ALLOWED_ADMINS.includes((currentAdmin || "").trim().toLowerCase());
+    }
+
+    function updateAdminUI() {
+      const badge = document.getElementById("adminStatusBadge");
+      const btn = document.getElementById("adminToggleBtn");
+      if (isAuthorizedAdmin()) {
+        badge.textContent = `Admin: ${currentAdmin}`;
+        badge.classList.add("active");
+        btn.textContent = "Sign Out";
+      } else {
+        badge.textContent = "Admin: Locked";
+        badge.classList.remove("active");
+        btn.textContent = "Admin Sign In";
+      }
+      renderEvents();
+    }
+
+    // =========================================================================
+    // 2. ALBUFEIRA SEED VENUES & EMERGENCY CONTACTS
+    // =========================================================================
+    const SEED_VENUES = [
+      {
+        id: 70,
+        name: "Espaço Multiusos de Albufeira",
+        zone: "Central / Lidl",
+        address: "Rua Baden-Powell 1, Albufeira",
+        lat: 37.0955,
+        lng: -8.2505,
+        category: "Events & Markets"
+      },
+      {
+        id: 71,
+        name: "Praça da República & Old Town Square",
+        zone: "Old Town",
+        address: "Praça da República, Albufeira",
+        lat: 37.0888,
+        lng: -8.2503,
+        category: "Square & Culture"
+      },
+      {
+        id: 72,
+        name: "Marina de Albufeira",
+        zone: "Albufeira",
+        address: "Marina de Albufeira, Albufeira",
+        lat: 37.0872,
+        lng: -8.2618,
+        category: "Marina & Promenade"
+      },
+      {
+        id: 73,
+        name: "Praia de Santa Eulália",
+        zone: "Santa Eulália",
+        address: "Santa Eulália, Albufeira",
+        lat: 37.0928,
+        lng: -8.2186,
+        category: "Beach & Coast"
+      },
+      {
+        id: 74,
+        name: "Praia dos Olhos de Água",
+        zone: "Olhos de Água",
+        address: "Olhos de Água, Albufeira",
+        lat: 37.0922,
+        lng: -8.1912,
+        category: "Beach & Village"
+      }
+    ];
+
+    const EMERGENCY_CONTACTS = [
+      {
+        name: "Número Europeu de Emergência (INEM)",
+        category: "Medical & Emergency",
+        phones: ["112"],
+        accent: ""
+      },
+      {
+        name: "Intoxicações | INEM",
+        category: "Poison & Medical",
+        phones: ["800 250 250"],
+        accent: ""
+      },
+      {
+        name: "Saúde 24 (SNS 24)",
+        category: "Health Line",
+        phones: ["808 24 24 24"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Linha de Apoio à Vítima (APAV)",
+        category: "Victim Support",
+        phones: ["116 006"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "SOS Ambiente e Território – Comunicação de Queimas",
+        category: "Environment & Fire Control",
+        phones: ["808 200 520", "+351 211 389 320"],
+        accent: "amber-accent"
+      },
+      {
+        name: "SOS Pessoa Idosa",
+        category: "Senior Support",
+        phones: ["800 102 100"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Bombeiros Voluntários de Albufeira",
+        category: "Firefighters & Rescue",
+        phones: ["+351 289 586 333"],
+        accent: ""
+      },
+      {
+        name: "Cruz Vermelha Portuguesa Silves-Albufeira",
+        category: "Red Cross & First Aid",
+        phones: ["+351 289 542 398"],
+        accent: ""
+      },
+      {
+        name: "Guarda Nacional Republicana Albufeira",
+        category: "GNR Police",
+        phones: ["+351 289 590 790"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Polícia Marítima Piquete Albufeira",
+        category: "Maritime Police",
+        phones: ["+351 916 613 540"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Serviço Municipal de Proteção Civil",
+        category: "Civil Protection",
+        phones: ["+351 289 599 503"],
+        accent: "amber-accent"
+      },
+      {
+        name: "Linha de Apoio SMPC Albufeira",
+        category: "Civil Protection Helpline",
+        phones: ["+351 968 339 212"],
+        accent: "amber-accent"
+      },
+      {
+        name: "Polícia Municipal Albufeira",
+        category: "Municipal Police",
+        phones: ["+351 289 599 504"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Centro de Bem Estar Animal",
+        category: "Animal Welfare",
+        phones: ["+351 924 051 601", "+351 969 956 125"],
+        accent: "amber-accent"
+      },
+      {
+        name: "Piquete Águas e Saneamento",
+        category: "Water & Sanitation",
+        phones: ["+351 289 599 534"],
+        accent: "cyan-accent"
+      },
+      {
+        name: "Lusagua",
+        category: "Water Utility",
+        phones: ["808 202 492"],
+        accent: "cyan-accent"
+      }
+    ];
+
+    let eventsData = [
+      {
+        id: 1,
+        title: "Albufeira Mercadinho Natal",
+        venueName: "Espaço Multiusos de Albufeira",
+        zone: "Albufeira",
+        town: "Albufeira",
+        category: "MARKETS",
+        date: "2026-11-22",
+        time: "14:00 - 19:00",
+        fee: "Free",
+        image: "",
+        desc: "Albufeira Mercadinho Natal at Espaço Multiusos de Albufeira (21 & 22 November, 14:00–19:00), featuring artesanato (crafts), animação (entertainment), concertos (concerts), dança (dance), and much more.",
+        author: "Me"
+      }
+    ];
+
+    let venuesData = [...SEED_VENUES];
+    let activeCategory = "ALL";
+    let activeZone = "ALL";
+    let leafletMap = null;
+    let mapMarkersLayer = null;
+
+    // =========================================================================
+    // 3. DATA LOADING & SUPABASE SYNC
+    // =========================================================================
+    async function loadInitialData() {
+      if (supabaseClient) {
+        const { data: evRows, error: evErr } = await supabaseClient
+          .from("events")
+          .select("*")
+          .order("date", { ascending: true });
+
+        if (!evErr && Array.isArray(evRows) && evRows.length > 0) {
+          eventsData = evRows.map((row) => ({
+            id: row.id,
+            title: row.title || "",
+            venueName: row.venueName || row.venuename || "",
+            zone: row.zone || "Albufeira",
+            town: row.town || "Albufeira",
+            category: row.category || "MARKETS",
+            date: row.date || "",
+            time: row.time || "14:00",
+            fee: row.fee || "Free",
+            image: row.image || "",
+            desc: row.desc || "",
+            author: row.author || "Me"
+          }));
+        }
+
+        const { data: dirRows, error: dirErr } = await supabaseClient
+          .from("directory")
+          .select("*");
+
+        if (!dirErr && Array.isArray(dirRows) && dirRows.length > 0) {
+          venuesData = dirRows.map((v, idx) => ({
+            id: v.id || idx + 100,
+            name: v.name || "Albufeira Venue",
+            zone: v.zone || v.town || "Albufeira",
+            address: v.address || "Albufeira, Algarve",
+            lat: Number(v.lat) || 37.0955,
+            lng: Number(v.lng) || -8.2505,
+            category: v.category || "Venue"
+          }));
+        }
+      }
+
+      populateVenueDatalist();
+      renderEvents();
+      renderVenues();
+      renderEmergencyContacts();
+    }
+
+    function populateVenueDatalist() {
+      const list = document.getElementById("albufeiraVenueList");
+      list.innerHTML = "";
+      venuesData.forEach((v) => {
+        const opt = document.createElement("option");
+        opt.value = v.name;
+        list.appendChild(opt);
+      });
+    }
+
+    // =========================================================================
+    // 4. RENDER FUNCTIONS
+    // =========================================================================
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderEvents() {
+      const grid = document.getElementById("eventsGrid");
+      const filtered =
+        activeCategory === "ALL"
+          ? eventsData
+          : eventsData.filter((ev) => (ev.category || "").toUpperCase() === activeCategory);
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state">No Albufeira events found in this category yet.</div>`;
+        return;
+      }
+
+      const canEdit = isAuthorizedAdmin();
+
+      grid.innerHTML = filtered
+        .map((ev) => {
+          const imgHtml = ev.image
+            ? `<img class="card-img" src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" onerror="this.style.display='none'" />`
+            : "";
+
+          const editButtonHtml = canEdit
+            ? `<button class="btn-edit" type="button" onclick="openEditEventModal(${ev.id})">Edit Event</button>`
+            : "";
+
+          return `
+            <article class="card">
+              ${imgHtml}
+              <div class="card-body">
+                <div class="card-meta">
+                  <span>${escapeHtml(ev.date || "TBA")} • ${escapeHtml(ev.time || "")}</span>
+                  <span class="vice-sticker sticker-pink">${escapeHtml(ev.category || "EVENT")}</span>
+                </div>
+                <h3 class="card-title">${escapeHtml(ev.title)}</h3>
+                <p style="font-size: 0.85rem; color: var(--neon-amber); font-weight: 600;">
+                  ${escapeHtml(ev.venueName)} — ${escapeHtml(ev.zone || "Albufeira")}
+                </p>
+                <p class="card-desc">${escapeHtml(ev.desc || "")}</p>
+                <div class="card-footer">
+                  <span>Fee: <strong>${escapeHtml(ev.fee || "Free")}</strong></span>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span>By ${escapeHtml(ev.author || "Admin")}</span>
+                    ${editButtonHtml}
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    function renderVenues() {
+      const grid = document.getElementById("venuesGrid");
+      const filtered =
+        activeZone === "ALL"
+          ? venuesData
+          : venuesData.filter((v) => (v.zone || "").toLowerCase() === activeZone.toLowerCase());
+
+      if (!filtered.length) {
+        grid.innerHTML = `<div class="empty-state">No venues found in this Albufeira zone.</div>`;
+      } else {
+        grid.innerHTML = filtered
+          .map(
+            (v) => `
+          <article class="card">
+            <div class="card-body">
+              <div class="card-meta">
+                <span>${escapeHtml(v.zone || "Albufeira")}</span>
+                <span class="vice-sticker sticker-cyan">${escapeHtml(v.category || "Albufeira")}</span>
+              </div>
+              <h3 class="card-title">${escapeHtml(v.name)}</h3>
+              <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
+              <div class="card-footer">
+                <span>GPS: ${Number(v.lat).toFixed(4)}, ${Number(v.lng).toFixed(4)}</span>
+              </div>
             </div>
-            <p id="editAddressVenueTitle" class="text-xs font-black text-miamiCyan"></p>
-            <form onsubmit="handleEditAddressSubmit(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="editAddressVenueOriginalName">
-                <div>
-                    <label class="block font-bold mb-1 theme-text-sub">Street Name & Number / Address</label>
-                    <input type="text" id="editAddressInput" required placeholder="e.g. Rua 25 de Abril, 14, Albufeira" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium focus:border-miamiCyan outline-none">
-                </div>
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeEditAddressModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button>
-                    <button type="submit" id="saveAddressBtn" class="px-4 py-2.5 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Save Address</button>
-                </div>
-            </form>
-        </div>
-    </div>
+          </article>
+        `
+          )
+          .join("");
+      }
 
-    <!-- New Forum Thread Modal -->
-    <div id="newThreadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiCyan/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Start New Forum Thread</h3><button onclick="closeNewThreadModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
-            <form onsubmit="handleNewThreadSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Thread Topic / Title</label><input type="text" id="newThreadTitle" required placeholder="Topic title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Category</label><select id="newThreadCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"><option value="General Discussion">General Discussion</option><option value="Recommendations">Recommendations</option><option value="Nightlife & Dining">Nightlife & Dining</option><option value="Wellness & Health">Wellness & Health</option><option value="Local Tips">Local Tips</option></select></div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Message</label><textarea id="newThreadBody" rows="4" required placeholder="Write your post..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeNewThreadModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-miamiCyan text-miamiDark font-black cursor-pointer shadow">Post Thread</button></div>
-            </form>
-        </div>
-    </div>
+      updateMapMarkers(filtered);
+    }
 
-    <!-- Post Classified Modal -->
-    <div id="classifiedModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="theme-card border-2 border-miamiPink/50 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center"><h3 class="text-lg font-black theme-text-main">Post Community Classified</h3><button onclick="closeClassifiedModal()" class="font-bold p-1 cursor-pointer">✕</button></div>
-            <form onsubmit="handleClassifiedSubmit(event)" class="space-y-3 text-xs">
-                <div><label class="block font-bold mb-1 theme-text-sub">Title</label><input type="text" id="newClassifiedTitle" required placeholder="Listing title" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                <div>
-                    <label class="block font-bold mb-1 theme-text-sub">Category (No Real Estate Sales)</label>
-                    <select id="newClassifiedCategory" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium">
-                        <option value="Rent">Rent (Rooms & Rentals Only - No Sales)</option>
-                        <option value="Job Offers">Job Offers</option>
-                        <option value="Buy & Sell">Buy & Sell</option>
-                        <option value="Socialise">Socialise / Meetups</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div><label class="block font-bold mb-1 theme-text-sub">Price / Salary</label><input type="text" id="newClassifiedPrice" placeholder="e.g. €500/mo or €50" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                    <div><label class="block font-bold mb-1 theme-text-sub">Contact Info</label><input type="text" id="newClassifiedContact" required placeholder="Email or Phone" class="w-full theme-input border-2 rounded-xl px-3 py-2.5 font-medium"></div>
-                </div>
-                <div><label class="block font-bold mb-1 theme-text-sub">Details</label><textarea id="newClassifiedDesc" rows="3" required placeholder="Describe your listing..." class="w-full theme-input border-2 rounded-xl p-3 font-medium"></textarea></div>
-                <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeClassifiedModal()" class="px-4 py-2.5 rounded-xl bg-gray-500/20 font-bold cursor-pointer">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl bg-[#FF007F] text-white font-black cursor-pointer shadow">Publish Listing</button></div>
-            </form>
-        </div>
-    </div>
+    function initOrUpdateMap() {
+      if (!leafletMap && typeof L !== "undefined") {
+        leafletMap = L.map("albufeiraMap").setView([37.0955, -8.2505], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(leafletMap);
+        mapMarkersLayer = L.layerGroup().addTo(leafletMap);
+      }
+      if (leafletMap) {
+        setTimeout(() => leafletMap.invalidateSize(), 100);
+        updateMapMarkers(
+          activeZone === "ALL"
+            ? venuesData
+            : venuesData.filter((v) => (v.zone || "").toLowerCase() === activeZone.toLowerCase())
+        );
+      }
+    }
 
-    <datalist id="zoneDatalist"></datalist>
-
-    <script>
-        const REPORT_EMAIL = 'support@albufeira-pulse.com';
-        let eventBannerMode = 'top';
-        let eventBannerCollapsed = false;
-
-        function escapeJsSingleQuote(str) {
-            return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    function updateMapMarkers(list) {
+      if (!leafletMap || !mapMarkersLayer) return;
+      mapMarkersLayer.clearLayers();
+      list.forEach((v) => {
+        if (typeof v.lat === "number" && typeof v.lng === "number") {
+          L.marker([v.lat, v.lng])
+            .bindPopup(`<strong>${escapeHtml(v.name)}</strong><br/>${escapeHtml(v.zone || "Albufeira")}`)
+            .addTo(mapMarkersLayer);
         }
+      });
+    }
 
-        function openReportModal(itemType, itemTitle, extraContext = '') {
-            document.getElementById('reportItemType').value = itemType || 'Listing';
-            document.getElementById('reportItemTitle').value = itemTitle || 'N/A';
-            document.getElementById('reportItemContext').value = extraContext || '';
-            document.getElementById('reportReasonSelect').selectedIndex = 0;
-            document.getElementById('reportDetailsInput').value = '';
-            document.getElementById('reportTargetSummary').textContent = `${itemType || 'Item'}: ${itemTitle || 'Listing'}`;
-            document.getElementById('reportModal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('reportReasonSelect')?.focus(), 50);
+    function renderEmergencyContacts() {
+      const grid = document.getElementById("emergencyGrid");
+      grid.innerHTML = EMERGENCY_CONTACTS.map((item) => {
+        const links = item.phones
+          .map((ph) => {
+            const telHref = ph.replace(/[^+\d]/g, "");
+            return `<a class="phone-link" href="tel:${telHref}">${escapeHtml(ph)}</a>`;
+          })
+          .join("");
+
+        return `
+          <article class="emergency-card ${item.accent}">
+            <span class="emergency-cat">${escapeHtml(item.category)}</span>
+            <h3 class="emergency-name">${escapeHtml(item.name)}</h3>
+            <div class="emergency-phones">${links}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    // =========================================================================
+    // 5. EVENT MODAL, TIME DROPDOWN & ADMIN-ONLY EDITING
+    // =========================================================================
+    const eventModal = document.getElementById("eventModal");
+    const eventForm = document.getElementById("eventForm");
+
+    function ensureTimeOptionExists(timeValue) {
+      if (!timeValue) return;
+      const select = document.getElementById("eventTime");
+      const exists = Array.from(select.options).some((opt) => opt.value === timeValue);
+      if (!exists) {
+        const opt = document.createElement("option");
+        opt.value = timeValue;
+        opt.textContent = timeValue;
+        select.appendChild(opt);
+      }
+      select.value = timeValue;
+    }
+
+    function openAddEventModal() {
+      eventForm.reset();
+      document.getElementById("editEventId").value = "";
+      document.getElementById("eventModalTitle").textContent = "Add Event";
+      document.getElementById("submitEventBtn").textContent = "Publish Event";
+      document.getElementById("eventZone").value = "Albufeira";
+      document.getElementById("eventCategory").value = "MARKETS";
+      document.getElementById("eventFee").value = "Free";
+      document.getElementById("eventTime").value = "14:00 - 19:00";
+      document.getElementById("eventLat").value = "37.0955";
+      document.getElementById("eventLng").value = "-8.2505";
+      eventModal.classList.add("open");
+    }
+
+    window.openEditEventModal = function (eventId) {
+      if (!isAuthorizedAdmin()) {
+        alert("Only admins (Me or Alex) can edit events. Please sign in as an admin first.");
+        openAdminModal();
+        return;
+      }
+
+      const ev = eventsData.find((item) => String(item.id) === String(eventId));
+      if (!ev) return;
+
+      document.getElementById("editEventId").value = ev.id;
+      document.getElementById("eventModalTitle").textContent = "Edit Event (Admin)";
+      document.getElementById("submitEventBtn").textContent = "Save Changes";
+      document.getElementById("eventTitle").value = ev.title || "";
+      document.getElementById("eventZone").value = ev.zone || "Albufeira";
+      document.getElementById("eventVenue").value = ev.venueName || "";
+      document.getElementById("eventDate").value = ev.date || "";
+      ensureTimeOptionExists(ev.time || "14:00");
+      document.getElementById("eventFee").value = ev.fee || "Free";
+      document.getElementById("eventCategory").value = ev.category || "MARKETS";
+      document.getElementById("eventImage").value = ev.image || "";
+      document.getElementById("eventDesc").value = ev.desc || "";
+      document.getElementById("eventLat").value = "37.0955";
+      document.getElementById("eventLng").value = "-8.2505";
+
+      eventModal.classList.add("open");
+    };
+
+    function closeEventModal() {
+      eventModal.classList.remove("open");
+    }
+
+    eventForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const editingId = document.getElementById("editEventId").value.trim();
+      if (editingId && !isAuthorizedAdmin()) {
+        alert("Only admins (Me or Alex) can edit existing events.");
+        return;
+      }
+
+      const payload = {
+        title: document.getElementById("eventTitle").value.trim(),
+        venueName: document.getElementById("eventVenue").value.trim(),
+        zone: document.getElementById("eventZone").value.trim() || "Albufeira",
+        town: "Albufeira",
+        category: document.getElementById("eventCategory").value.trim() || "MARKETS",
+        date: document.getElementById("eventDate").value.trim(),
+        time: document.getElementById("eventTime").value.trim(),
+        fee: document.getElementById("eventFee").value.trim() || "Free",
+        image: document.getElementById("eventImage").value.trim(),
+        desc: document.getElementById("eventDesc").value.trim(),
+        author: isAuthorizedAdmin() ? currentAdmin : "Community"
+      };
+
+      if (supabaseClient) {
+        if (editingId) {
+          const { data, error } = await supabaseClient
+            .from("events")
+            .update(payload)
+            .eq("id", editingId)
+            .select();
+
+          if (error) {
+            alert("Could not update event in Supabase: " + error.message);
+            return;
+          }
+
+          const updated = data && data[0] ? data[0] : { ...payload, id: editingId };
+          eventsData = eventsData.map((item) => (String(item.id) === String(editingId) ? updated : item));
+        } else {
+          const { data, error } = await supabaseClient
+            .from("events")
+            .insert([payload])
+            .select();
+
+          if (error) {
+            alert("Could not save event to Supabase: " + error.message);
+            return;
+          }
+
+          const created = data && data[0] ? data[0] : { ...payload, id: Date.now() };
+          eventsData.push(created);
         }
-        window.openReportModal = openReportModal;
-
-        function closeReportModal() {
-            document.getElementById('reportModal').classList.add('hidden');
+      } else {
+        if (editingId) {
+          eventsData = eventsData.map((item) =>
+            String(item.id) === String(editingId) ? { ...item, ...payload } : item
+          );
+        } else {
+          eventsData.push({ ...payload, id: Date.now() });
         }
-        window.closeReportModal = closeReportModal;
+      }
 
-        function handleReportSubmit(e) {
-            e.preventDefault();
-            const itemType = document.getElementById('reportItemType').value;
-            const itemTitle = document.getElementById('reportItemTitle').value;
-            const extraContext = document.getElementById('reportItemContext').value;
-            const reason = document.getElementById('reportReasonSelect').value;
-            const details = document.getElementById('reportDetailsInput').value.trim();
+      closeEventModal();
+      renderEvents();
+    });
 
-            const subject = encodeURIComponent(`Report [${reason}] - ${itemTitle}`);
-            const body = encodeURIComponent(
-                [
-                    `Reason / Complaint: ${reason}`,
-                    `Item Type: ${itemType}`,
-                    `Title / Name: ${itemTitle}`,
-                    extraContext ? `Context: ${extraContext}` : '',
-                    `Page URL: ${window.location.href}`,
-                    `Reported At: ${new Date().toISOString()}`,
-                    '',
-                    'Details:',
-                    details || '(No extra details provided)'
-                ].filter(Boolean).join('\n')
-            );
+    // =========================================================================
+    // 6. ADMIN MODAL HANDLERS
+    // =========================================================================
+    const adminModal = document.getElementById("adminModal");
 
-            closeReportModal();
-            window.location.href = `mailto:${REPORT_EMAIL}?subject=${subject}&body=${body}`;
+    function openAdminModal() {
+      adminModal.classList.add("open");
+      document.getElementById("adminPasscodeInput").focus();
+    }
+
+    function closeAdminModal() {
+      adminModal.classList.remove("open");
+      document.getElementById("adminLoginForm").reset();
+    }
+
+    document.getElementById("adminToggleBtn").addEventListener("click", () => {
+      if (isAuthorizedAdmin()) {
+        currentAdmin = "";
+        sessionStorage.removeItem("albufeira_admin_user");
+        updateAdminUI();
+      } else {
+        openAdminModal();
+      }
+    });
+
+    document.getElementById("closeAdminModalBtn").addEventListener("click", closeAdminModal);
+    document.getElementById("cancelAdminBtn").addEventListener("click", closeAdminModal);
+
+    document.getElementById("adminLoginForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const selectedAdmin = document.getElementById("adminNameSelect").value.trim();
+      const passcode = document.getElementById("adminPasscodeInput").value;
+
+      if (!ALLOWED_ADMINS.includes(selectedAdmin.toLowerCase())) {
+        alert("Only Me or Alex can be selected as admin.");
+        return;
+      }
+
+      if (passcode !== ADMIN_PASSCODE) {
+        alert("Incorrect admin passcode.");
+        return;
+      }
+
+      currentAdmin = selectedAdmin;
+      sessionStorage.setItem("albufeira_admin_user", currentAdmin);
+      closeAdminModal();
+      updateAdminUI();
+    });
+
+    // =========================================================================
+    // 7. NAVIGATION & FILTER LISTENERS
+    // =========================================================================
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetTab = btn.dataset.tab;
+        document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        document.querySelectorAll(".section-view").forEach((sec) => sec.classList.remove("active"));
+        document.getElementById(`section-${targetTab}`).classList.add("active");
+
+        if (targetTab === "venues") {
+          initOrUpdateMap();
         }
-        window.handleReportSubmit = handleReportSubmit;
-
-        function renderReportButtonHtml(itemType, itemTitle, extraContext = '', compact = true) {
-            const safeType = escapeJsSingleQuote(itemType);
-            const safeTitle = escapeJsSingleQuote(itemTitle);
-            const safeCtx = escapeJsSingleQuote(extraContext);
-            const sizing = compact
-                ? 'text-[10px] px-2 py-1 rounded-lg'
-                : 'text-xs px-3 py-1.5 rounded-xl';
-            return `<button type="button" onclick="event.stopPropagation(); openReportModal('${safeType}', '${safeTitle}', '${safeCtx}')" class="inline-flex items-center gap-1 ${sizing} font-bold border border-amber-500/40 text-amber-400 hover:bg-amber-500/15 transition cursor-pointer shrink-0" title="Report to ${REPORT_EMAIL}">🚩 Report</button>`;
-        }
-
-        const defaultZones = ["Albufeira", "Old Town", "The Strip", "Marina", "Montechoro", "Olhos de Água", "Central / Lidl", "Guia", "Ferreiras"];
-        const ADDRESS_PLACEHOLDER = 'Enter street name or address...';
-
-        let registeredVenues = [];
-        let registeredEvents = [];
-        let forumThreads = [];
-        let classifiedListings = [];
-        let articlesList = [];
-
-        const SUPABASE_URL = 'https://ljncrabbelxjnpvmvdau.supabase.co';
-        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6';
-        let _supabaseClient = null;
-        if (typeof supabase !== 'undefined') {
-            _supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-        }
-
-        let currentLang = localStorage.getItem('albufeira_lang') || 'en';
-        let activeZoneFilter = 'all';
-        let activeEventCategoryFilter = 'all';
-        let activeDirectoryCategoryFilter = 'all';
-        let activeClassifiedCategoryFilter = 'all';
-        let availableZones = [...defaultZones];
-        let focusedVenueName = null;
-
-        function syncAutoThemeIfUnlocked() {
-            const manualOverride = localStorage.getItem('albufeira_manual_theme');
-            if (!manualOverride) {
-                const autoMode = getAutomaticThemeMode();
-                if (document.documentElement.className !== autoMode) {
-                    applyThemeMode(autoMode);
-                    updateThemeButtonUI();
-                }
-            }
-        }
-
-        function needsStreetAddress(addr) {
-            if (!addr) return true;
-            const trimmed = String(addr).trim();
-            return !trimmed || trimmed.toLowerCase() === 'albufeira' || trimmed.toLowerCase() === 'n/a' || trimmed === ADDRESS_PLACEHOLDER;
-        }
-
-        function renderAddressPromptHtml(venueName, addressVal, isDetailView = false) {
-            const safeName = escapeJsSingleQuote(venueName);
-            if (needsStreetAddress(addressVal)) {
-                const sizeClass = isDetailView ? 'text-xs px-3 py-1.5 rounded-xl' : 'text-[11px] px-2.5 py-1 rounded-lg';
-                return `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="inline-flex items-center gap-1 ${sizeClass} bg-miamiPink/15 hover:bg-miamiPink text-miamiPink hover:text-white border border-miamiPink/50 font-black transition cursor-pointer" title="Click to add street name or address online">✏️ ${ADDRESS_PLACEHOLDER}</button>`;
-            }
-            const editBtn = `<button type="button" onclick="event.stopPropagation(); openEditAddressModal('${safeName}')" class="ml-1.5 text-[10px] font-bold text-miamiCyan hover:underline cursor-pointer" title="Edit address">Edit</button>`;
-            return `<span class="inline-flex items-center flex-wrap">📍 ${addressVal}${editBtn}</span>`;
-        }
-
-        function openEditAddressModal(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).toLowerCase());
-            if (!venue) return;
-            document.getElementById('editAddressVenueOriginalName').value = venue.name;
-            document.getElementById('editAddressVenueTitle').textContent = `${venue.name} (${venue.area || 'Albufeira'})`;
-            const currentAddr = needsStreetAddress(venue.address) ? '' : venue.address;
-            document.getElementById('editAddressInput').value = currentAddr;
-            document.getElementById('editAddressModal').classList.remove('hidden');
-            setTimeout(() => document.getElementById('editAddressInput').focus(), 50);
-            if (window.lucide) lucide.createIcons();
-        }
-        window.openEditAddressModal = openEditAddressModal;
-
-        function closeEditAddressModal() {
-            document.getElementById('editAddressModal').classList.add('hidden');
-        }
-        window.closeEditAddressModal = closeEditAddressModal;
-
-        async function handleEditAddressSubmit(e) {
-            e.preventDefault();
-            const originalName = document.getElementById('editAddressVenueOriginalName').value;
-            const newAddr = document.getElementById('editAddressInput').value.trim();
-            if (!newAddr) return;
-
-            const saveBtn = document.getElementById('saveAddressBtn');
-            if (saveBtn) saveBtn.disabled = true;
-
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === originalName.toLowerCase());
-            if (venue) {
-                venue.address = newAddr;
-                if (_supabaseClient) {
-                    try {
-                        const updateRes = (venue.id !== undefined && venue.id !== null)
-                            ? await _supabaseClient.from('directory').update({ address: newAddr }).eq('id', venue.id)
-                            : await _supabaseClient.from('directory').update({ address: newAddr }).eq('name', venue.name);
-                        if (updateRes.error) {
-                            alert(`Could not update address in Supabase: ${updateRes.error.message}`);
-                        }
-                    } catch (err) {}
-                }
-            }
-
-            if (saveBtn) saveBtn.disabled = false;
-            closeEditAddressModal();
-            renderDirectoryGrid();
-            const detailSection = document.getElementById('tab-content-venue-detail');
-            if (detailSection && !detailSection.classList.contains('hidden')) {
-                openVenueDetailPage(originalName);
-            }
-        }
-        window.handleEditAddressSubmit = handleEditAddressSubmit;
-
-        function syncHeaderOffset() {
-            const header = document.getElementById('mainHeader');
-            if (header) {
-                document.body.style.paddingTop = `${header.offsetHeight + 12}px`;
-            }
-        }
-        window.syncHeaderOffset = syncHeaderOffset;
-
-        const translations = {
-            en: {
-                subtitle: "The Heartbeat of Albufeira",
-                login: "Login",
-                liveConditions: "Live:",
-                air: "Air:",
-                water: "Water:",
-                condition: "Sky:",
-                waveHeight: "Waves:",
-                wind: "Wind:",
-                tabEvents: "Events",
-                tabDirectory: "Venues",
-                tabCalendar: "Calendar",
-                tabArticles: "Articles",
-                tabClassifieds: "Classifieds",
-                tabForum: "Forum",
-                tabLinks: "Links",
-                tabEmergency: "Emergency",
-                addVenue: "+ Add Venue",
-                addEvent: "+ Add Event",
-                zoneLabel: "Zone:",
-                zoneAll: "All",
-                mapTitle: "Interactive Algarve Venue Map",
-                hideMap: "Hide Map",
-                calendarHeader: "November 2026 Calendar"
-            },
-            pt: {
-                subtitle: "O Coração de Albufeira",
-                login: "Entrar",
-                liveConditions: "Ao Vivo:",
-                air: "Ar:",
-                water: "Água:",
-                condition: "Céu:",
-                waveHeight: "Ondas:",
-                wind: "Vento:",
-                tabEvents: "Eventos",
-                tabDirectory: "Locais",
-                tabCalendar: "Calendário",
-                tabArticles: "Artigos",
-                tabClassifieds: "Classificados",
-                tabForum: "Fórum",
-                tabLinks: "Links",
-                tabEmergency: "Emergência",
-                addVenue: "+ Local",
-                addEvent: "+ Evento",
-                zoneLabel: "Zona:",
-                zoneAll: "Todos",
-                mapTitle: "Mapa Interativo do Algarve",
-                hideMap: "Ocultar Mapa",
-                calendarHeader: "Calendário Novembro 2026"
-            }
-        };
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'pt' : 'en';
-            localStorage.setItem('albufeira_lang', currentLang);
-            applyTranslations();
-            renderZoneButtons();
-            renderEventCategoryButtons();
-            syncHeaderOffset();
-        }
-        window.toggleLanguage = toggleLanguage;
-
-        function applyTranslations() {
-            const t = translations[currentLang];
-            document.getElementById('siteSubtitle').textContent = t.subtitle;
-            document.getElementById('langText').textContent = currentLang === 'en' ? 'EN/PT' : 'PT/EN';
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.textContent = t[key];
-            });
-        }
-
-        let albufeiraMap = null;
-        let mapMarkersGroup = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) lucide.createIcons();
-            applyTranslations();
-            syncHeaderOffset();
-            window.addEventListener('resize', syncHeaderOffset);
-
-            setInterval(syncAutoThemeIfUnlocked, 60000);
-
-            const todayLabel = document.getElementById('sidebarTodayDateLabel');
-            if (todayLabel) {
-                todayLabel.textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-            }
-
-            initMap();
-            loadDataFromSupabase();
-            fetchLiveWeatherAndWaves();
-            updateThemeButtonUI();
-            checkExistingAuth();
-            renderEventCategoryButtons();
-            renderDirectoryCategorySidebar();
-            renderClassifiedCategoryBar();
-            renderRightSidebarWidgets();
-
-            window.addEventListener('popstate', (event) => {
-                const targetTab = event.state && event.state.tab ? event.state.tab : 'events';
-                switchTab(targetTab, false);
-            });
-
-            const initialHash = window.location.hash.replace('#', '');
-            if (initialHash) {
-                switchTab(initialHash, false);
-            }
-        });
-
-        function syncAvailableZones() {
-            const zoneSet = new Set(defaultZones);
-            registeredVenues.forEach(v => { if (v.area && v.area.trim()) zoneSet.add(v.area.trim()); });
-            registeredEvents.forEach(e => { if (e.zone && e.zone.trim()) zoneSet.add(e.zone.trim()); });
-            availableZones = Array.from(zoneSet);
-            renderZoneButtons();
-            updateZoneDatalist();
-        }
-
-        function renderZoneButtons() {
-            const bar = document.getElementById('zoneFilterBar');
-            if (!bar) return;
-            const t = translations[currentLang];
-            let html = `<span class="text-xs font-black text-miamiCyan mr-1 flex items-center gap-1 shrink-0"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> ${t.zoneLabel}</span>`;
-
-            const allActive = activeZoneFilter === 'all';
-            html += `<button onclick="filterZone('all')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${allActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${t.zoneAll}</button>`;
-
-            availableZones.forEach(zone => {
-                const isActive = activeZoneFilter === zone;
-                html += `<button onclick="filterZone('${escapeJsSingleQuote(zone)}')" class="zone-btn px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiCyan text-miamiDark shadow' : 'theme-pill font-bold theme-card border border-miamiCyan/40 shadow-sm'}">${zone}</button>`;
-            });
-            bar.innerHTML = html;
-            if (window.lucide) lucide.createIcons();
-        }
-        window.filterZone = filterZone;
-
-        function renderEventCategoryButtons() {
-            const bar = document.getElementById('eventCategoryFilterBar');
-            if (!bar) return;
-            const categories = ['all', 'HAPPY HOUR', 'LIVE MUSIC', 'SPORTS', 'LIVE SPORTS TV', 'QUIZ', 'WELLNESS', 'ART & CULTURE', 'MARKETS', 'SOCIAL'];
-            let html = `<span class="text-xs font-black text-miamiPink mr-1 flex items-center gap-1 shrink-0"><i data-lucide="tag" class="w-3.5 h-3.5"></i> Category:</span>`;
-            categories.forEach(cat => {
-                const isActive = activeEventCategoryFilter === cat;
-                const label = cat === 'all' ? 'All' : cat;
-                html += `<button onclick="filterEventCategory('${cat}')" class="px-3 py-1.5 rounded-full text-xs shrink-0 transition cursor-pointer ${isActive ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40 shadow-sm'}">${label}</button>`;
-            });
-            bar.innerHTML = html;
-            if (window.lucide) lucide.createIcons();
-        }
-        window.renderEventCategoryButtons = renderEventCategoryButtons;
-
-        function filterEventCategory(cat) {
-            activeEventCategoryFilter = cat;
-            renderEventCategoryButtons();
-            renderEventsGrid();
-        }
-        window.filterEventCategory = filterEventCategory;
-
-        function renderDirectoryCategorySidebar() {
-            const sidebar = document.getElementById('directoryCategorySidebar');
-            if (!sidebar) return;
-            const categories = ['all', 'Restaurant', 'Bar & Cafe', 'Nightclub', 'Live Sports TV', 'Karaoke', 'Quiz', 'Other'];
-            let html = '';
-            categories.forEach(cat => {
-                const isActive = activeDirectoryCategoryFilter === cat;
-                const label = cat === 'all' ? 'All' : cat;
-                html += `<button onclick="filterDirectoryCategory('${cat}')" class="shrink-0 md:w-full text-left px-3 py-1.5 md:py-2 rounded-xl transition cursor-pointer flex items-center justify-between gap-2 ${isActive ? 'bg-miamiCyan text-miamiDark font-black shadow' : 'hover:bg-miamiCyan/10 row-meta font-bold border border-transparent'}"><span>${label}</span><span class="hidden md:inline">→</span></button>`;
-            });
-            sidebar.innerHTML = html;
-        }
-        window.renderDirectoryCategorySidebar = renderDirectoryCategorySidebar;
-
-        function filterDirectoryCategory(cat) {
-            activeDirectoryCategoryFilter = cat;
-            renderDirectoryCategorySidebar();
-            renderDirectoryGrid();
-        }
-        window.filterDirectoryCategory = filterDirectoryCategory;
-
-        function updateZoneDatalist() {
-            const dl = document.getElementById('zoneDatalist');
-            if (!dl) return;
-            dl.innerHTML = availableZones.map(z => `<option value="${z}">`).join('');
-        }
-
-        function populateVenueAutocomplete() {
-            const dl = document.getElementById('venueAutocompleteList');
-            if (!dl) return;
-            dl.innerHTML = registeredVenues.map(v => `<option value="${v.name}">${v.area || ''}</option>`).join('');
-        }
-
-        async function loadDataFromSupabase() {
-            registeredVenues = [];
-            const countLabel = document.getElementById('directoryCountLabel');
-
-            if (_supabaseClient) {
-                try {
-                    const { data: dirData, error: dirError } = await _supabaseClient.from('directory').select('*');
-                    if (!dirError && Array.isArray(dirData)) {
-                        registeredVenues = dirData.filter(v => v && v.name && v.name.trim() !== '');
-                    } else if (countLabel) {
-                        countLabel.textContent = 'Unable to load directory table from Supabase.';
-                    }
-
-                    const { data: evData } = await _supabaseClient.from('events').select('*');
-                    if (Array.isArray(evData)) registeredEvents = evData;
-
-                    const { data: classData } = await _supabaseClient.from('classifieds').select('*').order('created_at', { ascending: false });
-                    if (Array.isArray(classData)) classifiedListings = classData;
-
-                    const { data: forumData } = await _supabaseClient.from('forum_threads').select('*').order('created_at', { ascending: false });
-                    if (Array.isArray(forumData)) forumThreads = forumData;
-
-                    const { data: artData } = await _supabaseClient.from('articles').select('*').order('created_at', { ascending: false });
-                    if (Array.isArray(artData)) articlesList = artData;
-                } catch (e) {
-                    if (countLabel) countLabel.textContent = 'Supabase directory connection error.';
-                }
-            } else if (countLabel) {
-                countLabel.textContent = 'Supabase client not initialized.';
-            }
-
-            syncAvailableZones();
-            populateVenueAutocomplete();
-            refreshMapMarkers(focusedVenueName);
-            renderDirectoryGrid();
-            renderEventsGrid();
-            renderClassifiedsList();
-            renderForumThreads();
-            renderArticlesList();
-            generateCalendarDays();
-            renderRightSidebarWidgets();
-        }
-
-        async function fetchLiveWeatherAndWaves() {
-            try {
-                const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.0881&longitude=-8.2520&current=temperature_2m,precipitation,wind_speed_10m');
-                const weatherData = await weatherRes.json();
-                if (weatherData && weatherData.current) {
-                    document.getElementById('liveWeatherTemp').textContent = `${weatherData.current.temperature_2m}°C`;
-                    document.getElementById('liveWeatherCondition').textContent = weatherData.current.precipitation > 0 ? "Rain 🌧️" : "Fair ☀️";
-                    document.getElementById('liveWeatherWind').textContent = `${weatherData.current.wind_speed_10m} km/h`;
-                }
-            } catch (err) {
-                document.getElementById('liveWeatherTemp').textContent = "—";
-                document.getElementById('liveWeatherCondition').textContent = "—";
-                document.getElementById('liveWeatherWind').textContent = "—";
-            }
-
-            try {
-                const marineRes = await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=37.0881&longitude=-8.2520&current=sea_surface_temperature,wave_height');
-                const marineData = await marineRes.json();
-                if (marineData && marineData.current) {
-                    const waterTemp = marineData.current.sea_surface_temperature;
-                    const waveHeight = marineData.current.wave_height;
-                    document.getElementById('liveWaterTemp').textContent = (waterTemp !== null && waterTemp !== undefined) ? `${waterTemp}°C` : "—";
-                    document.getElementById('liveWaveHeight').textContent = (waveHeight !== null && waveHeight !== undefined) ? `${waveHeight} m` : "—";
-                } else {
-                    document.getElementById('liveWaterTemp').textContent = "—";
-                    document.getElementById('liveWaveHeight').textContent = "—";
-                }
-            } catch (err) {
-                document.getElementById('liveWaterTemp').textContent = "—";
-                document.getElementById('liveWaveHeight').textContent = "—";
-            }
-        }
-
-        function setEventBannerMode(mode) {
-            eventBannerMode = mode === 'upcoming' ? 'upcoming' : 'top';
-            const topBtn = document.getElementById('bannerModeTopBtn');
-            const upBtn = document.getElementById('bannerModeUpcomingBtn');
-            if (topBtn && upBtn) {
-                if (eventBannerMode === 'top') {
-                    topBtn.className = 'px-3 py-1 rounded-lg bg-miamiCyan text-miamiDark transition cursor-pointer';
-                    upBtn.className = 'px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer';
-                } else {
-                    upBtn.className = 'px-3 py-1 rounded-lg bg-miamiPink text-white transition cursor-pointer';
-                    topBtn.className = 'px-3 py-1 rounded-lg row-meta hover:text-miamiCyan transition cursor-pointer';
-                }
-            }
-            renderTopUpcomingBanner();
-        }
-        window.setEventBannerMode = setEventBannerMode;
-
-        function toggleEventBanner() {
-            eventBannerCollapsed = !eventBannerCollapsed;
-            const cardsEl = document.getElementById('eventBannerCardsContainer');
-            const toggleBtn = document.getElementById('toggleEventBannerBtn');
-            if (cardsEl) cardsEl.classList.toggle('hidden', eventBannerCollapsed);
-            if (toggleBtn) toggleBtn.textContent = eventBannerCollapsed ? 'Show Banner' : 'Hide Banner';
-        }
-        window.toggleEventBanner = toggleEventBanner;
-
-        function parseEventTimestamp(ev) {
-            const rawDate = String(ev?.date || '').trim();
-            const rawTime = String(ev?.time || '00:00').trim().slice(0, 5);
-            const dt = new Date(`${rawDate}T${/^\d{2}:\d{2}$/.test(rawTime) ? rawTime : '00:00'}`);
-            return Number.isNaN(dt.getTime()) ? Number.MAX_SAFE_INTEGER : dt.getTime();
-        }
-
-        function scoreTopEvent(ev) {
-            let score = 0;
-            if (ev?.image && String(ev.image).trim() !== '') score += 3;
-            const cat = String(ev?.category || '').toUpperCase();
-            if (['LIVE MUSIC', 'SPORTS', 'LIVE SPORTS TV', 'HAPPY HOUR'].includes(cat)) score += 2;
-            const fee = String(ev?.fee || '').toLowerCase();
-            if (fee.includes('free') || fee.includes('grátis')) score += 1;
-            const ts = parseEventTimestamp(ev);
-            if (ts !== Number.MAX_SAFE_INTEGER && ts >= Date.now() - 86400000) score += 2;
-            return score;
-        }
-
-        function renderTopUpcomingBanner() {
-            const banner = document.getElementById('topUpcomingEventsBanner');
-            const container = document.getElementById('eventBannerCardsContainer');
-            if (!banner || !container) return;
-
-            if (!Array.isArray(registeredEvents) || registeredEvents.length === 0) {
-                banner.classList.add('hidden');
-                container.innerHTML = '';
-                return;
-            }
-
-            banner.classList.remove('hidden');
-            container.classList.toggle('hidden', eventBannerCollapsed);
-
-            const sortedByDate = [...registeredEvents].sort((a, b) => parseEventTimestamp(a) - parseEventTimestamp(b));
-            let picked = [];
-
-            if (eventBannerMode === 'upcoming') {
-                const startOfToday = new Date();
-                startOfToday.setHours(0, 0, 0, 0);
-                const futureOrToday = sortedByDate.filter(ev => {
-                    const ts = parseEventTimestamp(ev);
-                    return ts !== Number.MAX_SAFE_INTEGER && ts >= startOfToday.getTime();
-                });
-                picked = (futureOrToday.length > 0 ? futureOrToday : sortedByDate).slice(0, 3);
-            } else {
-                picked = [...registeredEvents]
-                    .sort((a, b) => (scoreTopEvent(b) - scoreTopEvent(a)) || (parseEventTimestamp(a) - parseEventTimestamp(b)))
-                    .slice(0, 3);
-            }
-
-            container.innerHTML = picked.map((ev, idx) => {
-                const badgeText = eventBannerMode === 'upcoming'
-                    ? (idx === 0 ? 'Next Up' : 'Upcoming')
-                    : `Top #${idx + 1}`;
-                const safeTitle = escapeJsSingleQuote(ev.title || '');
-                const imgThumb = (ev.image && String(ev.image).trim() !== '')
-                    ? `<img src="${ev.image}" alt="${ev.title || ''}" class="w-14 h-14 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`
-                    : `<div class="w-14 h-14 rounded-xl bg-miamiCyan/15 border border-miamiCyan/30 flex items-center justify-center text-lg font-black text-miamiCyan shrink-0">★</div>`;
-
-                return `
-                    <div onclick="openEventDetailPage('${safeTitle}')" class="unified-row border border-miamiCyan/35 hover:border-miamiPink rounded-xl p-3 cursor-pointer transition flex items-center gap-3 min-w-0">
-                        ${imgThumb}
-                        <div class="min-w-0 flex-1 space-y-0.5">
-                            <div class="flex items-center justify-between gap-1.5">
-                                <span class="text-[9px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2 py-0.5 rounded-full truncate">${badgeText} • ${ev.category || 'EVENT'}</span>
-                                <span class="text-[10px] font-black text-miamiPink shrink-0">${ev.fee || 'Free'}</span>
-                            </div>
-                            <h4 class="text-xs sm:text-sm font-black row-title truncate">${ev.title || 'Event'}</h4>
-                            <p class="text-[11px] font-bold row-body truncate">📍 ${ev.venueName || ev.zone || 'Albufeira'}</p>
-                            <p class="text-[10px] row-meta font-semibold truncate">📅 ${ev.date || ''} ${ev.time ? `• ${ev.time}` : ''}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function renderEventsGrid() {
-            renderTopUpcomingBanner();
-            const grid = document.getElementById('eventsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-
-            let filtered = registeredEvents.filter(ev => {
-                if (activeZoneFilter !== 'all') {
-                    const zoneVal = (ev.zone || '').toLowerCase();
-                    if (activeZoneFilter === 'Albufeira') {
-                        if (!zoneVal.includes('albufeira')) return false;
-                    } else if (zoneVal !== activeZoneFilter.toLowerCase()) {
-                        return false;
-                    }
-                }
-                if (activeEventCategoryFilter !== 'all') {
-                    if ((ev.category || 'SOCIAL').toUpperCase() !== activeEventCategoryFilter.toUpperCase()) return false;
-                }
-                return true;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="md:col-span-2 unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No events listed yet. Click "+ Add Event" to create one.</div>`;
-                return;
-            }
-
-            filtered.sort((a, b) => parseEventTimestamp(a) - parseEventTimestamp(b));
-
-            filtered.forEach(ev => {
-                const card = document.createElement('div');
-                card.className = 'unified-row border border-miamiCyan/40 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between space-y-2 cursor-pointer hover:border-miamiCyan transition';
-                card.onclick = () => openEventDetailPage(ev.title);
-
-                let imgHtml = '';
-                if (ev.image && ev.image.trim() !== '') {
-                    imgHtml = `<div class="h-40 sm:h-44 w-full overflow-hidden"><img src="${ev.image}" class="w-full h-full object-cover"></div>`;
-                }
-
-                const eventCtx = [ev.venueName, ev.zone, ev.date].filter(Boolean).join(' | ');
-
-                card.innerHTML = `
-                    <div>
-                        ${imgHtml}
-                        <div class="p-4 sm:p-5 space-y-2">
-                            <div class="flex justify-between items-center gap-2">
-                                <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-1 rounded-full">${ev.category || 'EVENT'}</span>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-xs font-black text-miamiPink">${ev.fee || 'Free'}</span>
-                                    ${renderReportButtonHtml('Event', ev.title, eventCtx, true)}
-                                </div>
-                            </div>
-                            <h3 class="text-base font-black row-title">${ev.title}</h3>
-                            <p class="text-xs font-bold row-body">📍 ${ev.venueName || ''} ${ev.zone ? `(${ev.zone})` : ''}</p>
-                            <p class="text-xs row-body">${ev.desc || ''}</p>
-                            <p class="text-[10px] font-bold text-miamiCyan pt-1">Added by ${ev.author || 'Member'}</p>
-                        </div>
-                    </div>
-                    <div class="px-4 sm:px-5 pb-4 pt-2 border-t border-miamiCyan/20 flex justify-between items-center text-[11px] row-meta font-medium">
-                        <span>📅 ${ev.date || ''} ${ev.time ? `| ${ev.time}` : ''}</span>
-                        <span class="text-miamiCyan font-black">Details →</span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterZone(zone) {
-            activeZoneFilter = zone;
-            renderZoneButtons();
-            renderEventsGrid();
-        }
-
-        function getVenueCoords(venue) {
-            const lat = parseFloat(venue.lat);
-            const lng = parseFloat(venue.lng);
-            if (!Number.isNaN(lat) && !Number.isNaN(lng) && lat !== 0 && lng !== 0) {
-                return [lat, lng];
-            }
-            const zoneCenters = {
-                'albufeira strip': [37.0916, -8.2243],
-                'albufeira marina': [37.0844, -8.2636],
-                'albufeira old town': [37.0886, -8.2529],
-                'albufeira': [37.0881, -8.2520],
-                'guia': [37.1275, -8.2928],
-                'ferreiras': [37.1319, -8.2456],
-                'lagos': [37.1028, -8.6730],
-                'faro': [37.0194, -7.9322],
-                'tavira': [37.1264, -7.6486],
-                'portimão': [37.1364, -8.5377]
-            };
-            const areaKey = String(venue.area || venue.address || '').toLowerCase();
-            let baseCoords = [37.0881, -8.2520];
-            for (const key of Object.keys(zoneCenters)) {
-                if (areaKey.includes(key)) {
-                    baseCoords = zoneCenters[key];
-                    break;
-                }
-            }
-            const nameStr = String(venue.name || 'venue');
-            let hash = 0;
-            for (let i = 0; i < nameStr.length; i++) {
-                hash = ((hash << 5) - hash) + nameStr.charCodeAt(i);
-                hash |= 0;
-            }
-            const latOffset = ((Math.abs(hash) % 100) - 50) * 0.0001;
-            const lngOffset = ((Math.abs(hash >> 4) % 100) - 50) * 0.0001;
-            return [baseCoords[0] + latOffset, baseCoords[1] + lngOffset];
-        }
-
-        function jumpToVenueOnMap(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === String(venueName).trim().toLowerCase());
-            if (!venue) return;
-            focusedVenueName = venue.name;
-            switchTab('events', true, false);
-
-            const mapContainer = document.getElementById('eventsMapContainer');
-            if (mapContainer && mapContainer.style.display === 'none') {
-                mapContainer.style.display = 'block';
-            }
-
-            const mapCard = document.getElementById('eventsMapCard');
-            if (mapCard) {
-                mapCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            setTimeout(() => {
-                initMap();
-                if (albufeiraMap) {
-                    albufeiraMap.invalidateSize();
-                    const [lat, lng] = getVenueCoords(venue);
-                    albufeiraMap.setView([lat, lng], 16);
-                    refreshMapMarkers(venue.name);
-                }
-            }, 180);
-        }
-        window.jumpToVenueOnMap = jumpToVenueOnMap;
-
-        function openEventDetailPage(eventTitle) {
-            const ev = registeredEvents.find(e => e.title.toLowerCase() === eventTitle.toLowerCase());
-            if (!ev) return;
-            const container = document.getElementById('eventDetailContainer');
-
-            let imgHtml = '';
-            if (ev.image && ev.image.trim() !== '') {
-                imgHtml = `<img src="${ev.image}" class="w-full md:w-80 h-52 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
-            }
-
-            const eventCtx = [ev.venueName, ev.zone, ev.date, ev.time].filter(Boolean).join(' | ');
-
-            container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
-                    ${imgHtml}
-                    <div class="space-y-3 w-full">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div class="flex flex-wrap gap-2">
-                                <span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${ev.category || 'EVENT'}</span>
-                                <span class="bg-miamiPink/20 text-miamiPink text-xs font-black uppercase px-3 py-1 rounded-full">${ev.fee || 'Free'}</span>
-                            </div>
-                            ${renderReportButtonHtml('Event', ev.title, eventCtx, false)}
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-black row-title">${ev.title}</h2>
-                        <p class="text-sm font-bold row-body">📅 ${ev.date || ''} ${ev.time ? `at ${ev.time}` : ''}</p>
-                        <p class="text-xs font-bold text-miamiCyan cursor-pointer inline-flex items-center gap-1 hover:underline" onclick="openVenueDetailPage('${escapeJsSingleQuote(ev.venueName || '')}')">
-                            📍 Venue: <strong class="row-title underline">${ev.venueName || ''}</strong> ${ev.zone ? `(${ev.zone})` : ''}
-                        </p>
-                    </div>
-                </div>
-                <div class="space-y-2 pt-1">
-                    <h3 class="text-lg sm:text-xl font-black row-title">Event Description</h3>
-                    <p class="text-sm row-body leading-relaxed">${ev.desc || ''}</p>
-                </div>
-            `;
-            switchTab('event-detail');
-        }
-        window.openEventDetailPage = openEventDetailPage;
-
-        function renderDirectoryGrid() {
-            const container = document.getElementById('directoryListContainer');
-            const searchInput = document.getElementById('directorySearchInput');
-            const countLabel = document.getElementById('directoryCountLabel');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-            let filtered = registeredVenues.filter(v => {
-                if (activeDirectoryCategoryFilter !== 'all') {
-                    const group = v.categoryGroup || v.category_group || 'Restaurant';
-                    if (group !== activeDirectoryCategoryFilter) return false;
-                }
-                if (searchTerm) {
-                    const matchName = (v.name || '').toLowerCase().includes(searchTerm);
-                    const matchAddr = (v.address || '').toLowerCase().includes(searchTerm);
-                    const matchArea = (v.area || '').toLowerCase().includes(searchTerm);
-                    if (!matchName && !matchAddr && !matchArea) return false;
-                }
-                return true;
-            });
-
-            if (countLabel) {
-                countLabel.textContent = `Showing ${filtered.length} of ${registeredVenues.length} venues`;
-            }
-
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No venues match your filter.</div>`;
-                return;
-            }
-
-            const displayList = filtered.slice(0, 150);
-
-            displayList.forEach(v => {
-                const group = v.categoryGroup || v.category_group || 'Restaurant';
-                const row = document.createElement('div');
-                row.className = 'unified-row border border-miamiCyan/30 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 shadow-sm hover:border-miamiCyan transition cursor-pointer';
-                row.onclick = () => openVenueDetailPage(v.name);
-
-                let thumbHtml = '';
-                if (v.image && v.image.trim() !== '') {
-                    thumbHtml = `<img src="${v.image}" class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover border border-miamiCyan/40 shrink-0">`;
-                }
-
-                const venueCtx = [group, v.area, v.address].filter(Boolean).join(' | ');
-                const safeName = escapeJsSingleQuote(v.name);
-
-                row.innerHTML = `
-                    <div class="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
-                        ${thumbHtml}
-                        <div class="space-y-1 w-full min-w-0">
-                            <div class="flex items-center justify-between flex-wrap gap-1.5">
-                                <h3 class="text-sm sm:text-base font-black row-title hover:text-miamiCyan transition">${v.name}</h3>
-                                <span class="bg-miamiCyan/20 text-miamiCyan text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full shrink-0">${group}</span>
-                            </div>
-                            <div class="text-xs font-bold row-body">${renderAddressPromptHtml(v.name, v.address, false)}</div>
-                            <p class="text-[11px] font-semibold text-emerald-400">🕒 ${v.schedule || 'Daily'}${v.area ? ` • Zone: ${v.area}` : ''}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-miamiCyan/20">
-                        ${renderReportButtonHtml('Venue', v.name, venueCtx, true)}
-                        <button onclick="event.stopPropagation(); jumpToVenueOnMap('${safeName}')" class="bg-miamiCyan/15 hover:bg-miamiCyan text-miamiCyan hover:text-miamiDark text-xs font-black px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition cursor-pointer">Map</button>
-                        <span class="text-xs font-black text-miamiPink px-1">View →</span>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-
-            if (filtered.length > 150) {
-                const moreNote = document.createElement('div');
-                moreNote.className = 'text-center text-xs font-bold text-miamiCyan py-3';
-                moreNote.textContent = `Showing top 150 results. Use the search bar above to filter any of the ${filtered.length} venues.`;
-                container.appendChild(moreNote);
-            }
-            if (window.lucide) lucide.createIcons();
-        }
-        window.filterDirectoryList = renderDirectoryGrid;
-
-        function openVenueDetailPage(venueName) {
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === venueName.toLowerCase());
-            if (!venue) return;
-            const venueEvents = registeredEvents.filter(e => (e.venueName || '').toLowerCase() === venue.name.toLowerCase());
-            const container = document.getElementById('venueDetailContainer');
-
-            let venueImageHtml = '';
-            if (venue.image && venue.image.trim() !== '') {
-                venueImageHtml = `<img src="${venue.image}" class="w-full md:w-72 h-48 object-cover rounded-2xl border-2 border-miamiCyan/40 shadow-lg">`;
-            }
-
-            const venueCtx = [venue.area, venue.address].filter(Boolean).join(' | ');
-            const safeName = escapeJsSingleQuote(venue.name);
-
-            container.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-5 items-start md:items-center border-b border-miamiCyan/30 pb-5">
-                    ${venueImageHtml}
-                    <div class="space-y-3 w-full">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            ${venue.area ? `<span class="bg-miamiCyan/20 text-miamiCyan text-xs font-black uppercase px-3 py-1 rounded-full">${venue.area}</span>` : '<span></span>'}
-                            ${renderReportButtonHtml('Venue', venue.name, venueCtx, false)}
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-black row-title">${venue.name}</h2>
-                        <div class="text-sm font-bold row-body">${renderAddressPromptHtml(venue.name, venue.address, true)}</div>
-                        ${venue.website ? `<p class="text-xs"><a href="${venue.website}" target="_blank" class="text-miamiCyan underline font-bold">Visit Website ↗</a></p>` : ''}
-                        <button onclick="jumpToVenueOnMap('${safeName}')" class="bg-miamiCyan text-miamiDark text-xs font-black px-3.5 py-2 rounded-xl transition inline-flex items-center gap-1.5 cursor-pointer shadow">📍 Show on Map</button>
-                    </div>
-                </div>
-                <div class="space-y-3 pt-1">
-                    <h3 class="text-lg sm:text-xl font-black row-title">Events at ${venue.name}</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${venueEvents.length ? venueEvents.map(ev => `<div class="unified-row p-4 rounded-2xl border border-miamiCyan/30 space-y-2 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${escapeJsSingleQuote(ev.title)}')"><h4 class="font-black text-base row-title">${ev.title}</h4><p class="text-xs row-body">${ev.desc || ''}</p></div>`).join('') : '<p class="text-xs row-meta">No upcoming events scheduled at this venue.</p>'}
-                    </div>
-                </div>
-            `;
-            switchTab('venue-detail');
-            if (window.lucide) lucide.createIcons();
-        }
-        window.openVenueDetailPage = openVenueDetailPage;
-
-        function renderArticlesList() {
-            const container = document.getElementById('articlesListContainer');
-            if (!container) return;
-            if (!articlesList.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No articles published yet.</div>`;
-                return;
-            }
-            container.innerHTML = articlesList.map(a => {
-                const artCtx = [a.category, a.author].filter(Boolean).join(' | ');
-                return `
-                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                        <div class="flex justify-between items-center gap-2">
-                            <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${a.category || 'Article'}</span>
-                            ${renderReportButtonHtml('Article', a.title, artCtx, true)}
-                        </div>
-                        <h3 class="font-black text-miamiPink text-base">${a.title}</h3>
-                        <p class="text-xs row-body leading-relaxed">${a.body}</p>
-                        <p class="text-[10px] font-bold text-miamiCyan">Added by ${a.author || 'Member'}</p>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderClassifiedCategoryBar() {
-            const bar = document.getElementById('classifiedCategoryBar');
-            if (!bar) return;
-            const cats = ['all', 'Rent', 'Job Offers', 'Buy & Sell', 'Socialise'];
-            bar.innerHTML = cats.map(c => {
-                const active = activeClassifiedCategoryFilter === c;
-                const label = c === 'all' ? 'All' : c;
-                return `<button onclick="filterClassifiedCategory('${c}')" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs transition cursor-pointer ${active ? 'font-black bg-miamiPink text-white shadow' : 'theme-pill font-bold theme-card border border-miamiPink/40'}">${label}</button>`;
-            }).join('');
-        }
-
-        function filterClassifiedCategory(cat) {
-            activeClassifiedCategoryFilter = cat;
-            renderClassifiedCategoryBar();
-            renderClassifiedsList();
-        }
-        window.filterClassifiedCategory = filterClassifiedCategory;
-
-        function renderClassifiedsList() {
-            const container = document.getElementById('classifiedsListContainer');
-            if (!container) return;
-            const filtered = classifiedListings.filter(item => activeClassifiedCategoryFilter === 'all' || item.category === activeClassifiedCategoryFilter);
-            if (!filtered.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No classified listings yet. Click "+ Post Classified" to add one.</div>`;
-                return;
-            }
-            container.innerHTML = filtered.map(item => {
-                const classCtx = [item.category, item.price, item.author].filter(Boolean).join(' | ');
-                return `
-                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2">
-                        <div class="flex justify-between items-center flex-wrap gap-2">
-                            <span class="text-[10px] font-black uppercase bg-miamiPink/20 text-miamiPink px-2.5 py-1 rounded-full">${item.category}</span>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-black text-miamiCyan">${item.price}</span>
-                                ${renderReportButtonHtml('Classified', item.title, classCtx, true)}
-                            </div>
-                        </div>
-                        <h3 class="text-base font-black row-title">${item.title}</h3>
-                        <p class="text-xs row-body leading-relaxed">${item.desc}</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[11px] row-meta font-bold">
-                            <span>📅 ${item.date || ''}</span>
-                            <span class="text-miamiCyan">Contact: ${item.contact}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function openClassifiedModal() { document.getElementById('classifiedModal').classList.remove('hidden'); }
-        window.openClassifiedModal = openClassifiedModal;
-        function closeClassifiedModal() { document.getElementById('classifiedModal').classList.add('hidden'); }
-        window.closeClassifiedModal = closeClassifiedModal;
-
-        async function handleClassifiedSubmit(e) {
-            e.preventDefault();
-            const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
-            const newItem = {
-                title: document.getElementById('newClassifiedTitle').value,
-                category: document.getElementById('newClassifiedCategory').value,
-                price: document.getElementById('newClassifiedPrice').value || 'Contact',
-                contact: document.getElementById('newClassifiedContact').value,
-                date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-                desc: document.getElementById('newClassifiedDesc').value,
-                author: currentAuthor
-            };
-
-            if (_supabaseClient) {
-                const { data, error } = await _supabaseClient.from('classifieds').insert([newItem]).select();
-                if (!error && Array.isArray(data) && data.length > 0) {
-                    classifiedListings = [...data, ...classifiedListings];
-                } else {
-                    classifiedListings.unshift(newItem);
-                }
-            } else {
-                classifiedListings.unshift(newItem);
-            }
-
-            renderClassifiedsList();
-            renderRightSidebarWidgets();
-            closeClassifiedModal();
-            e.target.reset();
-        }
-        window.handleClassifiedSubmit = handleClassifiedSubmit;
-
-        function renderForumThreads() {
-            const container = document.getElementById('forumThreadsContainer');
-            if (!container) return;
-            if (!forumThreads.length) {
-                container.innerHTML = `<div class="unified-row p-6 rounded-2xl text-center text-xs row-meta font-bold">No forum threads yet. Click "+ Start New Thread" to begin a discussion.</div>`;
-                return;
-            }
-            container.innerHTML = forumThreads.map(t => {
-                const threadCtx = [t.category, t.author].filter(Boolean).join(' | ');
-                return `
-                    <div class="unified-row p-4 sm:p-5 rounded-2xl border border-miamiCyan/30 shadow-md space-y-2 hover:border-miamiCyan transition">
-                        <div class="flex justify-between items-center gap-2">
-                            <span class="text-[10px] font-black uppercase bg-miamiCyan/20 text-miamiCyan px-2.5 py-0.5 rounded-full">${t.category}</span>
-                            <div class="flex items-center gap-2">
-                                <span class="text-[11px] font-bold row-meta">💬 ${t.replies || 0} Replies</span>
-                                ${renderReportButtonHtml('Forum Thread', t.title, threadCtx, true)}
-                            </div>
-                        </div>
-                        <h3 class="text-base font-black row-title">${t.title}</h3>
-                        <p class="text-xs row-body leading-relaxed">${t.body}</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-miamiCyan/20 text-[10px] font-bold text-miamiCyan">
-                            <span>Started by ${t.author}</span>
-                            <span class="row-meta">${t.date || ''}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function openNewThreadModal() { document.getElementById('newThreadModal').classList.remove('hidden'); }
-        window.openNewThreadModal = openNewThreadModal;
-        function closeNewThreadModal() { document.getElementById('newThreadModal').classList.add('hidden'); }
-        window.closeNewThreadModal = closeNewThreadModal;
-
-        async function handleNewThreadSubmit(e) {
-            e.preventDefault();
-            const author = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
-            const newThread = {
-                title: document.getElementById('newThreadTitle').value,
-                category: document.getElementById('newThreadCategory').value,
-                author,
-                date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-                replies: 0,
-                body: document.getElementById('newThreadBody').value
-            };
-
-            if (_supabaseClient) {
-                const { data, error } = await _supabaseClient.from('forum_threads').insert([newThread]).select();
-                if (!error && Array.isArray(data) && data.length > 0) {
-                    forumThreads = [...data, ...forumThreads];
-                } else {
-                    forumThreads.unshift(newThread);
-                }
-            } else {
-                forumThreads.unshift(newThread);
-            }
-
-            renderForumThreads();
-            renderRightSidebarWidgets();
-            closeNewThreadModal();
-            e.target.reset();
-        }
-        window.handleNewThreadSubmit = handleNewThreadSubmit;
-
-        function renderRightSidebarWidgets() {
-            const now = new Date();
-            const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-
-            const miniCal = document.getElementById('sidebarMiniCalendar');
-            if (miniCal) {
-                let html = '';
-                for (let d = 1; d <= 30; d++) {
-                    const dateStr = `2026-11-${String(d).padStart(2, '0')}`;
-                    const hasEv = registeredEvents.some(e => e.date === dateStr);
-                    const isToday = dateStr === todayIso;
-                    html += `<div onclick="switchTab('calendar')" class="py-1 rounded cursor-pointer transition ${isToday ? 'bg-miamiPink text-white font-black' : hasEv ? 'bg-miamiCyan/20 text-miamiCyan font-black' : 'row-meta hover:bg-miamiCyan/10'}">${d}</div>`;
-                }
-                miniCal.innerHTML = html;
-            }
-
-            const todaysBox = document.getElementById('sidebarTodaysEvents');
-            if (todaysBox) {
-                const todays = registeredEvents.filter(e => e.date === todayIso);
-                todaysBox.innerHTML = todays.length ? todays.map(e => `
-                    <div onclick="openEventDetailPage('${escapeJsSingleQuote(e.title)}')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
-                        <p class="font-black row-title leading-tight">${e.title}</p>
-                        <p class="text-[10px] text-miamiCyan font-bold">🕒 ${e.time || ''} ${e.venueName ? `• ${e.venueName}` : ''}</p>
-                    </div>
-                `).join('') : '<p class="row-meta text-[11px]">No events listed for today.</p>';
-            }
-
-            const forumBox = document.getElementById('sidebarLatestForum');
-            if (forumBox) {
-                forumBox.innerHTML = forumThreads.length ? forumThreads.slice(0, 3).map(t => `
-                    <div onclick="switchTab('forum')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiCyan/20 hover:border-miamiCyan cursor-pointer transition space-y-1">
-                        <p class="font-bold row-title leading-tight line-clamp-2">${t.title}</p>
-                        <p class="text-[10px] text-miamiCyan font-bold">By ${t.author} • ${t.replies || 0} replies</p>
-                    </div>
-                `).join('') : '<p class="row-meta text-[11px]">No forum posts yet.</p>';
-            }
-
-            const classBox = document.getElementById('sidebarLatestClassifieds');
-            if (classBox) {
-                classBox.innerHTML = classifiedListings.length ? classifiedListings.slice(0, 3).map(c => `
-                    <div onclick="switchTab('classifieds')" class="p-2.5 rounded-xl bg-miamiCyan/10 border border-miamiPink/20 hover:border-miamiPink cursor-pointer transition space-y-1">
-                        <span class="text-[9px] font-black uppercase text-miamiPink">${c.category}</span>
-                        <p class="font-bold row-title leading-tight line-clamp-1">${c.title}</p>
-                        <p class="text-[10px] text-emerald-400 font-bold">${c.price}</p>
-                    </div>
-                `).join('') : '<p class="row-meta text-[11px]">No classifieds yet.</p>';
-            }
-        }
-
-        function generateCalendarDays() {
-            const grid = document.getElementById('calendarGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            for (let day = 1; day <= 30; day++) {
-                const dateStr = `2026-11-${String(day).padStart(2, '0')}`;
-                const dayEvents = registeredEvents.filter(ev => ev.date === dateStr);
-                const cell = document.createElement('div');
-                cell.className = 'min-h-[95px] sm:min-h-[110px] unified-row rounded-xl p-2 border border-miamiCyan/30 flex flex-col justify-between gap-1 overflow-hidden';
-                let eventsHTML = '';
-                dayEvents.forEach(ev => {
-                    eventsHTML += `<div class="mt-1 bg-miamiCyan/15 border border-miamiCyan/40 rounded-lg p-1 cursor-pointer hover:border-miamiPink transition" onclick="openEventDetailPage('${escapeJsSingleQuote(ev.title)}')"><span class="text-[9px] font-black text-miamiCyan truncate block">${ev.title}</span></div>`;
-                });
-                cell.innerHTML = `<div class="flex justify-between items-center"><span class="font-black text-xs row-title">${day}</span>${dayEvents.length ? `<span class="w-2 h-2 rounded-full bg-miamiPink"></span>` : ''}</div><div class="space-y-1">${eventsHTML}</div>`;
-                grid.appendChild(cell);
-            }
-        }
-
-        function initMap() {
-            const mapContainer = document.getElementById('eventsAlbufeiraMap');
-            if (mapContainer && !albufeiraMap && typeof L !== 'undefined') {
-                albufeiraMap = L.map('eventsAlbufeiraMap').setView([37.0881, -8.2520], 13);
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors',
-                    maxZoom: 19
-                }).addTo(albufeiraMap);
-                mapMarkersGroup = L.layerGroup().addTo(albufeiraMap);
-            }
-        }
-
-        function refreshMapMarkers(selectedVenueName = null) {
-            if (!albufeiraMap) initMap();
-            if (!albufeiraMap || !mapMarkersGroup) return;
-            mapMarkersGroup.clearLayers();
-
-            const targetName = selectedVenueName || focusedVenueName;
-            const badge = document.getElementById('selectedMapVenueBadge');
-            if (targetName) {
-                if (badge) {
-                    badge.textContent = `📍 ${targetName}`;
-                    badge.classList.remove('hidden');
-                }
-            } else if (badge) {
-                badge.classList.add('hidden');
-            }
-
-            const venuesToRender = registeredVenues.filter(v => {
-                const isSelected = targetName && v.name.toLowerCase() === targetName.toLowerCase();
-                const hasRealCoords = v.lat !== undefined && v.lng !== undefined && v.lat !== null && v.lng !== null && !Number.isNaN(parseFloat(v.lat)) && !Number.isNaN(parseFloat(v.lng)) && !(parseFloat(v.lat) === 0 && parseFloat(v.lng) === 0);
-                return isSelected || hasRealCoords;
-            });
-
-            venuesToRender.forEach(v => {
-                const isSelected = targetName && v.name.toLowerCase() === targetName.toLowerCase();
-                const [lat, lng] = getVenueCoords(v);
-
-                const pinIcon = L.divIcon({
-                    className: 'pulse-venue-pin',
-                    html: `<div class="pulse-pin-dot ${isSelected ? 'active-pin' : ''}" title="${v.name}"></div>`,
-                    iconSize: isSelected ? [22, 22] : [16, 16],
-                    iconAnchor: isSelected ? [11, 11] : [8, 8]
-                });
-
-                const safeName = escapeJsSingleQuote(v.name || '');
-                const popupHtml = `
-                    <div style="min-width: 150px; font-family: 'Plus Jakarta Sans', sans-serif;">
-                        <div style="font-weight: 800; font-size: 13px; color: #0F172A;">${v.name}</div>
-                        <div style="font-size: 11px; color: #475569; margin-top: 2px;">${v.address || v.area || 'Albufeira'}</div>
-                        <button onclick="openVenueDetailPage('${safeName}')" style="margin-top: 6px; background: #FF007F; color: #FFFFFF; border: none; border-radius: 6px; padding: 3px 8px; font-size: 10px; font-weight: 800; cursor: pointer;">View Venue →</button>
-                    </div>
-                `;
-
-                const marker = L.marker([lat, lng], { icon: pinIcon, zIndexOffset: isSelected ? 1000 : 0 })
-                    .addTo(mapMarkersGroup)
-                    .bindPopup(popupHtml);
-
-                if (isSelected) {
-                    marker.openPopup();
-                }
-            });
-        }
-
-        function toggleManualDayNightMode() {
-            const htmlTag = document.documentElement;
-            const newMode = htmlTag.classList.contains('night-mode') ? 'day-mode' : 'night-mode';
-            applyThemeMode(newMode);
-            localStorage.setItem('albufeira_manual_theme', newMode);
-            updateThemeButtonUI();
-        }
-        window.toggleManualDayNightMode = toggleManualDayNightMode;
-
-        function updateThemeButtonUI() {
-            const isNight = document.documentElement.classList.contains('night-mode');
-            const themeText = document.getElementById('themeText');
-            const themeIcon = document.getElementById('themeIcon');
-            if (themeText) themeText.textContent = isNight ? 'Day Mode' : 'Night Mode';
-            if (themeIcon) themeIcon.setAttribute('data-lucide', isNight ? 'sun' : 'moon');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function switchTab(tabId, pushState = true, shouldScrollTop = true) {
-            ['events', 'directory', 'venue-detail', 'event-detail', 'calendar', 'articles', 'classifieds', 'forum', 'links', 'info'].forEach(t => {
-                document.getElementById('tab-content-' + t)?.classList.add('hidden');
-            });
-            document.getElementById('tab-content-' + tabId)?.classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-sm');
-                btn.classList.add('text-gray-200', 'font-bold');
-            });
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-gray-200', 'font-bold');
-                activeBtn.classList.add('bg-miamiCyan', 'text-miamiDark', 'font-black', 'shadow-sm');
-                activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
-
-            if (pushState) {
-                history.pushState({ tab: tabId }, "", `#${tabId}`);
-            }
-
-            if (shouldScrollTop) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            syncHeaderOffset();
-
-            if (tabId === 'events') {
-                setTimeout(() => {
-                    initMap();
-                    albufeiraMap.invalidateSize();
-                    refreshMapMarkers(focusedVenueName);
-                }, 150);
-            }
-        }
-        window.switchTab = switchTab;
-
-        function toggleEventsMap() {
-            const container = document.getElementById('eventsMapContainer');
-            const isHidden = container.style.display === 'none';
-            container.style.display = isHidden ? 'block' : 'none';
-            if (isHidden) {
-                setTimeout(() => {
-                    initMap();
-                    albufeiraMap.invalidateSize();
-                    refreshMapMarkers(focusedVenueName);
-                }, 100);
-            }
-        }
-        window.toggleEventsMap = toggleEventsMap;
-
-        function openModal() { document.getElementById('eventModal').classList.remove('hidden'); }
-        window.openModal = openModal;
-        function closeModal() { document.getElementById('eventModal').classList.add('hidden'); }
-        window.closeModal = closeModal;
-        function openVenueModal() { document.getElementById('venueModal').classList.remove('hidden'); }
-        window.openVenueModal = openVenueModal;
-        function closeVenueModal() { document.getElementById('venueModal').classList.add('hidden'); }
-        window.closeVenueModal = closeVenueModal;
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        window.openLoginModal = openLoginModal;
-        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
-        window.closeLoginModal = closeLoginModal;
-        function openArticleModal() { alert("Article creator"); }
-        window.openArticleModal = openArticleModal;
-
-        function onVenueInputChange() {
-            const val = document.getElementById('newEventVenueInput').value;
-            const venue = registeredVenues.find(v => v.name.toLowerCase() === val.toLowerCase());
-            if (venue && venue.area) document.getElementById('newEventZone').value = venue.area;
-        }
-        window.onVenueInputChange = onVenueInputChange;
-
-        async function uploadModeratedPoster(file) {
-            if (!file) return null;
-
-            const isJpeg = file.type === 'image/jpeg' || file.type === 'image/pjpeg';
-            if (!isJpeg || file.size === 0 || file.size > 3 * 1024 * 1024) {
-                throw new Error('Please choose a valid JPG/JPEG image under 3 MB.');
-            }
-
-            const header = new Uint8Array(await file.slice(0, 3).arrayBuffer());
-            if (header[0] !== 0xff || header[1] !== 0xd8 || header[2] !== 0xff) {
-                throw new Error('File header is not a valid JPEG image.');
-            }
-
-            const formData = new FormData();
-            formData.append('poster', file);
-
-            const response = await fetch(
-                `${SUPABASE_URL}/functions/v1/moderate-poster`,
-                {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-                        apikey: SUPABASE_PUBLISHABLE_KEY,
-                    },
-                    body: formData,
-                }
-            );
-
-            const result = await response.json();
-            if (!response.ok || !result.approved) {
-                throw new Error(result.reason || 'Poster was rejected by content moderation.');
-            }
-
-            return result.posterUrl;
-        }
-
-        async function handleEventSubmit(e) {
-            e.preventDefault();
-            const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
-            const posterFile = document.getElementById('eventPosterInput')?.files?.[0];
-            let imageUrl = (document.getElementById('newEventImage')?.value || '').trim();
-            let posterWarning = '';
-
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            if (submitBtn) submitBtn.disabled = true;
-
-            try {
-                if (posterFile) {
-                    try {
-                        imageUrl = await uploadModeratedPoster(posterFile);
-                    } catch (posterErr) {
-                        posterWarning = posterErr.message || 'Poster upload skipped.';
-                    }
-                }
-
-                const newEv = {
-                    title: document.getElementById('newEventTitle').value.trim(),
-                    venueName: document.getElementById('newEventVenueInput').value.trim(),
-                    zone: document.getElementById('newEventZone').value.trim() || 'Albufeira',
-                    category: document.getElementById('newEventCategory').value,
-                    date: document.getElementById('newEventDate').value,
-                    time: document.getElementById('newEventTime').value.trim(),
-                    fee: document.getElementById('newEventFee').value.trim() || 'Free',
-                    image: imageUrl,
-                    desc: document.getElementById('newEventDesc').value.trim(),
-                    author: currentAuthor
-                };
-
-                if (_supabaseClient) {
-                    const { data, error } = await _supabaseClient.from('events').insert([newEv]).select();
-                    if (error) {
-                        console.error('Supabase events insert error:', error);
-                        alert(`Could not save event to Supabase: ${error.message || JSON.stringify(error)}`);
-                        return;
-                    }
-                    if (Array.isArray(data) && data.length > 0) {
-                        registeredEvents.push(data[0]);
-                    } else {
-                        registeredEvents.push(newEv);
-                    }
-                } else {
-                    registeredEvents.push(newEv);
-                }
-
-                syncAvailableZones();
-                renderEventsGrid();
-                generateCalendarDays();
-                renderRightSidebarWidgets();
-                closeModal();
-                e.target.reset();
-                if (posterWarning) {
-                    alert(`Event saved, but poster was not uploaded: ${posterWarning}`);
-                }
-            } catch (err) {
-                console.error('Unexpected event save error:', err);
-                alert(err.message || 'Unable to save event.');
-            } finally {
-                if (submitBtn) submitBtn.disabled = false;
-            }
-        }
-        window.handleEventSubmit = handleEventSubmit;
-
-        async function handleVenueSubmit(e) {
-            e.preventDefault();
-            const currentAuthor = localStorage.getItem('albufeira_user_name') || localStorage.getItem('albufeira_user_email') || 'Member';
-            const rawAddr = document.getElementById('newVenueAddress').value.trim();
-            const areaVal = document.getElementById('newVenueArea').value.trim() || 'Albufeira';
-            const catGroupVal = document.getElementById('newVenueCategoryGroup').value;
-
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            if (submitBtn) submitBtn.disabled = true;
-
-            const newV = {
-                town: 'Albufeira',
-                zone: areaVal,
-                name: document.getElementById('newVenueName').value.trim(),
-                category: catGroupVal,
-                address: rawAddr || ADDRESS_PLACEHOLDER,
-                website: (document.getElementById('newVenueWebsite')?.value || '').trim() || null,
-                lat: 37.0955,
-                lng: -8.2505,
-                area: 'Albufeira',
-                categoryGroup: catGroupVal,
-                schedule: 'Daily',
-                author: currentAuthor
-            };
-
-            try {
-                if (_supabaseClient) {
-                    const { data, error } = await _supabaseClient.from('directory').insert([newV]).select();
-                    if (error) {
-                        console.error('Supabase directory insert error:', error);
-                        alert(`Could not save venue to Supabase: ${error.message || JSON.stringify(error)}`);
-                        return;
-                    }
-                    if (Array.isArray(data) && data.length > 0) {
-                        registeredVenues = [...data, ...registeredVenues];
-                    } else {
-                        registeredVenues.unshift(newV);
-                    }
-                } else {
-                    registeredVenues.unshift(newV);
-                }
-
-                syncAvailableZones();
-                populateVenueAutocomplete();
-                refreshMapMarkers(focusedVenueName);
-                renderDirectoryGrid();
-                closeVenueModal();
-                e.target.reset();
-            } catch (err) {
-                console.error('Unexpected venue save error:', err);
-                alert(err.message || 'Unable to save venue.');
-            } finally {
-                if (submitBtn) submitBtn.disabled = false;
-            }
-        }
-        window.handleVenueSubmit = handleVenueSubmit;
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const emailInput = document.getElementById('loginEmailInput').value.trim();
-            const customNameInput = document.getElementById('loginNameInput')?.value.trim();
-            let resolvedName = customNameInput || emailInput.split('@')[0] || "Member";
-
-            if (_supabaseClient) {
-                try {
-                    const { data: existing } = await _supabaseClient
-                        .from('profiles')
-                        .select('id, full_name')
-                        .eq('email', emailInput)
-                        .maybeSingle();
-
-                    if (existing && existing.full_name && !customNameInput) {
-                        resolvedName = existing.full_name;
-                    } else {
-                        await _supabaseClient
-                            .from('profiles')
-                            .upsert([{ email: emailInput, full_name: resolvedName }], { onConflict: 'email' });
-                    }
-                } catch (err) {}
-            }
-
-            localStorage.setItem('albufeira_user_email', emailInput);
-            localStorage.setItem('albufeira_user_name', resolvedName);
-            renderUserAuthUI(resolvedName);
-            if (resolvedName.toLowerCase() === 'admin') document.getElementById('writeArticleBtn').classList.remove('hidden');
-            closeLoginModal();
-        }
-        window.handleLogin = handleLogin;
-
-        async function checkExistingAuth() {
-            const savedEmail = localStorage.getItem('albufeira_user_email');
-            let savedName = localStorage.getItem('albufeira_user_name');
-            if (savedEmail && !savedName && _supabaseClient) {
-                try {
-                    const { data } = await _supabaseClient.from('profiles').select('full_name').eq('email', savedEmail).maybeSingle();
-                    if (data && data.full_name) savedName = data.full_name;
-                } catch (err) {}
-            }
-            if (savedName) {
-                renderUserAuthUI(savedName);
-                if (savedName.toLowerCase() === 'admin') document.getElementById('writeArticleBtn').classList.remove('hidden');
-            }
-        }
-
-        function renderUserAuthUI(name) {
-            const authArea = document.getElementById('authArea');
-            if (!authArea) return;
-            authArea.innerHTML = `
-                <div class="theme-card px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-miamiCyan/40 flex items-center gap-1.5 text-[11px] sm:text-xs font-black theme-text-main shadow-sm">
-                    <i data-lucide="user-check" class="w-3.5 h-3.5 text-miamiCyan"></i>
-                    <span class="max-w-[80px] sm:max-w-none truncate">${name}</span>
-                    <button onclick="handleLogout()" class="text-miamiPink hover:opacity-75 transition ml-1 cursor-pointer flex items-center" title="Logout">
-                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                    </button>
-                </div>
-            `;
-            if (window.lucide) lucide.createIcons();
-            syncHeaderOffset();
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('albufeira_user_email');
-            localStorage.removeItem('albufeira_user_name');
-            document.getElementById('writeArticleBtn').classList.add('hidden');
-            const authArea = document.getElementById('authArea');
-            if (authArea) {
-                authArea.innerHTML = `
-                    <button id="loginNavBtn" onclick="openLoginModal()" class="theme-card theme-text-main text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 rounded-xl border border-miamiCyan/40 transition flex items-center gap-1 cursor-pointer shadow-sm hover:border-miamiCyan">
-                        <i data-lucide="log-in" class="w-3.5 h-3.5 text-miamiCyan"></i> <span data-i18n="login">Login</span>
-                    </button>
-                `;
-            }
-            if (window.lucide) lucide.createIcons();
-            syncHeaderOffset();
-        }
-        window.handleLogout = handleLogout;
-    </script>
+      });
+    });
+
+    document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+        activeCategory = pill.dataset.category;
+        renderEvents();
+      });
+    });
+
+    document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+        activeZone = pill.dataset.zone;
+        renderVenues();
+      });
+    });
+
+    document.getElementById("openAddEventBtn").addEventListener("click", openAddEventModal);
+    document.getElementById("closeEventModalBtn").addEventListener("click", closeEventModal);
+    document.getElementById("cancelEventBtn").addEventListener("click", closeEventModal);
+
+    // Boot
+    updateAdminUI();
+    loadInitialData();
+  </script>
 </body>
 </html>
