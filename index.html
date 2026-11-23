@@ -223,7 +223,7 @@
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 16px 20px 64px;
+      padding: 16px 20px 84px;
     }
 
     /* Slim Action Bar (+ Add Event & + Add Venue matched) */
@@ -705,7 +705,7 @@
 
     footer {
       max-width: 1280px;
-      margin: 0 auto 40px;
+      margin: 0 auto 76px;
       padding: 0 20px;
     }
 
@@ -768,13 +768,14 @@
       }
     }
 
+    /* Centered Mobile Bottom Action Button */
     .mobile-fab-add {
       display: none;
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
       bottom: 20px;
-      z-index: 1400;
+      z-index: 1600;
       width: 54px;
       height: 54px;
       border-radius: 50%;
@@ -789,6 +790,12 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 4px 4px 0px #050711, 0 8px 24px rgba(255, 42, 133, 0.45);
+    }
+
+    @media (max-width: 768px) {
+      .mobile-fab-add {
+        display: flex;
+      }
     }
 
     .logo-qr-wrap {
@@ -836,12 +843,6 @@
     .logo-qr-popover.open {
       display: block;
     }
-
-    @media (max-width: 640px) {
-      .mobile-fab-add {
-        display: flex;
-      }
-    }
   </style>
 </head>
 <body>
@@ -849,119 +850,135 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Batman / Graphic-Novel Dusk Gull Mascot SVG -->
-          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="128" height="128" role="img" aria-label="Albufeira Pulse Graphic Dusk Gull Mascot">
+          <!-- Manga / Video-Game Cel-Shaded Gull Mascot SVG -->
+          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="128" height="128" role="img" aria-label="Albufeira Pulse Manga Game Gull Mascot">
             <defs>
-              <linearGradient id="noirBadgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#141932" />
-                <stop offset="55%" stop-color="#0b0e1d" />
-                <stop offset="100%" stop-color="#060812" />
+              <linearGradient id="gameArenaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#171e3d" />
+                <stop offset="55%" stop-color="#0b0f22" />
+                <stop offset="100%" stop-color="#060813" />
               </linearGradient>
-              <linearGradient id="duskHorizonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.7" />
-                <stop offset="50%" stop-color="#ffb800" stop-opacity="0.65" />
-                <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.75" />
-              </linearGradient>
-              <linearGradient id="gullWhiteLit" x1="15%" y1="10%" x2="85%" y2="90%">
+              <linearGradient id="celPlumageLit" x1="10%" y1="5%" x2="80%" y2="95%">
                 <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="70%" stop-color="#e9eff7" />
-                <stop offset="100%" stop-color="#c3cedd" />
+                <stop offset="75%" stop-color="#eef4fc" />
+                <stop offset="100%" stop-color="#cdd9ea" />
               </linearGradient>
-              <linearGradient id="gullShadowPlane" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#1b233b" />
-                <stop offset="100%" stop-color="#0a0e1a" />
+              <linearGradient id="celWingIndigo" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#293863" />
+                <stop offset="60%" stop-color="#141d38" />
+                <stop offset="100%" stop-color="#090e1d" />
               </linearGradient>
-              <linearGradient id="beakNoirGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffd026" />
-                <stop offset="100%" stop-color="#ff5a2a" />
+              <linearGradient id="celGoldBeak" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe033" />
+                <stop offset="55%" stop-color="#ff9e00" />
+                <stop offset="100%" stop-color="#ff4d2e" />
               </linearGradient>
             </defs>
 
-            <!-- Outer dark emblem disc & crisp rim -->
-            <circle cx="120" cy="120" r="108" fill="url(#noirBadgeGrad)" stroke="#00f0ff" stroke-width="2.4" stroke-opacity="0.6" />
+            <!-- Outer game emblem frame -->
+            <circle cx="120" cy="120" r="108" fill="url(#gameArenaGrad)" stroke="#00f0ff" stroke-width="2.6" stroke-opacity="0.7" />
             <circle cx="120" cy="120" r="101" fill="none" stroke="#050711" stroke-width="3" />
 
-            <!-- Subtle dusk skyline & whitewashed ledge beneath the sentinel gull -->
-            <path d="M36 168 L58 168 L58 156 L72 156 L72 168 L94 168 L94 150 L110 150 L110 168 L146 168 L146 153 L164 153 L164 168 L184 168 L184 158 L202 158 L202 168 L206 168 L206 175 L36 175 Z"
-                  fill="#10152b" stroke="#050711" stroke-width="1.5" />
-            <line x1="46" y1="168" x2="194" y2="168" stroke="url(#duskHorizonGrad)" stroke-width="2" stroke-linecap="round" />
-
-            <!-- Whitewashed parapet ledge -->
-            <polygon points="44,175 196,175 192,193 48,193" fill="#dce4ef" stroke="#050711" stroke-width="3" stroke-linejoin="round" />
-            <polygon points="48,193 192,193 190,201 50,201" fill="#182038" stroke="#050711" stroke-width="2.5" stroke-linejoin="round" />
-
-            <!-- Sharp amber/orange legs & talons gripping the ledge -->
-            <g stroke="#050711" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="116,154 112,175" fill="none" stroke="#ff9d00" stroke-width="6.5" />
-              <polyline points="116,154 112,175" fill="none" stroke="#050711" stroke-width="2.4" />
-              <polygon points="112,175 95,178 105,173 118,175" fill="url(#beakNoirGrad)" />
-
-              <polyline points="134,154 134,175" fill="none" stroke="#ff9d00" stroke-width="6.5" />
-              <polyline points="134,154 134,175" fill="none" stroke="#050711" stroke-width="2.4" />
-              <polygon points="134,175 118,178 128,173 142,175" fill="url(#beakNoirGrad)" />
+            <!-- Manga speed / energy streaks behind the sentinel -->
+            <g stroke="#00f0ff" stroke-linecap="round" opacity="0.45">
+              <line x1="28" y1="68" x2="86" y2="82" stroke-width="2" />
+              <line x1="22" y1="92" x2="74" y2="102" stroke-width="1.4" />
+              <line x1="176" y1="42" x2="208" y2="30" stroke-width="2" />
+              <line x1="186" y1="56" x2="214" y2="48" stroke-width="1.4" />
+            </g>
+            <g stroke="#ff2a85" stroke-linecap="round" opacity="0.5">
+              <line x1="34" y1="116" x2="72" y2="122" stroke-width="1.8" />
+              <line x1="182" y1="98" x2="212" y2="94" stroke-width="1.6" />
             </g>
 
-            <!-- Swept tail feathers -->
-            <polygon points="78,133 34,144 49,151 39,156 84,146" fill="url(#gullShadowPlane)" stroke="#050711" stroke-width="3.4" stroke-linejoin="round" />
-            <polygon points="78,133 44,144 82,141" fill="#f1f5f9" stroke="#050711" stroke-width="2.4" stroke-linejoin="round" />
+            <!-- Stylized coastal wall / stage ledge -->
+            <polygon points="40,174 200,174 195,193 45,193" fill="#e6eef8" stroke="#050711" stroke-width="3.2" stroke-linejoin="round" />
+            <!-- Cel-shadow strip on ledge -->
+            <polygon points="45,186 195,186 195,193 45,193" fill="#9fb0c7" />
+            <polygon points="45,193 195,193 192,201 48,201" fill="#161f38" stroke="#050711" stroke-width="2.6" stroke-linejoin="round" />
 
-            <!-- Proud chest & head silhouette (lit side) -->
-            <path d="M134 42
-                     L153 42
-                     L167 52
-                     L171 67
-                     L167 84
-                     C166 102, 169 124, 157 142
-                     C146 156, 127 160, 106 158
-                     C88 156, 75 145, 76 131
-                     C96 126, 114 111, 124 88
-                     C130 73, 128 55, 134 42 Z"
-                  fill="url(#gullWhiteLit)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
+            <!-- Manga-proportioned legs & talons -->
+            <g stroke="#050711" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="116" y1="154" x2="112" y2="174" stroke="#ff9e00" stroke-width="6.5" />
+              <line x1="116" y1="154" x2="112" y2="174" stroke="#050711" stroke-width="2.4" />
+              <polygon points="112,174 94,177 105,172 119,174" fill="url(#celGoldBeak)" />
 
-            <!-- Angular comic-noir shadow plane under belly & lower neck -->
-            <path d="M167 84
-                     C166 104, 168 126, 156 143
-                     C144 157, 124 160, 102 157
-                     L122 141
-                     L146 118
-                     L158 92 Z"
-                  fill="#b8c4d4" opacity="0.65" />
+              <line x1="134" y1="154" x2="134" y2="174" stroke="#ff9e00" stroke-width="6.5" />
+              <line x1="134" y1="154" x2="134" y2="174" stroke="#050711" stroke-width="2.4" />
+              <polygon points="134,174 117,177 128,172 143,174" fill="url(#celGoldBeak)" />
+            </g>
 
-            <!-- Dramatic swept dark mantle / wing with angular cape-like edge -->
+            <!-- Sharp manga tail feathers -->
+            <polygon points="78,132 30,141 47,149 35,156 84,146" fill="url(#celWingIndigo)" stroke="#050711" stroke-width="3.6" stroke-linejoin="round" />
+            <polygon points="78,132 42,142 82,140" fill="#ffffff" stroke="#050711" stroke-width="2.4" stroke-linejoin="round" />
+
+            <!-- Main body & proud head silhouette -->
+            <path d="M134 40
+                     L155 41
+                     L169 52
+                     L172 67
+                     L168 84
+                     C167 103, 170 125, 158 143
+                     C146 157, 126 160, 105 158
+                     C87 156, 75 145, 76 131
+                     C97 126, 115 110, 125 87
+                     C131 72, 129 54, 134 40 Z"
+                  fill="url(#celPlumageLit)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
+
+            <!-- Crisp anime/game cel-shaded shadow band (hard-edged, no blur) -->
+            <path d="M168 84
+                     C167 104, 169 126, 157 143
+                     C145 157, 125 160, 103 157
+                     L121 143
+                     L144 123
+                     L156 97 Z"
+                  fill="#b5c4d8" />
+
+            <!-- Glossy white anime specular highlight on upper chest/head -->
+            <polygon points="137,45 150,45 144,68 133,66" fill="#ffffff" opacity="0.9" />
+
+            <!-- Swept manga wing with cel highlight & sharp primary feathers -->
             <path d="M131 82
-                     C106 84, 77 98, 55 123
-                     L31 142
-                     L51 143
-                     L40 152
-                     L62 150
-                     L53 158
+                     C105 84, 75 98, 53 123
+                     L26 141
+                     L49 143
+                     L36 153
+                     L61 150
+                     L50 159
                      L79 152
-                     C107 146, 132 132, 142 112
-                     C147 101, 144 89, 131 82 Z"
-                  fill="url(#gullShadowPlane)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
+                     C108 146, 133 132, 143 111
+                     C148 100, 145 89, 131 82 Z"
+                  fill="url(#celWingIndigo)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
 
-            <!-- Sharp cyan/white rim light along the upper wing & crest -->
-            <path d="M134 45 L152 45 L164 54" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" opacity="0.85" />
-            <path d="M128 85 C106 87, 81 100, 60 123" fill="none" stroke="#00f0ff" stroke-width="1.8" stroke-linecap="round" opacity="0.6" />
+            <!-- Hard-edged cel highlight along the wing shoulder -->
+            <path d="M129 86 C106 88, 80 100, 61 122 L84 119 C104 111, 122 101, 133 90 Z" fill="#465f9c" />
+            <!-- Cyan edge glint -->
+            <path d="M131 83 C106 85, 77 99, 55 123" fill="none" stroke="#00f0ff" stroke-width="1.8" stroke-linecap="round" />
 
-            <!-- Hooked, angular gull beak with gape line & gonys spot -->
-            <path d="M169 66
-                     L202 71
-                     C208 73, 207 80, 198 83
+            <!-- Sharp video-game hooked beak with cel highlight -->
+            <path d="M170 66
+                     L205 71
+                     C211 73, 210 80, 200 83
                      L186 83
-                     L182 87
+                     L182 88
                      L167 84 Z"
-                  fill="url(#beakNoirGrad)" stroke="#050711" stroke-width="3.4" stroke-linejoin="round" />
-            <line x1="170" y1="77" x2="199" y2="77" stroke="#050711" stroke-width="2.4" stroke-linecap="round" />
-            <circle cx="192" cy="80.2" r="2.2" fill="#ff2a85" />
+                  fill="url(#celGoldBeak)" stroke="#050711" stroke-width="3.4" stroke-linejoin="round" />
+            <polygon points="172,69 197,72 195,75 172,73" fill="#fff394" />
+            <line x1="170" y1="77" x2="201" y2="77" stroke="#050711" stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="193" cy="80.2" r="2.2" fill="#ff2a85" />
 
-            <!-- Determined, narrowed graphic-novel eye & brow -->
+            <!-- Expressive manga / RPG character eye with twin shine dots -->
             <g>
-              <polygon points="145,57 163,56 165,65 147,66" fill="#ffffff" stroke="#050711" stroke-width="2.6" stroke-linejoin="round" />
-              <circle cx="157" cy="61" r="3.6" fill="#050711" />
-              <circle cx="158.4" cy="59.6" r="1.4" fill="#00f0ff" />
-              <!-- Fierce angled brow line -->
-              <line x1="143" y1="51" x2="165" y2="54" stroke="#050711" stroke-width="3.4" stroke-linecap="round" />
+              <polygon points="145,56 164,55 166,65 147,66" fill="#ffffff" stroke="#050711" stroke-width="2.6" stroke-linejoin="round" />
+              <!-- Upper iris shadow -->
+              <path d="M148 57 L164 56 L164 60 L148 61 Z" fill="#8fa4c4" />
+              <!-- Dark pupil -->
+              <circle cx="157" cy="61" r="3.8" fill="#050711" />
+              <!-- Primary & secondary anime catchlights -->
+              <circle cx="158.6" cy="59.2" r="1.7" fill="#ffffff" />
+              <circle cx="155.2" cy="62.4" r="0.9" fill="#00f0ff" />
+              <!-- Bold manga brow -->
+              <polygon points="142,49 166,53 165,56 142,52" fill="#050711" />
             </g>
           </svg>
 
