@@ -848,6 +848,8 @@
           <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
           <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
+
+        <button id="openAddVenueBtn" class="btn-primary" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
       </div>
 
       <div class="map-day-bar">
@@ -962,6 +964,65 @@
       </div>
     </section>
   </main>
+
+  <!-- ADD VENUE MODAL -->
+  <div id="venueModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="venueModalTitle">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="venueModalTitle" style="font-size: 1.25rem;">Add Venue</h3>
+        <button id="closeVenueModalBtn" class="btn-secondary" type="button">✕</button>
+      </div>
+
+      <form id="venueForm">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="venueNameInput">Venue Name *</label>
+            <input id="venueNameInput" type="text" required placeholder="e.g., Pau da Bandeira Viewpoint" />
+          </div>
+
+          <div class="form-group">
+            <label for="venueZoneInput">Zone *</label>
+            <select id="venueZoneInput" required>
+              <option value="Albufeira" selected>Albufeira</option>
+              <option value="Central / Lidl">Central / Lidl</option>
+              <option value="Old Town">Old Town</option>
+              <option value="Areias São João / The Strip">Areias São João / The Strip</option>
+              <option value="Olhos de Água">Olhos de Água</option>
+              <option value="Santa Eulália">Santa Eulália</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="venueCategoryInput">Category</label>
+            <input id="venueCategoryInput" type="text" value="Venue" placeholder="e.g., Bar, Square, Beach, Hall" />
+          </div>
+
+          <div class="form-group full">
+            <label for="venueAddressInput">Address (Albufeira)</label>
+            <div style="display:flex; gap:8px;">
+              <input id="venueAddressInput" type="text" placeholder="e.g., Rua 5 de Outubro, Albufeira" />
+              <button id="lookupVenueCoordsBtn" class="btn-secondary" type="button" style="white-space:nowrap;">Find GPS</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="venueLatInput">Latitude</label>
+            <input id="venueLatInput" type="number" step="any" value="37.0955" />
+          </div>
+
+          <div class="form-group">
+            <label for="venueLngInput">Longitude</label>
+            <input id="venueLngInput" type="number" step="any" value="-8.2505" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="cancelVenueBtn" class="btn-secondary" type="button">Cancel</button>
+          <button id="submitVenueBtn" class="btn-primary" type="submit">Save Venue</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- EVENT FULL POSTER & DETAILS MODAL -->
   <div id="eventDetailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eventDetailTitle">
@@ -1860,6 +1921,98 @@
     }
 
     // =========================================================================
+    // 4B. ADD VENUE MODAL & GEOCODING
+    // =========================================================================
+    const venueModal = document.getElementById("venueModal");
+    const venueForm = document.getElementById("venueForm");
+
+    function openAddVenueModal() {
+      venueForm.reset();
+      document.getElementById("venueZoneInput").value = activeZone !== "ALL" ? activeZone : "Albufeira";
+      document.getElementById("venueCategoryInput").value = "Venue";
+      document.getElementById("venueLatInput").value = "37.0955";
+      document.getElementById("venueLngInput").value = "-8.2505";
+      venueModal.classList.add("open");
+    }
+
+    function closeVenueModal() {
+      venueModal.classList.remove("open");
+    }
+
+    document.getElementById("openAddVenueBtn").addEventListener("click", openAddVenueModal);
+    document.getElementById("closeVenueModalBtn").addEventListener("click", closeVenueModal);
+    document.getElementById("cancelVenueBtn").addEventListener("click", closeVenueModal);
+    venueModal.addEventListener("click", (e) => {
+      if (e.target === venueModal) closeVenueModal();
+    });
+
+    document.getElementById("lookupVenueCoordsBtn").addEventListener("click", async () => {
+      const nameVal = document.getElementById("venueNameInput").value.trim();
+      const addrVal = document.getElementById("venueAddressInput").value.trim();
+      const queryStr = [nameVal, addrVal, "Albufeira", "Portugal"].filter(Boolean).join(", ");
+      if (!queryStr) return;
+
+      const btn = document.getElementById("lookupVenueCoordsBtn");
+      const prev = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "...";
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(queryStr)}`
+        );
+        const hits = await res.json();
+        if (Array.isArray(hits) && hits.length > 0) {
+          document.getElementById("venueLatInput").value = Number(hits[0].lat).toFixed(5);
+          document.getElementById("venueLngInput").value = Number(hits[0].lon).toFixed(5);
+        } else {
+          alert("No GPS match found in Albufeira; you can enter coordinates manually.");
+        }
+      } catch (_) {
+        alert("Could not look up GPS coordinates right now.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = prev;
+      }
+    });
+
+    venueForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newVenue = {
+        name: document.getElementById("venueNameInput").value.trim(),
+        zone: document.getElementById("venueZoneInput").value.trim() || "Albufeira",
+        town: "Albufeira",
+        category: document.getElementById("venueCategoryInput").value.trim() || "Venue",
+        address: document.getElementById("venueAddressInput").value.trim() || "Albufeira, Algarve",
+        lat: Number(document.getElementById("venueLatInput").value) || 37.0955,
+        lng: Number(document.getElementById("venueLngInput").value) || -8.2505
+      };
+
+      if (supabaseClient) {
+        const { data, error } = await supabaseClient.from("directory").insert([newVenue]).select();
+        if (!error && data && data[0]) {
+          venuesData.push({
+            id: data[0].id || Date.now(),
+            name: data[0].name || newVenue.name,
+            zone: data[0].zone || newVenue.zone,
+            address: data[0].address || newVenue.address,
+            lat: Number(data[0].lat) || newVenue.lat,
+            lng: Number(data[0].lng) || newVenue.lng,
+            category: data[0].category || newVenue.category
+          });
+          populateVenueDatalist();
+          closeVenueModal();
+          renderVenues();
+          return;
+        }
+      }
+
+      venuesData.push({ ...newVenue, id: Date.now() });
+      populateVenueDatalist();
+      closeVenueModal();
+      renderVenues();
+    });
+
+    // =========================================================================
     // 5. EVENT MODAL, TIME DROPDOWN & ADMIN-ONLY EDITING
     // =========================================================================
     const eventModal = document.getElementById("eventModal");
@@ -2489,6 +2642,7 @@
         "cat.family": "Family & Festivals",
         "cat.sports": "Sports & Outdoors",
         "btn.addEvent": "+ Add Event",
+        "btn.addVenue": "+ Add Venue",
         "zone.all": "All Albufeira Zones",
         "cls.title": "Albufeira Classifieds",
         "cls.subtitle": "Local listings, rentals, items, and services in Albufeira.",
@@ -2529,6 +2683,7 @@
         "cat.family": "Família e Festas",
         "cat.sports": "Desporto e Ar Livre",
         "btn.addEvent": "+ Adicionar Evento",
+        "btn.addVenue": "+ Adicionar Espaço",
         "zone.all": "Todas as Zonas de Albufeira",
         "cls.title": "Classificados de Albufeira",
         "cls.subtitle": "Anúncios locais, arrendamentos, artigos e serviços em Albufeira.",
