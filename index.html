@@ -603,7 +603,7 @@
       display: none;
       position: fixed;
       left: 50%;
-transform: translateX(-50%);
+      transform: translateX(-50%);
       bottom: 20px;
       z-index: 50;
       width: 54px;
@@ -672,7 +672,6 @@ transform: translateX(-50%);
         display: flex;
       }
     }
-
   </style>
 </head>
 <body>
@@ -826,6 +825,7 @@ transform: translateX(-50%);
 
       <div id="emergencyGrid" class="emergency-grid"></div>
     </section>
+
     <!-- IMPRESSUM & LEGAL SECTION -->
     <section id="section-impressum" class="section-view">
       <div class="impressum-box" aria-label="Impressum e Nota Legal">
@@ -839,7 +839,7 @@ transform: translateX(-50%);
         <div class="impressum-grid">
           <div>
             <div class="impressum-sub">Responsabilidade Editorial &amp; Gestão</div>
-            <p>Projeto gerido a título não comercial por <strong>Kris</strong> e <strong>Lex</strong>. Os conteúdos submetidos por utilizadores nos classificados ou no fórum são da responsabilidade dos respetivos autores.</p>
+            <p>Projeto gerido a título não comercial pela equipa <strong>Albufeira Pulse</strong>. Os conteúdos submetidos por utilizadores nos classificados ou no fórum são da responsabilidade dos respetivos autores.</p>
           </div>
           <div>
             <div class="impressum-sub">Proteção de Dados (RGPD) &amp; Direitos</div>
@@ -1032,7 +1032,7 @@ transform: translateX(-50%);
           </div>
           <div class="form-group full">
             <label for="forumAuthor">Your Name</label>
-            <input id="forumAuthor" type="text" placeholder="Kris, Lex, or neighbor name" />
+            <input id="forumAuthor" type="text" placeholder="Admin or neighbor name" />
           </div>
           <div class="form-group full">
             <label for="forumMessage">Message *</label>
@@ -1051,15 +1051,15 @@ transform: translateX(-50%);
   <div id="adminModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
     <div class="modal-box" style="max-width: 400px;">
       <div class="modal-header">
-        <h3 id="adminModalTitle" style="font-size: 1.2rem;">Admin Access (Kris or Lex)</h3>
+        <h3 id="adminModalTitle" style="font-size: 1.2rem;">Admin Access</h3>
         <button id="closeAdminModalBtn" class="btn-secondary" type="button">✕</button>
       </div>
       <form id="adminLoginForm">
         <div class="form-group" style="margin-bottom: 12px;">
           <label for="adminNameSelect">Select Admin</label>
           <select id="adminNameSelect" required>
-            <option value="Kris">Kris</option>
-            <option value="Lex">Lex</option>
+            <option value="Admin1">Admin1</option>
+            <option value="Admin2">Admin2</option>
           </select>
         </div>
         <div class="form-group">
@@ -1067,7 +1067,7 @@ transform: translateX(-50%);
           <input id="adminPasscodeInput" type="password" required placeholder="Enter admin passcode" />
         </div>
         <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px;">
-          Only authenticated admins (Kris or Lex) can edit existing events.
+          Only authenticated admins can edit existing events.
         </p>
         <div class="modal-actions">
           <button id="cancelAdminBtn" class="btn-secondary" type="button">Cancel</button>
@@ -1077,7 +1077,7 @@ transform: translateX(-50%);
     </div>
   </div>
 
-    <footer>
+  <footer>
     <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background:var(--bg-card); border:1.5px solid var(--border-subtle); border-radius:14px; font-size:0.84rem; color:var(--text-muted);">
       <span>Albufeira Pulse — Local Guide &amp; Events</span>
       <div style="display:flex; align-items:center; gap:16px;">
@@ -1091,13 +1091,13 @@ transform: translateX(-50%);
     // =========================================================================
     // 1. SUPABASE CONFIGURATION & ADMIN AUTHENTICATION
     // =========================================================================
-    const SUPABASE_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
-    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "YOUR_ANON_KEY";
+    const SUPABASE_URL = window.SUPABASE_URL || "https://ljncrabbelxjnpvmvdau.supabase.co";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6";
     const ADMIN_PASSCODE = window.ALBUFEIRA_ADMIN_PASSCODE || "albufeira-admin";
-    const ALLOWED_ADMINS = ["kris", "lex"];
+    const ALLOWED_ADMINS = ["admin1", "admin2"];
 
     const supabaseClient =
-      window.supabase && !SUPABASE_URL.includes("YOUR_PROJECT")
+      window.supabase && !SUPABASE_URL.includes("YOUR_PROJECT") && !SUPABASE_ANON_KEY.includes("YOUR_ANON_KEY")
         ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
         : null;
 
@@ -1285,7 +1285,7 @@ transform: translateX(-50%);
         fee: "Free",
         image: "",
         desc: "Albufeira Mercadinho Natal at Espaço Multiusos de Albufeira (21 & 22 November, 14:00–19:00), featuring artesanato (crafts), animação (entertainment), concertos (concerts), dança (dance), and much more.",
-        author: "Kris"
+        author: "Admin"
       }
     ];
 
@@ -1318,7 +1318,7 @@ transform: translateX(-50%);
             fee: row.fee || "Free",
             image: row.image || "",
             desc: row.desc || "",
-            author: row.author || "Me"
+            author: "Admin"
           }));
         }
 
@@ -1520,7 +1520,7 @@ transform: translateX(-50%);
       select.value = timeValue;
     }
 
-    const EVENT_IMAGE_BUCKET = window.ALBUFEIRA_IMAGE_BUCKET || "event-images";
+    const EVENT_IMAGE_BUCKET = window.ALBUFEIRA_IMAGE_BUCKET || "event-posters";
     const MAX_JPG_BYTES = 3 * 1024 * 1024;
     let selectedJpgFile = null;
 
@@ -1625,7 +1625,7 @@ transform: translateX(-50%);
 
     window.openEditEventModal = function (eventId) {
       if (!isAuthorizedAdmin()) {
-        alert("Only admins (Kris or Lex) can edit events. Please sign in as an admin first.");
+        alert("Only admins can edit events. Please sign in as an admin first.");
         openAdminModal();
         return;
       }
@@ -1663,7 +1663,7 @@ transform: translateX(-50%);
 
       const editingId = document.getElementById("editEventId").value.trim();
       if (editingId && !isAuthorizedAdmin()) {
-        alert("Only admins (Kris or Lex) can edit existing events.");
+        alert("Only admins can edit existing events.");
         return;
       }
 
@@ -1693,7 +1693,7 @@ transform: translateX(-50%);
         fee: document.getElementById("eventFee").value.trim() || "Free",
         image: resolvedImage,
         desc: document.getElementById("eventDesc").value.trim(),
-        author: isAuthorizedAdmin() ? currentAdmin : "Community"
+        author: "Admin"
       };
 
       submitBtn.disabled = false;
@@ -1712,7 +1712,7 @@ transform: translateX(-50%);
             return;
           }
 
-          const updated = data && data[0] ? data[0] : { ...payload, id: editingId };
+          const updated = data && data[0] ? { ...data[0], author: "Admin" } : { ...payload, id: editingId };
           eventsData = eventsData.map((item) => (String(item.id) === String(editingId) ? updated : item));
         } else {
           const { data, error } = await supabaseClient
@@ -1725,7 +1725,7 @@ transform: translateX(-50%);
             return;
           }
 
-          const created = data && data[0] ? data[0] : { ...payload, id: Date.now() };
+          const created = data && data[0] ? { ...data[0], author: "Admin" } : { ...payload, id: Date.now() };
           eventsData.push(created);
         }
       } else {
@@ -1776,7 +1776,7 @@ transform: translateX(-50%);
       const passcode = document.getElementById("adminPasscodeInput").value;
 
       if (!ALLOWED_ADMINS.includes(selectedAdmin.toLowerCase())) {
-        alert("Only Kris or Lex can be selected as admin.");
+        alert("Only Admin1 or Admin2 can be selected as admin.");
         return;
       }
 
@@ -2019,7 +2019,7 @@ transform: translateX(-50%);
       e.preventDefault();
       const thread = {
         topic: document.getElementById("forumTopic").value.trim(),
-        author: document.getElementById("forumAuthor").value.trim() || (isAuthorizedAdmin() ? currentAdmin : "Neighbor"),
+        author: document.getElementById("forumAuthor").value.trim() || (isAuthorizedAdmin() ? "Admin" : "Neighbor"),
         message: document.getElementById("forumMessage").value.trim()
       };
       if (supabaseClient) {
@@ -2035,7 +2035,6 @@ transform: translateX(-50%);
       forumModal.classList.remove("open");
       renderForum();
     });
-
 
     // =========================================================================
     // 9. BILINGUAL SUPPORT (EN / EUROPEAN PORTUGUESE)
@@ -2201,12 +2200,10 @@ transform: translateX(-50%);
       impBtn.addEventListener("click", openImpressumSection);
     }
 
-
     // =========================================================================
-    // PURE-JS QR CODE GENERATOR (VERSION 2 / 3 / 4 BYTE MODE -> CANVAS)
+    // PURE-JS QR CODE GENERATOR (VERSION 2 / 3 / 4 / 5 BYTE MODE -> CANVAS)
     // =========================================================================
     (function() {
-      // Compact Reed-Solomon + QR matrix builder supporting byte mode up to ~70 chars (EC level L)
       const EXP = new Array(256);
       const LOG = new Array(256);
       let x = 1;
@@ -2251,7 +2248,6 @@ transform: translateX(-50%);
         return res;
       }
 
-      // Version specs: [version, size, totalDataCodewords, ecCodewordsPerBlock]
       const SPECS = [
         [2, 25, 34, 10],
         [3, 29, 55, 15],
@@ -2299,7 +2295,6 @@ transform: translateX(-50%);
       }
 
       function drawFormatInfo(m, mask) {
-        // EC Level L (01) + mask (3 bits) -> BCH(15,5)
         const data5 = (1 << 3) | (mask & 7);
         let rem = data5 << 10;
         const poly = 0x537;
@@ -2339,7 +2334,6 @@ transform: translateX(-50%);
         const bytes = new TextEncoder().encode(text.slice(0, 85));
         let chosen = SPECS[SPECS.length - 1];
         for (const spec of SPECS) {
-          // 4-bit mode (0100) + 8-bit count + bytes*8 + terminator <= totalDataCodewords*8
           const maxBits = spec[2] * 8;
           if (4 + 8 + bytes.length * 8 <= maxBits) {
             chosen = spec;
@@ -2386,7 +2380,6 @@ transform: translateX(-50%);
         drawFinder(m, 0, size - 7);
         drawFinder(m, size - 7, 0);
 
-        // Timing patterns
         for (let i = 8; i < size - 8; i++) {
           const val = i % 2 === 0 ? 1 : 0;
           if (!m._res[6][i]) { m[6][i] = val; m._res[6][i] = true; }
@@ -2403,7 +2396,6 @@ transform: translateX(-50%);
 
         drawFormatInfo(m, 0);
 
-        // Data placement zigzag upward/downward
         let bitIdx = 0;
         let upward = true;
         for (let col = size - 1; col > 0; col -= 2) {
@@ -2414,7 +2406,6 @@ transform: translateX(-50%);
               const c = col + dx;
               if (m._res[row][c]) continue;
               let bit = bitIdx < streamBits.length ? streamBits[bitIdx++] : 0;
-              // Apply mask 0: (row + col) % 2 === 0
               if ((row + col) % 2 === 0) bit ^= 1;
               m[row][c] = bit;
             }
