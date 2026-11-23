@@ -47,7 +47,6 @@
       font-family: 'Outfit', sans-serif;
     }
 
-    /* Level Architectural Tag Styling */
     .vice-sticker {
       display: inline-flex;
       align-items: center;
@@ -82,7 +81,6 @@
       color: var(--neon-amber);
     }
 
-    /* Header & Nav */
     header {
       position: sticky;
       top: 0;
@@ -106,16 +104,23 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
     .brand-mascot {
-      width: 42px;
-      height: 42px;
+      width: 128px;
+      height: 128px;
       flex-shrink: 0;
       display: block;
-      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.22));
+      filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.24));
+    }
+
+    @media (max-width: 640px) {
+      .brand-mascot {
+        width: 126px;
+        height: 126px;
+      }
     }
 
     .qr-center-mascot {
@@ -132,7 +137,7 @@
     }
 
     .brand-title {
-      font-size: 1.5rem;
+      font-size: 1.55rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--text-main);
@@ -193,14 +198,12 @@
       font-weight: 700;
     }
 
-    /* Main Container */
     main {
       max-width: 1280px;
       margin: 0 auto;
       padding: 20px 20px 64px;
     }
 
-    /* Persistent Global Quick-Action Bar (+ Add Event dominant + Add Venue secondary) */
     .global-quick-actions {
       display: flex;
       flex-wrap: wrap;
@@ -338,7 +341,6 @@
       color: #07111a;
     }
 
-    /* Grids & Cards */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -420,7 +422,6 @@
       color: var(--text-muted);
     }
 
-    /* Map & Event Day Controls */
     .map-day-bar {
       display: flex;
       flex-wrap: wrap;
@@ -475,7 +476,6 @@
       margin-bottom: 22px;
     }
 
-    /* Info Strip / Essential Guide Box */
     .retro-info-strip {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -491,7 +491,6 @@
       box-shadow: 3px 3px 0px rgba(5, 7, 17, 0.75);
     }
 
-    /* Emergency Contacts */
     .emergency-banner {
       background: linear-gradient(120deg, rgba(255, 42, 133, 0.2), rgba(255, 184, 0, 0.14), rgba(0, 240, 255, 0.16));
       border: 2px solid rgba(255, 42, 133, 0.5);
@@ -570,7 +569,6 @@
       color: #07111a;
     }
 
-    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -754,7 +752,6 @@
       }
     }
 
-    /* Mobile Floating + Add Event Button */
     .mobile-fab-add {
       display: none;
       position: fixed;
@@ -782,7 +779,8 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .qr-chip-btn {
@@ -835,8 +833,8 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Embedded Grumpy Seagull Mascot SVG -->
-          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="42" height="42" role="img" aria-label="Albufeira Pulse Grumpy Seagull Mascot">
+          <!-- Happy 3x+ Seagull Mascot SVG -->
+          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="128" height="128" role="img" aria-label="Albufeira Pulse Happy Seagull Mascot">
             <defs>
               <linearGradient id="bgBadgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stop-color="#151a33" />
@@ -861,22 +859,22 @@
             <line x1="54" y1="195" x2="186" y2="195" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.7" />
 
             <g stroke="#090b16" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="url(#beakGrad)">
-              <line x1="112" y1="154" x2="106" y2="186" stroke="#ffb800" stroke-width="6" />
-              <line x1="112" y1="154" x2="106" y2="186" stroke="#090b16" stroke-width="2.2" />
-              <path d="M106 186 L90 194 L114 194 Z" />
+              <line x1="114" y1="154" x2="110" y2="186" stroke="#ffb800" stroke-width="6" />
+              <line x1="114" y1="154" x2="110" y2="186" stroke="#090b16" stroke-width="2.2" />
+              <path d="M110 186 L95 194 L117 194 Z" />
 
-              <line x1="134" y1="154" x2="136" y2="186" stroke="#ffb800" stroke-width="6" />
-              <line x1="134" y1="154" x2="136" y2="186" stroke="#090b16" stroke-width="2.2" />
-              <path d="M136 186 L121 194 L152 194 Z" />
+              <line x1="132" y1="154" x2="132" y2="186" stroke="#ffb800" stroke-width="6" />
+              <line x1="132" y1="154" x2="132" y2="186" stroke="#090b16" stroke-width="2.2" />
+              <path d="M132 186 L116 194 L147 194 Z" />
             </g>
 
             <path d="M74 134 L38 147 L56 155 L84 145 Z" fill="#f8fafc" stroke="#090b16" stroke-width="3.2" stroke-linejoin="round" />
 
             <path d="M136 46
-                     C154 45, 167 55, 169 69
-                     L169 84
-                     C168 99, 164 111, 164 123
-                     C164 146, 146 159, 118 159
+                     C153 45, 166 55, 168 69
+                     L168 83
+                     C167 98, 162 110, 162 122
+                     C162 145, 145 159, 118 159
                      C92 159, 75 144, 74 130
                      C90 126, 108 114, 123 94
                      C131 82, 129 61, 136 46 Z"
@@ -896,20 +894,19 @@
 
             <path d="M72 135 L97 127" stroke="#f8fafc" stroke-width="2.4" stroke-linecap="round" opacity="0.75" />
 
-            <path d="M168 68
-                     L202 74
-                     C207 76, 207 82, 199 84
-                     L168 83 Z"
+            <path d="M167 69
+                     Q184 69 199 72
+                     C205 74, 205 81, 197 83
+                     L167 83 Z"
                   fill="url(#beakGrad)" stroke="#090b16" stroke-width="3.2" stroke-linejoin="round" />
-            <circle cx="193" cy="80.5" r="2.3" fill="#ff2a85" />
+            <circle cx="191" cy="79.5" r="2.2" fill="#ff2a85" />
 
+            <ellipse cx="160" cy="72" rx="4.5" ry="2.6" fill="#ff2a85" opacity="0.35" />
             <g>
-              <circle cx="154" cy="63" r="6.8" fill="#ffffff" stroke="#090b16" stroke-width="2.5" />
-              <path d="M147.2 61.5 Q154 60 160.8 62.5 L160.8 56 L147.2 56 Z" fill="#ffffff" />
-              <path d="M147.5 61.5 Q154 60.2 160.5 62.5" fill="none" stroke="#090b16" stroke-width="2.6" stroke-linecap="round" />
-              <circle cx="156.5" cy="64" r="3.4" fill="#090b16" />
-              <circle cx="157.8" cy="62.7" r="1.3" fill="#00f0ff" />
-              <path d="M144 50 L163 57.5" fill="none" stroke="#090b16" stroke-width="3.6" stroke-linecap="round" />
+              <circle cx="154" cy="62" r="7.2" fill="#ffffff" stroke="#090b16" stroke-width="2.5" />
+              <circle cx="155.8" cy="62" r="3.8" fill="#090b16" />
+              <circle cx="157.4" cy="60.2" r="1.6" fill="#00f0ff" />
+              <path d="M146 51 Q154 47 161 52" fill="none" stroke="#090b16" stroke-width="2.5" stroke-linecap="round" />
             </g>
           </svg>
 
@@ -951,7 +948,6 @@
   </header>
 
   <main>
-    <!-- ALWAYS-PRESENT ACTION BAR: + ADD EVENT (DOMINANT) & + ADD VENUE (COMPANION) -->
     <div class="global-quick-actions" aria-label="Quick Actions">
       <span class="global-quick-label" data-i18n="quick.label">Albufeira Local Submissions</span>
       <div class="quick-action-group">
@@ -1039,7 +1035,7 @@
       <div id="forumGrid" class="grid-cards"></div>
     </section>
 
-    <!-- USEFUL LINKS & ALBUFEIRA ESSENTIALS SECTION -->
+    <!-- USEFUL LINKS SECTION -->
     <section id="section-links" class="section-view">
       <div class="toolbar">
         <div>
@@ -1437,9 +1433,6 @@
   </footer>
 
   <script>
-    // =========================================================================
-    // 1. SUPABASE CONFIGURATION & ADMIN AUTHENTICATION
-    // =========================================================================
     const SUPABASE_URL = window.SUPABASE_URL || "https://ljncrabbelxjnpvmvdau.supabase.co";
     const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6";
     const ADMIN_PASSCODE = window.ALBUFEIRA_ADMIN_PASSCODE || "albufeira-admin";
@@ -1471,9 +1464,6 @@
       renderEvents();
     }
 
-    // =========================================================================
-    // 2. ALBUFEIRA SEED VENUES & EMERGENCY CONTACTS
-    // =========================================================================
     const SEED_VENUES = [
       {
         id: 70,
@@ -1523,102 +1513,22 @@
     ];
 
     const EMERGENCY_CONTACTS = [
-      {
-        name: "Número Europeu de Emergência (INEM)",
-        category: "Medical & Emergency",
-        phones: ["112"],
-        accent: ""
-      },
-      {
-        name: "Intoxicações | INEM",
-        category: "Poison & Medical",
-        phones: ["800 250 250"],
-        accent: ""
-      },
-      {
-        name: "Saúde 24 (SNS 24)",
-        category: "Health Line",
-        phones: ["808 24 24 24"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Linha de Apoio à Vítima (APAV)",
-        category: "Victim Support",
-        phones: ["116 006"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "SOS Ambiente e Território – Comunicação de Queimas",
-        category: "Environment & Fire Control",
-        phones: ["808 200 520", "+351 211 389 320"],
-        accent: "amber-accent"
-      },
-      {
-        name: "SOS Pessoa Idosa",
-        category: "Senior Support",
-        phones: ["800 102 100"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Bombeiros Voluntários de Albufeira",
-        category: "Firefighters & Rescue",
-        phones: ["+351 289 586 333"],
-        accent: ""
-      },
-      {
-        name: "Cruz Vermelha Portuguesa Silves-Albufeira",
-        category: "Red Cross & First Aid",
-        phones: ["+351 289 542 398"],
-        accent: ""
-      },
-      {
-        name: "Guarda Nacional Republicana Albufeira",
-        category: "GNR Police",
-        phones: ["+351 289 590 790"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Polícia Marítima Piquete Albufeira",
-        category: "Maritime Police",
-        phones: ["+351 916 613 540"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Serviço Municipal de Proteção Civil",
-        category: "Civil Protection",
-        phones: ["+351 289 599 503"],
-        accent: "amber-accent"
-      },
-      {
-        name: "Linha de Apoio SMPC Albufeira",
-        category: "Civil Protection Helpline",
-        phones: ["+351 968 339 212"],
-        accent: "amber-accent"
-      },
-      {
-        name: "Polícia Municipal Albufeira",
-        category: "Municipal Police",
-        phones: ["+351 289 599 504"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Centro de Bem Estar Animal",
-        category: "Animal Welfare",
-        phones: ["+351 924 051 601", "+351 969 956 125"],
-        accent: "amber-accent"
-      },
-      {
-        name: "Piquete Águas e Saneamento",
-        category: "Water & Sanitation",
-        phones: ["+351 289 599 534"],
-        accent: "cyan-accent"
-      },
-      {
-        name: "Lusagua",
-        category: "Water Utility",
-        phones: ["808 202 492"],
-        accent: "cyan-accent"
-      }
+      { name: "Número Europeu de Emergência (INEM)", category: "Medical & Emergency", phones: ["112"], accent: "" },
+      { name: "Intoxicações | INEM", category: "Poison & Medical", phones: ["800 250 250"], accent: "" },
+      { name: "Saúde 24 (SNS 24)", category: "Health Line", phones: ["808 24 24 24"], accent: "cyan-accent" },
+      { name: "Linha de Apoio à Vítima (APAV)", category: "Victim Support", phones: ["116 006"], accent: "cyan-accent" },
+      { name: "SOS Ambiente e Território – Comunicação de Queimas", category: "Environment & Fire Control", phones: ["808 200 520", "+351 211 389 320"], accent: "amber-accent" },
+      { name: "SOS Pessoa Idosa", category: "Senior Support", phones: ["800 102 100"], accent: "cyan-accent" },
+      { name: "Bombeiros Voluntários de Albufeira", category: "Firefighters & Rescue", phones: ["+351 289 586 333"], accent: "" },
+      { name: "Cruz Vermelha Portuguesa Silves-Albufeira", category: "Red Cross & First Aid", phones: ["+351 289 542 398"], accent: "" },
+      { name: "Guarda Nacional Republicana Albufeira", category: "GNR Police", phones: ["+351 289 590 790"], accent: "cyan-accent" },
+      { name: "Polícia Marítima Piquete Albufeira", category: "Maritime Police", phones: ["+351 916 613 540"], accent: "cyan-accent" },
+      { name: "Serviço Municipal de Proteção Civil", category: "Civil Protection", phones: ["+351 289 599 503"], accent: "amber-accent" },
+      { name: "Linha de Apoio SMPC Albufeira", category: "Civil Protection Helpline", phones: ["+351 968 339 212"], accent: "amber-accent" },
+      { name: "Polícia Municipal Albufeira", category: "Municipal Police", phones: ["+351 289 599 504"], accent: "cyan-accent" },
+      { name: "Centro de Bem Estar Animal", category: "Animal Welfare", phones: ["+351 924 051 601", "+351 969 956 125"], accent: "amber-accent" },
+      { name: "Piquete Águas e Saneamento", category: "Water & Sanitation", phones: ["+351 289 599 534"], accent: "cyan-accent" },
+      { name: "Lusagua", category: "Water Utility", phones: ["808 202 492"], accent: "cyan-accent" }
     ];
 
     let eventsData = [
@@ -1742,9 +1652,6 @@
       }
     }
 
-    // =========================================================================
-    // 3. DATA LOADING & SUPABASE SYNC
-    // =========================================================================
     async function loadInitialData() {
       if (supabaseClient) {
         const { data: evRows, error: evErr } = await supabaseClient
@@ -1803,9 +1710,6 @@
       });
     }
 
-    // =========================================================================
-    // 4. RENDER FUNCTIONS, CLICKABLE EVENT CARDS & TURQUOISE/PINK CIRCLE PINS
-    // =========================================================================
     function escapeHtml(str) {
       return String(str || "")
         .replace(/&/g, "&amp;")
@@ -2069,9 +1973,6 @@
       }).join("");
     }
 
-    // =========================================================================
-    // 4B. ADD VENUE MODAL & GEOCODING
-    // =========================================================================
     const venueModal = document.getElementById("venueModal");
     const venueForm = document.getElementById("venueForm");
 
@@ -2161,9 +2062,6 @@
       renderVenues();
     });
 
-    // =========================================================================
-    // 5. EVENT MODAL, TIME DROPDOWN & ADMIN-ONLY EDITING
-    // =========================================================================
     const eventModal = document.getElementById("eventModal");
     const eventForm = document.getElementById("eventForm");
 
@@ -2404,9 +2302,6 @@
       initOrUpdateMap();
     });
 
-    // =========================================================================
-    // 6. ADMIN MODAL HANDLERS
-    // =========================================================================
     const adminModal = document.getElementById("adminModal");
 
     function openAdminModal() {
@@ -2453,9 +2348,6 @@
       updateAdminUI();
     });
 
-    // =========================================================================
-    // 7. NAVIGATION & FILTER LISTENERS
-    // =========================================================================
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const targetTab = btn.dataset.tab;
@@ -2502,22 +2394,13 @@
     document.getElementById("closeEventModalBtn").addEventListener("click", closeEventModal);
     document.getElementById("cancelEventBtn").addEventListener("click", closeEventModal);
 
-    // =========================================================================
-    // 8. CLASSIFIEDS, FORUM & USEFUL LINKS (EN / PT)
-    // =========================================================================
     let classifiedsData = [];
     let forumThreadsData = [];
 
     const USEFUL_LINKS = [
       {
-        title: {
-          en: "Câmara Municipal de Albufeira",
-          pt: "Câmara Municipal de Albufeira"
-        },
-        category: {
-          en: "Municipality",
-          pt: "Município"
-        },
+        title: { en: "Câmara Municipal de Albufeira", pt: "Câmara Municipal de Albufeira" },
+        category: { en: "Municipality", pt: "Município" },
         url: "https://www.cm-albufeira.pt",
         desc: {
           en: "Official Albufeira municipal council portal, notices, local services, and civic updates.",
@@ -2525,14 +2408,8 @@
         }
       },
       {
-        title: {
-          en: "Visit Albufeira (APAL)",
-          pt: "Visit Albufeira (APAL)"
-        },
-        category: {
-          en: "Local Guide",
-          pt: "Guia Local"
-        },
+        title: { en: "Visit Albufeira (APAL)", pt: "Visit Albufeira (APAL)" },
+        category: { en: "Local Guide", pt: "Guia Local" },
         url: "https://visitalbufeira.pt",
         desc: {
           en: "Beaches, boardwalks (Salgados & Falésia), events, parking zones, and tourist offices.",
@@ -2540,14 +2417,8 @@
         }
       },
       {
-        title: {
-          en: "Turistrem — Albufeira Tourist Train",
-          pt: "Turistrem — Comboio Turístico de Albufeira"
-        },
-        category: {
-          en: "Sightseeing & Transport",
-          pt: "Passeios e Transporte"
-        },
+        title: { en: "Turistrem — Albufeira Tourist Train", pt: "Turistrem — Comboio Turístico de Albufeira" },
+        category: { en: "Sightseeing & Transport", pt: "Passeios e Transporte" },
         url: "https://www.turistrem.com/",
         desc: {
           en: "Tourist road train linking Old Town, Areias de São João / The Strip & Santa Eulália (plus a seasonal Marina route, Mar–Oct). Tickets bought from the driver (single trip ~€5, day pass ~€7; child/senior discounts).",
@@ -2555,14 +2426,8 @@
         }
       },
       {
-        title: {
-          en: "Vamus Algarve — Regional & GIRO Buses",
-          pt: "Vamus Algarve — Autocarros Regionais e GIRO"
-        },
-        category: {
-          en: "Public Transport",
-          pt: "Transportes Públicos"
-        },
+        title: { en: "Vamus Algarve — Regional & GIRO Buses", pt: "Vamus Algarve — Autocarros Regionais e GIRO" },
+        category: { en: "Public Transport", pt: "Transportes Públicos" },
         url: "https://vamusalgarve.pt",
         desc: {
           en: "Timetables and routes for Albufeira GIRO buses, Caliços terminal, and Algarve-wide coaches.",
@@ -2570,14 +2435,8 @@
         }
       },
       {
-        title: {
-          en: "Comboios de Portugal (CP)",
-          pt: "Comboios de Portugal (CP)"
-        },
-        category: {
-          en: "Rail & Trains",
-          pt: "Comboios"
-        },
+        title: { en: "Comboios de Portugal (CP)", pt: "Comboios de Portugal (CP)" },
+        category: { en: "Rail & Trains", pt: "Comboios" },
         url: "https://www.cp.pt",
         desc: {
           en: "Train schedules and tickets for Albufeira-Ferreiras railway station and regional/long-distance trains.",
@@ -2585,14 +2444,8 @@
         }
       },
       {
-        title: {
-          en: "SNS 24 — Serviço Nacional de Saúde",
-          pt: "SNS 24 — Serviço Nacional de Saúde"
-        },
-        category: {
-          en: "Healthcare",
-          pt: "Saúde"
-        },
+        title: { en: "SNS 24 — Serviço Nacional de Saúde", pt: "SNS 24 — Serviço Nacional de Saúde" },
+        category: { en: "Healthcare", pt: "Saúde" },
         url: "https://www.sns24.gov.pt",
         desc: {
           en: "National health triage, pharmacy/health guidance, and medical information in Portugal.",
@@ -2600,14 +2453,8 @@
         }
       },
       {
-        title: {
-          en: "Autoridade Nacional de Emergência e Proteção Civil",
-          pt: "Autoridade Nacional de Emergência e Proteção Civil"
-        },
-        category: {
-          en: "Civil Protection",
-          pt: "Proteção Civil"
-        },
+        title: { en: "Autoridade Nacional de Emergência e Proteção Civil", pt: "Autoridade Nacional de Emergência e Proteção Civil" },
+        category: { en: "Civil Protection", pt: "Proteção Civil" },
         url: "https://prociv.gov.pt",
         desc: {
           en: "National civil protection alerts, fire/burn advisories, and safety guidance.",
@@ -2770,9 +2617,6 @@
       renderForum();
     });
 
-    // =========================================================================
-    // 9. BILINGUAL SUPPORT (EN / EUROPEAN PORTUGUESE)
-    // =========================================================================
     let currentLang = sessionStorage.getItem("albufeira_lang") || "en";
 
     const I18N = {
@@ -2914,9 +2758,6 @@
       impBtn.addEventListener("click", openImpressumSection);
     }
 
-    // =========================================================================
-    // PURE-JS QR CODE GENERATOR (VERSION 2 / 3 / 4 / 5 BYTE MODE -> CANVAS)
-    // =========================================================================
     (function() {
       const EXP = new Array(256);
       const LOG = new Array(256);
@@ -3153,7 +2994,6 @@
       };
     })();
 
-    // Sync embedded SVG mascot into QR center mark
     const brandMascotSvg = document.getElementById("brandMascotSvg");
     const qrCenterMascotImg = document.getElementById("qrCenterMascotImg");
     if (brandMascotSvg && qrCenterMascotImg) {
@@ -3161,7 +3001,6 @@
       qrCenterMascotImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgXml);
     }
 
-    // Wire Mobile Floating + Button & Logo QR Code Popover
     const mobileFabAdd = document.getElementById("mobileFabAddEvent");
     if (mobileFabAdd) {
       mobileFabAdd.addEventListener("click", openAddEventModal);
@@ -3206,7 +3045,6 @@
       }
     });
 
-    // Boot
     loadInitialData().then(() => {
       initHomeMap();
       applyLanguage(currentLang);
