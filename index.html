@@ -176,7 +176,34 @@
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 24px 20px 64px;
+      padding: 20px 20px 64px;
+    }
+
+    /* Persistent Global Quick-Action Bar (+ Add Event dominant + Add Venue secondary) */
+    .global-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      background: rgba(18, 22, 41, 0.85);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
+    }
+
+    .global-quick-label {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .quick-action-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
     }
 
     .section-view {
@@ -225,18 +252,37 @@
       background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
       color: #ffffff;
       border: 2px solid #fffdf7;
-      padding: 9px 18px;
+      padding: 10px 20px;
       border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.9rem;
+      font-weight: 800;
+      font-size: 0.94rem;
+      letter-spacing: 0.01em;
       cursor: pointer;
-      box-shadow: 3px 3px 0px #050711, 0 4px 16px rgba(255, 42, 133, 0.35);
+      box-shadow: 3px 3px 0px #050711, 0 4px 18px rgba(255, 42, 133, 0.42);
       transition: transform 0.15s ease, filter 0.15s ease;
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
       filter: brightness(1.08);
+    }
+
+    .btn-venue-companion {
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--neon-cyan);
+      border: 1.5px solid rgba(0, 240, 255, 0.45);
+      padding: 8px 14px;
+      border-radius: 11px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-venue-companion:hover {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--neon-cyan);
+      color: #ffffff;
     }
 
     .btn-secondary {
@@ -807,6 +853,15 @@
   </header>
 
   <main>
+    <!-- ALWAYS-PRESENT ACTION BAR: + ADD EVENT (DOMINANT) & + ADD VENUE (COMPANION) -->
+    <div class="global-quick-actions" aria-label="Quick Actions">
+      <span class="global-quick-label" data-i18n="quick.label">Albufeira Local Submissions</span>
+      <div class="quick-action-group">
+        <button id="openAddEventBtn" class="btn-primary" type="button" data-i18n="btn.addEvent">+ Add Event</button>
+        <button id="openAddVenueBtn" class="btn-venue-companion" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
+      </div>
+    </div>
+
     <!-- EVENTS SECTION -->
     <section id="section-events" class="section-view active">
       <div class="toolbar">
@@ -818,8 +873,6 @@
           <button class="pill-btn" data-category="FAMILY & FESTIVALS" data-i18n="cat.family">Family & Festivals</button>
           <button class="pill-btn" data-category="SPORTS & OUTDOORS" data-i18n="cat.sports">Sports & Outdoors</button>
         </div>
-
-        <button id="openAddEventBtn" class="btn-primary" type="button" data-i18n="btn.addEvent">+ Add Event</button>
       </div>
 
       <div class="map-day-bar">
@@ -848,8 +901,6 @@
           <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
           <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
-
-        <button id="openAddVenueBtn" class="btn-primary" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
       </div>
 
       <div class="map-day-bar">
@@ -873,7 +924,7 @@
           <h2 style="font-size: 1.3rem;" data-i18n="cls.title">Albufeira Classifieds</h2>
           <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="cls.subtitle">Local listings, rentals, items, and services in Albufeira.</p>
         </div>
-        <button id="openAddClassifiedBtn" class="btn-primary" type="button" data-i18n="btn.postListing">+ Post Listing</button>
+        <button id="openAddClassifiedBtn" class="btn-secondary" type="button" data-i18n="btn.postListing">+ Post Listing</button>
       </div>
       <div id="classifiedsGrid" class="grid-cards"></div>
     </section>
@@ -885,7 +936,7 @@
           <h2 style="font-size: 1.3rem;" data-i18n="frm.title">Albufeira Community Forum</h2>
           <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="frm.subtitle">Local discussions, tips, and neighborhood updates.</p>
         </div>
-        <button id="openAddThreadBtn" class="btn-primary" type="button" data-i18n="btn.newThread">+ New Thread</button>
+        <button id="openAddThreadBtn" class="btn-secondary" type="button" data-i18n="btn.newThread">+ New Thread</button>
       </div>
       <div id="forumGrid" class="grid-cards"></div>
     </section>
@@ -2641,6 +2692,7 @@
         "cat.arts": "Arts & Culture",
         "cat.family": "Family & Festivals",
         "cat.sports": "Sports & Outdoors",
+        "quick.label": "Albufeira Local Submissions",
         "btn.addEvent": "+ Add Event",
         "btn.addVenue": "+ Add Venue",
         "zone.all": "All Albufeira Zones",
@@ -2682,6 +2734,7 @@
         "cat.arts": "Artes e Cultura",
         "cat.family": "Família e Festas",
         "cat.sports": "Desporto e Ar Livre",
+        "quick.label": "Submissões Locais em Albufeira",
         "btn.addEvent": "+ Adicionar Evento",
         "btn.addVenue": "+ Adicionar Espaço",
         "zone.all": "Todas as Zonas de Albufeira",
