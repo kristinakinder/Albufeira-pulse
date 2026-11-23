@@ -1889,47 +1889,116 @@
     document.getElementById("cancelEventBtn").addEventListener("click", closeEventModal);
 
     // =========================================================================
-    // 8. CLASSIFIEDS, FORUM & USEFUL LINKS
+    // 8. CLASSIFIEDS, FORUM & USEFUL LINKS (EN / PT)
     // =========================================================================
     let classifiedsData = [];
     let forumThreadsData = [];
 
     const USEFUL_LINKS = [
       {
-        title: "Câmara Municipal de Albufeira",
-        category: "Municipality",
+        title: {
+          en: "Câmara Municipal de Albufeira",
+          pt: "Câmara Municipal de Albufeira"
+        },
+        category: {
+          en: "Municipality",
+          pt: "Município"
+        },
         url: "https://www.cm-albufeira.pt",
-        desc: "Official Albufeira municipal council portal, notices, local services, and civic updates."
+        desc: {
+          en: "Official Albufeira municipal council portal, notices, local services, and civic updates.",
+          pt: "Portal oficial da Câmara Municipal de Albufeira, avisos, serviços municipais e informações locais."
+        }
       },
       {
-        title: "Visit Albufeira (APAL)",
-        category: "Local Guide",
+        title: {
+          en: "Visit Albufeira (APAL)",
+          pt: "Visit Albufeira (APAL)"
+        },
+        category: {
+          en: "Local Guide",
+          pt: "Guia Local"
+        },
         url: "https://visitalbufeira.pt",
-        desc: "Beaches, boardwalks (Salgados & Falésia), events, parking zones, and tourist offices."
+        desc: {
+          en: "Beaches, boardwalks (Salgados & Falésia), events, parking zones, and tourist offices.",
+          pt: "Praias, passadiços (Salgados e Falésia), eventos, zonas de estacionamento e postos de turismo."
+        }
       },
       {
-        title: "Vamus Algarve — Regional & GIRO Buses",
-        category: "Public Transport",
+        title: {
+          en: "Turistrem — Albufeira Tourist Train",
+          pt: "Turistrem — Comboio Turístico de Albufeira"
+        },
+        category: {
+          en: "Sightseeing & Transport",
+          pt: "Passeios e Transporte"
+        },
+        url: "https://www.turistrem.com/",
+        desc: {
+          en: "Tourist road train linking Old Town, Areias de São João / The Strip & Santa Eulália (plus a seasonal Marina route, Mar–Oct). Tickets bought from the driver (single trip ~€5, day pass ~€7; child/senior discounts).",
+          pt: "Comboio turístico que liga o Centro Antigo, Areias de São João / Oura e Santa Eulália (e rota sazonal até à Marina, mar–out). Bilhetes comprados ao motorista (viagem simples ~5 €, passe diário ~7 €; descontos criança/sénior)."
+        }
+      },
+      {
+        title: {
+          en: "Vamus Algarve — Regional & GIRO Buses",
+          pt: "Vamus Algarve — Autocarros Regionais e GIRO"
+        },
+        category: {
+          en: "Public Transport",
+          pt: "Transportes Públicos"
+        },
         url: "https://vamusalgarve.pt",
-        desc: "Timetables and routes for Albufeira GIRO buses, Caliços terminal, and Algarve-wide coaches."
+        desc: {
+          en: "Timetables and routes for Albufeira GIRO buses, Caliços terminal, and Algarve-wide coaches.",
+          pt: "Horários e percursos dos autocarros urbanos GIRO, terminal dos Caliços e ligações no Algarve."
+        }
       },
       {
-        title: "Comboios de Portugal (CP)",
-        category: "Rail & Trains",
+        title: {
+          en: "Comboios de Portugal (CP)",
+          pt: "Comboios de Portugal (CP)"
+        },
+        category: {
+          en: "Rail & Trains",
+          pt: "Comboios"
+        },
         url: "https://www.cp.pt",
-        desc: "Train schedules and tickets for Albufeira-Ferreiras railway station and regional/long-distance trains."
+        desc: {
+          en: "Train schedules and tickets for Albufeira-Ferreiras railway station and regional/long-distance trains.",
+          pt: "Horários e bilhetes para a estação ferroviária de Albufeira-Ferreiras e comboios regionais e de longo curso."
+        }
       },
       {
-        title: "SNS 24 — Serviço Nacional de Saúde",
-        category: "Healthcare",
+        title: {
+          en: "SNS 24 — Serviço Nacional de Saúde",
+          pt: "SNS 24 — Serviço Nacional de Saúde"
+        },
+        category: {
+          en: "Healthcare",
+          pt: "Saúde"
+        },
         url: "https://www.sns24.gov.pt",
-        desc: "National health triage, pharmacy/health guidance, and medical information in Portugal."
+        desc: {
+          en: "National health triage, pharmacy/health guidance, and medical information in Portugal.",
+          pt: "Triagem clínica, orientação de saúde, farmácias e informação médica em Portugal."
+        }
       },
       {
-        title: "Autoridade Nacional de Emergência e Proteção Civil",
-        category: "Civil Protection",
+        title: {
+          en: "Autoridade Nacional de Emergência e Proteção Civil",
+          pt: "Autoridade Nacional de Emergência e Proteção Civil"
+        },
+        category: {
+          en: "Civil Protection",
+          pt: "Proteção Civil"
+        },
         url: "https://prociv.gov.pt",
-        desc: "National civil protection alerts, fire/burn advisories, and safety guidance."
+        desc: {
+          en: "National civil protection alerts, fire/burn advisories, and safety guidance.",
+          pt: "Alertas nacionais de proteção civil, avisos de perigo de incêndio e recomendações de segurança."
+        }
       }
     ];
 
@@ -2008,15 +2077,16 @@
     function renderUsefulLinks() {
       const grid = document.getElementById("usefulLinksGrid");
       if (!grid) return;
+      const lang = currentLang === "pt" ? "pt" : "en";
       grid.innerHTML = USEFUL_LINKS.map(
         (lnk) => `
         <article class="card">
           <div class="card-body">
             <div class="card-meta">
-              <span>${escapeHtml(lnk.category)}</span>
+              <span>${escapeHtml(lnk.category[lang] || lnk.category.en)}</span>
             </div>
-            <h3 class="card-title">${escapeHtml(lnk.title)}</h3>
-            <p class="card-desc">${escapeHtml(lnk.desc)}</p>
+            <h3 class="card-title">${escapeHtml(lnk.title[lang] || lnk.title.en)}</h3>
+            <p class="card-desc">${escapeHtml(lnk.desc[lang] || lnk.desc.en)}</p>
             <div class="card-footer">
               <a href="${escapeHtml(lnk.url)}" target="_blank" rel="noopener noreferrer" style="color: var(--neon-cyan); font-weight: 700; text-decoration: none;">${t("link.open")}</a>
             </div>
