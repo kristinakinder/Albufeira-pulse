@@ -81,24 +81,32 @@
       color: var(--neon-amber);
     }
 
+    /* Header & Nav */
     header {
       position: sticky;
       top: 0;
       z-index: 1500;
       backdrop-filter: blur(14px);
-      background: rgba(9, 11, 22, 0.88);
+      background: rgba(9, 11, 22, 0.9);
       border-bottom: 1px solid var(--border-subtle);
     }
 
     .header-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 16px;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      margin-left: auto;
     }
 
     .brand {
@@ -117,6 +125,14 @@
     }
 
     @media (max-width: 640px) {
+      .header-inner {
+        flex-wrap: wrap;
+      }
+      .header-right {
+        align-items: flex-start;
+        margin-left: 0;
+        width: 100%;
+      }
       .brand-mascot {
         width: 126px;
         height: 126px;
@@ -146,17 +162,24 @@
     .nav-tabs {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    @media (max-width: 640px) {
+      .nav-tabs {
+        justify-content: flex-start;
+      }
     }
 
     .nav-btn {
       background: var(--bg-card);
       color: var(--text-muted);
       border: 2px solid var(--border-subtle);
-      padding: 8px 14px;
+      padding: 7px 13px;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       cursor: pointer;
       transition: all 0.18s ease;
     }
@@ -180,12 +203,11 @@
       justify-content: flex-end;
       flex-wrap: wrap;
       gap: 8px;
-      margin-left: auto;
     }
 
     .admin-status {
-      font-size: 0.78rem;
-      padding: 5px 10px;
+      font-size: 0.76rem;
+      padding: 4px 9px;
       border-radius: 8px;
       background: var(--bg-elevated);
       border: 1px solid var(--border-subtle);
@@ -201,26 +223,21 @@
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 20px 20px 64px;
+      padding: 16px 20px 64px;
     }
 
+    /* Slim Action Bar (+ Add Event & + Add Venue matched) */
     .global-quick-actions {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 16px;
-      margin-bottom: 20px;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 7px 12px;
+      margin-bottom: 16px;
       background: rgba(18, 22, 41, 0.85);
-      border: 1.5px solid var(--border-subtle);
-      border-radius: 16px;
-    }
-
-    .global-quick-label {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      font-weight: 600;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
     }
 
     .quick-action-group {
@@ -244,7 +261,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .filter-pills {
@@ -257,9 +274,9 @@
       background: var(--bg-card);
       color: var(--text-muted);
       border: 2px solid var(--border-subtle);
-      padding: 6px 13px;
+      padding: 5px 12px;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.16s ease;
@@ -270,6 +287,27 @@
       color: #ffffff;
       border-color: #fffdf7;
       box-shadow: 2px 2px 0px #050711, 0 0 12px rgba(255, 42, 133, 0.45);
+    }
+
+    /* Matched primary action buttons for + Add Event and + Add Venue */
+    .action-btn {
+      background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
+      color: #ffffff;
+      border: 2px solid #fffdf7;
+      padding: 7px 15px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.86rem;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #050711, 0 3px 14px rgba(255, 42, 133, 0.35);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
     }
 
     .btn-primary {
@@ -291,32 +329,14 @@
       filter: brightness(1.08);
     }
 
-    .btn-venue-companion {
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--neon-cyan);
-      border: 1.5px solid rgba(0, 240, 255, 0.45);
-      padding: 8px 14px;
-      border-radius: 11px;
-      font-weight: 700;
-      font-size: 0.84rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-venue-companion:hover {
-      background: rgba(0, 240, 255, 0.2);
-      border-color: var(--neon-cyan);
-      color: #ffffff;
-    }
-
     .btn-secondary {
       background: var(--bg-elevated);
       color: var(--text-main);
       border: 1.5px solid var(--border-subtle);
-      padding: 8px 14px;
-      border-radius: 10px;
+      padding: 6px 12px;
+      border-radius: 9px;
       font-weight: 600;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       cursor: pointer;
     }
 
@@ -429,7 +449,7 @@
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 12px;
-      padding: 10px 14px;
+      padding: 8px 14px;
       background: var(--bg-elevated);
       border: 1.5px solid var(--border-subtle);
       border-radius: 14px;
@@ -444,8 +464,8 @@
 
     .map-day-controls input[type="date"] {
       width: auto;
-      padding: 6px 10px;
-      font-size: 0.84rem;
+      padding: 5px 10px;
+      font-size: 0.82rem;
     }
 
     .map-day-summary {
@@ -746,10 +766,6 @@
       .form-grid {
         grid-template-columns: 1fr;
       }
-      .admin-bar {
-        margin-left: 0;
-        justify-content: flex-start;
-      }
     }
 
     .mobile-fab-add {
@@ -833,7 +849,7 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Happy 3x+ Seagull Mascot SVG -->
+          <!-- Happy Seagull Mascot SVG (replace inner paths with your Illustrator .svg export) -->
           <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="128" height="128" role="img" aria-label="Albufeira Pulse Happy Seagull Mascot">
             <defs>
               <linearGradient id="bgBadgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -926,33 +942,35 @@
         </div>
       </div>
 
-      <nav class="nav-tabs" aria-label="Primary Sections">
-        <button class="nav-btn active" data-tab="events" data-i18n="nav.home">Home</button>
-        <button class="nav-btn" data-tab="events" data-i18n="nav.events">Events</button>
-        <button class="nav-btn" data-tab="venues" data-i18n="nav.venues">Venues & Map</button>
-        <button class="nav-btn" data-tab="classifieds" data-i18n="nav.classifieds">Classifieds</button>
-        <button class="nav-btn" data-tab="forum" data-i18n="nav.forum">Forum</button>
-        <button class="nav-btn" data-tab="links" data-i18n="nav.links">Useful Links</button>
-        <button class="nav-btn" data-tab="emergency" data-i18n="nav.emergency">Emergency Contacts</button>
-      </nav>
-
-      <div class="admin-bar">
-        <div class="filter-pills" id="langSwitcher" role="group" aria-label="Idioma / Language">
-          <button id="langEnBtn" class="pill-btn active" type="button" data-lang="en">EN</button>
-          <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
+      <div class="header-right">
+        <div class="admin-bar">
+          <div class="filter-pills" id="langSwitcher" role="group" aria-label="Idioma / Language">
+            <button id="langEnBtn" class="pill-btn active" type="button" data-lang="en">EN</button>
+            <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
+          </div>
+          <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
+          <button id="adminToggleBtn" class="btn-secondary" type="button">Admin Sign In</button>
         </div>
-        <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
-        <button id="adminToggleBtn" class="btn-secondary" type="button">Admin Sign In</button>
+
+        <nav class="nav-tabs" aria-label="Primary Sections">
+          <button class="nav-btn active" data-tab="events" data-i18n="nav.home">Home</button>
+          <button class="nav-btn" data-tab="events" data-i18n="nav.events">Events</button>
+          <button class="nav-btn" data-tab="venues" data-i18n="nav.venues">Venues & Map</button>
+          <button class="nav-btn" data-tab="classifieds" data-i18n="nav.classifieds">Classifieds</button>
+          <button class="nav-btn" data-tab="forum" data-i18n="nav.forum">Forum</button>
+          <button class="nav-btn" data-tab="links" data-i18n="nav.links">Useful Links</button>
+          <button class="nav-btn" data-tab="emergency" data-i18n="nav.emergency">Emergency Contacts</button>
+        </nav>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- THIN ACTION BAR: + ADD EVENT & + ADD VENUE MATCHED -->
     <div class="global-quick-actions" aria-label="Quick Actions">
-      <span class="global-quick-label" data-i18n="quick.label">Albufeira Local Submissions</span>
       <div class="quick-action-group">
-        <button id="openAddEventBtn" class="btn-primary" type="button" data-i18n="btn.addEvent">+ Add Event</button>
-        <button id="openAddVenueBtn" class="btn-venue-companion" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
+        <button id="openAddEventBtn" class="action-btn" type="button" data-i18n="btn.addEvent">+ Add Event</button>
+        <button id="openAddVenueBtn" class="action-btn" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
       </div>
     </div>
 
@@ -973,8 +991,8 @@
         <div class="map-day-controls">
           <label for="eventMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Event Day Map:</label>
           <input id="eventMapDateInput" type="date" />
-          <button id="eventMapTodayBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">Today</button>
-          <button id="eventMapAllDaysBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">All Event Days</button>
+          <button id="eventMapTodayBtn" class="btn-secondary" type="button">Today</button>
+          <button id="eventMapAllDaysBtn" class="btn-secondary" type="button">All Event Days</button>
         </div>
         <span id="homeMapStatus" class="map-day-summary"></span>
       </div>
@@ -1001,8 +1019,8 @@
         <div class="map-day-controls">
           <label for="venueMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Map Event Day:</label>
           <input id="venueMapDateInput" type="date" />
-          <button id="venueMapTodayBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">Today</button>
-          <button id="venueMapAllDaysBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">All Event Days</button>
+          <button id="venueMapTodayBtn" class="btn-secondary" type="button">Today</button>
+          <button id="venueMapAllDaysBtn" class="btn-secondary" type="button">All Event Days</button>
         </div>
         <span id="venuesMapStatus" class="map-day-summary"></span>
       </div>
@@ -1579,46 +1597,28 @@
         .trim();
     }
 
-    function getPlacesWithEventsForDate(targetDate) {
-      const matchingEvents = activeMapDate === "ALL"
+    function getMapVenuesForFilter(zoneFilter, dateFilter) {
+      const dayEvents = (!dateFilter || dateFilter === "ALL")
         ? eventsData
-        : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizeDateKey(targetDate));
+        : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizeDateKey(dateFilter));
 
-      const places = [];
-      const seenKeys = new Set();
+      const filteredVenues = (!zoneFilter || zoneFilter === "ALL")
+        ? venuesData
+        : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));
 
-      matchingEvents.forEach((ev, idx) => {
-        const venueMatch = venuesData.find((v) => {
+      return filteredVenues.map((v) => {
+        const matchingEvents = dayEvents.filter((ev) => {
           const vn = normalizeNameKey(v.name);
           const en = normalizeNameKey(ev.venueName);
           return vn && en && (vn === en || vn.includes(en) || en.includes(vn));
         });
-
-        const lat = venueMatch ? Number(venueMatch.lat) : Number(ev.lat || 37.0955);
-        const lng = venueMatch ? Number(venueMatch.lng) : Number(ev.lng || -8.2505);
-        const name = (ev.venueName || (venueMatch && venueMatch.name) || "Event Venue").trim();
-        const zone = (ev.zone || (venueMatch && venueMatch.zone) || "Albufeira").trim();
-        const key = `${normalizeNameKey(name)}|${lat.toFixed(4)}|${lng.toFixed(4)}`;
-
-        if (!seenKeys.has(key)) {
-          seenKeys.add(key);
-          places.push({
-            id: venueMatch ? venueMatch.id : `ev-place-${ev.id || idx}`,
-            name,
-            zone,
-            lat,
-            lng,
-            events: [ev]
-          });
-        } else {
-          const existing = places.find(
-            (p) => `${normalizeNameKey(p.name)}|${p.lat.toFixed(4)}|${p.lng.toFixed(4)}` === key
-          );
-          if (existing) existing.events.push(ev);
-        }
+        return {
+          ...v,
+          lat: Number(v.lat) || 37.0955,
+          lng: Number(v.lng) || -8.2505,
+          events: matchingEvents
+        };
       });
-
-      return places;
     }
 
     function syncMapDateInputs() {
@@ -1628,27 +1628,21 @@
       if (homeInput) homeInput.value = val;
       if (venueInput) venueInput.value = val;
 
-      const labelText = activeMapDate === "ALL"
-        ? "Showing venues with events across all dates"
-        : `Showing only venues with events on ${activeMapDate}`;
+      const dayNote = activeMapDate === "ALL"
+        ? "All event days"
+        : `Date: ${activeMapDate}`;
 
-      const homePlaces = getPlacesWithEventsForDate(activeMapDate);
-      const venuePlaces = activeZone === "ALL"
-        ? homePlaces
-        : homePlaces.filter((p) => normalizeNameKey(p.zone) === normalizeNameKey(activeZone));
+      const homePlaces = getMapVenuesForFilter("ALL", activeMapDate);
+      const venuePlaces = getMapVenuesForFilter(activeZone, activeMapDate);
 
       const homeStatus = document.getElementById("homeMapStatus");
       if (homeStatus) {
-        homeStatus.textContent = homePlaces.length
-          ? `${labelText} (${homePlaces.length} ${homePlaces.length === 1 ? "place" : "places"})`
-          : `${labelText} — No events on this day`;
+        homeStatus.textContent = `${homePlaces.length} ${homePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
       }
 
       const venuesStatus = document.getElementById("venuesMapStatus");
       if (venuesStatus) {
-        venuesStatus.textContent = venuePlaces.length
-          ? `${labelText} (${venuePlaces.length} ${venuePlaces.length === 1 ? "place" : "places"})`
-          : `${labelText} — No events on this day`;
+        venuesStatus.textContent = `${venuePlaces.length} ${venuePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
       }
     }
 
@@ -1896,11 +1890,7 @@
       }
       if (leafletMap) {
         setTimeout(() => leafletMap.invalidateSize(), 100);
-        const dayPlaces = getPlacesWithEventsForDate(activeMapDate);
-        const filteredPlaces =
-          activeZone === "ALL"
-            ? dayPlaces
-            : dayPlaces.filter((p) => normalizeNameKey(p.zone) === normalizeNameKey(activeZone));
+        const filteredPlaces = getMapVenuesForFilter(activeZone, activeMapDate);
         updateMapMarkers(filteredPlaces);
       }
     }
@@ -1927,8 +1917,8 @@
       }
       setTimeout(() => homeLeafletMap.invalidateSize(), 100);
       homeMarkersLayer.clearLayers();
-      const dayPlaces = getPlacesWithEventsForDate(activeMapDate);
-      dayPlaces.forEach((v, idx) => {
+      const places = getMapVenuesForFilter("ALL", activeMapDate);
+      places.forEach((v, idx) => {
         if (typeof v.lat === "number" && typeof v.lng === "number" && !Number.isNaN(v.lat) && !Number.isNaN(v.lng)) {
           addTurquoisePinkCircleMarker(homeMarkersLayer, v, idx);
         }
@@ -1943,10 +1933,10 @@
     }
 
     document.getElementById("eventMapDateInput").addEventListener("change", (e) => {
-      setMapDateFilter(e.target.value || getLocalTodayIso());
+      setMapDateFilter(e.target.value || "ALL");
     });
     document.getElementById("venueMapDateInput").addEventListener("change", (e) => {
-      setMapDateFilter(e.target.value || getLocalTodayIso());
+      setMapDateFilter(e.target.value || "ALL");
     });
     document.getElementById("eventMapTodayBtn").addEventListener("click", () => setMapDateFilter(getLocalTodayIso()));
     document.getElementById("venueMapTodayBtn").addEventListener("click", () => setMapDateFilter(getLocalTodayIso()));
@@ -2634,7 +2624,6 @@
         "cat.arts": "Arts & Culture",
         "cat.family": "Family & Festivals",
         "cat.sports": "Sports & Outdoors",
-        "quick.label": "Albufeira Local Submissions",
         "btn.addEvent": "+ Add Event",
         "btn.addVenue": "+ Add Venue",
         "zone.all": "All Albufeira Zones",
@@ -2676,7 +2665,6 @@
         "cat.arts": "Artes e Cultura",
         "cat.family": "Família e Festas",
         "cat.sports": "Desporto e Ar Livre",
-        "quick.label": "Submissões Locais em Albufeira",
         "btn.addEvent": "+ Adicionar Evento",
         "btn.addVenue": "+ Adicionar Espaço",
         "zone.all": "Todas as Zonas de Albufeira",
@@ -2886,173 +2874,4 @@
       }
 
       function buildQrMatrix(text) {
-        const bytes = new TextEncoder().encode(text.slice(0, 85));
-        let chosen = SPECS[SPECS.length - 1];
-        for (const spec of SPECS) {
-          const maxBits = spec[2] * 8;
-          if (4 + 8 + bytes.length * 8 <= maxBits) {
-            chosen = spec;
-            break;
-          }
-        }
-        const [ver, size, dataCw, ecCw] = chosen;
-        const bits = [];
-        const pushBits = (val, len) => {
-          for (let i = len - 1; i >= 0; i--) bits.push((val >> i) & 1);
-        };
-        pushBits(0b0100, 4);
-        pushBits(bytes.length, 8);
-        for (const b of bytes) pushBits(b, 8);
-        const totalDataBits = dataCw * 8;
-        const termLen = Math.min(4, Math.max(0, totalDataBits - bits.length));
-        pushBits(0, termLen);
-        while (bits.length % 8 !== 0) bits.push(0);
-
-        const dataBytes = [];
-        for (let i = 0; i < bits.length; i += 8) {
-          let byte = 0;
-          for (let j = 0; j < 8; j++) byte = (byte << 1) | (bits[i + j] || 0);
-          dataBytes.push(byte);
-        }
-        const pads = [0xec, 0x11];
-        let pIdx = 0;
-        while (dataBytes.length < dataCw) {
-          dataBytes.push(pads[pIdx % 2]);
-          pIdx++;
-        }
-
-        const ecBytes = rsEncode(dataBytes, ecCw);
-        const streamBytes = dataBytes.concat(ecBytes);
-        const streamBits = [];
-        for (const sb of streamBytes) {
-          for (let i = 7; i >= 0; i--) streamBits.push((sb >> i) & 1);
-        }
-
-        const m = Array.from({ length: size }, () => new Array(size).fill(0));
-        m._res = Array.from({ length: size }, () => new Array(size).fill(false));
-
-        drawFinder(m, 0, 0);
-        drawFinder(m, 0, size - 7);
-        drawFinder(m, size - 7, 0);
-
-        for (let i = 8; i < size - 8; i++) {
-          const val = i % 2 === 0 ? 1 : 0;
-          if (!m._res[6][i]) { m[6][i] = val; m._res[6][i] = true; }
-          if (!m._res[i][6]) { m[i][6] = val; m._res[i][6] = true; }
-        }
-
-        const centers = getAlignCenters(ver);
-        for (const r of centers) {
-          for (const c of centers) {
-            if ((r < 9 && c < 9) || (r < 9 && c > size - 10) || (r > size - 10 && c < 9)) continue;
-            drawAlign(m, r, c);
-          }
-        }
-
-        drawFormatInfo(m, 0);
-
-        let bitIdx = 0;
-        let upward = true;
-        for (let col = size - 1; col > 0; col -= 2) {
-          if (col === 6) col = 5;
-          for (let count = 0; count < size; count++) {
-            const row = upward ? (size - 1 - count) : count;
-            for (const dx of [0, -1]) {
-              const c = col + dx;
-              if (m._res[row][c]) continue;
-              let bit = bitIdx < streamBits.length ? streamBits[bitIdx++] : 0;
-              if ((row + col) % 2 === 0) bit ^= 1;
-              m[row][c] = bit;
-            }
-          }
-          upward = !upward;
-        }
-        return m;
-      }
-
-      window.renderAlbufeiraQrToCanvas = function(canvasId, text) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-        const matrix = buildQrMatrix(text);
-        const n = matrix.length;
-        const quiet = 3;
-        const total = n + quiet * 2;
-        const scale = Math.max(4, Math.floor(176 / total));
-        canvas.width = total * scale;
-        canvas.height = total * scale;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "#090b16";
-        for (let r = 0; r < n; r++) {
-          for (let c = 0; c < n; c++) {
-            if (matrix[r][c]) {
-              ctx.fillRect((c + quiet) * scale, (r + quiet) * scale, scale, scale);
-            }
-          }
-        }
-      };
-    })();
-
-    const brandMascotSvg = document.getElementById("brandMascotSvg");
-    const qrCenterMascotImg = document.getElementById("qrCenterMascotImg");
-    if (brandMascotSvg && qrCenterMascotImg) {
-      const svgXml = new XMLSerializer().serializeToString(brandMascotSvg);
-      qrCenterMascotImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgXml);
-    }
-
-    const mobileFabAdd = document.getElementById("mobileFabAddEvent");
-    if (mobileFabAdd) {
-      mobileFabAdd.addEventListener("click", openAddEventModal);
-    }
-
-    const logoQrToggleBtn = document.getElementById("logoQrToggleBtn");
-    const logoQrPopover = document.getElementById("logoQrPopover");
-    const closeLogoQrBtn = document.getElementById("closeLogoQrBtn");
-    const logoQrUrlLabel = document.getElementById("logoQrUrlLabel");
-
-    function refreshLogoQr() {
-      const href = (window.location && window.location.href && window.location.href.startsWith("http"))
-        ? window.location.href
-        : "https://albufeira-pulse.com";
-      if (logoQrUrlLabel) logoQrUrlLabel.textContent = href;
-      if (window.renderAlbufeiraQrToCanvas) {
-        window.renderAlbufeiraQrToCanvas("logoQrCanvas", href);
-      }
-    }
-
-    if (logoQrToggleBtn && logoQrPopover) {
-      logoQrToggleBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const willOpen = !logoQrPopover.classList.contains("open");
-        logoQrPopover.classList.toggle("open", willOpen);
-        logoQrToggleBtn.setAttribute("aria-expanded", willOpen ? "true" : "false");
-        if (willOpen) refreshLogoQr();
-      });
-    }
-
-    if (closeLogoQrBtn && logoQrPopover) {
-      closeLogoQrBtn.addEventListener("click", () => {
-        logoQrPopover.classList.remove("open");
-        if (logoQrToggleBtn) logoQrToggleBtn.setAttribute("aria-expanded", "false");
-      });
-    }
-
-    document.addEventListener("click", (e) => {
-      if (logoQrPopover && logoQrToggleBtn && !logoQrPopover.contains(e.target) && !logoQrToggleBtn.contains(e.target)) {
-        logoQrPopover.classList.remove("open");
-        logoQrToggleBtn.setAttribute("aria-expanded", "false");
-      }
-    });
-
-    loadInitialData().then(() => {
-      initHomeMap();
-      applyLanguage(currentLang);
-      updateAdminUI();
-    });
-    loadCommunitySections();
-  </script>
-
-  <button id="mobileFabAddEvent" class="mobile-fab-add" type="button" aria-label="Add Event">+</button>
-</body>
-</html>
+        const bytes = new TextEncoder().encode(text.slice(0, 85
