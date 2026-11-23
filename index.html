@@ -151,7 +151,10 @@
     .admin-bar {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
       gap: 8px;
+      margin-left: auto;
     }
 
     .admin-status {
@@ -595,6 +598,10 @@
     @media (max-width: 640px) {
       .form-grid {
         grid-template-columns: 1fr;
+      }
+      .admin-bar {
+        margin-left: 0;
+        justify-content: flex-start;
       }
     }
 
@@ -1111,13 +1118,13 @@
       const badge = document.getElementById("adminStatusBadge");
       const btn = document.getElementById("adminToggleBtn");
       if (isAuthorizedAdmin()) {
-        badge.textContent = `Admin: ${currentAdmin}`;
+        badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
         badge.classList.add("active");
-        btn.textContent = "Sign Out";
+        btn.textContent = t("admin.signOut");
       } else {
-        badge.textContent = "Admin: Locked";
+        badge.textContent = t("admin.locked");
         badge.classList.remove("active");
-        btn.textContent = "Admin Sign In";
+        btn.textContent = t("admin.signIn");
       }
       renderEvents();
     }
@@ -1294,6 +1301,8 @@
     let activeZone = "ALL";
     let leafletMap = null;
     let mapMarkersLayer = null;
+    let homeLeafletMap = null;
+    let homeMarkersLayer = null;
 
     // =========================================================================
     // 3. DATA LOADING & SUPABASE SYNC
@@ -1356,7 +1365,7 @@
     }
 
     // =========================================================================
-    // 4. RENDER FUNCTIONS
+    // 4. RENDER FUNCTIONS & TURQUOISE/PINK CIRCLE PINS
     // =========================================================================
     function escapeHtml(str) {
       return String(str || "")
@@ -1364,6 +1373,30 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
+    }
+
+    function addTurquoisePinkCircleMarker(layerGroup, venue, idx) {
+      const isPink = idx % 2 === 1;
+      const strokeColor = isPink ? "#ff2a85" : "#00f0ff";
+      const fillColor = isPink ? "#ff2a85" : "#00f0ff";
+
+      const marker = L.circleMarker([venue.lat, venue.lng], {
+        radius: 9,
+        color: "#090b16",
+        weight: 2.5,
+        opacity: 1,
+        fillColor,
+        fillOpacity: 0.92
+      });
+
+      marker.on("mouseover", () => marker.setStyle({ radius: 11, color: strokeColor }));
+      marker.on("mouseout", () => marker.setStyle({ radius: 9, color: "#090b16" }));
+
+      marker.bindPopup(
+        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="color:${strokeColor};font-weight:700;">${escapeHtml(venue.zone || "Albufeira")}</span>`
+      );
+
+      marker.addTo(layerGroup);
     }
 
     function renderEvents() {
@@ -1429,12 +1462,12 @@
       } else {
         grid.innerHTML = filtered
           .map(
-            (v) => `
+            (v, idx) => `
           <article class="card">
             <div class="card-body">
               <div class="card-meta">
                 <span>${escapeHtml(v.zone || "Albufeira")}</span>
-                <span class="vice-sticker sticker-cyan">${escapeHtml(v.category || "Albufeira")}</span>
+                <span class="vice-sticker ${idx % 2 === 1 ? "sticker-pink" : "sticker-cyan"}">${escapeHtml(v.category || "Albufeira")}</span>
               </div>
               <h3 class="card-title">${escapeHtml(v.name)}</h3>
               <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
@@ -1472,11 +1505,28 @@
     function updateMapMarkers(list) {
       if (!leafletMap || !mapMarkersLayer) return;
       mapMarkersLayer.clearLayers();
-      list.forEach((v) => {
+      list.forEach((v, idx) => {
         if (typeof v.lat === "number" && typeof v.lng === "number") {
-          L.marker([v.lat, v.lng])
-            .bindPopup(`<strong>${escapeHtml(v.name)}</strong><br/>${escapeHtml(v.zone || "Albufeira")}`)
-            .addTo(mapMarkersLayer);
+          addTurquoisePinkCircleMarker(mapMarkersLayer, v, idx);
+        }
+      });
+    }
+
+    function initHomeMap() {
+      const el = document.getElementById("homeMap");
+      if (!el || typeof L === "undefined") return;
+      if (!homeLeafletMap) {
+        homeLeafletMap = L.map("homeMap").setView([37.0955, -8.2505], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(homeLeafletMap);
+        homeMarkersLayer = L.layerGroup().addTo(homeLeafletMap);
+      }
+      setTimeout(() => homeLeafletMap.invalidateSize(), 100);
+      homeMarkersLayer.clearLayers();
+      venuesData.forEach((v, idx) => {
+        if (typeof v.lat === "number" && typeof v.lng === "number") {
+          addTurquoisePinkCircleMarker(homeMarkersLayer, v, idx);
         }
       });
     }
@@ -2164,30 +2214,6 @@
     document.getElementById("langEnBtn").addEventListener("click", () => applyLanguage("en"));
     document.getElementById("langPtBtn").addEventListener("click", () => applyLanguage("pt"));
 
-    let homeLeafletMap = null;
-    let homeMarkersLayer = null;
-
-    function initHomeMap() {
-      const el = document.getElementById("homeMap");
-      if (!el || typeof L === "undefined") return;
-      if (!homeLeafletMap) {
-        homeLeafletMap = L.map("homeMap").setView([37.0955, -8.2505], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors"
-        }).addTo(homeLeafletMap);
-        homeMarkersLayer = L.layerGroup().addTo(homeLeafletMap);
-      }
-      setTimeout(() => homeLeafletMap.invalidateSize(), 100);
-      homeMarkersLayer.clearLayers();
-      venuesData.forEach((v) => {
-        if (typeof v.lat === "number" && typeof v.lng === "number") {
-          L.marker([v.lat, v.lng])
-            .bindPopup(`<strong>${escapeHtml(v.name)}</strong><br/>${escapeHtml(v.zone || "Albufeira")}`)
-            .addTo(homeMarkersLayer);
-        }
-      });
-    }
-
     function openImpressumSection() {
       document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
       document.querySelectorAll(".section-view").forEach((sec) => sec.classList.remove("active"));
@@ -2485,10 +2511,10 @@
     });
 
     // Boot
-    updateAdminUI();
     loadInitialData().then(() => {
       initHomeMap();
       applyLanguage(currentLang);
+      updateAdminUI();
     });
     loadCommunitySections();
   </script>
