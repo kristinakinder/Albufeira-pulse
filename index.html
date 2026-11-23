@@ -294,6 +294,15 @@
       border-color: rgba(0, 240, 255, 0.45);
     }
 
+    .event-card-clickable {
+      cursor: pointer;
+    }
+
+    .event-card-clickable:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.85), 0 0 18px rgba(0, 240, 255, 0.16);
+    }
+
     .card-img {
       width: 100%;
       height: 185px;
@@ -344,7 +353,39 @@
       color: var(--text-muted);
     }
 
-    /* Map */
+    /* Map & Event Day Controls */
+    .map-day-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: var(--bg-elevated);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+    }
+
+    .map-day-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .map-day-controls input[type="date"] {
+      width: auto;
+      padding: 6px 10px;
+      font-size: 0.84rem;
+    }
+
+    .map-day-summary {
+      font-size: 0.82rem;
+      color: var(--neon-cyan);
+      font-weight: 600;
+    }
+
     #albufeiraMap {
       width: 100%;
       height: 360px;
@@ -479,11 +520,38 @@
       box-shadow: 6px 6px 0px #050711, 0 20px 50px rgba(0, 0, 0, 0.75);
     }
 
+    .poster-modal-box {
+      max-width: 720px;
+    }
+
+    .full-poster-frame {
+      width: 100%;
+      background: #070913;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .full-poster-img {
+      display: block;
+      max-width: 100%;
+      max-height: 68vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
     .modal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
+      gap: 12px;
     }
 
     .form-grid {
@@ -740,6 +808,16 @@
         <button id="openAddEventBtn" class="btn-primary" type="button" data-i18n="btn.addEvent">+ Add Event</button>
       </div>
 
+      <div class="map-day-bar">
+        <div class="map-day-controls">
+          <label for="eventMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Event Day Map:</label>
+          <input id="eventMapDateInput" type="date" />
+          <button id="eventMapTodayBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">Today</button>
+          <button id="eventMapAllDaysBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">All Event Days</button>
+        </div>
+        <span id="homeMapStatus" class="map-day-summary"></span>
+      </div>
+
       <div id="homeMap" style="width: 100%; height: 280px; border-radius: 18px; border: 2px solid var(--border-subtle); box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.75); margin-bottom: 20px; overflow: hidden;"></div>
       <div id="eventsGrid" class="grid-cards"></div>
     </section>
@@ -756,6 +834,16 @@
           <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
           <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
+      </div>
+
+      <div class="map-day-bar">
+        <div class="map-day-controls">
+          <label for="venueMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Map Event Day:</label>
+          <input id="venueMapDateInput" type="date" />
+          <button id="venueMapTodayBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">Today</button>
+          <button id="venueMapAllDaysBtn" class="btn-secondary" type="button" style="padding:6px 11px; font-size:0.78rem;">All Event Days</button>
+        </div>
+        <span id="venuesMapStatus" class="map-day-summary"></span>
       </div>
 
       <div id="albufeiraMap"></div>
@@ -861,6 +949,36 @@
     </section>
   </main>
 
+  <!-- EVENT FULL POSTER & DETAILS MODAL -->
+  <div id="eventDetailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eventDetailTitle">
+    <div class="modal-box poster-modal-box">
+      <div class="modal-header">
+        <div>
+          <span id="eventDetailCategory" class="vice-sticker sticker-pink" style="margin-bottom: 6px;">EVENT</span>
+          <h3 id="eventDetailTitle" style="font-size: 1.35rem;">Event Details</h3>
+        </div>
+        <button id="closeEventDetailModalBtn" class="btn-secondary" type="button">✕</button>
+      </div>
+
+      <div id="eventDetailPosterWrap" class="full-poster-frame" style="display:none;">
+        <img id="eventDetailPosterImg" class="full-poster-img" src="" alt="" />
+      </div>
+
+      <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:0.88rem; color:var(--neon-cyan); font-weight:700; margin-bottom:10px;">
+        <span id="eventDetailDateTime"></span>
+        <span id="eventDetailFee" style="color:var(--neon-amber);"></span>
+      </div>
+
+      <p id="eventDetailVenue" style="font-size:0.92rem; color:var(--text-main); font-weight:600; margin-bottom:10px;"></p>
+      <p id="eventDetailDesc" style="font-size:0.94rem; color:var(--text-muted); white-space:pre-line;"></p>
+
+      <div class="modal-actions">
+        <button id="eventDetailEditBtn" class="btn-edit" type="button" style="display:none; padding:8px 14px; font-size:0.84rem;">Edit Event</button>
+        <button id="closeEventDetailBtn" class="btn-secondary" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ADD / EDIT EVENT MODAL -->
   <div id="eventModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
     <div class="modal-box">
@@ -963,7 +1081,7 @@
             <input id="eventImageFile" type="file" accept=".jpg,.jpeg,image/jpeg" />
             <input id="eventImage" name="image" type="hidden" />
             <div id="eventImagePreviewWrap" style="display:none; margin-top:8px; align-items:center; gap:10px;">
-              <img id="eventImagePreview" alt="Selected JPG preview" style="width:72px; height:72px; object-fit:cover; border-radius:8px; border:1px solid var(--border-subtle);" />
+              <img id="eventImagePreview" alt="Selected JPG preview" style="width:72px; height:72px; object-fit:contain; background:#070913; border-radius:8px; border:1px solid var(--border-subtle);" />
               <span id="eventImageFileName" style="font-size:0.78rem; color:var(--neon-cyan);"></span>
               <button id="clearEventImageBtn" class="btn-secondary" type="button" style="padding:4px 10px; font-size:0.75rem;">Remove</button>
             </div>
@@ -1299,10 +1417,106 @@
     let venuesData = [...SEED_VENUES];
     let activeCategory = "ALL";
     let activeZone = "ALL";
+    let activeMapDate = getLocalTodayIso();
     let leafletMap = null;
     let mapMarkersLayer = null;
     let homeLeafletMap = null;
     let homeMarkersLayer = null;
+
+    function getLocalTodayIso() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, "0");
+      const d = String(now.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function normalizeDateKey(val) {
+      if (!val) return "";
+      const match = String(val).match(/\d{4}-\d{2}-\d{2}/);
+      return match ? match[0] : String(val).trim();
+    }
+
+    function normalizeNameKey(str) {
+      return String(str || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function getPlacesWithEventsForDate(targetDate) {
+      const matchingEvents = activeMapDate === "ALL"
+        ? eventsData
+        : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizeDateKey(targetDate));
+
+      const places = [];
+      const seenKeys = new Set();
+
+      matchingEvents.forEach((ev, idx) => {
+        const venueMatch = venuesData.find((v) => {
+          const vn = normalizeNameKey(v.name);
+          const en = normalizeNameKey(ev.venueName);
+          return vn && en && (vn === en || vn.includes(en) || en.includes(vn));
+        });
+
+        const lat = venueMatch ? Number(venueMatch.lat) : Number(ev.lat || 37.0955);
+        const lng = venueMatch ? Number(venueMatch.lng) : Number(ev.lng || -8.2505);
+        const name = (ev.venueName || (venueMatch && venueMatch.name) || "Event Venue").trim();
+        const zone = (ev.zone || (venueMatch && venueMatch.zone) || "Albufeira").trim();
+        const key = `${normalizeNameKey(name)}|${lat.toFixed(4)}|${lng.toFixed(4)}`;
+
+        if (!seenKeys.has(key)) {
+          seenKeys.add(key);
+          places.push({
+            id: venueMatch ? venueMatch.id : `ev-place-${ev.id || idx}`,
+            name,
+            zone,
+            lat,
+            lng,
+            events: [ev]
+          });
+        } else {
+          const existing = places.find(
+            (p) => `${normalizeNameKey(p.name)}|${p.lat.toFixed(4)}|${p.lng.toFixed(4)}` === key
+          );
+          if (existing) existing.events.push(ev);
+        }
+      });
+
+      return places;
+    }
+
+    function syncMapDateInputs() {
+      const val = activeMapDate === "ALL" ? "" : activeMapDate;
+      const homeInput = document.getElementById("eventMapDateInput");
+      const venueInput = document.getElementById("venueMapDateInput");
+      if (homeInput) homeInput.value = val;
+      if (venueInput) venueInput.value = val;
+
+      const labelText = activeMapDate === "ALL"
+        ? "Showing venues with events across all dates"
+        : `Showing only venues with events on ${activeMapDate}`;
+
+      const homePlaces = getPlacesWithEventsForDate(activeMapDate);
+      const venuePlaces = activeZone === "ALL"
+        ? homePlaces
+        : homePlaces.filter((p) => normalizeNameKey(p.zone) === normalizeNameKey(activeZone));
+
+      const homeStatus = document.getElementById("homeMapStatus");
+      if (homeStatus) {
+        homeStatus.textContent = homePlaces.length
+          ? `${labelText} (${homePlaces.length} ${homePlaces.length === 1 ? "place" : "places"})`
+          : `${labelText} — No events on this day`;
+      }
+
+      const venuesStatus = document.getElementById("venuesMapStatus");
+      if (venuesStatus) {
+        venuesStatus.textContent = venuePlaces.length
+          ? `${labelText} (${venuePlaces.length} ${venuePlaces.length === 1 ? "place" : "places"})`
+          : `${labelText} — No events on this day`;
+      }
+    }
 
     // =========================================================================
     // 3. DATA LOADING & SUPABASE SYNC
@@ -1349,6 +1563,7 @@
       }
 
       populateVenueDatalist();
+      syncMapDateInputs();
       renderEvents();
       renderVenues();
       renderEmergencyContacts();
@@ -1365,7 +1580,7 @@
     }
 
     // =========================================================================
-    // 4. RENDER FUNCTIONS & TURQUOISE/PINK CIRCLE PINS
+    // 4. RENDER FUNCTIONS, CLICKABLE EVENT CARDS & TURQUOISE/PINK CIRCLE PINS
     // =========================================================================
     function escapeHtml(str) {
       return String(str || "")
@@ -1392,8 +1607,12 @@
       marker.on("mouseover", () => marker.setStyle({ radius: 11, color: strokeColor }));
       marker.on("mouseout", () => marker.setStyle({ radius: 9, color: "#090b16" }));
 
+      const eventLines = Array.isArray(venue.events) && venue.events.length
+        ? `<br/><span style="color:#ffb800;font-weight:700;">${venue.events.map((e) => escapeHtml(e.title)).join(", ")}</span>`
+        : "";
+
       marker.bindPopup(
-        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="color:${strokeColor};font-weight:700;">${escapeHtml(venue.zone || "Albufeira")}</span>`
+        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="color:${strokeColor};font-weight:700;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}`
       );
 
       marker.addTo(layerGroup);
@@ -1420,11 +1639,11 @@
             : "";
 
           const editButtonHtml = canEdit
-            ? `<button class="btn-edit" type="button" onclick="openEditEventModal(${ev.id})">${t("event.editBtn")}</button>`
+            ? `<button class="btn-edit" type="button" onclick="event.stopPropagation(); openEditEventModal('${escapeHtml(ev.id)}')">${t("event.editBtn")}</button>`
             : "";
 
           return `
-            <article class="card">
+            <article class="card event-card-clickable" onclick="openEventDetailModal('${escapeHtml(ev.id)}')" title="Click to view full event & poster">
               ${imgHtml}
               <div class="card-body">
                 <div class="card-meta">
@@ -1449,6 +1668,59 @@
         })
         .join("");
     }
+
+    const eventDetailModal = document.getElementById("eventDetailModal");
+    let currentDetailEventId = null;
+
+    window.openEventDetailModal = function (eventId) {
+      const ev = eventsData.find((item) => String(item.id) === String(eventId));
+      if (!ev) return;
+
+      currentDetailEventId = ev.id;
+      document.getElementById("eventDetailCategory").textContent = ev.category || "EVENT";
+      document.getElementById("eventDetailTitle").textContent = ev.title || "Event";
+      document.getElementById("eventDetailDateTime").textContent = `${ev.date || "TBA"}${ev.time ? " • " + ev.time : ""}`;
+      document.getElementById("eventDetailFee").textContent = `${t("event.feeLabel")} ${ev.fee || "Free"}`;
+      document.getElementById("eventDetailVenue").textContent = `${ev.venueName || ""}${ev.zone ? " — " + ev.zone : ""}`;
+      document.getElementById("eventDetailDesc").textContent = ev.desc || "";
+
+      const posterWrap = document.getElementById("eventDetailPosterWrap");
+      const posterImg = document.getElementById("eventDetailPosterImg");
+      if (ev.image) {
+        posterImg.src = ev.image;
+        posterImg.alt = `${ev.title || "Event"} poster`;
+        posterWrap.style.display = "flex";
+      } else {
+        posterImg.src = "";
+        posterWrap.style.display = "none";
+      }
+
+      const editBtn = document.getElementById("eventDetailEditBtn");
+      if (isAuthorizedAdmin()) {
+        editBtn.style.display = "inline-block";
+        editBtn.textContent = t("event.editBtn");
+      } else {
+        editBtn.style.display = "none";
+      }
+
+      eventDetailModal.classList.add("open");
+    };
+
+    function closeEventDetailModal() {
+      eventDetailModal.classList.remove("open");
+      currentDetailEventId = null;
+    }
+
+    document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal);
+    document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal);
+    eventDetailModal.addEventListener("click", (e) => {
+      if (e.target === eventDetailModal) closeEventDetailModal();
+    });
+    document.getElementById("eventDetailEditBtn").addEventListener("click", () => {
+      const targetId = currentDetailEventId;
+      closeEventDetailModal();
+      if (targetId !== null) window.openEditEventModal(targetId);
+    });
 
     function renderVenues() {
       const grid = document.getElementById("venuesGrid");
@@ -1481,7 +1753,9 @@
           .join("");
       }
 
-      updateMapMarkers(filtered);
+      syncMapDateInputs();
+      initOrUpdateMap();
+      initHomeMap();
     }
 
     function initOrUpdateMap() {
@@ -1494,11 +1768,12 @@
       }
       if (leafletMap) {
         setTimeout(() => leafletMap.invalidateSize(), 100);
-        updateMapMarkers(
+        const dayPlaces = getPlacesWithEventsForDate(activeMapDate);
+        const filteredPlaces =
           activeZone === "ALL"
-            ? venuesData
-            : venuesData.filter((v) => (v.zone || "").toLowerCase() === activeZone.toLowerCase())
-        );
+            ? dayPlaces
+            : dayPlaces.filter((p) => normalizeNameKey(p.zone) === normalizeNameKey(activeZone));
+        updateMapMarkers(filteredPlaces);
       }
     }
 
@@ -1506,7 +1781,7 @@
       if (!leafletMap || !mapMarkersLayer) return;
       mapMarkersLayer.clearLayers();
       list.forEach((v, idx) => {
-        if (typeof v.lat === "number" && typeof v.lng === "number") {
+        if (typeof v.lat === "number" && typeof v.lng === "number" && !Number.isNaN(v.lat) && !Number.isNaN(v.lng)) {
           addTurquoisePinkCircleMarker(mapMarkersLayer, v, idx);
         }
       });
@@ -1524,12 +1799,31 @@
       }
       setTimeout(() => homeLeafletMap.invalidateSize(), 100);
       homeMarkersLayer.clearLayers();
-      venuesData.forEach((v, idx) => {
-        if (typeof v.lat === "number" && typeof v.lng === "number") {
+      const dayPlaces = getPlacesWithEventsForDate(activeMapDate);
+      dayPlaces.forEach((v, idx) => {
+        if (typeof v.lat === "number" && typeof v.lng === "number" && !Number.isNaN(v.lat) && !Number.isNaN(v.lng)) {
           addTurquoisePinkCircleMarker(homeMarkersLayer, v, idx);
         }
       });
     }
+
+    function setMapDateFilter(newDate) {
+      activeMapDate = newDate || "ALL";
+      syncMapDateInputs();
+      initHomeMap();
+      initOrUpdateMap();
+    }
+
+    document.getElementById("eventMapDateInput").addEventListener("change", (e) => {
+      setMapDateFilter(e.target.value || getLocalTodayIso());
+    });
+    document.getElementById("venueMapDateInput").addEventListener("change", (e) => {
+      setMapDateFilter(e.target.value || getLocalTodayIso());
+    });
+    document.getElementById("eventMapTodayBtn").addEventListener("click", () => setMapDateFilter(getLocalTodayIso()));
+    document.getElementById("venueMapTodayBtn").addEventListener("click", () => setMapDateFilter(getLocalTodayIso()));
+    document.getElementById("eventMapAllDaysBtn").addEventListener("click", () => setMapDateFilter("ALL"));
+    document.getElementById("venueMapAllDaysBtn").addEventListener("click", () => setMapDateFilter("ALL"));
 
     function renderEmergencyContacts() {
       const grid = document.getElementById("emergencyGrid");
@@ -1790,6 +2084,8 @@
 
       closeEventModal();
       renderEvents();
+      initHomeMap();
+      initOrUpdateMap();
     });
 
     // =========================================================================
@@ -1859,6 +2155,8 @@
 
         if (targetTab === "venues") {
           initOrUpdateMap();
+        } else if (targetTab === "events") {
+          initHomeMap();
         }
         if (isHomeBtn) {
           window.scrollTo({ top: 0, behavior: "smooth" });
