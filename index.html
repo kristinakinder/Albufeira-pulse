@@ -349,6 +349,10 @@
       font-size: 0.78rem;
       white-space: nowrap;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .btn-secondary:hover {
@@ -364,9 +368,58 @@
       font-weight: 700;
       font-size: 0.76rem;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .btn-edit:hover {
+      background: var(--neon-cyan);
+      color: #07111a;
+    }
+
+    .venue-link-btn {
+      background: rgba(255, 184, 0, 0.12);
+      color: var(--neon-amber);
+      border: 1.5px solid rgba(255, 184, 0, 0.45);
+      border-radius: 10px;
+      padding: 6px 11px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .venue-link-btn:hover {
+      background: rgba(255, 184, 0, 0.24);
+      border-color: var(--neon-amber);
+      transform: translateY(-1px);
+    }
+
+    .gmaps-link-btn {
+      background: rgba(0, 240, 255, 0.14);
+      color: var(--neon-cyan);
+      border: 1.5px solid rgba(0, 240, 255, 0.48);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .gmaps-link-btn:hover {
       background: var(--neon-cyan);
       color: #07111a;
     }
@@ -396,11 +449,13 @@
       opacity: 0.52;
     }
 
-    .event-card-clickable {
+    .event-card-clickable,
+    .venue-card-clickable {
       cursor: pointer;
     }
 
-    .event-card-clickable:hover {
+    .event-card-clickable:hover,
+    .venue-card-clickable:hover {
       border-color: var(--neon-cyan);
     }
 
@@ -487,7 +542,8 @@
     }
 
     #homeMap,
-    #albufeiraMap {
+    #albufeiraMap,
+    #venueDetailMap {
       position: relative;
       z-index: 1;
       isolation: isolate;
@@ -505,6 +561,11 @@
     #albufeiraMap {
       height: 340px;
       margin-bottom: 20px;
+    }
+
+    #venueDetailMap {
+      height: 240px;
+      margin: 12px 0;
     }
 
     .retro-info-strip {
@@ -706,6 +767,7 @@
 
     .modal-actions {
       display: flex;
+      flex-wrap: wrap;
       justify-content: flex-end;
       gap: 10px;
       margin-top: 16px;
@@ -1235,13 +1297,59 @@
         <span id="eventDetailFee" style="color:var(--neon-amber);"></span>
       </div>
 
-      <p id="eventDetailVenue" style="font-size:0.9rem; color:var(--text-main); font-weight:600; margin-bottom:10px;"></p>
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:12px;">
+        <button id="eventDetailVenueBtn" class="venue-link-btn" type="button" title="Open Venue Card & Map">
+          <span id="eventDetailVenueText"></span>
+          <span style="font-size:0.76rem; opacity:0.85;">• View Venue &amp; Map →</span>
+        </button>
+        <a id="eventDetailGmapsLink" class="gmaps-link-btn" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
+          Google Maps ↗
+        </a>
+      </div>
+
       <p id="eventDetailDesc" style="font-size:0.92rem; color:var(--text-muted); white-space:pre-line;"></p>
 
       <div class="modal-actions">
         <button id="eventDetailDeleteBtn" class="btn-secondary" type="button" style="display:none; border-color:rgba(255,42,133,0.55); color:#ff7ab2;">Delete Event</button>
         <button id="eventDetailEditBtn" class="btn-edit" type="button" style="display:none; padding:7px 14px; font-size:0.82rem;">Edit Event</button>
         <button id="closeEventDetailBtn" class="btn-secondary" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VENUE CARD & MINI-MAP MODAL -->
+  <div id="venueDetailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="venueDetailTitle">
+    <div class="modal-box poster-modal-box">
+      <div class="modal-header">
+        <div>
+          <span id="venueDetailZoneBadge" class="vice-sticker sticker-cyan" style="margin-bottom: 6px;">ALBUFEIRA</span>
+          <h3 id="venueDetailTitle" style="font-size: 1.3rem;">Venue Details</h3>
+        </div>
+        <button id="closeVenueDetailModalBtn" class="btn-secondary" type="button">✕</button>
+      </div>
+
+      <p id="venueDetailAddress" style="font-size:0.9rem; color:var(--text-muted); margin-bottom:10px;"></p>
+
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px;">
+        <a id="venueDetailGmapsLink" class="gmaps-link-btn" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
+          Open in Google Maps (Directions) ↗
+        </a>
+        <button id="venueDetailShowOnMainMapBtn" class="btn-secondary" type="button">
+          Show on Venues Map
+        </button>
+      </div>
+
+      <div id="venueDetailMap"></div>
+
+      <div style="margin-top:12px;">
+        <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; color:var(--neon-amber); margin-bottom:6px;">
+          Scheduled Events at this Venue
+        </div>
+        <div id="venueDetailEventsList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="closeVenueDetailBtn" class="btn-secondary" type="button">Close</button>
       </div>
     </div>
   </div>
@@ -1610,6 +1718,8 @@
     let mapMarkersLayer = null;
     let homeLeafletMap = null;
     let homeMarkersLayer = null;
+    let venueDetailLeafletMap = null;
+    let venueDetailMarkerLayer = null;
 
     function getLocalTodayIso() {
       const now = new Date();
@@ -1636,6 +1746,57 @@
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9]+/g, " ")
         .trim();
+    }
+
+    function buildGoogleMapsUrl(venueObj) {
+      const namePart = (venueObj.name || venueObj.venueName || "").trim();
+      const addrPart = (venueObj.address || "").trim();
+      const hasCustomCoords =
+        typeof venueObj.lat === "number" &&
+        typeof venueObj.lng === "number" &&
+        !Number.isNaN(venueObj.lat) &&
+        !Number.isNaN(venueObj.lng) &&
+        !(Math.abs(venueObj.lat - 37.0955) < 0.0001 && Math.abs(venueObj.lng - -8.2505) < 0.0001 && !namePart.toLowerCase().includes("multiusos"));
+
+      const query = namePart
+        ? [namePart, addrPart || "Albufeira, Portugal"].filter(Boolean).join(", ")
+        : hasCustomCoords
+          ? `${venueObj.lat},${venueObj.lng}`
+          : "Albufeira, Portugal";
+
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    }
+
+    function resolveVenueForEvent(ev) {
+      const targetKey = normalizeNameKey(ev.venueName || ev.venue || "");
+      const matched = venuesData.find((v) => {
+        const vn = normalizeNameKey(v.name || "");
+        return vn && targetKey && (vn === targetKey || vn.includes(targetKey) || targetKey.includes(vn));
+      });
+
+      const baseVenue = matched
+        ? {
+            ...matched,
+            lat: Number(matched.lat) || 37.0955,
+            lng: Number(matched.lng) || -8.2505
+          }
+        : {
+            id: `ev-venue-${targetKey || "albufeira"}`,
+            name: (ev.venueName || ev.venue || "Albufeira Venue").trim(),
+            zone: ev.zone || "Albufeira",
+            address: `${(ev.venueName || ev.venue || "Albufeira").trim()}, Albufeira, Portugal`,
+            lat: Number(ev.lat) || 37.0955,
+            lng: Number(ev.lng) || -8.2505,
+            category: ev.category || "Venue"
+          };
+
+      const vKey = normalizeNameKey(baseVenue.name);
+      const venueEvents = eventsData.filter((item) => {
+        const ik = normalizeNameKey(item.venueName || item.venue || "");
+        return ik && vKey && (ik === vKey || ik.includes(vKey) || vKey.includes(ik));
+      });
+
+      return { ...baseVenue, events: venueEvents };
     }
 
     function eventsMatchVenue(ev, venue) {
@@ -1815,8 +1976,9 @@
         ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events.map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`).join("<br/>")}</span>`
         : "";
 
+      const gmapsUrl = buildGoogleMapsUrl(venue);
       marker.bindPopup(
-        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}`
+        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}<br/><a href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;color:#0284c7;font-weight:700;text-decoration:underline;">Google Maps ↗</a>`
       );
 
       marker.addTo(layerGroup);
@@ -1886,11 +2048,14 @@
       if (!ev) return;
 
       currentDetailEventId = ev.id;
+      const venueObj = resolveVenueForEvent(ev);
+
       document.getElementById("eventDetailCategory").textContent = ev.category || "EVENT";
       document.getElementById("eventDetailTitle").textContent = ev.title || "Event";
       document.getElementById("eventDetailDateTime").textContent = `${ev.date || "TBA"}${ev.time ? " • " + ev.time : ""}`;
       document.getElementById("eventDetailFee").textContent = `${t("event.feeLabel")} ${ev.fee || "Free"}`;
-      document.getElementById("eventDetailVenue").textContent = `${ev.venueName || ""}${ev.zone ? " — " + ev.zone : ""}`;
+      document.getElementById("eventDetailVenueText").textContent = `${venueObj.name}${venueObj.zone ? " — " + venueObj.zone : ""}`;
+      document.getElementById("eventDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
       document.getElementById("eventDetailDesc").textContent = ev.desc || "";
 
       const posterWrap = document.getElementById("eventDetailPosterWrap");
@@ -1923,6 +2088,14 @@
       currentDetailEventId = null;
     }
 
+    document.getElementById("eventDetailVenueBtn").addEventListener("click", () => {
+      const ev = eventsData.find((item) => String(item.id) === String(currentDetailEventId));
+      if (!ev) return;
+      const venueObj = resolveVenueForEvent(ev);
+      closeEventDetailModal();
+      openVenueDetailModal(venueObj);
+    });
+
     document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal);
     document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal);
     eventDetailModal.addEventListener("click", (e) => {
@@ -1936,6 +2109,99 @@
     document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => {
       const targetId = currentDetailEventId;
       if (targetId !== null) window.deleteEventById(targetId);
+    });
+
+    // VENUE DETAIL & MINI-MAP MODAL
+    const venueDetailModal = document.getElementById("venueDetailModal");
+    let currentDetailVenue = null;
+
+    window.openVenueDetailModal = function (venueObj) {
+      if (!venueObj) return;
+      currentDetailVenue = venueObj;
+
+      document.getElementById("venueDetailZoneBadge").textContent = venueObj.zone || "ALBUFEIRA";
+      document.getElementById("venueDetailTitle").textContent = venueObj.name || "Venue";
+      document.getElementById("venueDetailAddress").textContent = venueObj.address || `${venueObj.name}, Albufeira, Portugal`;
+      document.getElementById("venueDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
+
+      const eventsListEl = document.getElementById("venueDetailEventsList");
+      const vEvents = Array.isArray(venueObj.events) ? venueObj.events : [];
+      if (vEvents.length > 0) {
+        eventsListEl.innerHTML = vEvents
+          .map(
+            (e) => `
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; background:var(--bg-elevated); border:1px solid var(--border-subtle); border-radius:10px; cursor:pointer;"
+                   onclick="closeVenueDetailModal(); openEventDetailModal('${escapeHtml(e.id)}')">
+                <div>
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--text-main);">${escapeHtml(e.title)}</div>
+                  <div style="font-size:0.76rem; color:var(--neon-cyan);">${escapeHtml(e.date || "TBA")} • ${escapeHtml(e.time || "")}</div>
+                </div>
+                <span class="vice-sticker sticker-pink">${escapeHtml(e.category || "EVENT")}</span>
+              </div>
+            `
+          )
+          .join("");
+      } else {
+        eventsListEl.innerHTML = `<p style="font-size:0.84rem; color:var(--text-muted);">No scheduled events listed at this venue right now.</p>`;
+      }
+
+      venueDetailModal.classList.add("open");
+
+      const lat = Number(venueObj.lat) || 37.0955;
+      const lng = Number(venueObj.lng) || -8.2505;
+      setTimeout(() => {
+        if (typeof L === "undefined") return;
+        if (!venueDetailLeafletMap) {
+          venueDetailLeafletMap = L.map("venueDetailMap").setView([lat, lng], 15);
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+          }).addTo(venueDetailLeafletMap);
+          venueDetailMarkerLayer = L.layerGroup().addTo(venueDetailLeafletMap);
+        }
+        venueDetailLeafletMap.invalidateSize();
+        venueDetailLeafletMap.setView([lat, lng], 15);
+        venueDetailMarkerLayer.clearLayers();
+        addTurquoisePinkCircleMarker(venueDetailMarkerLayer, { ...venueObj, lat, lng }, 0);
+      }, 90);
+    };
+
+    function closeVenueDetailModal() {
+      venueDetailModal.classList.remove("open");
+    }
+
+    document.getElementById("closeVenueDetailModalBtn").addEventListener("click", closeVenueDetailModal);
+    document.getElementById("closeVenueDetailBtn").addEventListener("click", closeVenueDetailModal);
+    venueDetailModal.addEventListener("click", (e) => {
+      if (e.target === venueDetailModal) closeVenueDetailModal();
+    });
+
+    document.getElementById("venueDetailShowOnMainMapBtn").addEventListener("click", () => {
+      const targetVenue = currentDetailVenue;
+      closeVenueDetailModal();
+
+      // Switch to Venues & Map tab and show All Event Days so the venue pin is visible
+      activeMapDate = "ALL";
+      activeZone = "ALL";
+      document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((p) => {
+        p.classList.toggle("active", p.dataset.zone === "ALL");
+      });
+
+      document.querySelectorAll(".nav-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.tab === "venues");
+      });
+      document.querySelectorAll(".section-view").forEach((sec) => sec.classList.remove("active"));
+      document.getElementById("section-venues").classList.add("active");
+
+      renderVenues();
+      if (leafletMap && targetVenue) {
+        const lat = Number(targetVenue.lat) || 37.0955;
+        const lng = Number(targetVenue.lng) || -8.2505;
+        setTimeout(() => {
+          leafletMap.invalidateSize();
+          leafletMap.setView([lat, lng], 15);
+        }, 120);
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     window.deleteEventById = async function (eventId) {
@@ -1967,6 +2233,13 @@
       renderVenues();
     };
 
+    window.openVenueCardByIndex = function (idx) {
+      const activeVenues = getMapVenuesForFilter(activeZone, activeMapDate);
+      if (activeVenues[idx]) {
+        openVenueDetailModal(activeVenues[idx]);
+      }
+    };
+
     function renderVenues() {
       const grid = document.getElementById("venuesGrid");
       const activeVenues = getMapVenuesForFilter(activeZone, activeMapDate);
@@ -1980,9 +2253,10 @@
               const eventBadges = v.events
                 .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title)} (${escapeHtml(e.date)})</span>`)
                 .join(" ");
+              const gmapsUrl = buildGoogleMapsUrl(v);
 
               return `
-                <article class="card">
+                <article class="card venue-card-clickable" onclick="openVenueCardByIndex(${idx})" title="Click to view venue map & directions">
                   <div class="card-body">
                     <div class="card-meta">
                       <span>${escapeHtml(v.zone || "Albufeira")}</span>
@@ -1992,6 +2266,10 @@
                     <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
                     <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;">
                       ${eventBadges}
+                    </div>
+                    <div class="card-footer">
+                      <span style="color:var(--text-muted);">View on map</span>
+                      <a class="btn-edit" href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Google Maps ↗</a>
                     </div>
                   </div>
                 </article>
