@@ -34,9 +34,8 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
       background-image:
-        radial-gradient(circle at 10% 6%, rgba(255, 42, 133, 0.18), transparent 36%),
-        radial-gradient(circle at 90% 10%, rgba(0, 240, 255, 0.15), transparent 38%),
-        radial-gradient(circle at 50% 0%, rgba(255, 184, 0, 0.08), transparent 45%),
+        radial-gradient(circle at 10% 6%, rgba(255, 42, 133, 0.16), transparent 36%),
+        radial-gradient(circle at 90% 10%, rgba(0, 240, 255, 0.14), transparent 38%),
         linear-gradient(180deg, #090b16 0%, #0d1022 100%);
       color: var(--text-main);
       min-height: 100vh;
@@ -51,11 +50,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 10px;
-      border-radius: 8px;
+      padding: 3px 9px;
+      border-radius: 7px;
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       border: 1px solid var(--border-subtle);
@@ -81,24 +80,47 @@
       color: var(--neon-amber);
     }
 
-    /* Header & Nav */
+    /* Clean Architectural Header */
     header {
       position: sticky;
       top: 0;
       z-index: 1500;
       backdrop-filter: blur(14px);
-      background: rgba(9, 11, 22, 0.9);
+      background: rgba(9, 11, 22, 0.92);
       border-bottom: 1px solid var(--border-subtle);
     }
 
     .header-inner {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 12px 20px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mascot {
+      width: 74px;
+      height: 74px;
+      flex-shrink: 0;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.22));
+    }
+
+    .brand-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      white-space: nowrap;
     }
 
     .header-right {
@@ -109,33 +131,99 @@
       margin-left: auto;
     }
 
-    .brand {
+    .admin-bar {
       display: flex;
       align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
     }
 
-    .brand-mascot {
-      width: 128px;
-      height: 128px;
-      flex-shrink: 0;
-      display: block;
-      filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.24));
+    .admin-status {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 7px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
     }
 
-    @media (max-width: 640px) {
+    .admin-status.active {
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1.5px solid var(--border-subtle);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      border-color: rgba(0, 240, 255, 0.55);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, rgba(255, 42, 133, 0.24), rgba(0, 240, 255, 0.18));
+      color: #ffffff;
+      border-color: var(--neon-cyan);
+    }
+
+    @media (max-width: 768px) {
       .header-inner {
         flex-wrap: wrap;
-      }
-      .header-right {
-        align-items: flex-start;
-        margin-left: 0;
-        width: 100%;
+        padding: 8px 14px;
+        gap: 8px;
       }
       .brand-mascot {
-        width: 126px;
-        height: 126px;
+        width: 56px;
+        height: 56px;
+      }
+      .brand-title {
+        font-size: 1.2rem;
+      }
+      .header-right {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        overflow-x: auto;
+        scrollbar-width: none;
+        gap: 8px;
+      }
+      .header-right::-webkit-scrollbar {
+        display: none;
+      }
+      .admin-bar {
+        order: 2;
+        flex-shrink: 0;
+      }
+      .admin-status {
+        display: none;
+      }
+      .nav-tabs {
+        order: 1;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+      }
+      .nav-tabs::-webkit-scrollbar {
+        display: none;
       }
     }
 
@@ -152,99 +240,33 @@
       pointer-events: none;
     }
 
-    .brand-title {
-      font-size: 1.55rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-main);
-    }
-
-    .nav-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 6px;
-    }
-
-    @media (max-width: 640px) {
-      .nav-tabs {
-        justify-content: flex-start;
-      }
-    }
-
-    .nav-btn {
-      background: var(--bg-card);
-      color: var(--text-muted);
-      border: 2px solid var(--border-subtle);
-      padding: 7px 13px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.84rem;
-      cursor: pointer;
-      transition: all 0.18s ease;
-    }
-
-    .nav-btn:hover {
-      color: var(--text-main);
-      border-color: rgba(0, 240, 255, 0.55);
-      transform: translateY(-1px);
-    }
-
-    .nav-btn.active {
-      background: linear-gradient(135deg, rgba(255, 42, 133, 0.25), rgba(0, 240, 255, 0.2));
-      color: #ffffff;
-      border-color: var(--neon-cyan);
-      box-shadow: 3px 3px 0px #050711, 0 0 14px rgba(0, 240, 255, 0.25);
-    }
-
-    .admin-bar {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .admin-status {
-      font-size: 0.76rem;
-      padding: 4px 9px;
-      border-radius: 8px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-    }
-
-    .admin-status.active {
-      border-color: var(--neon-cyan);
-      color: var(--neon-cyan);
-      font-weight: 700;
-    }
-
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 16px 20px 84px;
+      padding: 14px 18px 92px;
     }
 
-    /* Slim Action Bar (+ Add Event & + Add Venue matched) */
-    .global-quick-actions {
+    /* Compact Toolbar Row */
+    .top-control-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 10px;
-      padding: 7px 12px;
-      margin-bottom: 16px;
-      background: rgba(18, 22, 41, 0.85);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
+      margin-bottom: 14px;
     }
 
     .quick-action-group {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 768px) {
+      .hide-on-mobile-fab {
+        display: none !important;
+      }
     }
 
     .section-view {
@@ -260,48 +282,59 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .filter-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .filter-pills.scrollable-pills {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        max-width: 100%;
+        padding-bottom: 2px;
+      }
+      .filter-pills.scrollable-pills::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     .pill-btn {
       background: var(--bg-card);
       color: var(--text-muted);
-      border: 2px solid var(--border-subtle);
-      padding: 5px 12px;
+      border: 1.5px solid var(--border-subtle);
+      padding: 4px 11px;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
+      white-space: nowrap;
       cursor: pointer;
-      transition: all 0.16s ease;
+      transition: all 0.15s ease;
     }
 
     .pill-btn.active {
       background: linear-gradient(135deg, var(--neon-pink), var(--sunset-coral));
       color: #ffffff;
       border-color: #fffdf7;
-      box-shadow: 2px 2px 0px #050711, 0 0 12px rgba(255, 42, 133, 0.45);
     }
 
-    /* Matched primary action buttons for + Add Event and + Add Venue */
     .action-btn {
       background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
       color: #ffffff;
-      border: 2px solid #fffdf7;
-      padding: 7px 15px;
+      border: 1.5px solid #fffdf7;
+      padding: 6px 13px;
       border-radius: 10px;
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 0.86rem;
-      letter-spacing: 0.01em;
+      font-size: 0.82rem;
+      white-space: nowrap;
       cursor: pointer;
-      box-shadow: 2px 2px 0px #050711, 0 3px 14px rgba(255, 42, 133, 0.35);
       transition: transform 0.15s ease, filter 0.15s ease;
     }
 
@@ -314,13 +347,11 @@
       background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
       color: #ffffff;
       border: 2px solid #fffdf7;
-      padding: 10px 20px;
-      border-radius: 12px;
+      padding: 9px 18px;
+      border-radius: 11px;
       font-weight: 800;
-      font-size: 0.94rem;
-      letter-spacing: 0.01em;
+      font-size: 0.9rem;
       cursor: pointer;
-      box-shadow: 3px 3px 0px #050711, 0 4px 18px rgba(255, 42, 133, 0.42);
       transition: transform 0.15s ease, filter 0.15s ease;
     }
 
@@ -333,10 +364,11 @@
       background: var(--bg-elevated);
       color: var(--text-main);
       border: 1.5px solid var(--border-subtle);
-      padding: 6px 12px;
-      border-radius: 9px;
+      padding: 5px 10px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
+      white-space: nowrap;
       cursor: pointer;
     }
 
@@ -348,12 +380,11 @@
       background: rgba(0, 240, 255, 0.16);
       color: var(--neon-cyan);
       border: 1.5px solid rgba(0, 240, 255, 0.55);
-      padding: 6px 12px;
-      border-radius: 9px;
+      padding: 5px 10px;
+      border-radius: 8px;
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
     .btn-edit:hover {
@@ -363,18 +394,17 @@
 
     .grid-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
+      gap: 16px;
     }
 
     .card {
       background: var(--bg-card);
-      border: 2px solid var(--border-subtle);
-      border-radius: 18px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.75);
       transition: transform 0.18s ease, border-color 0.18s ease;
     }
 
@@ -383,28 +413,27 @@
       border-color: rgba(0, 240, 255, 0.45);
     }
 
+    .card.past-event-dimmed {
+      opacity: 0.52;
+    }
+
     .event-card-clickable {
       cursor: pointer;
     }
 
-    .event-card-clickable:hover {
-      border-color: var(--neon-cyan);
-      box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.85), 0 0 18px rgba(0, 240, 255, 0.16);
-    }
-
     .card-img {
       width: 100%;
-      height: 185px;
+      height: 180px;
       object-fit: cover;
       background: var(--bg-elevated);
-      border-bottom: 2px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
     }
 
     .card-body {
-      padding: 16px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       flex: 1;
     }
 
@@ -414,19 +443,19 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--neon-cyan);
       font-weight: 700;
     }
 
     .card-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--text-main);
     }
 
     .card-desc {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
       flex: 1;
     }
@@ -436,9 +465,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      padding-top: 10px;
+      padding-top: 9px;
       border-top: 1px solid var(--border-subtle);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
     }
 
@@ -447,29 +476,29 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding: 8px 14px;
-      background: var(--bg-elevated);
-      border: 1.5px solid var(--border-subtle);
-      border-radius: 14px;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
     }
 
     .map-day-controls {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .map-day-controls input[type="date"] {
       width: auto;
-      padding: 5px 10px;
-      font-size: 0.82rem;
+      padding: 4px 8px;
+      font-size: 0.78rem;
     }
 
     .map-day-summary {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--neon-cyan);
       font-weight: 600;
     }
@@ -480,44 +509,41 @@
       z-index: 1;
       isolation: isolate;
       width: 100%;
-      border-radius: 18px;
-      border: 2px solid var(--border-subtle);
-      box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.75);
+      border-radius: 16px;
+      border: 1.5px solid var(--border-subtle);
       overflow: hidden;
     }
 
     #homeMap {
-      height: 280px;
-      margin-bottom: 20px;
+      height: 245px;
+      margin-bottom: 18px;
     }
 
     #albufeiraMap {
-      height: 360px;
-      margin-bottom: 22px;
+      height: 340px;
+      margin-bottom: 20px;
     }
 
     .retro-info-strip {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .retro-tile {
       background: var(--bg-elevated);
-      border: 2px solid var(--border-subtle);
-      border-radius: 16px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 14px;
       padding: 14px 16px;
-      box-shadow: 3px 3px 0px rgba(5, 7, 17, 0.75);
     }
 
     .emergency-banner {
       background: linear-gradient(120deg, rgba(255, 42, 133, 0.2), rgba(255, 184, 0, 0.14), rgba(0, 240, 255, 0.16));
-      border: 2px solid rgba(255, 42, 133, 0.5);
-      border-radius: 18px;
-      box-shadow: 4px 4px 0px rgba(5, 7, 17, 0.75);
-      padding: 18px 20px;
-      margin-bottom: 20px;
+      border: 1.5px solid rgba(255, 42, 133, 0.5);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -533,11 +559,10 @@
 
     .emergency-card {
       background: var(--bg-card);
-      border: 2px solid var(--border-subtle);
+      border: 1.5px solid var(--border-subtle);
       border-left: 5px solid var(--neon-pink);
-      border-radius: 16px;
-      box-shadow: 3px 3px 0px rgba(5, 7, 17, 0.75);
-      padding: 15px 16px;
+      border-radius: 14px;
+      padding: 14px 16px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -553,12 +578,12 @@
 
     .emergency-name {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.98rem;
       color: var(--text-main);
     }
 
     .emergency-cat {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--text-muted);
@@ -581,7 +606,7 @@
       border-radius: 9px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
     }
 
     .phone-link:hover {
@@ -592,13 +617,13 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(4, 6, 15, 0.82);
+      background: rgba(4, 6, 15, 0.84);
       backdrop-filter: blur(6px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
-      z-index: 2000;
+      z-index: 2500;
     }
 
     .modal-backdrop.open {
@@ -607,16 +632,16 @@
 
     .modal-box {
       position: relative;
-      z-index: 2001;
+      z-index: 2501;
       background: var(--bg-card);
-      border: 2px solid rgba(0, 240, 255, 0.45);
-      border-radius: 20px;
+      border: 1.5px solid rgba(0, 240, 255, 0.45);
+      border-radius: 18px;
       width: 100%;
       max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 22px;
-      box-shadow: 6px 6px 0px #050711, 0 20px 50px rgba(0, 0, 0, 0.75);
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
     }
 
     .poster-modal-box {
@@ -626,10 +651,10 @@
     .full-poster-frame {
       width: 100%;
       background: #070913;
-      border: 1.5px solid var(--border-subtle);
-      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
       padding: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -649,7 +674,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       gap: 12px;
     }
 
@@ -670,7 +695,7 @@
     }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-muted);
     }
@@ -700,13 +725,13 @@
       display: flex;
       justify-content: flex-end;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
     footer {
       max-width: 1280px;
-      margin: 0 auto 76px;
-      padding: 0 20px;
+      margin: 0 auto 84px;
+      padding: 0 18px;
     }
 
     .impressum-box {
@@ -755,10 +780,10 @@
 
     .empty-state {
       text-align: center;
-      padding: 40px 20px;
+      padding: 36px 20px;
       background: var(--bg-card);
-      border: 2px dashed var(--border-subtle);
-      border-radius: 18px;
+      border: 1.5px dashed var(--border-subtle);
+      border-radius: 16px;
       color: var(--text-muted);
     }
 
@@ -768,28 +793,34 @@
       }
     }
 
-    /* Centered Mobile Bottom Action Button */
+    /* Centered Mobile Bottom Add Button */
     .mobile-fab-add {
       display: none;
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 20px;
-      z-index: 1600;
-      width: 54px;
-      height: 54px;
+      bottom: 18px;
+      z-index: 2100;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       border: 2px solid #fffdf7;
       background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
       color: #ffffff;
       font-family: 'Outfit', sans-serif;
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 800;
       line-height: 1;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 4px 4px 0px #050711, 0 8px 24px rgba(255, 42, 133, 0.45);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 6px 22px rgba(255, 42, 133, 0.55), 0 3px 10px rgba(0, 0, 0, 0.75);
+    }
+
+    .mobile-fab-add:active {
+      transform: translateX(-50%) scale(0.94);
     }
 
     @media (max-width: 768px) {
@@ -803,7 +834,6 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
     .qr-chip-btn {
@@ -813,7 +843,7 @@
       border-radius: 8px;
       padding: 3px 8px;
       font-family: 'Outfit', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
@@ -830,13 +860,13 @@
       position: absolute;
       top: calc(100% + 10px);
       left: 0;
-      z-index: 1900;
+      z-index: 2200;
       background: var(--bg-card);
-      border: 2px solid rgba(0, 240, 255, 0.5);
+      border: 1.5px solid rgba(0, 240, 255, 0.5);
       border-radius: 16px;
       padding: 14px;
       width: 224px;
-      box-shadow: 6px 6px 0px #050711, 0 16px 36px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8);
       text-align: center;
     }
 
@@ -850,135 +880,115 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Manga / Video-Game Cel-Shaded Gull Mascot SVG -->
-          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="128" height="128" role="img" aria-label="Albufeira Pulse Manga Game Gull Mascot">
+          <!-- Sleek Architectural / Editorial Albufeira Seagull Emblem -->
+          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="74" height="74" role="img" aria-label="Albufeira Pulse Seagull Emblem">
             <defs>
-              <linearGradient id="gameArenaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#171e3d" />
-                <stop offset="55%" stop-color="#0b0f22" />
-                <stop offset="100%" stop-color="#060813" />
+              <linearGradient id="skyDiscGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#172042" />
+                <stop offset="60%" stop-color="#0c1024" />
+                <stop offset="100%" stop-color="#070914" />
               </linearGradient>
-              <linearGradient id="celPlumageLit" x1="10%" y1="5%" x2="80%" y2="95%">
+              <linearGradient id="duskGlowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.32" />
+                <stop offset="50%" stop-color="#ffb800" stop-opacity="0.16" />
+                <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.28" />
+              </linearGradient>
+              <linearGradient id="plumageLight" x1="20%" y1="10%" x2="80%" y2="90%">
                 <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="75%" stop-color="#eef4fc" />
-                <stop offset="100%" stop-color="#cdd9ea" />
+                <stop offset="72%" stop-color="#edf3fa" />
+                <stop offset="100%" stop-color="#c6d3e3" />
               </linearGradient>
-              <linearGradient id="celWingIndigo" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#293863" />
-                <stop offset="60%" stop-color="#141d38" />
-                <stop offset="100%" stop-color="#090e1d" />
+              <linearGradient id="mantleSlate" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#33436b" />
+                <stop offset="58%" stop-color="#1b2540" />
+                <stop offset="100%" stop-color="#0f1526" />
               </linearGradient>
-              <linearGradient id="celGoldBeak" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffe033" />
-                <stop offset="55%" stop-color="#ff9e00" />
-                <stop offset="100%" stop-color="#ff4d2e" />
+              <linearGradient id="gullBillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd53d" />
+                <stop offset="65%" stop-color="#ff9914" />
+                <stop offset="100%" stop-color="#e85d1a" />
               </linearGradient>
             </defs>
 
-            <!-- Outer game emblem frame -->
-            <circle cx="120" cy="120" r="108" fill="url(#gameArenaGrad)" stroke="#00f0ff" stroke-width="2.6" stroke-opacity="0.7" />
-            <circle cx="120" cy="120" r="101" fill="none" stroke="#050711" stroke-width="3" />
+            <!-- Emblem disc -->
+            <circle cx="120" cy="120" r="108" fill="url(#skyDiscGrad)" stroke="#00f0ff" stroke-width="2.5" stroke-opacity="0.65" />
+            <circle cx="120" cy="120" r="102" fill="url(#duskGlowGrad)" />
 
-            <!-- Manga speed / energy streaks behind the sentinel -->
-            <g stroke="#00f0ff" stroke-linecap="round" opacity="0.45">
-              <line x1="28" y1="68" x2="86" y2="82" stroke-width="2" />
-              <line x1="22" y1="92" x2="74" y2="102" stroke-width="1.4" />
-              <line x1="176" y1="42" x2="208" y2="30" stroke-width="2" />
-              <line x1="186" y1="56" x2="214" y2="48" stroke-width="1.4" />
-            </g>
-            <g stroke="#ff2a85" stroke-linecap="round" opacity="0.5">
-              <line x1="34" y1="116" x2="72" y2="122" stroke-width="1.8" />
-              <line x1="182" y1="98" x2="212" y2="94" stroke-width="1.6" />
-            </g>
+            <!-- Minimal sea horizon & whitewashed parapet wall -->
+            <path d="M24 156 Q 75 151, 120 155 T 216 154" fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-opacity="0.35" />
+            <polygon points="36,176 204,176 198,194 42,194" fill="#e5edf7" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
+            <polygon points="40,188 200,188 198,194 42,194" fill="#a8b8ce" />
 
-            <!-- Stylized coastal wall / stage ledge -->
-            <polygon points="40,174 200,174 195,193 45,193" fill="#e6eef8" stroke="#050711" stroke-width="3.2" stroke-linejoin="round" />
-            <!-- Cel-shadow strip on ledge -->
-            <polygon points="45,186 195,186 195,193 45,193" fill="#9fb0c7" />
-            <polygon points="45,193 195,193 192,201 48,201" fill="#161f38" stroke="#050711" stroke-width="2.6" stroke-linejoin="round" />
+            <!-- Gull legs & webbed feet -->
+            <g stroke="#080b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M114 152 L110 176" stroke="#ff9e1b" stroke-width="5.5" />
+              <path d="M114 152 L110 176" fill="none" stroke="#080b16" stroke-width="2" />
+              <path d="M110 176 L97 178 L107 174 L117 176 Z" fill="#ff9e1b" />
 
-            <!-- Manga-proportioned legs & talons -->
-            <g stroke="#050711" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="116" y1="154" x2="112" y2="174" stroke="#ff9e00" stroke-width="6.5" />
-              <line x1="116" y1="154" x2="112" y2="174" stroke="#050711" stroke-width="2.4" />
-              <polygon points="112,174 94,177 105,172 119,174" fill="url(#celGoldBeak)" />
-
-              <line x1="134" y1="154" x2="134" y2="174" stroke="#ff9e00" stroke-width="6.5" />
-              <line x1="134" y1="154" x2="134" y2="174" stroke="#050711" stroke-width="2.4" />
-              <polygon points="134,174 117,177 128,172 143,174" fill="url(#celGoldBeak)" />
+              <path d="M131 153 L131 176" stroke="#ff9e1b" stroke-width="5.5" />
+              <path d="M131 153 L131 176" fill="none" stroke="#080b16" stroke-width="2" />
+              <path d="M131 176 L119 178 L128 174 L139 176 Z" fill="#ff9e1b" />
             </g>
 
-            <!-- Sharp manga tail feathers -->
-            <polygon points="78,132 30,141 47,149 35,156 84,146" fill="url(#celWingIndigo)" stroke="#050711" stroke-width="3.6" stroke-linejoin="round" />
-            <polygon points="78,132 42,142 82,140" fill="#ffffff" stroke="#050711" stroke-width="2.4" stroke-linejoin="round" />
+            <!-- Crisp white tail feathers -->
+            <path d="M77 132 L35 142 L44 148 L38 153 L83 145 Z" fill="#f1f5fb" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
 
-            <!-- Main body & proud head silhouette -->
-            <path d="M134 40
-                     L155 41
-                     L169 52
-                     L172 67
-                     L168 84
-                     C167 103, 170 125, 158 143
-                     C146 157, 126 160, 105 158
-                     C87 156, 75 145, 76 131
-                     C97 126, 115 110, 125 87
-                     C131 72, 129 54, 134 40 Z"
-                  fill="url(#celPlumageLit)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
+            <!-- Smooth, organic S-curved gull head, neck & chest -->
+            <path d="M136 44
+                     C147 41, 161 45, 167 56
+                     C170 62, 170 69, 167 76
+                     C163 85, 165 98, 166 112
+                     C167 131, 156 148, 136 154
+                     C117 159, 93 156, 80 143
+                     C75 138, 75 132, 79 128
+                     C98 122, 115 107, 123 86
+                     C128 73, 126 57, 131 49
+                     C132 46, 134 45, 136 44 Z"
+                  fill="url(#plumageLight)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
 
-            <!-- Crisp anime/game cel-shaded shadow band (hard-edged, no blur) -->
-            <path d="M168 84
-                     C167 104, 169 126, 157 143
-                     C145 157, 125 160, 103 157
-                     L121 143
-                     L144 123
-                     L156 97 Z"
-                  fill="#b5c4d8" />
+            <!-- Soft shaded belly contour -->
+            <path d="M165 95
+                     C166 119, 162 142, 138 152
+                     C120 158, 98 155, 84 144
+                     C104 147, 129 142, 146 125
+                     C156 115, 162 104, 165 95 Z"
+                  fill="#b7c6da" opacity="0.7" />
 
-            <!-- Glossy white anime specular highlight on upper chest/head -->
-            <polygon points="137,45 150,45 144,68 133,66" fill="#ffffff" opacity="0.9" />
+            <!-- Sleek slate-grey folded wing with white tertial crescent & black primary tips -->
+            <path d="M128 84
+                     C105 84, 79 97, 58 119
+                     L34 139
+                     L56 138
+                     L45 146
+                     L72 144
+                     C102 141, 129 130, 141 112
+                     C147 102, 144 88, 128 84 Z"
+                  fill="url(#mantleSlate)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
 
-            <!-- Swept manga wing with cel highlight & sharp primary feathers -->
-            <path d="M131 82
-                     C105 84, 75 98, 53 123
-                     L26 141
-                     L49 143
-                     L36 153
-                     L61 150
-                     L50 159
-                     L79 152
-                     C108 146, 133 132, 143 111
-                     C148 100, 145 89, 131 82 Z"
-                  fill="url(#celWingIndigo)" stroke="#050711" stroke-width="3.8" stroke-linejoin="round" />
+            <!-- Subtle wing covert highlight -->
+            <path d="M126 88 C105 89, 83 100, 65 119 C85 116, 108 109, 129 94 Z" fill="#465c8f" opacity="0.8" />
+            <!-- White tertial edge -->
+            <path d="M72 136 C95 134, 118 127, 133 114" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" />
 
-            <!-- Hard-edged cel highlight along the wing shoulder -->
-            <path d="M129 86 C106 88, 80 100, 61 122 L84 119 C104 111, 122 101, 133 90 Z" fill="#465f9c" />
-            <!-- Cyan edge glint -->
-            <path d="M131 83 C106 85, 77 99, 55 123" fill="none" stroke="#00f0ff" stroke-width="1.8" stroke-linecap="round" />
+            <!-- Authentic yellow-legged gull bill with hooked tip & red gonys spot -->
+            <path d="M167 63
+                     L201 69
+                     C206 70, 206 76, 199 79
+                     L188 79
+                     L184 82
+                     L165 78 Z"
+                  fill="url(#gullBillGrad)" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
+            <path d="M167 72 L199 74" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
+            <!-- Classic red spot on lower mandible -->
+            <circle cx="190" cy="76.5" r="2.5" fill="#ff2a55" />
 
-            <!-- Sharp video-game hooked beak with cel highlight -->
-            <path d="M170 66
-                     L205 71
-                     C211 73, 210 80, 200 83
-                     L186 83
-                     L182 88
-                     L167 84 Z"
-                  fill="url(#celGoldBeak)" stroke="#050711" stroke-width="3.4" stroke-linejoin="round" />
-            <polygon points="172,69 197,72 195,75 172,73" fill="#fff394" />
-            <line x1="170" y1="77" x2="201" y2="77" stroke="#050711" stroke-width="2.5" stroke-linecap="round" />
-            <circle cx="193" cy="80.2" r="2.2" fill="#ff2a85" />
-
-            <!-- Expressive manga / RPG character eye with twin shine dots -->
+            <!-- Natural, keen gull eye (no boxy glasses) -->
             <g>
-              <polygon points="145,56 164,55 166,65 147,66" fill="#ffffff" stroke="#050711" stroke-width="2.6" stroke-linejoin="round" />
-              <!-- Upper iris shadow -->
-              <path d="M148 57 L164 56 L164 60 L148 61 Z" fill="#8fa4c4" />
-              <!-- Dark pupil -->
-              <circle cx="157" cy="61" r="3.8" fill="#050711" />
-              <!-- Primary & secondary anime catchlights -->
-              <circle cx="158.6" cy="59.2" r="1.7" fill="#ffffff" />
-              <circle cx="155.2" cy="62.4" r="0.9" fill="#00f0ff" />
-              <!-- Bold manga brow -->
-              <polygon points="142,49 166,53 165,56 142,52" fill="#050711" />
+              <ellipse cx="155" cy="59" rx="5.2" ry="4.4" fill="#ffe484" stroke="#080b16" stroke-width="2" />
+              <circle cx="155.5" cy="59" r="2.5" fill="#080b16" />
+              <circle cx="156.6" cy="57.8" r="1" fill="#ffffff" />
+              <!-- Subtle sleek brow contour -->
+              <path d="M148 53.5 Q 155 51.5, 162 54.5" fill="none" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
             </g>
           </svg>
 
@@ -1005,35 +1015,26 @@
             <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
           </div>
           <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
-          <button id="adminToggleBtn" class="btn-secondary" type="button">Admin Sign In</button>
+          <button id="adminToggleBtn" class="btn-secondary" type="button">Admin</button>
         </div>
 
         <nav class="nav-tabs" aria-label="Primary Sections">
-          <button class="nav-btn active" data-tab="events" data-i18n="nav.home">Home</button>
-          <button class="nav-btn" data-tab="events" data-i18n="nav.events">Events</button>
+          <button class="nav-btn active" data-tab="events" data-i18n="nav.events">Events</button>
           <button class="nav-btn" data-tab="venues" data-i18n="nav.venues">Venues & Map</button>
           <button class="nav-btn" data-tab="classifieds" data-i18n="nav.classifieds">Classifieds</button>
           <button class="nav-btn" data-tab="forum" data-i18n="nav.forum">Forum</button>
           <button class="nav-btn" data-tab="links" data-i18n="nav.links">Useful Links</button>
-          <button class="nav-btn" data-tab="emergency" data-i18n="nav.emergency">Emergency Contacts</button>
+          <button class="nav-btn" data-tab="emergency" data-i18n="nav.emergency">Emergency</button>
         </nav>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- THIN ACTION BAR: + ADD EVENT & + ADD VENUE MATCHED -->
-    <div class="global-quick-actions" aria-label="Quick Actions">
-      <div class="quick-action-group">
-        <button id="openAddEventBtn" class="action-btn" type="button" data-i18n="btn.addEvent">+ Add Event</button>
-        <button id="openAddVenueBtn" class="action-btn" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
-      </div>
-    </div>
-
     <!-- EVENTS SECTION -->
     <section id="section-events" class="section-view active">
-      <div class="toolbar">
-        <div class="filter-pills" id="eventCategoryFilters">
+      <div class="top-control-row">
+        <div class="filter-pills scrollable-pills" id="eventCategoryFilters">
           <button class="pill-btn active" data-category="ALL" data-i18n="cat.all">All</button>
           <button class="pill-btn" data-category="MARKETS" data-i18n="cat.markets">Markets</button>
           <button class="pill-btn" data-category="MUSIC & NIGHTLIFE" data-i18n="cat.music">Music & Nightlife</button>
@@ -1041,11 +1042,16 @@
           <button class="pill-btn" data-category="FAMILY & FESTIVALS" data-i18n="cat.family">Family & Festivals</button>
           <button class="pill-btn" data-category="SPORTS & OUTDOORS" data-i18n="cat.sports">Sports & Outdoors</button>
         </div>
+
+        <div class="quick-action-group">
+          <button id="openAddEventBtn" class="action-btn hide-on-mobile-fab" type="button" data-i18n="btn.addEvent">+ Add Event</button>
+          <button id="openAddVenueBtn" class="btn-secondary" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
+        </div>
       </div>
 
       <div class="map-day-bar">
         <div class="map-day-controls">
-          <label for="eventMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Event Day Map:</label>
+          <label for="eventMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Map Day:</label>
           <input id="eventMapDateInput" type="date" />
           <button id="eventMapTodayBtn" class="btn-secondary" type="button">Today</button>
           <button id="eventMapAllDaysBtn" class="btn-secondary" type="button">All Event Days</button>
@@ -1060,20 +1066,21 @@
     <!-- VENUES & MAP SECTION -->
     <section id="section-venues" class="section-view">
       <div class="toolbar">
-        <div class="filter-pills" id="venueZoneFilters">
-          <button class="pill-btn active" data-zone="ALL" data-i18n="zone.all">All Albufeira Zones</button>
+        <div class="filter-pills scrollable-pills" id="venueZoneFilters">
+          <button class="pill-btn active" data-zone="ALL" data-i18n="zone.all">All Zones</button>
           <button class="pill-btn" data-zone="Albufeira">Albufeira</button>
           <button class="pill-btn" data-zone="Old Town">Old Town</button>
-          <button class="pill-btn" data-zone="Areias São João / The Strip">Areias São João / The Strip</button>
+          <button class="pill-btn" data-zone="Areias São João / The Strip">The Strip</button>
           <button class="pill-btn" data-zone="Olhos de Água">Olhos de Água</button>
           <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
           <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
+        <button id="openAddVenueBtn2" class="action-btn" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
       </div>
 
       <div class="map-day-bar">
         <div class="map-day-controls">
-          <label for="venueMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Map Event Day:</label>
+          <label for="venueMapDateInput" style="margin:0; color:var(--text-main); font-weight:700;">Map Day:</label>
           <input id="venueMapDateInput" type="date" />
           <button id="venueMapTodayBtn" class="btn-secondary" type="button">Today</button>
           <button id="venueMapAllDaysBtn" class="btn-secondary" type="button">All Event Days</button>
@@ -1089,10 +1096,10 @@
     <section id="section-classifieds" class="section-view">
       <div class="toolbar">
         <div>
-          <h2 style="font-size: 1.3rem;" data-i18n="cls.title">Albufeira Classifieds</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="cls.subtitle">Local listings, rentals, items, and services in Albufeira.</p>
+          <h2 style="font-size: 1.25rem;" data-i18n="cls.title">Albufeira Classifieds</h2>
+          <p style="font-size: 0.84rem; color: var(--text-muted);" data-i18n="cls.subtitle">Local listings, rentals, items, and services in Albufeira.</p>
         </div>
-        <button id="openAddClassifiedBtn" class="btn-secondary" type="button" data-i18n="btn.postListing">+ Post Listing</button>
+        <button id="openAddClassifiedBtn" class="action-btn" type="button" data-i18n="btn.postListing">+ Post Listing</button>
       </div>
       <div id="classifiedsGrid" class="grid-cards"></div>
     </section>
@@ -1101,10 +1108,10 @@
     <section id="section-forum" class="section-view">
       <div class="toolbar">
         <div>
-          <h2 style="font-size: 1.3rem;" data-i18n="frm.title">Albufeira Community Forum</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="frm.subtitle">Local discussions, tips, and neighborhood updates.</p>
+          <h2 style="font-size: 1.25rem;" data-i18n="frm.title">Albufeira Community Forum</h2>
+          <p style="font-size: 0.84rem; color: var(--text-muted);" data-i18n="frm.subtitle">Local discussions, tips, and neighborhood updates.</p>
         </div>
-        <button id="openAddThreadBtn" class="btn-secondary" type="button" data-i18n="btn.newThread">+ New Thread</button>
+        <button id="openAddThreadBtn" class="action-btn" type="button" data-i18n="btn.newThread">+ New Thread</button>
       </div>
       <div id="forumGrid" class="grid-cards"></div>
     </section>
@@ -1114,24 +1121,24 @@
       <div class="toolbar">
         <div>
           <span class="vice-sticker sticker-amber" style="margin-bottom: 6px;" data-i18n="lnk.badge">Albufeira Field Guide</span>
-          <h2 style="font-size: 1.35rem; margin-top: 4px;" data-i18n="lnk.title">Useful Links & Local Essentials</h2>
-          <p style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="lnk.subtitle">Official municipal, transport, tourist offices, and practical Albufeira tips.</p>
+          <h2 style="font-size: 1.3rem; margin-top: 4px;" data-i18n="lnk.title">Useful Links & Local Essentials</h2>
+          <p style="font-size: 0.84rem; color: var(--text-muted);" data-i18n="lnk.subtitle">Official municipal, transport, tourist offices, and practical Albufeira tips.</p>
         </div>
       </div>
 
       <div class="retro-info-strip">
         <div class="retro-tile">
-          <div style="font-size: 0.74rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">GIRO & Buses</div>
+          <div style="font-size: 0.72rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">GIRO & Buses</div>
           <div style="font-weight: 700; margin: 4px 0;">Alto dos Caliços Terminal</div>
           <p style="font-size: 0.82rem; color: var(--text-muted);">5 GIRO urban lines (Green, Blue, Red 1 & 2, Orange) link Old Town, The Strip, Marina, Santa Eulália & Ferreiras station. Single ride ~€1.40 / 1-day pass ~€4.</p>
         </div>
         <div class="retro-tile">
-          <div style="font-size: 0.74rem; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase;">Tourist Offices</div>
+          <div style="font-size: 0.72rem; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase;">Tourist Offices</div>
           <div style="font-weight: 700; margin: 4px 0;">3 Albufeira Info Points</div>
           <p style="font-size: 0.82rem; color: var(--text-muted);">Rua 5 de Outubro (by the tunnel, daily), EN 395 Municipal Office (Mon–Sat), and Santa Eulália Office (Mon–Fri).</p>
         </div>
         <div class="retro-tile">
-          <div style="font-size: 0.74rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Parking & Taxis</div>
+          <div style="font-size: 0.72rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Parking & Taxis</div>
           <div style="font-weight: 700; margin: 4px 0;">P1, P5, P6 & Av. da Liberdade</div>
           <p style="font-size: 0.82rem; color: var(--text-muted);">Central taxi rank on south side of P1 near Pau da Bandeira; taxis, radio taxis, and rideshares available around town.</p>
         </div>
@@ -1145,12 +1152,12 @@
       <div class="emergency-banner">
         <div>
           <span class="vice-sticker sticker-amber">Contactos Úteis de Emergência</span>
-          <h2 style="margin-top: 8px; font-size: 1.35rem;" data-i18n="emg.title">Albufeira & Portugal Emergency Directory</h2>
-          <p style="color: var(--text-muted); font-size: 0.9rem;">
+          <h2 style="margin-top: 8px; font-size: 1.3rem;" data-i18n="emg.title">Albufeira & Portugal Emergency Directory</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">
             Mantenha a calma e informe de forma simples e clara a situação. A proteção civil é uma responsabilidade de todos!
           </p>
         </div>
-        <a class="phone-link" href="tel:112" style="font-size: 1rem; padding: 9px 16px;" data-i18n="emg.call112">Emergency 112</a>
+        <a class="phone-link" href="tel:112" style="font-size: 0.96rem; padding: 8px 15px;" data-i18n="emg.call112">Emergency 112</a>
       </div>
 
       <div id="emergencyGrid" class="emergency-grid"></div>
@@ -1188,7 +1195,7 @@
   <div id="venueModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="venueModalTitle">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 id="venueModalTitle" style="font-size: 1.25rem;">Add Venue</h3>
+        <h3 id="venueModalTitle" style="font-size: 1.2rem;">Add Venue</h3>
         <button id="closeVenueModalBtn" class="btn-secondary" type="button">✕</button>
       </div>
 
@@ -1196,7 +1203,7 @@
         <div class="form-grid">
           <div class="form-group full">
             <label for="venueNameInput">Venue Name *</label>
-            <input id="venueNameInput" type="text" required placeholder="e.g., Pau da Bandeira Viewpoint" />
+            <input id="venueNameInput" type="text" required placeholder="e.g., Yolo Lounge" />
           </div>
 
           <div class="form-group">
@@ -1213,14 +1220,14 @@
 
           <div class="form-group">
             <label for="venueCategoryInput">Category</label>
-            <input id="venueCategoryInput" type="text" value="Venue" placeholder="e.g., Bar, Square, Beach, Hall" />
+            <input id="venueCategoryInput" type="text" value="Venue" placeholder="e.g., Bar, Lounge, Square, Hall" />
           </div>
 
           <div class="form-group full">
             <label for="venueAddressInput">Address (Albufeira)</label>
             <div style="display:flex; gap:8px;">
               <input id="venueAddressInput" type="text" placeholder="e.g., Rua 5 de Outubro, Albufeira" />
-              <button id="lookupVenueCoordsBtn" class="btn-secondary" type="button" style="white-space:nowrap;">Find GPS</button>
+              <button id="lookupVenueCoordsBtn" class="btn-secondary" type="button">Find GPS</button>
             </div>
           </div>
 
@@ -1249,7 +1256,7 @@
       <div class="modal-header">
         <div>
           <span id="eventDetailCategory" class="vice-sticker sticker-pink" style="margin-bottom: 6px;">EVENT</span>
-          <h3 id="eventDetailTitle" style="font-size: 1.35rem;">Event Details</h3>
+          <h3 id="eventDetailTitle" style="font-size: 1.3rem;">Event Details</h3>
         </div>
         <button id="closeEventDetailModalBtn" class="btn-secondary" type="button">✕</button>
       </div>
@@ -1258,16 +1265,17 @@
         <img id="eventDetailPosterImg" class="full-poster-img" src="" alt="" />
       </div>
 
-      <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:0.88rem; color:var(--neon-cyan); font-weight:700; margin-bottom:10px;">
+      <div style="display:flex; flex-wrap:wrap; gap:14px; font-size:0.86rem; color:var(--neon-cyan); font-weight:700; margin-bottom:10px;">
         <span id="eventDetailDateTime"></span>
         <span id="eventDetailFee" style="color:var(--neon-amber);"></span>
       </div>
 
-      <p id="eventDetailVenue" style="font-size:0.92rem; color:var(--text-main); font-weight:600; margin-bottom:10px;"></p>
-      <p id="eventDetailDesc" style="font-size:0.94rem; color:var(--text-muted); white-space:pre-line;"></p>
+      <p id="eventDetailVenue" style="font-size:0.9rem; color:var(--text-main); font-weight:600; margin-bottom:10px;"></p>
+      <p id="eventDetailDesc" style="font-size:0.92rem; color:var(--text-muted); white-space:pre-line;"></p>
 
       <div class="modal-actions">
-        <button id="eventDetailEditBtn" class="btn-edit" type="button" style="display:none; padding:8px 14px; font-size:0.84rem;">Edit Event</button>
+        <button id="eventDetailDeleteBtn" class="btn-secondary" type="button" style="display:none; border-color:rgba(255,42,133,0.55); color:#ff7ab2;">Delete Event</button>
+        <button id="eventDetailEditBtn" class="btn-edit" type="button" style="display:none; padding:7px 14px; font-size:0.82rem;">Edit Event</button>
         <button id="closeEventDetailBtn" class="btn-secondary" type="button">Close</button>
       </div>
     </div>
@@ -1277,7 +1285,7 @@
   <div id="eventModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 id="eventModalTitle" style="font-size: 1.25rem;">Add Event</h3>
+        <h3 id="eventModalTitle" style="font-size: 1.2rem;">Add Event</h3>
         <button id="closeEventModalBtn" class="btn-secondary" type="button">✕</button>
       </div>
 
@@ -1289,7 +1297,7 @@
         <div class="form-grid">
           <div class="form-group full">
             <label for="eventTitle">Event Title *</label>
-            <input id="eventTitle" name="title" type="text" required placeholder="e.g., Albufeira Mercadinho Natal" />
+            <input id="eventTitle" name="title" type="text" required placeholder="e.g., Christmas Day at Yolo Lounge" />
           </div>
 
           <div class="form-group">
@@ -1306,7 +1314,7 @@
 
           <div class="form-group">
             <label for="eventVenue">Venue *</label>
-            <input id="eventVenue" name="venueName" list="albufeiraVenueList" type="text" required placeholder="Espaço Multiusos de Albufeira" />
+            <input id="eventVenue" name="venueName" list="albufeiraVenueList" type="text" required placeholder="Select or type venue..." />
             <datalist id="albufeiraVenueList"></datalist>
           </div>
 
@@ -1356,7 +1364,7 @@
 
           <div class="form-group">
             <label for="eventFee">Fee</label>
-            <input id="eventFee" name="fee" type="text" value="Free" placeholder="Free or €10" />
+            <input id="eventFee" name="fee" type="text" value="Free" placeholder="Free or €80" />
           </div>
 
           <div class="form-group">
@@ -1477,8 +1485,8 @@
         <div class="form-group" style="margin-bottom: 12px;">
           <label for="adminNameSelect">Select Admin</label>
           <select id="adminNameSelect" required>
-            <option value="Admin1">Admin1</option>
-            <option value="Admin2">Admin2</option>
+            <option value="Kris">Kris</option>
+            <option value="Lex">Lex</option>
           </select>
         </div>
         <div class="form-group">
@@ -1486,7 +1494,7 @@
           <input id="adminPasscodeInput" type="password" required placeholder="Enter admin passcode" />
         </div>
         <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px;">
-          Only authenticated admins can edit existing events.
+          Only authenticated admins can edit or delete events.
         </p>
         <div class="modal-actions">
           <button id="cancelAdminBtn" class="btn-secondary" type="button">Cancel</button>
@@ -1497,20 +1505,23 @@
   </div>
 
   <footer>
-    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background:var(--bg-card); border:1.5px solid var(--border-subtle); border-radius:14px; font-size:0.84rem; color:var(--text-muted);">
+    <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; font-size:0.82rem; color:var(--text-muted);">
       <span>Albufeira Pulse — Local Guide &amp; Events</span>
       <div style="display:flex; align-items:center; gap:16px;">
         <a href="mailto:support@albufeira-pulse.com" style="color:var(--text-muted); text-decoration:none;">support@albufeira-pulse.com</a>
-        <button id="openImpressumTabBtn" type="button" style="background:none; border:none; color:var(--neon-cyan); font-weight:700; cursor:pointer; text-decoration:underline; font-size:0.84rem;">Impressum &amp; Legal</button>
+        <button id="openImpressumTabBtn" type="button" style="background:none; border:none; color:var(--neon-cyan); font-weight:700; cursor:pointer; text-decoration:underline; font-size:0.82rem;">Impressum &amp; Legal</button>
       </div>
     </div>
   </footer>
+
+  <!-- Centered Bottom Mobile Add Event Button -->
+  <button id="mobileFabAddEvent" class="mobile-fab-add" type="button" onclick="openAddEventModal()" aria-label="Add Event">+</button>
 
   <script>
     const SUPABASE_URL = window.SUPABASE_URL || "https://ljncrabbelxjnpvmvdau.supabase.co";
     const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6";
     const ADMIN_PASSCODE = window.ALBUFEIRA_ADMIN_PASSCODE || "albufeira-admin";
-    const ALLOWED_ADMINS = ["admin1", "admin2"];
+    const ALLOWED_ADMINS = ["kris", "lex", "admin1", "admin2"];
 
     const supabaseClient =
       window.supabase && !SUPABASE_URL.includes("YOUR_PROJECT") && !SUPABASE_ANON_KEY.includes("YOUR_ANON_KEY")
@@ -1527,13 +1538,17 @@
       const badge = document.getElementById("adminStatusBadge");
       const btn = document.getElementById("adminToggleBtn");
       if (isAuthorizedAdmin()) {
-        badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
-        badge.classList.add("active");
-        btn.textContent = t("admin.signOut");
+        if (badge) {
+          badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
+          badge.classList.add("active");
+        }
+        if (btn) btn.textContent = t("admin.signOut");
       } else {
-        badge.textContent = t("admin.locked");
-        badge.classList.remove("active");
-        btn.textContent = t("admin.signIn");
+        if (badge) {
+          badge.textContent = t("admin.locked");
+          badge.classList.remove("active");
+        }
+        if (btn) btn.textContent = t("admin.signIn");
       }
       renderEvents();
     }
@@ -1625,7 +1640,7 @@
     let venuesData = [...SEED_VENUES];
     let activeCategory = "ALL";
     let activeZone = "ALL";
-    let activeMapDate = getLocalTodayIso();
+    let activeMapDate = "ALL";
     let leafletMap = null;
     let mapMarkersLayer = null;
     let homeLeafletMap = null;
@@ -1653,6 +1668,7 @@
         .trim();
     }
 
+    // ONLY show venues that actually have matching events!
     function getMapVenuesForFilter(zoneFilter, dateFilter) {
       const dayEvents = (!dateFilter || dateFilter === "ALL")
         ? eventsData
@@ -1662,19 +1678,52 @@
         ? venuesData
         : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));
 
-      return filteredVenues.map((v) => {
+      const matchedResults = [];
+      const claimedEventIds = new Set();
+
+      filteredVenues.forEach((v) => {
+        const vn = normalizeNameKey(v.name);
         const matchingEvents = dayEvents.filter((ev) => {
-          const vn = normalizeNameKey(v.name);
           const en = normalizeNameKey(ev.venueName);
           return vn && en && (vn === en || vn.includes(en) || en.includes(vn));
         });
-        return {
-          ...v,
-          lat: Number(v.lat) || 37.0955,
-          lng: Number(v.lng) || -8.2505,
-          events: matchingEvents
-        };
+
+        if (matchingEvents.length > 0) {
+          matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id)));
+          matchedResults.push({
+            ...v,
+            lat: Number(v.lat) || 37.0955,
+            lng: Number(v.lng) || -8.2505,
+            events: matchingEvents
+          });
+        }
       });
+
+      // Also plot any event whose venue was typed custom and isn't in venuesData yet
+      const unclaimedByVenue = new Map();
+      dayEvents.forEach((ev) => {
+        if (claimedEventIds.has(String(ev.id))) return;
+        if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) {
+          return;
+        }
+        const key = normalizeNameKey(ev.venueName || "albufeira");
+        if (!unclaimedByVenue.has(key)) {
+          unclaimedByVenue.set(key, {
+            id: `ev-venue-${key}`,
+            name: ev.venueName || "Albufeira Venue",
+            zone: ev.zone || "Albufeira",
+            address: `${ev.venueName || "Albufeira"}, Albufeira`,
+            lat: Number(ev.lat) || 37.0955,
+            lng: Number(ev.lng) || -8.2505,
+            category: ev.category || "Event Venue",
+            events: []
+          });
+        }
+        unclaimedByVenue.get(key).events.push(ev);
+      });
+
+      unclaimedByVenue.forEach((entry) => matchedResults.push(entry));
+      return matchedResults;
     }
 
     function syncMapDateInputs() {
@@ -1693,12 +1742,12 @@
 
       const homeStatus = document.getElementById("homeMapStatus");
       if (homeStatus) {
-        homeStatus.textContent = `${homePlaces.length} ${homePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
+        homeStatus.textContent = `${homePlaces.length} active ${homePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
       }
 
       const venuesStatus = document.getElementById("venuesMapStatus");
       if (venuesStatus) {
-        venuesStatus.textContent = `${venuePlaces.length} ${venuePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
+        venuesStatus.textContent = `${venuePlaces.length} active ${venuePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
       }
     }
 
@@ -1752,6 +1801,7 @@
 
     function populateVenueDatalist() {
       const list = document.getElementById("albufeiraVenueList");
+      if (!list) return;
       list.innerHTML = "";
       venuesData.forEach((v) => {
         const opt = document.createElement("option");
@@ -1774,23 +1824,23 @@
       const fillColor = isPink ? "#ff2a85" : "#00f0ff";
 
       const marker = L.circleMarker([venue.lat, venue.lng], {
-        radius: 9,
+        radius: 10,
         color: "#090b16",
         weight: 2.5,
         opacity: 1,
         fillColor,
-        fillOpacity: 0.92
+        fillOpacity: 0.94
       });
 
-      marker.on("mouseover", () => marker.setStyle({ radius: 11, color: strokeColor }));
-      marker.on("mouseout", () => marker.setStyle({ radius: 9, color: "#090b16" }));
+      marker.on("mouseover", () => marker.setStyle({ radius: 12, color: strokeColor }));
+      marker.on("mouseout", () => marker.setStyle({ radius: 10, color: "#090b16" }));
 
       const eventLines = Array.isArray(venue.events) && venue.events.length
-        ? `<br/><span style="color:#ffb800;font-weight:700;">${venue.events.map((e) => escapeHtml(e.title)).join(", ")}</span>`
+        ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events.map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`).join("<br/>")}</span>`
         : "";
 
       marker.bindPopup(
-        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="color:${strokeColor};font-weight:700;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}`
+        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}`
       );
 
       marker.addTo(layerGroup);
@@ -1798,6 +1848,7 @@
 
     function renderEvents() {
       const grid = document.getElementById("eventsGrid");
+      if (!grid) return;
       const filtered =
         activeCategory === "ALL"
           ? eventsData
@@ -1809,19 +1860,24 @@
       }
 
       const canEdit = isAuthorizedAdmin();
+      const todayIso = getLocalTodayIso();
 
       grid.innerHTML = filtered
         .map((ev) => {
+          const evDateKey = normalizeDateKey(ev.date);
+          const isPast = evDateKey && evDateKey < todayIso;
+
           const imgHtml = ev.image
             ? `<img class="card-img" src="${escapeHtml(ev.image)}" alt="${escapeHtml(ev.title)}" onerror="this.style.display='none'" />`
             : "";
 
-          const editButtonHtml = canEdit
-            ? `<button class="btn-edit" type="button" onclick="event.stopPropagation(); openEditEventModal('${escapeHtml(ev.id)}')">${t("event.editBtn")}</button>`
+          const adminActionsHtml = canEdit
+            ? `<button class="btn-edit" type="button" onclick="event.stopPropagation(); openEditEventModal('${escapeHtml(ev.id)}')">${t("event.editBtn")}</button>
+               <button class="btn-secondary" type="button" style="border-color:rgba(255,42,133,0.55);color:#ff7ab2;" onclick="event.stopPropagation(); deleteEventById('${escapeHtml(ev.id)}')">Delete</button>`
             : "";
 
           return `
-            <article class="card event-card-clickable" onclick="openEventDetailModal('${escapeHtml(ev.id)}')" title="Click to view full event & poster">
+            <article class="card event-card-clickable ${isPast ? "past-event-dimmed" : ""}" onclick="openEventDetailModal('${escapeHtml(ev.id)}')" title="Click to view full event & poster">
               ${imgHtml}
               <div class="card-body">
                 <div class="card-meta">
@@ -1829,15 +1885,14 @@
                   <span class="vice-sticker sticker-pink">${escapeHtml(ev.category || "EVENT")}</span>
                 </div>
                 <h3 class="card-title">${escapeHtml(ev.title)}</h3>
-                <p style="font-size: 0.85rem; color: var(--neon-amber); font-weight: 600;">
+                <p style="font-size: 0.84rem; color: var(--neon-amber); font-weight: 600;">
                   ${escapeHtml(ev.venueName)} — ${escapeHtml(ev.zone || "Albufeira")}
                 </p>
                 <p class="card-desc">${escapeHtml(ev.desc || "")}</p>
                 <div class="card-footer">
                   <span>${t("event.feeLabel")} <strong>${escapeHtml(ev.fee || "Free")}</strong></span>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <span>${t("event.byPrefix")} ${escapeHtml(ev.author || "Admin")}</span>
-                    ${editButtonHtml}
+                  <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    ${adminActionsHtml}
                   </div>
                 </div>
               </div>
@@ -1874,11 +1929,14 @@
       }
 
       const editBtn = document.getElementById("eventDetailEditBtn");
+      const deleteBtn = document.getElementById("eventDetailDeleteBtn");
       if (isAuthorizedAdmin()) {
         editBtn.style.display = "inline-block";
         editBtn.textContent = t("event.editBtn");
+        deleteBtn.style.display = "inline-block";
       } else {
         editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
       }
 
       eventDetailModal.classList.add("open");
@@ -1899,36 +1957,73 @@
       closeEventDetailModal();
       if (targetId !== null) window.openEditEventModal(targetId);
     });
+    document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => {
+      const targetId = currentDetailEventId;
+      if (targetId !== null) window.deleteEventById(targetId);
+    });
 
+    window.deleteEventById = async function (eventId) {
+      if (!isAuthorizedAdmin()) {
+        alert("Only admins can delete events. Please sign in first.");
+        openAdminModal();
+        return;
+      }
+
+      const target = eventsData.find((item) => String(item.id) === String(eventId));
+      const label = target?.title ? `"${target.title}"` : "this event";
+      if (!confirm(`Delete ${label}?`)) return;
+
+      if (supabaseClient) {
+        const { error } = await supabaseClient
+          .from("events")
+          .delete()
+          .eq("id", eventId);
+
+        if (error) {
+          alert("Could not delete event from Supabase: " + error.message);
+          return;
+        }
+      }
+
+      eventsData = eventsData.filter((item) => String(item.id) !== String(eventId));
+      closeEventDetailModal();
+      renderEvents();
+      renderVenues();
+    };
+
+    // Venues & Map tab also shows ONLY venues with events
     function renderVenues() {
       const grid = document.getElementById("venuesGrid");
-      const filtered =
-        activeZone === "ALL"
-          ? venuesData
-          : venuesData.filter((v) => (v.zone || "").toLowerCase() === activeZone.toLowerCase());
+      const activeVenues = getMapVenuesForFilter(activeZone, activeMapDate);
 
-      if (!filtered.length) {
-        grid.innerHTML = `<div class="empty-state">${t("venue.empty")}</div>`;
-      } else {
-        grid.innerHTML = filtered
-          .map(
-            (v, idx) => `
-          <article class="card">
-            <div class="card-body">
-              <div class="card-meta">
-                <span>${escapeHtml(v.zone || "Albufeira")}</span>
-                <span class="vice-sticker ${idx % 2 === 1 ? "sticker-pink" : "sticker-cyan"}">${escapeHtml(v.category || "Albufeira")}</span>
-              </div>
-              <h3 class="card-title">${escapeHtml(v.name)}</h3>
-              <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
-              <div class="card-footer">
-                <span>GPS: ${Number(v.lat).toFixed(4)}, ${Number(v.lng).toFixed(4)}</span>
-              </div>
-            </div>
-          </article>
-        `
-          )
-          .join("");
+      if (grid) {
+        if (!activeVenues.length) {
+          grid.innerHTML = `<div class="empty-state">${t("venue.empty")}</div>`;
+        } else {
+          grid.innerHTML = activeVenues
+            .map((v, idx) => {
+              const eventBadges = v.events
+                .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title)} (${escapeHtml(e.date)})</span>`)
+                .join(" ");
+
+              return `
+                <article class="card">
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span>${escapeHtml(v.zone || "Albufeira")}</span>
+                      <span class="vice-sticker ${idx % 2 === 1 ? "sticker-pink" : "sticker-cyan"}">${v.events.length} ${v.events.length === 1 ? "Event" : "Events"}</span>
+                    </div>
+                    <h3 class="card-title">${escapeHtml(v.name)}</h3>
+                    <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;">
+                      ${eventBadges}
+                    </div>
+                  </div>
+                </article>
+              `;
+            })
+            .join("");
+        }
       }
 
       syncMapDateInputs();
@@ -1984,8 +2079,7 @@
     function setMapDateFilter(newDate) {
       activeMapDate = newDate || "ALL";
       syncMapDateInputs();
-      initHomeMap();
-      initOrUpdateMap();
+      renderVenues();
     }
 
     document.getElementById("eventMapDateInput").addEventListener("change", (e) => {
@@ -2001,6 +2095,7 @@
 
     function renderEmergencyContacts() {
       const grid = document.getElementById("emergencyGrid");
+      if (!grid) return;
       grid.innerHTML = EMERGENCY_CONTACTS.map((item) => {
         const links = item.phones
           .map((ph) => {
@@ -2036,6 +2131,8 @@
     }
 
     document.getElementById("openAddVenueBtn").addEventListener("click", openAddVenueModal);
+    const openAddVenueBtn2 = document.getElementById("openAddVenueBtn2");
+    if (openAddVenueBtn2) openAddVenueBtn2.addEventListener("click", openAddVenueModal);
     document.getElementById("closeVenueModalBtn").addEventListener("click", closeVenueModal);
     document.getElementById("cancelVenueBtn").addEventListener("click", closeVenueModal);
     venueModal.addEventListener("click", (e) => {
@@ -2210,7 +2307,7 @@
       return await readFileAsDataUrl(selectedJpgFile);
     }
 
-    function openAddEventModal() {
+    window.openAddEventModal = function () {
       eventForm.reset();
       selectedJpgFile = null;
       setImagePreview("");
@@ -2225,7 +2322,7 @@
       document.getElementById("eventLat").value = "37.0955";
       document.getElementById("eventLng").value = "-8.2505";
       eventModal.classList.add("open");
-    }
+    };
 
     window.openEditEventModal = function (eventId) {
       if (!isAuthorizedAdmin()) {
@@ -2344,8 +2441,7 @@
 
       closeEventModal();
       renderEvents();
-      initHomeMap();
-      initOrUpdateMap();
+      renderVenues();
     });
 
     const adminModal = document.getElementById("adminModal");
@@ -2379,7 +2475,7 @@
       const passcode = document.getElementById("adminPasscodeInput").value;
 
       if (!ALLOWED_ADMINS.includes(selectedAdmin.toLowerCase())) {
-        alert("Only Admin1 or Admin2 can be selected as admin.");
+        alert("Only Kris or Lex can sign in as admin.");
         return;
       }
 
@@ -2397,11 +2493,8 @@
     document.querySelectorAll(".nav-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const targetTab = btn.dataset.tab;
-        const isHomeBtn = btn.textContent.trim().toLowerCase() === "home";
         document.querySelectorAll(".nav-btn").forEach((b) => {
-          const matchesTab = b.dataset.tab === targetTab;
-          const bIsHome = b.textContent.trim().toLowerCase() === "home";
-          b.classList.toggle("active", matchesTab && (isHomeBtn ? bIsHome : !bIsHome));
+          b.classList.toggle("active", b.dataset.tab === targetTab);
         });
 
         document.querySelectorAll(".section-view").forEach((sec) => sec.classList.remove("active"));
@@ -2412,9 +2505,7 @@
         } else if (targetTab === "events") {
           initHomeMap();
         }
-        if (isHomeBtn) {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     });
 
@@ -2436,7 +2527,7 @@
       });
     });
 
-    document.getElementById("openAddEventBtn").addEventListener("click", openAddEventModal);
+    document.getElementById("openAddEventBtn").addEventListener("click", window.openAddEventModal);
     document.getElementById("closeEventModalBtn").addEventListener("click", closeEventModal);
     document.getElementById("cancelEventBtn").addEventListener("click", closeEventModal);
 
@@ -2667,13 +2758,12 @@
 
     const I18N = {
       en: {
-        "nav.home": "Home",
         "nav.events": "Events",
         "nav.venues": "Venues & Map",
         "nav.classifieds": "Classifieds",
         "nav.forum": "Forum",
         "nav.links": "Useful Links",
-        "nav.emergency": "Emergency Contacts",
+        "nav.emergency": "Emergency",
         "cat.all": "All",
         "cat.markets": "Markets",
         "cat.music": "Music & Nightlife",
@@ -2682,7 +2772,7 @@
         "cat.sports": "Sports & Outdoors",
         "btn.addEvent": "+ Add Event",
         "btn.addVenue": "+ Add Venue",
-        "zone.all": "All Albufeira Zones",
+        "zone.all": "All Zones",
         "cls.title": "Albufeira Classifieds",
         "cls.subtitle": "Local listings, rentals, items, and services in Albufeira.",
         "btn.postListing": "+ Post Listing",
@@ -2696,25 +2786,23 @@
         "emg.call112": "Emergency 112",
         "admin.locked": "Admin: Locked",
         "admin.activePrefix": "Admin:",
-        "admin.signIn": "Admin Sign In",
+        "admin.signIn": "Admin",
         "admin.signOut": "Sign Out",
         "event.feeLabel": "Fee:",
-        "event.byPrefix": "By",
-        "event.editBtn": "Edit Event",
+        "event.editBtn": "Edit",
         "event.empty": "No Albufeira events found in this category yet.",
-        "venue.empty": "No venues found in this Albufeira zone.",
+        "venue.empty": "No venues with scheduled events in this zone.",
         "cls.empty": "No classifieds posted yet. Click <strong>+ Post Listing</strong> to add one.",
         "frm.empty": "No forum threads yet. Click <strong>+ New Thread</strong> to start a conversation.",
         "link.open": "Open Link ↗"
       },
       pt: {
-        "nav.home": "Início",
         "nav.events": "Eventos",
         "nav.venues": "Espaços e Mapa",
         "nav.classifieds": "Classificados",
         "nav.forum": "Fórum",
         "nav.links": "Ligações Úteis",
-        "nav.emergency": "Contactos de Emergência",
+        "nav.emergency": "Emergência",
         "cat.all": "Todos",
         "cat.markets": "Mercados",
         "cat.music": "Música e Noite",
@@ -2723,7 +2811,7 @@
         "cat.sports": "Desporto e Ar Livre",
         "btn.addEvent": "+ Adicionar Evento",
         "btn.addVenue": "+ Adicionar Espaço",
-        "zone.all": "Todas as Zonas de Albufeira",
+        "zone.all": "Todas as Zonas",
         "cls.title": "Classificados de Albufeira",
         "cls.subtitle": "Anúncios locais, arrendamentos, artigos e serviços em Albufeira.",
         "btn.postListing": "+ Publicar Anúncio",
@@ -2737,13 +2825,12 @@
         "emg.call112": "Emergência 112",
         "admin.locked": "Admin: Bloqueado",
         "admin.activePrefix": "Admin:",
-        "admin.signIn": "Entrar Admin",
+        "admin.signIn": "Admin",
         "admin.signOut": "Sair",
         "event.feeLabel": "Entrada:",
-        "event.byPrefix": "Por",
-        "event.editBtn": "Editar Evento",
+        "event.editBtn": "Editar",
         "event.empty": "Ainda não existem eventos em Albufeira nesta categoria.",
-        "venue.empty": "Não foram encontrados espaços nesta zona de Albufeira.",
+        "venue.empty": "Não há espaços com eventos marcados nesta zona.",
         "cls.empty": "Ainda não há classificados. Clique em <strong>+ Publicar Anúncio</strong> para adicionar.",
         "frm.empty": "Ainda não há tópicos no fórum. Clique em <strong>+ Novo Tópico</strong> para iniciar uma conversa.",
         "link.open": "Abrir Ligação ↗"
@@ -2773,11 +2860,11 @@
       const badge = document.getElementById("adminStatusBadge");
       const btn = document.getElementById("adminToggleBtn");
       if (isAuthorizedAdmin()) {
-        badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
-        btn.textContent = t("admin.signOut");
+        if (badge) badge.textContent = `${t("admin.activePrefix")} ${currentAdmin}`;
+        if (btn) btn.textContent = t("admin.signOut");
       } else {
-        badge.textContent = t("admin.locked");
-        btn.textContent = t("admin.signIn");
+        if (badge) badge.textContent = t("admin.locked");
+        if (btn) btn.textContent = t("admin.signIn");
       }
 
       renderEvents();
@@ -3045,11 +3132,6 @@
       qrCenterMascotImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgXml);
     }
 
-    const mobileFabAdd = document.getElementById("mobileFabAddEvent");
-    if (mobileFabAdd) {
-      mobileFabAdd.addEventListener("click", openAddEventModal);
-    }
-
     const logoQrToggleBtn = document.getElementById("logoQrToggleBtn");
     const logoQrPopover = document.getElementById("logoQrPopover");
     const closeLogoQrBtn = document.getElementById("closeLogoQrBtn");
@@ -3096,7 +3178,5 @@
     });
     loadCommunitySections();
   </script>
-
-  <button id="mobileFabAddEvent" class="mobile-fab-add" type="button" aria-label="Add Event">+</button>
 </body>
 </html>
