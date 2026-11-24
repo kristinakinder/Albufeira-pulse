@@ -80,13 +80,13 @@
       color: var(--neon-amber);
     }
 
-    /* Clean Architectural Header */
+    /* Sticky Header with Pinned + Event / + Venue Controls */
     header {
       position: sticky;
       top: 0;
       z-index: 1500;
       backdrop-filter: blur(14px);
-      background: rgba(9, 11, 22, 0.92);
+      background: rgba(9, 11, 22, 0.94);
       border-bottom: 1px solid var(--border-subtle);
     }
 
@@ -135,6 +135,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      flex-wrap: wrap;
       gap: 6px;
     }
 
@@ -190,11 +191,11 @@
         gap: 8px;
       }
       .brand-mascot {
-        width: 56px;
-        height: 56px;
+        width: 54px;
+        height: 54px;
       }
       .brand-title {
-        font-size: 1.2rem;
+        font-size: 1.18rem;
       }
       .header-right {
         width: 100%;
@@ -211,6 +212,7 @@
       .admin-bar {
         order: 2;
         flex-shrink: 0;
+        flex-wrap: nowrap;
       }
       .admin-status {
         display: none;
@@ -243,30 +245,7 @@
     main {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 14px 18px 92px;
-    }
-
-    /* Compact Toolbar Row */
-    .top-control-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .quick-action-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: auto;
-    }
-
-    @media (max-width: 768px) {
-      .hide-on-mobile-fab {
-        display: none !important;
-      }
+      padding: 16px 18px 92px;
     }
 
     .section-view {
@@ -328,11 +307,11 @@
       background: linear-gradient(135deg, var(--neon-pink), #d91b6c);
       color: #ffffff;
       border: 1.5px solid #fffdf7;
-      padding: 6px 13px;
-      border-radius: 10px;
+      padding: 5px 11px;
+      border-radius: 9px;
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       white-space: nowrap;
       cursor: pointer;
       transition: transform 0.15s ease, filter 0.15s ease;
@@ -419,6 +398,10 @@
 
     .event-card-clickable {
       cursor: pointer;
+    }
+
+    .event-card-clickable:hover {
+      border-color: var(--neon-cyan);
     }
 
     .card-img {
@@ -793,7 +776,7 @@
       }
     }
 
-    /* Centered Mobile Bottom Add Button */
+    /* Centered Mobile Bottom Add Event Button */
     .mobile-fab-add {
       display: none;
       position: fixed;
@@ -880,7 +863,6 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Sleek Architectural / Editorial Albufeira Seagull Emblem -->
           <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="74" height="74" role="img" aria-label="Albufeira Pulse Seagull Emblem">
             <defs>
               <linearGradient id="skyDiscGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -910,16 +892,13 @@
               </linearGradient>
             </defs>
 
-            <!-- Emblem disc -->
             <circle cx="120" cy="120" r="108" fill="url(#skyDiscGrad)" stroke="#00f0ff" stroke-width="2.5" stroke-opacity="0.65" />
             <circle cx="120" cy="120" r="102" fill="url(#duskGlowGrad)" />
 
-            <!-- Minimal sea horizon & whitewashed parapet wall -->
             <path d="M24 156 Q 75 151, 120 155 T 216 154" fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-opacity="0.35" />
             <polygon points="36,176 204,176 198,194 42,194" fill="#e5edf7" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
             <polygon points="40,188 200,188 198,194 42,194" fill="#a8b8ce" />
 
-            <!-- Gull legs & webbed feet -->
             <g stroke="#080b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <path d="M114 152 L110 176" stroke="#ff9e1b" stroke-width="5.5" />
               <path d="M114 152 L110 176" fill="none" stroke="#080b16" stroke-width="2" />
@@ -930,10 +909,8 @@
               <path d="M131 176 L119 178 L128 174 L139 176 Z" fill="#ff9e1b" />
             </g>
 
-            <!-- Crisp white tail feathers -->
             <path d="M77 132 L35 142 L44 148 L38 153 L83 145 Z" fill="#f1f5fb" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
 
-            <!-- Smooth, organic S-curved gull head, neck & chest -->
             <path d="M136 44
                      C147 41, 161 45, 167 56
                      C170 62, 170 69, 167 76
@@ -946,7 +923,6 @@
                      C132 46, 134 45, 136 44 Z"
                   fill="url(#plumageLight)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
 
-            <!-- Soft shaded belly contour -->
             <path d="M165 95
                      C166 119, 162 142, 138 152
                      C120 158, 98 155, 84 144
@@ -954,7 +930,6 @@
                      C156 115, 162 104, 165 95 Z"
                   fill="#b7c6da" opacity="0.7" />
 
-            <!-- Sleek slate-grey folded wing with white tertial crescent & black primary tips -->
             <path d="M128 84
                      C105 84, 79 97, 58 119
                      L34 139
@@ -965,12 +940,9 @@
                      C147 102, 144 88, 128 84 Z"
                   fill="url(#mantleSlate)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
 
-            <!-- Subtle wing covert highlight -->
             <path d="M126 88 C105 89, 83 100, 65 119 C85 116, 108 109, 129 94 Z" fill="#465c8f" opacity="0.8" />
-            <!-- White tertial edge -->
             <path d="M72 136 C95 134, 118 127, 133 114" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" />
 
-            <!-- Authentic yellow-legged gull bill with hooked tip & red gonys spot -->
             <path d="M167 63
                      L201 69
                      C206 70, 206 76, 199 79
@@ -979,15 +951,12 @@
                      L165 78 Z"
                   fill="url(#gullBillGrad)" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
             <path d="M167 72 L199 74" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
-            <!-- Classic red spot on lower mandible -->
             <circle cx="190" cy="76.5" r="2.5" fill="#ff2a55" />
 
-            <!-- Natural, keen gull eye (no boxy glasses) -->
             <g>
               <ellipse cx="155" cy="59" rx="5.2" ry="4.4" fill="#ffe484" stroke="#080b16" stroke-width="2" />
               <circle cx="155.5" cy="59" r="2.5" fill="#080b16" />
               <circle cx="156.6" cy="57.8" r="1" fill="#ffffff" />
-              <!-- Subtle sleek brow contour -->
               <path d="M148 53.5 Q 155 51.5, 162 54.5" fill="none" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
             </g>
           </svg>
@@ -1010,6 +979,8 @@
 
       <div class="header-right">
         <div class="admin-bar">
+          <button id="openAddEventBtn" class="action-btn" type="button" data-i18n="btn.addEvent">+ Add Event</button>
+          <button id="openAddVenueBtn" class="btn-secondary" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
           <div class="filter-pills" id="langSwitcher" role="group" aria-label="Idioma / Language">
             <button id="langEnBtn" class="pill-btn active" type="button" data-lang="en">EN</button>
             <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
@@ -1033,7 +1004,7 @@
   <main>
     <!-- EVENTS SECTION -->
     <section id="section-events" class="section-view active">
-      <div class="top-control-row">
+      <div class="toolbar">
         <div class="filter-pills scrollable-pills" id="eventCategoryFilters">
           <button class="pill-btn active" data-category="ALL" data-i18n="cat.all">All</button>
           <button class="pill-btn" data-category="MARKETS" data-i18n="cat.markets">Markets</button>
@@ -1041,11 +1012,6 @@
           <button class="pill-btn" data-category="ARTS & CULTURE" data-i18n="cat.arts">Arts & Culture</button>
           <button class="pill-btn" data-category="FAMILY & FESTIVALS" data-i18n="cat.family">Family & Festivals</button>
           <button class="pill-btn" data-category="SPORTS & OUTDOORS" data-i18n="cat.sports">Sports & Outdoors</button>
-        </div>
-
-        <div class="quick-action-group">
-          <button id="openAddEventBtn" class="action-btn hide-on-mobile-fab" type="button" data-i18n="btn.addEvent">+ Add Event</button>
-          <button id="openAddVenueBtn" class="btn-secondary" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
         </div>
       </div>
 
@@ -1075,7 +1041,6 @@
           <button class="pill-btn" data-zone="Santa Eulália">Santa Eulália</button>
           <button class="pill-btn" data-zone="Central / Lidl">Central / Lidl</button>
         </div>
-        <button id="openAddVenueBtn2" class="action-btn" type="button" data-i18n="btn.addVenue">+ Add Venue</button>
       </div>
 
       <div class="map-day-bar">
@@ -1640,7 +1605,7 @@
     let venuesData = [...SEED_VENUES];
     let activeCategory = "ALL";
     let activeZone = "ALL";
-    let activeMapDate = "ALL";
+    let activeMapDate = getLocalTodayIso();
     let leafletMap = null;
     let mapMarkersLayer = null;
     let homeLeafletMap = null;
@@ -1656,8 +1621,12 @@
 
     function normalizeDateKey(val) {
       if (!val) return "";
-      const match = String(val).match(/\d{4}-\d{2}-\d{2}/);
-      return match ? match[0] : String(val).trim();
+      const str = String(val).trim();
+      const isoMatch = str.match(/\d{4}-\d{2}-\d{2}/);
+      if (isoMatch) return isoMatch[0];
+      const euMatch = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (euMatch) return `${euMatch[3]}-${euMatch[2]}-${euMatch[1]}`;
+      return str;
     }
 
     function normalizeNameKey(str) {
@@ -1665,14 +1634,26 @@
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, " ")
         .trim();
     }
 
-    // ONLY show venues that actually have matching events!
+    function eventsMatchVenue(ev, venue) {
+      const en = normalizeNameKey(ev.venueName || ev.venue || "");
+      const vn = normalizeNameKey(venue.name || "");
+      if (!en || !vn) return false;
+      return en === vn || vn.includes(en) || en.includes(vn);
+    }
+
+    // Strictly return ONLY venues that have matching events for the selected date/zone filter
     function getMapVenuesForFilter(zoneFilter, dateFilter) {
-      const dayEvents = (!dateFilter || dateFilter === "ALL")
-        ? eventsData
-        : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizeDateKey(dateFilter));
+      const normalizedTargetDate = (!dateFilter || dateFilter === "ALL")
+        ? "ALL"
+        : normalizeDateKey(dateFilter);
+
+      const dayEvents = normalizedTargetDate === "ALL"
+        ? eventsData.slice()
+        : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizedTargetDate);
 
       const filteredVenues = (!zoneFilter || zoneFilter === "ALL")
         ? venuesData
@@ -1682,12 +1663,7 @@
       const claimedEventIds = new Set();
 
       filteredVenues.forEach((v) => {
-        const vn = normalizeNameKey(v.name);
-        const matchingEvents = dayEvents.filter((ev) => {
-          const en = normalizeNameKey(ev.venueName);
-          return vn && en && (vn === en || vn.includes(en) || en.includes(vn));
-        });
-
+        const matchingEvents = dayEvents.filter((ev) => eventsMatchVenue(ev, v));
         if (matchingEvents.length > 0) {
           matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id)));
           matchedResults.push({
@@ -1699,20 +1675,20 @@
         }
       });
 
-      // Also plot any event whose venue was typed custom and isn't in venuesData yet
       const unclaimedByVenue = new Map();
       dayEvents.forEach((ev) => {
         if (claimedEventIds.has(String(ev.id))) return;
         if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) {
           return;
         }
-        const key = normalizeNameKey(ev.venueName || "albufeira");
+        const rawVenue = (ev.venueName || ev.venue || "Albufeira Venue").trim();
+        const key = normalizeNameKey(rawVenue) || "albufeira";
         if (!unclaimedByVenue.has(key)) {
           unclaimedByVenue.set(key, {
             id: `ev-venue-${key}`,
-            name: ev.venueName || "Albufeira Venue",
+            name: rawVenue,
             zone: ev.zone || "Albufeira",
-            address: `${ev.venueName || "Albufeira"}, Albufeira`,
+            address: `${rawVenue}, Albufeira`,
             lat: Number(ev.lat) || 37.0955,
             lng: Number(ev.lng) || -8.2505,
             category: ev.category || "Event Venue",
@@ -1742,12 +1718,12 @@
 
       const homeStatus = document.getElementById("homeMapStatus");
       if (homeStatus) {
-        homeStatus.textContent = `${homePlaces.length} active ${homePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
+        homeStatus.textContent = `${homePlaces.length} ${homePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
 
       const venuesStatus = document.getElementById("venuesMapStatus");
       if (venuesStatus) {
-        venuesStatus.textContent = `${venuePlaces.length} active ${venuePlaces.length === 1 ? "venue" : "venues"} • ${dayNote}`;
+        venuesStatus.textContent = `${venuePlaces.length} ${venuePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
     }
 
@@ -1762,7 +1738,7 @@
           eventsData = evRows.map((row) => ({
             id: row.id,
             title: row.title || "",
-            venueName: row.venueName || row.venuename || "",
+            venueName: row.venueName || row.venuename || row.venue || "",
             zone: row.zone || "Albufeira",
             town: row.town || "Albufeira",
             category: row.category || "MARKETS",
@@ -1991,7 +1967,6 @@
       renderVenues();
     };
 
-    // Venues & Map tab also shows ONLY venues with events
     function renderVenues() {
       const grid = document.getElementById("venuesGrid");
       const activeVenues = getMapVenuesForFilter(activeZone, activeMapDate);
@@ -2131,8 +2106,6 @@
     }
 
     document.getElementById("openAddVenueBtn").addEventListener("click", openAddVenueModal);
-    const openAddVenueBtn2 = document.getElementById("openAddVenueBtn2");
-    if (openAddVenueBtn2) openAddVenueBtn2.addEventListener("click", openAddVenueModal);
     document.getElementById("closeVenueModalBtn").addEventListener("click", closeVenueModal);
     document.getElementById("cancelVenueBtn").addEventListener("click", closeVenueModal);
     venueModal.addEventListener("click", (e) => {
