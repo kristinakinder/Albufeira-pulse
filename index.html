@@ -108,11 +108,11 @@
     }
 
     .brand-mascot {
-      width: 74px;
-      height: 74px;
+      width: 96px;
+      height: 58px;
       flex-shrink: 0;
       display: block;
-      filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.22));
+      filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.18));
     }
 
     .brand-title {
@@ -191,8 +191,8 @@
         gap: 8px;
       }
       .brand-mascot {
-        width: 54px;
-        height: 54px;
+        width: 78px;
+        height: 46px;
       }
       .brand-title {
         font-size: 1.18rem;
@@ -234,8 +234,9 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 34px;
-      height: 34px;
+      width: 42px;
+      height: 28px;
+      object-fit: contain;
       background: #ffffff;
       padding: 2px;
       border-radius: 6px;
@@ -925,101 +926,63 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="74" height="74" role="img" aria-label="Albufeira Pulse Seagull Emblem">
+          <!-- Klaus.svg vector mark (replace inner geometry with raw Klaus.svg markup if desired) -->
+          <svg id="brandMascotSvg" class="brand-mascot" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 160" width="96" height="58" role="img" aria-label="Klaus Seagull Emblem">
             <defs>
-              <linearGradient id="skyDiscGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#172042" />
-                <stop offset="60%" stop-color="#0c1024" />
-                <stop offset="100%" stop-color="#070914" />
+              <linearGradient id="klausChestGrad" x1="15%" y1="10%" x2="85%" y2="85%">
+                <stop offset="0%" stop-color="#f5f8fc" />
+                <stop offset="65%" stop-color="#e5ebf4" />
+                <stop offset="100%" stop-color="#b8c4d6" />
               </linearGradient>
-              <linearGradient id="duskGlowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#ff2a85" stop-opacity="0.32" />
-                <stop offset="50%" stop-color="#ffb800" stop-opacity="0.16" />
-                <stop offset="100%" stop-color="#00f0ff" stop-opacity="0.28" />
+              <linearGradient id="klausWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1b1f2e" />
+                <stop offset="100%" stop-color="#0b0d14" />
               </linearGradient>
-              <linearGradient id="plumageLight" x1="20%" y1="10%" x2="80%" y2="90%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="72%" stop-color="#edf3fa" />
-                <stop offset="100%" stop-color="#c6d3e3" />
+              <linearGradient id="klausTailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#7a8499" />
+                <stop offset="100%" stop-color="#4e5668" />
               </linearGradient>
-              <linearGradient id="mantleSlate" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#33436b" />
-                <stop offset="58%" stop-color="#1b2540" />
-                <stop offset="100%" stop-color="#0f1526" />
-              </linearGradient>
-              <linearGradient id="gullBillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ffd53d" />
-                <stop offset="65%" stop-color="#ff9914" />
-                <stop offset="100%" stop-color="#e85d1a" />
+              <linearGradient id="klausBillGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff5e1a" />
+                <stop offset="65%" stop-color="#e33b0c" />
+                <stop offset="100%" stop-color="#9e2408" />
               </linearGradient>
             </defs>
 
-            <circle cx="120" cy="120" r="108" fill="url(#skyDiscGrad)" stroke="#00f0ff" stroke-width="2.5" stroke-opacity="0.65" />
-            <circle cx="120" cy="120" r="102" fill="url(#duskGlowGrad)" />
+            <!-- PASTE RAW KLAUS.SVG PATHS HERE -->
+            <g id="klausVectorArtwork">
+              <!-- Ground / Ledge Lines -->
+              <path d="M2 135 L196 135 C208 135, 214 137, 218 140 L225 129 L235 129 L240 122 L252 124 L257 119 L270 119 L274 114 L292 115 L296 112 L314 114 L322 111 L344 111 L347 104 L366 101 L371 97 L398 97 L398 100"
+                    fill="none" stroke="#11131a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              <line x1="120" y1="149" x2="195" y2="140" stroke="#11131a" stroke-width="1.3" />
 
-            <path d="M24 156 Q 75 151, 120 155 T 216 154" fill="none" stroke="#00f0ff" stroke-width="1.6" stroke-opacity="0.35" />
-            <polygon points="36,176 204,176 198,194 42,194" fill="#e5edf7" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
-            <polygon points="40,188 200,188 198,194 42,194" fill="#a8b8ce" />
+              <!-- Legs & Webbed Feet -->
+              <g fill="#a4421d" stroke="#11131a" stroke-width="1.3" stroke-linejoin="round">
+                <path d="M132 111 L133 135 L136 155 L154 155 L139 149 L138 135 L139 111 Z" />
+                <path d="M148 110 L146 135 L146 156 L178 152 L150 148 L151 135 L155 110 Z" />
+              </g>
 
-            <g stroke="#080b16" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M114 152 L110 176" stroke="#ff9e1b" stroke-width="5.5" />
-              <path d="M114 152 L110 176" fill="none" stroke="#080b16" stroke-width="2" />
-              <path d="M110 176 L97 178 L107 174 L117 176 Z" fill="#ff9e1b" />
+              <!-- Lower Tail Feather -->
+              <path d="M40 118 C54 123, 78 122, 108 109 L88 105 Z"
+                    fill="url(#klausTailGrad)" stroke="#11131a" stroke-width="1.6" stroke-linejoin="round" />
 
-              <path d="M131 153 L131 176" stroke="#ff9e1b" stroke-width="5.5" />
-              <path d="M131 153 L131 176" fill="none" stroke="#080b16" stroke-width="2" />
-              <path d="M131 176 L119 178 L128 174 L139 176 Z" fill="#ff9e1b" />
-            </g>
+              <!-- Upper Tail & Slate Mantle Wing -->
+              <path d="M29 111 C46 113, 74 109, 102 98 L82 88 Z"
+                    fill="url(#klausTailGrad)" stroke="#11131a" stroke-width="1.6" stroke-linejoin="round" />
+              <path d="M29 111 C48 97, 68 74, 86 52 C101 36, 124 31, 152 31 L143 42 L156 47 L145 55 L157 57 C153 74, 134 89, 102 104 C76 115, 48 115, 29 111 Z"
+                    fill="url(#klausWingGrad)" stroke="#11131a" stroke-width="1.8" stroke-linejoin="round" />
 
-            <path d="M77 132 L35 142 L44 148 L38 153 L83 145 Z" fill="#f1f5fb" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
+              <!-- Body, Neck & Head -->
+              <path d="M84 108 C108 113, 138 112, 161 100 C184 88, 196 63, 191 40 C188 26, 178 17, 168 11 C156 3, 134 2, 122 10 C114 16, 111 26, 111 33 C98 37, 86 45, 78 55"
+                    fill="url(#klausChestGrad)" stroke="#11131a" stroke-width="1.8" stroke-linejoin="round" />
 
-            <path d="M136 44
-                     C147 41, 161 45, 167 56
-                     C170 62, 170 69, 167 76
-                     C163 85, 165 98, 166 112
-                     C167 131, 156 148, 136 154
-                     C117 159, 93 156, 80 143
-                     C75 138, 75 132, 79 128
-                     C98 122, 115 107, 123 86
-                     C128 73, 126 57, 131 49
-                     C132 46, 134 45, 136 44 Z"
-                  fill="url(#plumageLight)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
+              <!-- Beak -->
+              <path d="M167 16 C178 15, 193 16, 204 21 C211 24, 214 29, 213 33 C203 30, 192 29, 183 32 C178 34, 175 37, 172 39 C173 32, 174 26, 172 22 L164 21 Z"
+                    fill="url(#klausBillGrad)" stroke="#11131a" stroke-width="1.5" stroke-linejoin="round" />
+              <path d="M172 22 L212 28" fill="none" stroke="#11131a" stroke-width="1.3" stroke-linecap="round" />
 
-            <path d="M165 95
-                     C166 119, 162 142, 138 152
-                     C120 158, 98 155, 84 144
-                     C104 147, 129 142, 146 125
-                     C156 115, 162 104, 165 95 Z"
-                  fill="#b7c6da" opacity="0.7" />
-
-            <path d="M128 84
-                     C105 84, 79 97, 58 119
-                     L34 139
-                     L56 138
-                     L45 146
-                     L72 144
-                     C102 141, 129 130, 141 112
-                     C147 102, 144 88, 128 84 Z"
-                  fill="url(#mantleSlate)" stroke="#080b16" stroke-width="3.2" stroke-linejoin="round" />
-
-            <path d="M126 88 C105 89, 83 100, 65 119 C85 116, 108 109, 129 94 Z" fill="#465c8f" opacity="0.8" />
-            <path d="M72 136 C95 134, 118 127, 133 114" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" />
-
-            <path d="M167 63
-                     L201 69
-                     C206 70, 206 76, 199 79
-                     L188 79
-                     L184 82
-                     L165 78 Z"
-                  fill="url(#gullBillGrad)" stroke="#080b16" stroke-width="2.8" stroke-linejoin="round" />
-            <path d="M167 72 L199 74" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
-            <circle cx="190" cy="76.5" r="2.5" fill="#ff2a55" />
-
-            <g>
-              <ellipse cx="155" cy="59" rx="5.2" ry="4.4" fill="#ffe484" stroke="#080b16" stroke-width="2" />
-              <circle cx="155.5" cy="59" r="2.5" fill="#080b16" />
-              <circle cx="156.6" cy="57.8" r="1" fill="#ffffff" />
-              <path d="M148 53.5 Q 155 51.5, 162 54.5" fill="none" stroke="#080b16" stroke-width="2" stroke-linecap="round" />
+              <!-- Eye -->
+              <ellipse cx="163" cy="12" rx="4.2" ry="2.6" transform="rotate(-12 163 12)" fill="#0b0d14" />
             </g>
           </svg>
 
@@ -1032,7 +995,7 @@
             </div>
             <div style="position:relative; display:inline-block; background:#ffffff; padding:8px; border-radius:10px;">
               <canvas id="logoQrCanvas" width="160" height="160" style="display:block;"></canvas>
-              <img id="qrCenterMascotImg" class="qr-center-mascot" src="" alt="Albufeira Pulse mascot mark" />
+              <img id="qrCenterMascotImg" class="qr-center-mascot" src="" alt="Klaus seagull emblem" />
             </div>
             <p id="logoQrUrlLabel" style="margin-top:8px; font-size:0.72rem; color:var(--text-muted); word-break:break-all;"></p>
           </div>
@@ -1806,7 +1769,6 @@
       return en === vn || vn.includes(en) || en.includes(vn);
     }
 
-    // Strictly return ONLY venues that have matching events for the selected date/zone filter
     function getMapVenuesForFilter(zoneFilter, dateFilter) {
       const normalizedTargetDate = (!dateFilter || dateFilter === "ALL")
         ? "ALL"
@@ -2111,7 +2073,6 @@
       if (targetId !== null) window.deleteEventById(targetId);
     });
 
-    // VENUE DETAIL & MINI-MAP MODAL
     const venueDetailModal = document.getElementById("venueDetailModal");
     let currentDetailVenue = null;
 
@@ -2179,7 +2140,6 @@
       const targetVenue = currentDetailVenue;
       closeVenueDetailModal();
 
-      // Switch to Venues & Map tab and show All Event Days so the venue pin is visible
       activeMapDate = "ALL";
       activeZone = "ALL";
       document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((p) => {
