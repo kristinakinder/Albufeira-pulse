@@ -1624,6 +1624,25 @@
             </select>
           </div>
 
+          <div class="form-group full">
+            <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input id="eventRepeatToggle" type="checkbox" />
+              <span>Repeat event (tick to choose frequency)</span>
+            </label>
+          </div>
+
+          <div class="form-group" id="eventRepeatOptionsWrap" style="display: none;">
+            <label for="eventRepeatFrequency">Repeat Frequency</label>
+            <select id="eventRepeatFrequency" name="repeatFrequency">
+              <option value="once" selected>Once</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="fortnightly">Every fortnight</option>
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+
           <div class="form-group">
             <label for="eventFee">Fee</label>
             <input id="eventFee" name="fee" type="text" value="Free" placeholder="Free or €80" />
@@ -2812,6 +2831,15 @@
       document.getElementById("eventImage").value = "";
       document.getElementById("eventLat").value = "37.0955";
       document.getElementById("eventLng").value = "-8.2505";
+      if (typeof eventRepeatToggle !== "undefined" && eventRepeatToggle) {
+        eventRepeatToggle.checked = false;
+      }
+      if (typeof eventRepeatFrequency !== "undefined" && eventRepeatFrequency) {
+        eventRepeatFrequency.value = "once";
+      }
+      if (typeof syncRepeatUi === "function") {
+        syncRepeatUi();
+      }
       eventModal.classList.add("open");
     };
 
@@ -2888,6 +2916,11 @@
         author: "Admin"
       };
 
+      const repeatEnabled = Boolean(eventRepeatToggle && eventRepeatToggle.checked);
+      const chosenFrequency = repeatEnabled ? (eventRepeatFrequency ? eventRepeatFrequency.value : "once") : "once";
+      const targetDates = editingId ? [payload.date] : expandEventDates(payload.date, chosenFrequency);
+      const payloadsToSave = targetDates.map((dt) => ({ ...payload, date: dt }));
+
       submitBtn.disabled = false;
       submitBtn.textContent = prevBtnText;
 
@@ -2909,7 +2942,7 @@
         } else {
           const { data, error } = await supabaseClient
             .from("events")
-            .insert([payload])
+            .insert(payloadsToSave)
             .select();
 
           if (error) {
@@ -2917,8 +2950,15 @@
             return;
           }
 
-          const created = data && data[0] ? { ...data[0], author: "Admin" } : { ...payload, id: Date.now() };
-          eventsData.push(created);
+          if (Array.isArray(data) && data.length > 0) {
+            data.forEach((row, idx) => {
+              eventsData.push({ ...row, author: "Admin", id: row.id ?? (Date.now() + idx) });
+            });
+          } else {
+            payloadsToSave.forEach((item, idx) => {
+              eventsData.push({ ...item, id: Date.now() + idx });
+            });
+          }
         }
       } else {
         if (editingId) {
@@ -2926,7 +2966,9 @@
             String(item.id) === String(editingId) ? { ...item, ...payload } : item
           );
         } else {
-          eventsData.push({ ...payload, id: Date.now() });
+          payloadsToSave.forEach((item, idx) => {
+            eventsData.push({ ...item, id: Date.now() + idx });
+          });
         }
       }
 
@@ -2934,6 +2976,83 @@
       renderEvents();
       renderVenues();
     });
+
+    const eventRepeatToggle = document.getElementById("eventRepeatToggle");
+    const eventRepeatOptionsWrap = document.getElementById("eventRepeatOptionsWrap");
+    const eventRepeatFrequency = document.getElementById("eventRepeatFrequency");
+
+    function syncRepeatUi() {
+      const checked = Boolean(eventRepeatToggle && eventRepeatToggle.checked);
+      if (eventRepeatOptionsWrap) {
+        eventRepeatOptionsWrap.style.display = checked ? "flex" : "none";
+      }
+      if (!checked && eventRepeatFrequency) {
+        eventRepeatFrequency.value = "once";
+      }
+    }
+
+    if (eventRepeatToggle) {
+      eventRepeatToggle.addEventListener("change", syncRepeatUi);
+    }
+
+    function formatIsoDateUtc(dateObj) {
+      const y = dateObj.getUTCFullYear();
+      const m = String(dateObj.getUTCMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getUTCDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function addMonthsUtc(dateObj, monthsToAdd) {
+      const year = dateObj.getUTCFullYear();
+      const month = dateObj.getUTCMonth() + monthsToAdd;
+      const day = dateObj.getUTCDate();
+      const targetMonthFirst = new Date(Date.UTC(year, month, 1));
+      const lastDayOfTargetMonth = new Date(
+        Date.UTC(targetMonthFirst.getUTCFullYear(), targetMonthFirst.getUTCMonth() + 1, 0)
+      ).getUTCDate();
+      return new Date(
+        Date.UTC(
+          targetMonthFirst.getUTCFullYear(),
+          targetMonthFirst.getUTCMonth(),
+          Math.min(day, lastDayOfTargetMonth)
+        )
+      );
+    }
+
+    function expandEventDates(startDateStr, frequency) {
+      if (!startDateStr || !frequency || frequency === "once") {
+        return [startDateStr];
+      }
+
+      const [y, m, d] = startDateStr.split("-").map(Number);
+      const base = new Date(Date.UTC(y, m - 1, d));
+      const dates = [];
+
+      const config = {
+        daily: { count: 14, stepDays: 1 },
+        weekly: { count: 8, stepDays: 7 },
+        fortnightly: { count: 6, stepDays: 14 },
+        monthly: { count: 6, months: 1 },
+        yearly: { count: 3, years: 1 }
+      }[frequency];
+
+      if (!config) return [startDateStr];
+
+      for (let i = 0; i < config.count; i++) {
+        let nextDate;
+        if (config.stepDays) {
+          nextDate = new Date(base.getTime() + i * config.stepDays * 86400000);
+        } else if (config.months) {
+          nextDate = addMonthsUtc(base, i * config.months);
+        } else if (config.years) {
+          nextDate = addMonthsUtc(base, i * config.years * 12);
+        }
+        dates.push(formatIsoDateUtc(nextDate));
+      }
+
+      return dates;
+    }
+
 
     const adminModal = document.getElementById("adminModal");
 
