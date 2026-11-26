@@ -317,8 +317,16 @@
         margin-left: 0;
         gap: 0;
       }
-      /* Declutter mobile top bar: hide desktop admin/add buttons on mobile (use central + FAB & compact controls) */
+      /* Keep mobile top bar compact while keeping Admin sign-in accessible */
       .admin-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 5px;
+        margin-bottom: 4px;
+      }
+      .admin-bar #openAddEventBtn,
+      .admin-bar #openAddVenueBtn {
         display: none;
       }
       .nav-tabs {
