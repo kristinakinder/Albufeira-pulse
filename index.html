@@ -951,71 +951,6 @@
       margin-top: 16px;
     }
 
-    .auth-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 14px;
-      background: var(--bg-elevated);
-      padding: 4px;
-      border-radius: 11px;
-      border: 1px solid var(--border-subtle);
-    }
-
-    .auth-tab-btn {
-      background: transparent;
-      color: var(--text-muted);
-      border: none;
-      border-radius: 8px;
-      padding: 7px 10px;
-      font-family: 'Outfit', sans-serif;
-      font-weight: 700;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-
-    .auth-tab-btn.active {
-      background: linear-gradient(135deg, rgba(255, 42, 133, 0.28), rgba(0, 240, 255, 0.2));
-      color: #ffffff;
-      border: 1px solid rgba(0, 240, 255, 0.45);
-    }
-
-    .auth-feedback {
-      margin-top: 10px;
-      font-size: 0.8rem;
-      padding: 8px 10px;
-      border-radius: 9px;
-      display: none;
-    }
-
-    .auth-feedback.error {
-      display: block;
-      background: rgba(255, 42, 133, 0.16);
-      border: 1px solid rgba(255, 42, 133, 0.5);
-      color: #ff9ec7;
-    }
-
-    .auth-feedback.success {
-      display: block;
-      background: rgba(0, 240, 255, 0.14);
-      border: 1px solid rgba(0, 240, 255, 0.45);
-      color: var(--neon-cyan);
-    }
-
-    .member-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 7px;
-      background: rgba(255, 184, 0, 0.14);
-      border: 1px solid rgba(255, 184, 0, 0.45);
-      color: var(--neon-amber);
-      cursor: pointer;
-    }
-
     footer {
       max-width: 1280px;
       margin: 0 auto 84px;
@@ -1203,7 +1138,6 @@
             <button id="langEnBtn" class="pill-btn active" type="button" data-lang="en">EN</button>
             <button id="langPtBtn" class="pill-btn" type="button" data-lang="pt">PT</button>
           </div>
-          <button id="memberAccountBtn" class="member-chip" type="button" title="Sign up with email & choose username">Sign Up / Login</button>
           <span id="adminStatusBadge" class="admin-status">Admin: Locked</span>
           <button id="adminToggleBtn" class="btn-secondary" type="button">Admin</button>
         </div>
@@ -1263,19 +1197,19 @@
 
       <div id="albufeiraBeachConditionsBar" class="retro-info-strip" style="margin-bottom: 12px;">
         <div class="retro-tile" style="padding: 10px 14px;">
-          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Albufeira Weather • Fri Nov 27</div>
-          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">Mild Algarve Coastal Day</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Check local sky &amp; wind conditions before heading out to Old Town or the coast.</p>
+          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Albufeira Weather • Thu Nov 26</div>
+          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">13°C now • High 18°C / Low 10°C</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Mostly sunny now (partly sunny today), wind 4 mph from north (7 mph daily), 0% rain chance now (10% today).</p>
         </div>
         <div class="retro-tile" style="padding: 10px 14px;">
           <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase;">Sea Temperature • Late Nov</div>
           <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~17.2°C – 18.8°C along the coast</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Fresh Atlantic water along the Algarve coast; wetsuit recommended for swimming or surfing.</p>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Fresh Atlantic water (around 17.2°C near Lagoa de Albufeira and ~18.6–18.8°C on the Faro coast); wetsuit recommended for swimming/surfing.</p>
         </div>
         <div class="retro-tile" style="padding: 10px 14px;">
-          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">Waves &amp; Swell • Late Nov</div>
-          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~1.3m – 2.0m Atlantic swell</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Always check beach flags and local maritime advisories before entering the water.</p>
+          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">Waves &amp; Swell • Nov 26</div>
+          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~1.3m – 2.0m waves (light wind ~5.5 km/h)</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Moderate-to-lively Atlantic swell (~2.04 m modeled near Lagoa de Albufeira today, easing toward ~1.34 m tomorrow); check beach flags before entering.</p>
         </div>
       </div>
 
@@ -1409,143 +1343,6 @@
       </div>
     </section>
   </main>
-
-  <!-- MEMBER SIGN UP / LOGIN & ONE-TIME USERNAME MODAL -->
-  <div id="memberAuthModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="memberAuthTitle">
-    <div class="modal-box" style="max-width: 440px;">
-      <div class="modal-header">
-        <div>
-          <span class="vice-sticker sticker-cyan" style="margin-bottom: 5px;">Member Account</span>
-          <h3 id="memberAuthTitle" style="font-size: 1.2rem;">Sign Up or Log In</h3>
-        </div>
-        <button id="closeMemberAuthBtn" class="btn-secondary" type="button">✕</button>
-      </div>
-
-      <div id="memberAuthTabs" class="auth-tabs" role="tablist">
-        <button id="authTabSignup" class="auth-tab-btn active" type="button" role="tab">Sign Up (Email)</button>
-        <button id="authTabLogin" class="auth-tab-btn" type="button" role="tab">Log In</button>
-      </div>
-
-      <!-- Email Sign Up + Choose Username Once -->
-      <form id="memberSignupForm">
-        <div class="form-grid" style="grid-template-columns: 1fr;">
-          <div class="form-group">
-            <label for="signupUsernameInput">Choose Username (Locked Once Set — 3–20 chars, letters/numbers/_) *</label>
-            <input
-              id="signupUsernameInput"
-              type="text"
-              required
-              minlength="3"
-              maxlength="20"
-              pattern="[A-Za-z0-9_]{3,20}"
-              placeholder="e.g., klaus_algarve"
-              autocomplete="username"
-            />
-          </div>
-          <div class="form-group">
-            <label for="signupEmailInput">Email Address *</label>
-            <input
-              id="signupEmailInput"
-              type="email"
-              required
-              placeholder="you@example.com"
-              autocomplete="email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="signupPasswordInput">Password (min. 6 characters) *</label>
-            <input
-              id="signupPasswordInput"
-              type="password"
-              required
-              minlength="6"
-              placeholder="Create a password"
-              autocomplete="new-password"
-            />
-          </div>
-        </div>
-        <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 8px;">
-          Your username can only be chosen once when setting up your profile.
-        </p>
-        <div id="memberSignupFeedback" class="auth-feedback"></div>
-        <div class="modal-actions">
-          <button id="cancelMemberSignupBtn" class="btn-secondary" type="button">Cancel</button>
-          <button id="submitMemberSignupBtn" class="btn-primary" type="submit">Create Account</button>
-        </div>
-      </form>
-
-      <!-- Existing Email Login -->
-      <form id="memberLoginForm" style="display: none;">
-        <div class="form-grid" style="grid-template-columns: 1fr;">
-          <div class="form-group">
-            <label for="loginEmailInput">Email Address *</label>
-            <input
-              id="loginEmailInput"
-              type="email"
-              required
-              placeholder="you@example.com"
-              autocomplete="email"
-            />
-          </div>
-          <div class="form-group">
-            <label for="loginPasswordInput">Password *</label>
-            <input
-              id="loginPasswordInput"
-              type="password"
-              required
-              placeholder="Your password"
-              autocomplete="current-password"
-            />
-          </div>
-        </div>
-        <div id="memberLoginFeedback" class="auth-feedback"></div>
-        <div class="modal-actions">
-          <button id="cancelMemberLoginBtn" class="btn-secondary" type="button">Cancel</button>
-          <button id="submitMemberLoginBtn" class="btn-primary" type="submit">Log In</button>
-        </div>
-      </form>
-
-      <!-- One-Time Username Claim Step (for signed-in users without a locked username yet) -->
-      <form id="claimUsernameForm" style="display: none;">
-        <p style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px;">
-          Signed in as <strong id="claimAccountEmailLabel" style="color: var(--neon-cyan);"></strong>. Pick your permanent username below — once saved, it cannot be changed.
-        </p>
-        <div class="form-group">
-          <label for="claimUsernameInput">Permanent Username (3–20 chars: letters, numbers, _) *</label>
-          <input
-            id="claimUsernameInput"
-            type="text"
-            required
-            minlength="3"
-            maxlength="20"
-            pattern="[A-Za-z0-9_]{3,20}"
-            placeholder="e.g., algarve_builder"
-          />
-        </div>
-        <div id="claimUsernameFeedback" class="auth-feedback"></div>
-        <div class="modal-actions">
-          <button id="memberSignOutFromClaimBtn" class="btn-secondary" type="button">Sign Out</button>
-          <button id="submitClaimUsernameBtn" class="btn-primary" type="submit">Lock In Username</button>
-        </div>
-      </form>
-
-      <!-- Active Signed-In Member Summary -->
-      <div id="memberSessionPanel" style="display: none;">
-        <div style="background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 12px 14px;">
-          <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Active Profile</div>
-          <div style="font-size: 1rem; font-weight: 800; color: var(--neon-amber); margin-top: 2px;">
-            @<span id="sessionUsernameDisplay"></span> <span class="vice-sticker sticker-cyan" style="margin-left: 6px;">Locked</span>
-          </div>
-          <div id="sessionEmailDisplay" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;"></div>
-        </div>
-        <div id="memberSessionFeedback" class="auth-feedback"></div>
-        <div class="modal-actions">
-          <button id="memberSignOutBtn" class="btn-secondary" type="button">Log Out</button>
-          <button id="closeMemberSessionDoneBtn" class="btn-primary" type="button">Done</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- ADD VENUE MODAL -->
   <div id="venueModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="venueModalTitle">
@@ -1880,7 +1677,7 @@
           </div>
           <div class="form-group full">
             <label for="forumAuthor">Your Name</label>
-            <input id="forumAuthor" type="text" placeholder="Username or neighbor name" />
+            <input id="forumAuthor" type="text" placeholder="Admin or neighbor name" />
           </div>
           <div class="form-group full">
             <label for="forumMessage">Message *</label>
@@ -2080,108 +1877,6 @@
     if (brandMascotImg) brandMascotImg.src = KLAUS_DATA_URI;
     if (qrCenterMascotImg) qrCenterMascotImg.src = KLAUS_DATA_URI;
 
-    let currentLang = localStorage.getItem("albufeira_lang") || "en";
-
-    const I18N = {
-      en: {
-        "btn.addEvent": "+ Add Event",
-        "btn.addVenue": "+ Add Venue",
-        "btn.postListing": "+ Post Listing",
-        "btn.newThread": "+ New Thread",
-        "nav.events": "Events",
-        "nav.venues": "Venues & Map",
-        "nav.classifieds": "Classifieds",
-        "nav.forum": "Forum",
-        "nav.links": "Useful Links",
-        "nav.emergency": "Emergency",
-        "cat.all": "All",
-        "cat.markets": "Markets",
-        "cat.music": "Music & Nightlife",
-        "cat.arts": "Arts & Culture",
-        "cat.family": "Family & Festivals",
-        "cat.sports": "Sports & Outdoors",
-        "zone.all": "All Zones",
-        "cls.title": "Albufeira Classifieds",
-        "cls.subtitle": "Local listings, rentals, items, and services in Albufeira.",
-        "frm.title": "Albufeira Community Forum",
-        "frm.subtitle": "Local discussions, tips, and neighborhood updates.",
-        "lnk.badge": "Albufeira Field Guide",
-        "lnk.title": "Useful Links & Local Essentials",
-        "lnk.subtitle": "Official municipal, transport, tourist offices, and practical Albufeira tips.",
-        "emg.title": "Albufeira & Portugal Emergency Directory",
-        "emg.call112": "Emergency 112",
-        "admin.activePrefix": "Admin:",
-        "admin.locked": "Admin: Locked",
-        "admin.signIn": "Admin",
-        "admin.signOut": "Lock Admin",
-        "event.empty": "No events match this filter yet.",
-        "event.editBtn": "Edit",
-        "event.feeLabel": "Fee:",
-        "venue.empty": "No venues match this filter yet."
-      },
-      pt: {
-        "btn.addEvent": "+ Adicionar Evento",
-        "btn.addVenue": "+ Adicionar Espaço",
-        "btn.postListing": "+ Publicar Anúncio",
-        "btn.newThread": "+ Novo Tópico",
-        "nav.events": "Eventos",
-        "nav.venues": "Espaços e Mapa",
-        "nav.classifieds": "Classificados",
-        "nav.forum": "Fórum",
-        "nav.links": "Ligações Úteis",
-        "nav.emergency": "Emergência",
-        "cat.all": "Todos",
-        "cat.markets": "Mercados",
-        "cat.music": "Música e Noite",
-        "cat.arts": "Arte e Cultura",
-        "cat.family": "Família e Festas",
-        "cat.sports": "Desporto e Ar Livre",
-        "zone.all": "Todas as Zonas",
-        "cls.title": "Classificados de Albufeira",
-        "cls.subtitle": "Anúncios locais, rendas, artigos e serviços em Albufeira.",
-        "frm.title": "Fórum Comunitário de Albufeira",
-        "frm.subtitle": "Conversas locais, dicas e novidades da zona.",
-        "lnk.badge": "Guia Prático de Albufeira",
-        "lnk.title": "Ligações Úteis e Essenciais Locais",
-        "lnk.subtitle": "Câmara municipal, transportes, postos de turismo e dicas práticas em Albufeira.",
-        "emg.title": "Diretório de Emergência — Albufeira e Portugal",
-        "emg.call112": "Emergência 112",
-        "admin.activePrefix": "Admin:",
-        "admin.locked": "Admin: Bloqueado",
-        "admin.signIn": "Admin",
-        "admin.signOut": "Bloquear Admin",
-        "event.empty": "Ainda não há eventos com este filtro.",
-        "event.editBtn": "Editar",
-        "event.feeLabel": "Entrada:",
-        "venue.empty": "Ainda não há espaços com este filtro."
-      }
-    };
-
-    function t(key) {
-      return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
-    }
-
-    function applyLanguage(lang) {
-      currentLang = lang === "pt" ? "pt" : "en";
-      localStorage.setItem("albufeira_lang", currentLang);
-      document.documentElement.lang = currentLang;
-      document.getElementById("langEnBtn")?.classList.toggle("active", currentLang === "en");
-      document.getElementById("langPtBtn")?.classList.toggle("active", currentLang === "pt");
-
-      document.querySelectorAll("[data-i18n]").forEach((el) => {
-        const key = el.getAttribute("data-i18n");
-        if (key) el.textContent = t(key);
-      });
-
-      updateAdminUI();
-      updateMemberAccountUI();
-      renderEvents();
-      renderVenues();
-    }
-
-    document.getElementById("langEnBtn")?.addEventListener("click", () => applyLanguage("en"));
-    document.getElementById("langPtBtn")?.addEventListener("click", () => applyLanguage("pt"));
-
     function switchToTab(targetTab) {
       document.querySelectorAll(".nav-btn").forEach((b) => {
         b.classList.toggle("active", b.dataset.tab === targetTab);
@@ -2232,440 +1927,6 @@
       }
       renderEvents();
     }
-
-    /* =========================================================================
-       EMAIL SIGN-UP + ONE-TIME USERNAME ACCOUNT SYSTEM
-       Works with Supabase `profiles` + `auth.users` when configured, and falls
-       back gracefully to localStorage persistence if Supabase auth/table isn't
-       ready yet so the UI flow can be tested immediately.
-       ========================================================================= */
-    const LOCAL_PROFILES_KEY = "albufeira_pulse_local_profiles_v1";
-    const LOCAL_SESSION_KEY = "albufeira_pulse_local_session_v1";
-
-    let memberUser = null; // { id, email }
-    let memberProfile = null; // { id, email, username, username_locked: true }
-
-    function loadLocalProfilesMap() {
-      try {
-        return JSON.parse(localStorage.getItem(LOCAL_PROFILES_KEY) || "{}");
-      } catch (_) {
-        return {};
-      }
-    }
-
-    function saveLocalProfilesMap(map) {
-      localStorage.setItem(LOCAL_PROFILES_KEY, JSON.stringify(map));
-    }
-
-    function sanitizeUsername(raw) {
-      return String(raw || "").trim().toLowerCase();
-    }
-
-    function validateUsernameFormat(username) {
-      if (!/^[a-z0-9_]{3,20}$/.test(username)) {
-        return "Username must be 3–20 characters using only letters, numbers, or underscores (_).";
-      }
-      return "";
-    }
-
-    function showAuthFeedback(elId, message, type = "error") {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      el.textContent = message;
-      el.className = `auth-feedback ${type}`;
-    }
-
-    function clearAllAuthFeedback() {
-      ["memberSignupFeedback", "memberLoginFeedback", "claimUsernameFeedback", "memberSessionFeedback"].forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.textContent = "";
-          el.className = "auth-feedback";
-        }
-      });
-    }
-
-    function updateMemberAccountUI() {
-      const btn = document.getElementById("memberAccountBtn");
-      const forumAuthorInput = document.getElementById("forumAuthor");
-      if (!btn) return;
-
-      if (memberUser && memberProfile && memberProfile.username) {
-        btn.textContent = `@${memberProfile.username}`;
-        btn.title = `Signed in as @${memberProfile.username} (${memberUser.email})`;
-        if (forumAuthorInput && !forumAuthorInput.value.trim()) {
-          forumAuthorInput.value = memberProfile.username;
-        }
-      } else if (memberUser) {
-        btn.textContent = "Pick Username";
-        btn.title = "Choose your permanent username";
-      } else {
-        btn.textContent = "Sign Up / Login";
-        btn.title = "Sign up with email and choose a username";
-      }
-    }
-
-    async function fetchOrBuildProfileForUser(user, fallbackDesiredUsername = "") {
-      if (!user) return null;
-      const email = (user.email || "").toLowerCase();
-      const localMap = loadLocalProfilesMap();
-
-      if (supabaseClient) {
-        try {
-          const { data, error } = await supabaseClient
-            .from("profiles")
-            .select("id, email, username, username_locked")
-            .eq("id", user.id)
-            .maybeSingle();
-
-          if (!error && data && data.username) {
-            const lockedProfile = {
-              id: user.id,
-              email: data.email || email,
-              username: data.username,
-              username_locked: true
-            };
-            localMap[email] = lockedProfile;
-            saveLocalProfilesMap(localMap);
-            return lockedProfile;
-          }
-
-          if (!error && fallbackDesiredUsername) {
-            const clean = sanitizeUsername(fallbackDesiredUsername);
-            const { data: existing } = await supabaseClient
-              .from("profiles")
-              .select("id")
-              .eq("username", clean)
-              .maybeSingle();
-
-            if (existing && existing.id !== user.id) {
-              return { id: user.id, email, username: "", username_locked: false, conflict: true };
-            }
-
-            const { error: upsertErr } = await supabaseClient
-              .from("profiles")
-              .upsert({
-                id: user.id,
-                email,
-                username: clean,
-                username_locked: true
-              });
-
-            if (!upsertErr) {
-              const lockedProfile = { id: user.id, email, username: clean, username_locked: true };
-              localMap[email] = lockedProfile;
-              saveLocalProfilesMap(localMap);
-              return lockedProfile;
-            }
-          }
-        } catch (_) {
-          // Fall back to local profile record if table isn't provisioned yet
-        }
-      }
-
-      if (localMap[email] && localMap[email].username) {
-        return { ...localMap[email], username_locked: true };
-      }
-
-      if (fallbackDesiredUsername) {
-        const clean = sanitizeUsername(fallbackDesiredUsername);
-        const takenByOther = Object.values(localMap).some(
-          (p) => p.username === clean && p.email !== email
-        );
-        if (takenByOther) {
-          return { id: user.id, email, username: "", username_locked: false, conflict: true };
-        }
-        const lockedProfile = { id: user.id, email, username: clean, username_locked: true };
-        localMap[email] = lockedProfile;
-        saveLocalProfilesMap(localMap);
-        return lockedProfile;
-      }
-
-      return { id: user.id, email, username: "", username_locked: false };
-    }
-
-    function syncMemberModalViews() {
-      const tabsEl = document.getElementById("memberAuthTabs");
-      const signupForm = document.getElementById("memberSignupForm");
-      const loginForm = document.getElementById("memberLoginForm");
-      const claimForm = document.getElementById("claimUsernameForm");
-      const sessionPanel = document.getElementById("memberSessionPanel");
-      const titleEl = document.getElementById("memberAuthTitle");
-
-      signupForm.style.display = "none";
-      loginForm.style.display = "none";
-      claimForm.style.display = "none";
-      sessionPanel.style.display = "none";
-
-      if (memberUser && memberProfile && memberProfile.username) {
-        if (tabsEl) tabsEl.style.display = "none";
-        if (titleEl) titleEl.textContent = "Account Profile";
-        sessionPanel.style.display = "block";
-        document.getElementById("sessionUsernameDisplay").textContent = memberProfile.username;
-        document.getElementById("sessionEmailDisplay").textContent = memberUser.email || "";
-        return;
-      }
-
-      if (memberUser && (!memberProfile || !memberProfile.username)) {
-        if (tabsEl) tabsEl.style.display = "none";
-        if (titleEl) titleEl.textContent = "Choose Your Username (Once)";
-        claimForm.style.display = "block";
-        document.getElementById("claimAccountEmailLabel").textContent = memberUser.email || "";
-        return;
-      }
-
-      if (tabsEl) tabsEl.style.display = "grid";
-      const isSignupActive = document.getElementById("authTabSignup")?.classList.contains("active");
-      if (isSignupActive) {
-        if (titleEl) titleEl.textContent = "Create Account";
-        signupForm.style.display = "block";
-      } else {
-        if (titleEl) titleEl.textContent = "Member Log In";
-        loginForm.style.display = "block";
-      }
-    }
-
-    function openMemberAuthModal(preferredMode = "signup") {
-      clearAllAuthFeedback();
-      const signupTab = document.getElementById("authTabSignup");
-      const loginTab = document.getElementById("authTabLogin");
-      if (preferredMode === "login") {
-        loginTab?.classList.add("active");
-        signupTab?.classList.remove("active");
-      } else {
-        signupTab?.classList.add("active");
-        loginTab?.classList.remove("active");
-      }
-      syncMemberModalViews();
-      document.getElementById("memberAuthModal")?.classList.add("open");
-    }
-
-    function closeMemberAuthModal() {
-      document.getElementById("memberAuthModal")?.classList.remove("open");
-    }
-
-    async function initMemberAuthSession() {
-      if (supabaseClient && supabaseClient.auth) {
-        try {
-          const { data } = await supabaseClient.auth.getSession();
-          if (data?.session?.user) {
-            memberUser = { id: data.session.user.id, email: data.session.user.email || "" };
-            const pendingUserMeta = data.session.user.user_metadata?.desired_username || "";
-            memberProfile = await fetchOrBuildProfileForUser(memberUser, pendingUserMeta);
-            updateMemberAccountUI();
-            return;
-          }
-        } catch (_) {}
-      }
-
-      try {
-        const savedLocal = JSON.parse(localStorage.getItem(LOCAL_SESSION_KEY) || "null");
-        if (savedLocal && savedLocal.email) {
-          memberUser = { id: savedLocal.id || savedLocal.email, email: savedLocal.email };
-          memberProfile = await fetchOrBuildProfileForUser(memberUser, savedLocal.username || "");
-          updateMemberAccountUI();
-        }
-      } catch (_) {}
-    }
-
-    document.getElementById("memberAccountBtn")?.addEventListener("click", () => {
-      openMemberAuthModal(memberUser ? "signup" : "signup");
-    });
-
-    document.getElementById("closeMemberAuthBtn")?.addEventListener("click", closeMemberAuthModal);
-    document.getElementById("cancelMemberSignupBtn")?.addEventListener("click", closeMemberAuthModal);
-    document.getElementById("cancelMemberLoginBtn")?.addEventListener("click", closeMemberAuthModal);
-    document.getElementById("closeMemberSessionDoneBtn")?.addEventListener("click", closeMemberAuthModal);
-    document.getElementById("memberAuthModal")?.addEventListener("click", (e) => {
-      if (e.target.id === "memberAuthModal") closeMemberAuthModal();
-    });
-
-    document.getElementById("authTabSignup")?.addEventListener("click", () => {
-      clearAllAuthFeedback();
-      document.getElementById("authTabSignup").classList.add("active");
-      document.getElementById("authTabLogin").classList.remove("active");
-      syncMemberModalViews();
-    });
-
-    document.getElementById("authTabLogin")?.addEventListener("click", () => {
-      clearAllAuthFeedback();
-      document.getElementById("authTabLogin").classList.add("active");
-      document.getElementById("authTabSignup").classList.remove("active");
-      syncMemberModalViews();
-    });
-
-    document.getElementById("memberSignupForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearAllAuthFeedback();
-
-      const rawUsername = document.getElementById("signupUsernameInput").value;
-      const email = document.getElementById("signupEmailInput").value.trim().toLowerCase();
-      const password = document.getElementById("signupPasswordInput").value;
-      const cleanUsername = sanitizeUsername(rawUsername);
-
-      const formatErr = validateUsernameFormat(cleanUsername);
-      if (formatErr) {
-        showAuthFeedback("memberSignupFeedback", formatErr, "error");
-        return;
-      }
-
-      const localMap = loadLocalProfilesMap();
-      const alreadyTakenLocal = Object.values(localMap).some(
-        (p) => p.username === cleanUsername && p.email !== email
-      );
-      if (alreadyTakenLocal) {
-        showAuthFeedback("memberSignupFeedback", `Username "@${cleanUsername}" is already taken. Choose another.`, "error");
-        return;
-      }
-
-      if (supabaseClient && supabaseClient.auth) {
-        try {
-          const { data: existingProfile } = await supabaseClient
-            .from("profiles")
-            .select("id")
-            .eq("username", cleanUsername)
-            .maybeSingle();
-
-          if (existingProfile) {
-            showAuthFeedback("memberSignupFeedback", `Username "@${cleanUsername}" is already taken.`, "error");
-            return;
-          }
-
-          const { data, error } = await supabaseClient.auth.signUp({
-            email,
-            password,
-            options: { data: { desired_username: cleanUsername } }
-          });
-
-          if (error) {
-            showAuthFeedback("memberSignupFeedback", error.message, "error");
-            return;
-          }
-
-          if (data?.session?.user) {
-            memberUser = { id: data.session.user.id, email };
-            memberProfile = await fetchOrBuildProfileForUser(memberUser, cleanUsername);
-            localStorage.setItem(LOCAL_SESSION_KEY, JSON.stringify({ id: memberUser.id, email, username: cleanUsername }));
-            updateMemberAccountUI();
-            syncMemberModalViews();
-            showAuthFeedback("memberSessionFeedback", `Welcome, @${cleanUsername}! Your username is now locked.`, "success");
-            return;
-          }
-
-          // If email confirmation is required by Supabase project settings:
-          localMap[email] = { id: data?.user?.id || email, email, username: cleanUsername, username_locked: true };
-          saveLocalProfilesMap(localMap);
-          showAuthFeedback(
-            "memberSignupFeedback",
-            `Account created for ${email} with username @${cleanUsername}. Check your inbox to confirm your email, then log in.`,
-            "success"
-          );
-          return;
-        } catch (err) {
-          showAuthFeedback("memberSignupFeedback", err?.message || "Could not complete sign up.", "error");
-          return;
-        }
-      }
-
-      // Local fallback when Supabase auth client isn't configured
-      memberUser = { id: email, email };
-      memberProfile = await fetchOrBuildProfileForUser(memberUser, cleanUsername);
-      localStorage.setItem(LOCAL_SESSION_KEY, JSON.stringify({ id: email, email, username: cleanUsername }));
-      updateMemberAccountUI();
-      syncMemberModalViews();
-      showAuthFeedback("memberSessionFeedback", `Account ready as @${cleanUsername}! Username locked for this profile.`, "success");
-    });
-
-    document.getElementById("memberLoginForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearAllAuthFeedback();
-
-      const email = document.getElementById("loginEmailInput").value.trim().toLowerCase();
-      const password = document.getElementById("loginPasswordInput").value;
-      const localMap = loadLocalProfilesMap();
-      const reservedUsername = localMap[email]?.username || "";
-
-      if (supabaseClient && supabaseClient.auth) {
-        try {
-          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-          if (error) {
-            showAuthFeedback("memberLoginFeedback", error.message, "error");
-            return;
-          }
-          if (data?.user) {
-            memberUser = { id: data.user.id, email: data.user.email || email };
-            const metaUsername = data.user.user_metadata?.desired_username || reservedUsername;
-            memberProfile = await fetchOrBuildProfileForUser(memberUser, metaUsername);
-            localStorage.setItem(
-              LOCAL_SESSION_KEY,
-              JSON.stringify({ id: memberUser.id, email, username: memberProfile?.username || "" })
-            );
-            updateMemberAccountUI();
-            syncMemberModalViews();
-            return;
-          }
-        } catch (err) {
-          showAuthFeedback("memberLoginFeedback", err?.message || "Login failed.", "error");
-          return;
-        }
-      }
-
-      if (!reservedUsername) {
-        showAuthFeedback("memberLoginFeedback", "No local account found for that email. Switch to Sign Up first.", "error");
-        return;
-      }
-
-      memberUser = { id: email, email };
-      memberProfile = await fetchOrBuildProfileForUser(memberUser, reservedUsername);
-      localStorage.setItem(LOCAL_SESSION_KEY, JSON.stringify({ id: email, email, username: reservedUsername }));
-      updateMemberAccountUI();
-      syncMemberModalViews();
-    });
-
-    document.getElementById("claimUsernameForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearAllAuthFeedback();
-      if (!memberUser) return;
-
-      const cleanUsername = sanitizeUsername(document.getElementById("claimUsernameInput").value);
-      const formatErr = validateUsernameFormat(cleanUsername);
-      if (formatErr) {
-        showAuthFeedback("claimUsernameFeedback", formatErr, "error");
-        return;
-      }
-
-      const built = await fetchOrBuildProfileForUser(memberUser, cleanUsername);
-      if (built?.conflict) {
-        showAuthFeedback("claimUsernameFeedback", `Username "@${cleanUsername}" is already taken.`, "error");
-        return;
-      }
-
-      memberProfile = built;
-      localStorage.setItem(
-        LOCAL_SESSION_KEY,
-        JSON.stringify({ id: memberUser.id, email: memberUser.email, username: cleanUsername })
-      );
-      updateMemberAccountUI();
-      syncMemberModalViews();
-      showAuthFeedback("memberSessionFeedback", `@${cleanUsername} is now set and locked!`, "success");
-    });
-
-    async function handleMemberSignOut() {
-      if (supabaseClient && supabaseClient.auth) {
-        try {
-          await supabaseClient.auth.signOut();
-        } catch (_) {}
-      }
-      localStorage.removeItem(LOCAL_SESSION_KEY);
-      memberUser = null;
-      memberProfile = null;
-      clearAllAuthFeedback();
-      updateMemberAccountUI();
-      syncMemberModalViews();
-    }
-
-    document.getElementById("memberSignOutBtn")?.addEventListener("click", handleMemberSignOut);
-    document.getElementById("memberSignOutFromClaimBtn")?.addEventListener("click", handleMemberSignOut);
 
     const SEED_VENUES = [
       {
@@ -2734,52 +1995,6 @@
       { name: "Lusagua", category: "Water Utility", phones: ["808 202 492"], accent: "cyan-accent" }
     ];
 
-    const USEFUL_LINKS = [
-      {
-        title: "Câmara Municipal de Albufeira",
-        badge: "Municipal",
-        desc: "Official local council portal for municipal notices, events, permits, and civil protection updates.",
-        url: "https://www.cm-albufeira.pt/"
-      },
-      {
-        title: "GIRO — Urban Buses of Albufeira",
-        badge: "Transport",
-        desc: "Local urban bus lines connecting Old Town, The Strip, Marina, Santa Eulália, and Ferreiras.",
-        url: "https://www.cm-albufeira.pt/giro"
-      },
-      {
-        title: "Visit Algarve — Albufeira",
-        badge: "Tourism",
-        desc: "Regional visitor information, beaches, coastal trails, and seasonal guides.",
-        url: "https://www.visitalgarve.pt/"
-      },
-      {
-        title: "SNS 24 — Saúde Pública Portugal",
-        badge: "Health",
-        desc: "National health line and official information portal for clinics, pharmacies, and care.",
-        url: "https://www.sns24.gov.pt/"
-      }
-    ];
-
-    let classifiedsData = [
-      {
-        id: 1,
-        title: "Albufeira Local Classifieds Board",
-        zone: "Albufeira",
-        price: "Free to post",
-        desc: "Post second-hand items, rentals, or local services in Albufeira using the button above."
-      }
-    ];
-
-    let forumThreadsData = [
-      {
-        id: 1,
-        title: "Where to catch live music & markets around Albufeira?",
-        author: "Admin",
-        message: "Share your favorite weekly live music nights, markets, and neighborhood spots in Old Town, The Strip, or Olhos de Água."
-      }
-    ];
-
     let eventsData = [
       {
         id: 1,
@@ -2814,16 +2029,7 @@
       const y = now.getFullYear();
       const m = String(now.getMonth() + 1).padStart(2, "0");
       const d = String(now.getDate()).padStart(2, "0");
-      return `${y}-${m}-${d}`;
-    }
-
-    function normalizeDateKey(val) {
-      if (!val) return "";
-      const str = String(val).trim();
-      const isoMatch = str.match(/\d{4}-\d{2}-\d{2}/);
-      if (isoMatch) return isoMatch[0];
-      const euMatch = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-      if (euMatch) return `${euMatch[3]}-${euMatch[2]}-${euMatch[1]}`;
+      return `${y}-${m}-${d}`; }  function normalizeDateKey(val) { if (!val) return ""; const str = String(val).trim(); const isoMatch = str.match(/\d{4}-\d{2}-\d{2}/); if (isoMatch) return isoMatch[0]; const euMatch = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if (euMatch) return `${euMatch[3]}-${euMatch[2]}-${euMatch[1]}`;
       return str;
     }
 
@@ -2844,11 +2050,7 @@
         typeof venueObj.lng === "number" &&
         !Number.isNaN(venueObj.lat) &&
         !Number.isNaN(venueObj.lng) &&
-        !(
-          Math.abs(venueObj.lat - 37.0955) < 0.0001 &&
-          Math.abs(venueObj.lng - -8.2505) < 0.0001 &&
-          !namePart.toLowerCase().includes("multiusos")
-        );
+        !(Math.abs(venueObj.lat - 37.0955) < 0.0001 && Math.abs(venueObj.lng - -8.2505) < 0.0001 && !namePart.toLowerCase().includes("multiusos"));
 
       const query = namePart
         ? [namePart, addrPart || "Albufeira, Portugal"].filter(Boolean).join(", ")
@@ -2856,175 +2058,74 @@
           ? `${venueObj.lat},${venueObj.lng}`
           : "Albufeira, Portugal";
 
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-    }
-
-    function resolveVenueForEvent(ev) {
-      const targetKey = normalizeNameKey(ev.venueName || ev.venue || "");
-      const matched = venuesData.find((v) => {
-        const vn = normalizeNameKey(v.name || "");
-        return vn && targetKey && (vn === targetKey || vn.includes(targetKey) || targetKey.includes(vn));
-      });
-
-      const baseVenue = matched
-        ? { ...matched, lat: Number(matched.lat) || 37.0955, lng: Number(matched.lng) || -8.2505 }
-        : {
-            id: `ev-venue-${targetKey || "albufeira"}`,
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }  function resolveVenueForEvent(ev) { const targetKey = normalizeNameKey(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} ""); const matched = venuesData.find((v) => { const vn = normalizeNameKey(v.name \vert{}\vert{} ""); return vn && targetKey && (vn === targetKey \vert{}\vert{} vn.includes(targetKey) \vert{}\vert{} targetKey.includes(vn)); });  const baseVenue = matched ? { ...matched, lat: Number(matched.lat) \vert{}\vert{} 37.0955, lng: Number(matched.lng) \vert{}\vert{} -8.2505 } : { id: `ev-venue-${targetKey || "albufeira"}`,
             name: (ev.venueName || ev.venue || "Albufeira Venue").trim(),
             zone: ev.zone || "Albufeira",
-            address: `${(ev.venueName || ev.venue || "Albufeira").trim()}, Albufeira, Portugal`,
-            lat: Number(ev.lat) || 37.0955,
-            lng: Number(ev.lng) || -8.2505,
-            category: ev.category || "Venue"
-          };
-
-      const vKey = normalizeNameKey(baseVenue.name);
-      const venueEvents = eventsData.filter((item) => {
-        const ik = normalizeNameKey(item.venueName || item.venue || "");
-        return ik && vKey && (ik === vKey || ik.includes(vKey) || vKey.includes(ik));
-      });
-
-      return { ...baseVenue, events: venueEvents };
-    }
-
-    function eventsMatchVenue(ev, venue) {
-      const en = normalizeNameKey(ev.venueName || ev.venue || "");
-      const vn = normalizeNameKey(venue.name || "");
-      if (!en || !vn) return false;
-      return en === vn || vn.includes(en) || en.includes(vn);
-    }
-
-    function getMapVenuesForFilter(zoneFilter, dateFilter) {
-      const normalizedTargetDate = (!dateFilter || dateFilter === "ALL") ? "ALL" : normalizeDateKey(dateFilter);
-
-      const dayEvents =
-        normalizedTargetDate === "ALL"
-          ? eventsData.slice()
-          : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizedTargetDate);
-
-      const filteredVenues =
-        !zoneFilter || zoneFilter === "ALL"
-          ? venuesData
-          : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));
-
-      const matchedResults = [];
-      const claimedEventIds = new Set();
-
-      filteredVenues.forEach((v) => {
-        const matchingEvents = dayEvents.filter((ev) => eventsMatchVenue(ev, v));
-        if (matchingEvents.length > 0) {
-          matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id)));
-          matchedResults.push({
-            ...v,
-            lat: Number(v.lat) || 37.0955,
-            lng: Number(v.lng) || -8.2505,
-            events: matchingEvents
-          });
-        }
-      });
-
-      const unclaimedByVenue = new Map();
-      dayEvents.forEach((ev) => {
-        if (claimedEventIds.has(String(ev.id))) return;
-        if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) {
-          return;
-        }
-        const rawVenue = (ev.venueName || ev.venue || "Albufeira Venue").trim();
-        const key = normalizeNameKey(rawVenue) || "albufeira";
-        if (!unclaimedByVenue.has(key)) {
-          unclaimedByVenue.set(key, {
-            id: `ev-venue-${key}`,
+            address: `${(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} "Albufeira").trim()}, Albufeira, Portugal`, lat: Number(ev.lat) \vert{}\vert{} 37.0955, lng: Number(ev.lng) \vert{}\vert{} -8.2505, category: ev.category \vert{}\vert{} "Venue" };  const vKey = normalizeNameKey(baseVenue.name); const venueEvents = eventsData.filter((item) => { const ik = normalizeNameKey(item.venueName \vert{}\vert{} item.venue \vert{}\vert{} ""); return ik && vKey && (ik === vKey \vert{}\vert{} ik.includes(vKey) \vert{}\vert{} vKey.includes(ik)); });  return { ...baseVenue, events: venueEvents }; }  function eventsMatchVenue(ev, venue) { const en = normalizeNameKey(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} ""); const vn = normalizeNameKey(venue.name \vert{}\vert{} ""); if (!en \vert{}\vert{} !vn) return false; return en === vn \vert{}\vert{} vn.includes(en) \vert{}\vert{} en.includes(vn); }  function getMapVenuesForFilter(zoneFilter, dateFilter) { const normalizedTargetDate = (!dateFilter \vert{}\vert{} dateFilter === "ALL") ? "ALL" : normalizeDateKey(dateFilter);  const dayEvents = normalizedTargetDate === "ALL" ? eventsData.slice() : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizedTargetDate);  const filteredVenues = (!zoneFilter \vert{}\vert{} zoneFilter === "ALL") ? venuesData : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));  const matchedResults = []; const claimedEventIds = new Set();  filteredVenues.forEach((v) => { const matchingEvents = dayEvents.filter((ev) => eventsMatchVenue(ev, v)); if (matchingEvents.length > 0) { matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id))); matchedResults.push({ ...v, lat: Number(v.lat) \vert{}\vert{} 37.0955, lng: Number(v.lng) \vert{}\vert{} -8.2505, events: matchingEvents }); } });  const unclaimedByVenue = new Map(); dayEvents.forEach((ev) => { if (claimedEventIds.has(String(ev.id))) return; if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) { return; } const rawVenue = (ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} "Albufeira Venue").trim(); const key = normalizeNameKey(rawVenue) \vert{}\vert{} "albufeira"; if (!unclaimedByVenue.has(key)) { unclaimedByVenue.set(key, { id: `ev-venue-${key}`,
             name: rawVenue,
             zone: ev.zone || "Albufeira",
-            address: `${rawVenue}, Albufeira`,
-            lat: Number(ev.lat) || 37.0955,
-            lng: Number(ev.lng) || -8.2505,
-            category: ev.category || "Event Venue",
-            events: []
-          });
-        }
-        unclaimedByVenue.get(key).events.push(ev);
-      });
-
-      unclaimedByVenue.forEach((entry) => matchedResults.push(entry));
-      return matchedResults;
-    }
-
-    function syncMapDateInputs() {
-      const val = activeMapDate === "ALL" ? "" : activeMapDate;
-      const homeInput = document.getElementById("eventMapDateInput");
-      const venueInput = document.getElementById("venueMapDateInput");
-      if (homeInput) homeInput.value = val;
-      if (venueInput) venueInput.value = val;
-
-      const dayNote = activeMapDate === "ALL" ? "All event days" : `Date: ${activeMapDate}`;
+            address: `${rawVenue}, Albufeira`, lat: Number(ev.lat) \vert{}\vert{} 37.0955, lng: Number(ev.lng) \vert{}\vert{} -8.2505, category: ev.category \vert{}\vert{} "Event Venue", events: [] }); } unclaimedByVenue.get(key).events.push(ev); });  unclaimedByVenue.forEach((entry) => matchedResults.push(entry)); return matchedResults; }  function syncMapDateInputs() { const val = activeMapDate === "ALL" ? "" : activeMapDate; const homeInput = document.getElementById("eventMapDateInput"); const venueInput = document.getElementById("venueMapDateInput"); if (homeInput) homeInput.value = val; if (venueInput) venueInput.value = val;  const dayNote = activeMapDate === "ALL" ? "All event days" : `Date: ${activeMapDate}`;
 
       const homePlaces = getMapVenuesForFilter("ALL", activeMapDate);
       const venuePlaces = getMapVenuesForFilter(activeZone, activeMapDate);
 
       const homeStatus = document.getElementById("homeMapStatus");
       if (homeStatus) {
-        homeStatus.textContent = `${homePlaces.length} ${homePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
+        homeStatus.textContent = `${homePlaces.length}${homePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
 
       const venuesStatus = document.getElementById("venuesMapStatus");
       if (venuesStatus) {
-        venuesStatus.textContent = `${venuePlaces.length} ${venuePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
+        venuesStatus.textContent = `${venuePlaces.length}${venuePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
     }
 
     async function loadInitialData() {
       if (supabaseClient) {
-        try {
-          const { data: evRows, error: evErr } = await supabaseClient
-            .from("events")
-            .select("*")
-            .order("date", { ascending: true });
+        const { data: evRows, error: evErr } = await supabaseClient
+          .from("events")
+          .select("*")
+          .order("date", { ascending: true });
 
-          if (!evErr && Array.isArray(evRows) && evRows.length > 0) {
-            eventsData = evRows.map((row) => ({
-              id: row.id,
-              title: row.title || "",
-              venueName: row.venueName || row.venuename || row.venue || "",
-              zone: row.zone || "Albufeira",
-              town: row.town || "Albufeira",
-              category: row.category || "MARKETS",
-              date: row.date || "",
-              time: row.time || "14:00",
-              fee: row.fee || "Free",
-              image: row.image || "",
-              desc: row.desc || "",
-              author: "Admin"
-            }));
-          }
+        if (!evErr && Array.isArray(evRows) && evRows.length > 0) {
+          eventsData = evRows.map((row) => ({
+            id: row.id,
+            title: row.title || "",
+            venueName: row.venueName || row.venuename || row.venue || "",
+            zone: row.zone || "Albufeira",
+            town: row.town || "Albufeira",
+            category: row.category || "MARKETS",
+            date: row.date || "",
+            time: row.time || "14:00",
+            fee: row.fee || "Free",
+            image: row.image || "",
+            desc: row.desc || "",
+            author: "Admin"
+          }));
+        }
 
-          const { data: dirRows, error: dirErr } = await supabaseClient
-            .from("directory")
-            .select("*");
+        const { data: dirRows, error: dirErr } = await supabaseClient
+          .from("directory")
+          .select("*");
 
-          if (!dirErr && Array.isArray(dirRows) && dirRows.length > 0) {
-            venuesData = dirRows.map((v, idx) => ({
-              id: v.id || idx + 100,
-              name: v.name || "Albufeira Venue",
-              zone: v.zone || v.town || "Albufeira",
-              address: v.address || "Albufeira, Algarve",
-              lat: Number(v.lat) || 37.0955,
-              lng: Number(v.lng) || -8.2505,
-              category: v.category || "Venue"
-            }));
-          }
-        } catch (_) {}
+        if (!dirErr && Array.isArray(dirRows) && dirRows.length > 0) {
+          venuesData = dirRows.map((v, idx) => ({
+            id: v.id || idx + 100,
+            name: v.name || "Albufeira Venue",
+            zone: v.zone || v.town || "Albufeira",
+            address: v.address || "Albufeira, Algarve",
+            lat: Number(v.lat) || 37.0955,
+            lng: Number(v.lng) || -8.2505,
+            category: v.category || "Venue"
+          }));
+        }
       }
 
       populateVenueDatalist();
       syncMapDateInputs();
       renderEvents();
       renderVenues();
-      renderClassifieds();
-      renderForumThreads();
-      renderUsefulLinks();
       renderEmergencyContacts();
-      initHomeMap();
     }
 
     function populateVenueDatalist() {
@@ -3063,64 +2164,16 @@
       marker.on("mouseover", () => marker.setStyle({ radius: 12, color: strokeColor }));
       marker.on("mouseout", () => marker.setStyle({ radius: 10, color: "#090b16" }));
 
-      const eventLines =
-        Array.isArray(venue.events) && venue.events.length
-          ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events
-              .map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`)
-              .join("<br/>")}</span>`
-          : "";
-
-      const gmapsUrl = buildGoogleMapsUrl(venue);
-      marker.bindPopup(
-        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(
-          venue.zone || "Albufeira"
-        )}</span>${eventLines}<br/><a href="${escapeHtml(
-          gmapsUrl
-        )}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;color:#0284c7;font-weight:700;text-decoration:underline;">Google Maps ↗</a>`
+      const eventLines = Array.isArray(venue.events) && venue.events.length
+        ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events.map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`).join("<br/>")}</span>` : "";  const gmapsUrl = buildGoogleMapsUrl(venue); marker.bindPopup( `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone \vert{}\vert{} "Albufeira")}</span>${eventLines}<br/><a href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;color:#0284c7;font-weight:700;text-decoration:underline;">Google Maps ↗</a>`
       );
 
       marker.addTo(layerGroup);
     }
 
-    function initHomeMap() {
-      if (typeof L === "undefined") return;
-      if (!homeLeafletMap) {
-        homeLeafletMap = L.map("homeMap").setView([37.0915, -8.245], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors"
-        }).addTo(homeLeafletMap);
-        homeMarkersLayer = L.layerGroup().addTo(homeLeafletMap);
-      }
-      setTimeout(() => {
-        if (!homeLeafletMap || !homeMarkersLayer) return;
-        homeLeafletMap.invalidateSize();
-        homeMarkersLayer.clearLayers();
-        const places = getMapVenuesForFilter("ALL", activeMapDate);
-        places.forEach((v, i) => addTurquoisePinkCircleMarker(homeMarkersLayer, v, i));
-      }, 60);
-    }
-
-    function initOrUpdateMap() {
-      if (typeof L === "undefined") return;
-      if (!leafletMap) {
-        leafletMap = L.map("albufeiraMap").setView([37.0915, -8.245], 13);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "&copy; OpenStreetMap contributors"
-        }).addTo(leafletMap);
-        mapMarkersLayer = L.layerGroup().addTo(leafletMap);
-      }
-      setTimeout(() => {
-        if (!leafletMap || !mapMarkersLayer) return;
-        leafletMap.invalidateSize();
-        mapMarkersLayer.clearLayers();
-        const places = getMapVenuesForFilter(activeZone, activeMapDate);
-        places.forEach((v, i) => addTurquoisePinkCircleMarker(mapMarkersLayer, v, i));
-      }, 60);
-    }
-
     function isHolidaySeasonEvent(ev) {
       const d = normalizeDateKey(ev.date || "");
-      const hay = `${ev.title || ""} ${ev.desc || ""} ${ev.category || ""}`.toLowerCase();
+      const hay = `${ev.title || ""} ${ev.desc \vert{}\vert{} ""} ${ev.category || ""}`.toLowerCase();
       const isDecOrJan = /-12-|-01-/.test(d);
       const hasHolidayKeyword = /(christmas|natal|new year|ano novo|réveillon|reveillon|holiday|festas)/i.test(hay);
       return isDecOrJan || hasHolidayKeyword;
@@ -3196,27 +2249,21 @@
             : "";
 
           const adminActionsHtml = canEdit
-            ? `<button class="btn-edit" type="button" onclick="event.stopPropagation(); openEditEventModal('${escapeHtml(
-                ev.id
-              )}')">${t("event.editBtn")}</button>
-               <button class="btn-secondary" type="button" style="border-color:rgba(255,42,133,0.55);color:#ff7ab2;" onclick="event.stopPropagation(); deleteEventById('${escapeHtml(
-                 ev.id
-               )}')">Delete</button>`
+            ? `<button class="btn-edit" type="button" onclick="event.stopPropagation(); openEditEventModal('${escapeHtml(ev.id)}')">${t("event.editBtn")}</button>
+               <button class="btn-secondary" type="button" style="border-color:rgba(255,42,133,0.55);color:#ff7ab2;" onclick="event.stopPropagation(); deleteEventById('${escapeHtml(ev.id)}')">Delete</button>`
             : "";
 
           return `
-            <article class="card event-card-clickable ${isPast ? "past-event-dimmed" : ""}" onclick="openEventDetailModal('${escapeHtml(
-            ev.id
-          )}')" title="Click to view full event & poster">
+            <article class="card event-card-clickable ${isPast ? "past-event-dimmed" : ""}" onclick="openEventDetailModal('${escapeHtml(ev.id)}')" title="Click to view full event & poster">
               ${imgHtml}
               <div class="card-body">
                 <div class="card-meta">
-                  <span>${escapeHtml(ev.date || "TBA")} • ${escapeHtml(ev.time || "")}</span>
+                  <span>${escapeHtml(ev.date \vert{}\vert{} "TBA")} • ${escapeHtml(ev.time || "")}</span>
                   <span class="vice-sticker sticker-pink">${escapeHtml(ev.category || "EVENT")}</span>
                 </div>
                 <h3 class="card-title">${escapeHtml(ev.title)}</h3>
                 <p style="font-size: 0.84rem; color: var(--neon-amber); font-weight: 600;">
-                  ${escapeHtml(ev.venueName)} — ${escapeHtml(ev.zone || "Albufeira")}
+                  ${escapeHtml(ev.venueName)} —${escapeHtml(ev.zone || "Albufeira")}
                 </p>
                 <p class="card-desc">${escapeHtml(ev.desc || "")}</p>
                 <div class="card-footer">
@@ -3244,11 +2291,9 @@
 
       document.getElementById("eventDetailCategory").textContent = ev.category || "EVENT";
       document.getElementById("eventDetailTitle").textContent = ev.title || "Event";
-      document.getElementById("eventDetailDateTime").textContent = `${ev.date || "TBA"}${ev.time ? " • " + ev.time : ""}`;
+      document.getElementById("eventDetailDateTime").textContent = `${ev.date \vert{}\vert{} "TBA"}${ev.time ? " • " + ev.time : ""}`;
       document.getElementById("eventDetailFee").textContent = `${t("event.feeLabel")} ${ev.fee || "Free"}`;
-      document.getElementById("eventDetailVenueText").textContent = `${venueObj.name}${
-        venueObj.zone ? " — " + venueObj.zone : ""
-      }`;
+      document.getElementById("eventDetailVenueText").textContent = `${venueObj.name}${venueObj.zone ? " — " + venueObj.zone : ""}`;
       document.getElementById("eventDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
       document.getElementById("eventDetailDesc").textContent = ev.desc || "";
 
@@ -3256,68 +2301,7 @@
       const posterImg = document.getElementById("eventDetailPosterImg");
       if (ev.image) {
         posterImg.src = ev.image;
-        posterImg.alt = `${ev.title || "Event"} poster`;
-        posterWrap.style.display = "flex";
-      } else {
-        posterImg.src = "";
-        posterWrap.style.display = "none";
-      }
-
-      const editBtn = document.getElementById("eventDetailEditBtn");
-      const deleteBtn = document.getElementById("eventDetailDeleteBtn");
-      if (isAuthorizedAdmin()) {
-        editBtn.style.display = "inline-block";
-        editBtn.textContent = t("event.editBtn");
-        deleteBtn.style.display = "inline-block";
-      } else {
-        editBtn.style.display = "none";
-        deleteBtn.style.display = "none";
-      }
-
-      eventDetailModal.classList.add("open");
-    };
-
-    function closeEventDetailModal() {
-      eventDetailModal.classList.remove("open");
-      currentDetailEventId = null;
-    }
-
-    document.getElementById("eventDetailVenueBtn").addEventListener("click", () => {
-      const ev = eventsData.find((item) => String(item.id) === String(currentDetailEventId));
-      if (!ev) return;
-      const venueObj = resolveVenueForEvent(ev);
-      closeEventDetailModal();
-      openVenueDetailModal(venueObj);
-    });
-
-    document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal);
-    document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal);
-    eventDetailModal.addEventListener("click", (e) => {
-      if (e.target === eventDetailModal) closeEventDetailModal();
-    });
-
-    document.getElementById("eventDetailEditBtn").addEventListener("click", () => {
-      const targetId = currentDetailEventId;
-      closeEventDetailModal();
-      if (targetId !== null) window.openEditEventModal(targetId);
-    });
-
-    document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => {
-      const targetId = currentDetailEventId;
-      if (targetId !== null) window.deleteEventById(targetId);
-    });
-
-    const venueDetailModal = document.getElementById("venueDetailModal");
-    let currentDetailVenue = null;
-
-    window.openVenueDetailModal = function (venueObj) {
-      if (!venueObj) return;
-      currentDetailVenue = venueObj;
-
-      document.getElementById("venueDetailZoneBadge").textContent = venueObj.zone || "ALBUFEIRA";
-      document.getElementById("venueDetailTitle").textContent = venueObj.name || "Venue";
-      document.getElementById("venueDetailAddress").textContent =
-        venueObj.address || `${venueObj.name}, Albufeira, Portugal`;
+        posterImg.alt = `${ev.title \vert{}\vert{} "Event"} poster`; posterWrap.style.display = "flex"; } else { posterImg.src = ""; posterWrap.style.display = "none"; }  const editBtn = document.getElementById("eventDetailEditBtn"); const deleteBtn = document.getElementById("eventDetailDeleteBtn"); if (isAuthorizedAdmin()) { editBtn.style.display = "inline-block"; editBtn.textContent = t("event.editBtn"); deleteBtn.style.display = "inline-block"; } else { editBtn.style.display = "none"; deleteBtn.style.display = "none"; }  eventDetailModal.classList.add("open"); };  function closeEventDetailModal() { eventDetailModal.classList.remove("open"); currentDetailEventId = null; }  document.getElementById("eventDetailVenueBtn").addEventListener("click", () => { const ev = eventsData.find((item) => String(item.id) === String(currentDetailEventId)); if (!ev) return; const venueObj = resolveVenueForEvent(ev); closeEventDetailModal(); openVenueDetailModal(venueObj); });  document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal); document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal); eventDetailModal.addEventListener("click", (e) => { if (e.target === eventDetailModal) closeEventDetailModal(); }); document.getElementById("eventDetailEditBtn").addEventListener("click", () => { const targetId = currentDetailEventId; closeEventDetailModal(); if (targetId !== null) window.openEditEventModal(targetId); }); document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => { const targetId = currentDetailEventId; if (targetId !== null) window.deleteEventById(targetId); });  const venueDetailModal = document.getElementById("venueDetailModal"); let currentDetailVenue = null;  window.openVenueDetailModal = function (venueObj) { if (!venueObj) return; currentDetailVenue = venueObj;  document.getElementById("venueDetailZoneBadge").textContent = venueObj.zone \vert{}\vert{} "ALBUFEIRA"; document.getElementById("venueDetailTitle").textContent = venueObj.name \vert{}\vert{} "Venue"; document.getElementById("venueDetailAddress").textContent = venueObj.address \vert{}\vert{} `${venueObj.name}, Albufeira, Portugal`;
       document.getElementById("venueDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
 
       const eventsListEl = document.getElementById("venueDetailEventsList");
@@ -3330,9 +2314,7 @@
                    onclick="closeVenueDetailModal(); openEventDetailModal('${escapeHtml(e.id)}')">
                 <div>
                   <div style="font-weight:700; font-size:0.88rem; color:var(--text-main);">${escapeHtml(e.title)}</div>
-                  <div style="font-size:0.76rem; color:var(--neon-cyan);">${escapeHtml(e.date || "TBA")} • ${escapeHtml(
-              e.time || ""
-            )}</div>
+                  <div style="font-size:0.76rem; color:var(--neon-cyan);">${escapeHtml(e.date \vert{}\vert{} "TBA")} • ${escapeHtml(e.time || "")}</div>
                 </div>
                 <span class="vice-sticker sticker-pink">${escapeHtml(e.category || "EVENT")}</span>
               </div>
@@ -3403,11 +2385,14 @@
       }
 
       const target = eventsData.find((item) => String(item.id) === String(eventId));
-      const label = target?.title ? `"${target.title}"` : "this event";
-      if (!confirm(`Delete ${label}?`)) return;
+      const label = target?.title ? `"${target.title}"` : "this event"; if (!confirm(`Delete ${label}?`)) return;
 
       if (supabaseClient) {
-        const { error } = await supabaseClient.from("events").delete().eq("id", eventId);
+        const { error } = await supabaseClient
+          .from("events")
+          .delete()
+          .eq("id", eventId);
+
         if (error) {
           alert("Could not delete event from Supabase: " + error.message);
           return;
@@ -3418,8 +2403,6 @@
       closeEventDetailModal();
       renderEvents();
       renderVenues();
-      initHomeMap();
-      initOrUpdateMap();
     };
 
     window.openVenueCardByIndex = function (idx) {
@@ -3439,504 +2422,5 @@
         } else {
           grid.innerHTML = activeVenues
             .map((v, idx) => {
-              const eventBadges = (v.events || [])
-                .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title)}</span>`)
-                .join(" ");
-              const gmapsUrl = buildGoogleMapsUrl(v);
-              return `
-                <article class="card venue-card-clickable" onclick="openVenueCardByIndex(${idx})" title="Click for venue card & map">
-                  <div class="card-body">
-                    <div class="card-meta">
-                      <span>${escapeHtml(v.zone || "Albufeira")}</span>
-                      <span class="vice-sticker sticker-cyan">${escapeHtml(v.category || "Venue")}</span>
-                    </div>
-                    <h3 class="card-title">${escapeHtml(v.name)}</h3>
-                    <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
-                    ${eventBadges ? `<div style="display:flex; flex-wrap:wrap; gap:6px;">${eventBadges}</div>` : ""}
-                    <div class="card-footer">
-                      <span>GPS: ${Number(v.lat).toFixed(4)}, ${Number(v.lng).toFixed(4)}</span>
-                      <a class="gmaps-link-btn" href="${escapeHtml(
-                        gmapsUrl
-                      )}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Maps ↗</a>
-                    </div>
-                  </div>
-                </article>
-              `;
-            })
-            .join("");
-        }
-      }
-
-      if (document.getElementById("section-venues")?.classList.contains("active")) {
-        initOrUpdateMap();
-      }
-    }
-
-    function renderClassifieds() {
-      const grid = document.getElementById("classifiedsGrid");
-      if (!grid) return;
-      grid.innerHTML = classifiedsData
-        .map(
-          (item) => `
-            <article class="card">
-              <div class="card-body">
-                <div class="card-meta">
-                  <span>${escapeHtml(item.zone || "Albufeira")}</span>
-                  <span class="vice-sticker sticker-amber">${escapeHtml(item.price || "Local")}</span>
-                </div>
-                <h3 class="card-title">${escapeHtml(item.title)}</h3>
-                <p class="card-desc">${escapeHtml(item.desc)}</p>
-              </div>
-            </article>
-          `
-        )
-        .join("");
-    }
-
-    function renderForumThreads() {
-      const grid = document.getElementById("forumGrid");
-      if (!grid) return;
-      grid.innerHTML = forumThreadsData
-        .map(
-          (th) => `
-            <article class="card">
-              <div class="card-body">
-                <div class="card-meta">
-                  <span>By ${escapeHtml(th.author || "Neighbor")}</span>
-                  <span class="vice-sticker sticker-cyan">Discussion</span>
-                </div>
-                <h3 class="card-title">${escapeHtml(th.title)}</h3>
-                <p class="card-desc">${escapeHtml(th.message)}</p>
-              </div>
-            </article>
-          `
-        )
-        .join("");
-    }
-
-    function renderUsefulLinks() {
-      const grid = document.getElementById("usefulLinksGrid");
-      if (!grid) return;
-      grid.innerHTML = USEFUL_LINKS.map(
-        (lnk) => `
-          <article class="card">
-            <div class="card-body">
-              <div class="card-meta">
-                <span>${escapeHtml(lnk.badge)}</span>
-                <span class="vice-sticker sticker-cyan">Official</span>
-              </div>
-              <h3 class="card-title">${escapeHtml(lnk.title)}</h3>
-              <p class="card-desc">${escapeHtml(lnk.desc)}</p>
-              <div class="card-footer">
-                <span>Albufeira &amp; Algarve</span>
-                <a class="gmaps-link-btn" href="${escapeHtml(lnk.url)}" target="_blank" rel="noopener noreferrer">Visit ↗</a>
-              </div>
-            </div>
-          </article>
-        `
-      ).join("");
-    }
-
-    function renderEmergencyContacts() {
-      const grid = document.getElementById("emergencyGrid");
-      if (!grid) return;
-      grid.innerHTML = EMERGENCY_CONTACTS.map(
-        (c) => `
-          <article class="emergency-card ${escapeHtml(c.accent || "")}">
-            <span class="emergency-cat">${escapeHtml(c.category)}</span>
-            <div class="emergency-name">${escapeHtml(c.name)}</div>
-            <div class="emergency-phones">
-              ${c.phones
-                .map(
-                  (ph) =>
-                    `<a class="phone-link" href="tel:${escapeHtml(ph.replace(/[^+\d]/g, ""))}">${escapeHtml(ph)}</a>`
-                )
-                .join("")}
-            </div>
-          </article>
-        `
-      ).join("");
-    }
-
-    /* Event Modal & Form */
-    const eventModal = document.getElementById("eventModal");
-    window.openAddEventModal = function () {
-      document.getElementById("editEventId").value = "";
-      document.getElementById("eventModalTitle").textContent = "Add Event";
-      document.getElementById("eventForm").reset();
-      document.getElementById("eventDate").value = getLocalTodayIso();
-      document.getElementById("eventImage").value = "";
-      document.getElementById("eventImagePreviewWrap").style.display = "none";
-      document.getElementById("eventRepeatOptionsWrap").style.display = "none";
-      eventModal.classList.add("open");
-    };
-
-    window.openEditEventModal = function (eventId) {
-      const ev = eventsData.find((item) => String(item.id) === String(eventId));
-      if (!ev) return;
-      document.getElementById("editEventId").value = ev.id;
-      document.getElementById("eventModalTitle").textContent = "Edit Event";
-      document.getElementById("eventTitle").value = ev.title || "";
-      document.getElementById("eventZone").value = ev.zone || "Albufeira";
-      document.getElementById("eventVenue").value = ev.venueName || "";
-      document.getElementById("eventDate").value = normalizeDateKey(ev.date) || getLocalTodayIso();
-      document.getElementById("eventTime").value = ev.time || "14:00";
-      document.getElementById("eventFee").value = ev.fee || "Free";
-      document.getElementById("eventCategory").value = ev.category || "MARKETS";
-      document.getElementById("eventDesc").value = ev.desc || "";
-      document.getElementById("eventImage").value = ev.image || "";
-      if (ev.image) {
-        document.getElementById("eventImagePreview").src = ev.image;
-        document.getElementById("eventImageFileName").textContent = "Saved flyer";
-        document.getElementById("eventImagePreviewWrap").style.display = "flex";
-      } else {
-        document.getElementById("eventImagePreviewWrap").style.display = "none";
-      }
-      eventModal.classList.add("open");
-    };
-
-    function closeEventModal() {
-      eventModal.classList.remove("open");
-    }
-
-    document.getElementById("openAddEventBtn")?.addEventListener("click", window.openAddEventModal);
-    document.getElementById("closeEventModalBtn")?.addEventListener("click", closeEventModal);
-    document.getElementById("cancelEventBtn")?.addEventListener("click", closeEventModal);
-    eventModal?.addEventListener("click", (e) => {
-      if (e.target === eventModal) closeEventModal();
-    });
-
-    document.getElementById("eventRepeatToggle")?.addEventListener("change", (e) => {
-      document.getElementById("eventRepeatOptionsWrap").style.display = e.target.checked ? "flex" : "none";
-    });
-
-    document.getElementById("eventImageFile")?.addEventListener("change", (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      if (!file.type.includes("jpeg") && !/\.(jpe?g)$/i.test(file.name)) {
-        alert("Please select a JPG/JPEG image.");
-        e.target.value = "";
-        return;
-      }
-      if (file.size > 3 * 1024 * 1024) {
-        alert("Image must be 3 MB or smaller.");
-        e.target.value = "";
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = String(reader.result || "");
-        document.getElementById("eventImage").value = result;
-        document.getElementById("eventImagePreview").src = result;
-        document.getElementById("eventImageFileName").textContent = file.name;
-        document.getElementById("eventImagePreviewWrap").style.display = "flex";
-      };
-      reader.readAsDataURL(file);
-    });
-
-    document.getElementById("clearEventImageBtn")?.addEventListener("click", () => {
-      document.getElementById("eventImageFile").value = "";
-      document.getElementById("eventImage").value = "";
-      document.getElementById("eventImagePreview").src = "";
-      document.getElementById("eventImagePreviewWrap").style.display = "none";
-    });
-
-    document.getElementById("eventForm")?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const editId = document.getElementById("editEventId").value;
-      const authorLabel = memberProfile?.username
-        ? `@${memberProfile.username}`
-        : currentAdmin || "Neighbor";
-
-      const payload = {
-        title: document.getElementById("eventTitle").value.trim(),
-        zone: document.getElementById("eventZone").value,
-        town: document.getElementById("eventZone").value,
-        venueName: document.getElementById("eventVenue").value.trim(),
-        date: document.getElementById("eventDate").value,
-        time: document.getElementById("eventTime").value,
-        fee: document.getElementById("eventFee").value.trim() || "Free",
-        category: document.getElementById("eventCategory").value,
-        image: document.getElementById("eventImage").value || "",
-        desc: document.getElementById("eventDesc").value.trim(),
-        author: authorLabel
-      };
-
-      if (editId) {
-        eventsData = eventsData.map((item) =>
-          String(item.id) === String(editId) ? { ...item, ...payload } : item
-        );
-      } else {
-        const newId = Date.now();
-        eventsData.push({ id: newId, ...payload });
-      }
-
-      syncMapDateInputs();
-      renderEvents();
-      renderVenues();
-      initHomeMap();
-      closeEventModal();
-    });
-
-    /* Venue Modal */
-    const venueModal = document.getElementById("venueModal");
-    document.getElementById("openAddVenueBtn")?.addEventListener("click", () => {
-      document.getElementById("venueForm").reset();
-      venueModal.classList.add("open");
-    });
-    document.getElementById("closeVenueModalBtn")?.addEventListener("click", () => venueModal.classList.remove("open"));
-    document.getElementById("cancelVenueBtn")?.addEventListener("click", () => venueModal.classList.remove("open"));
-    venueModal?.addEventListener("click", (e) => {
-      if (e.target === venueModal) venueModal.classList.remove("open");
-    });
-
-    document.getElementById("lookupVenueCoordsBtn")?.addEventListener("click", async () => {
-      const addr = document.getElementById("venueAddressInput").value.trim();
-      const name = document.getElementById("venueNameInput").value.trim();
-      const query = [name, addr || "Albufeira, Portugal"].filter(Boolean).join(", ");
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(query)}`
-        );
-        const data = await res.json();
-        if (Array.isArray(data) && data[0]) {
-          document.getElementById("venueLatInput").value = Number(data[0].lat).toFixed(6);
-          document.getElementById("venueLngInput").value = Number(data[0].lon).toFixed(6);
-        }
-      } catch (_) {}
-    });
-
-    document.getElementById("venueForm")?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      venuesData.push({
-        id: Date.now(),
-        name: document.getElementById("venueNameInput").value.trim(),
-        zone: document.getElementById("venueZoneInput").value,
-        category: document.getElementById("venueCategoryInput").value.trim() || "Venue",
-        address: document.getElementById("venueAddressInput").value.trim() || "Albufeira, Portugal",
-        lat: Number(document.getElementById("venueLatInput").value) || 37.0955,
-        lng: Number(document.getElementById("venueLngInput").value) || -8.2505
-      });
-      populateVenueDatalist();
-      syncMapDateInputs();
-      renderVenues();
-      initHomeMap();
-      venueModal.classList.remove("open");
-    });
-
-    /* Classifieds & Forum Modals */
-    const classifiedModal = document.getElementById("classifiedModal");
-    document.getElementById("openAddClassifiedBtn")?.addEventListener("click", () => {
-      document.getElementById("classifiedForm").reset();
-      classifiedModal.classList.add("open");
-    });
-    document.getElementById("closeClassifiedModalBtn")?.addEventListener("click", () => classifiedModal.classList.remove("open"));
-    document.getElementById("cancelClassifiedBtn")?.addEventListener("click", () => classifiedModal.classList.remove("open"));
-    classifiedModal?.addEventListener("click", (e) => {
-      if (e.target === classifiedModal) classifiedModal.classList.remove("open");
-    });
-    document.getElementById("classifiedForm")?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      classifiedsData.unshift({
-        id: Date.now(),
-        title: document.getElementById("classifiedTitle").value.trim(),
-        zone: document.getElementById("classifiedZone").value,
-        price: document.getElementById("classifiedPrice").value.trim() || "Contact",
-        desc: document.getElementById("classifiedDesc").value.trim()
-      });
-      renderClassifieds();
-      classifiedModal.classList.remove("open");
-    });
-
-    const forumModal = document.getElementById("forumModal");
-    document.getElementById("openAddThreadBtn")?.addEventListener("click", () => {
-      document.getElementById("forumForm").reset();
-      if (memberProfile?.username) {
-        document.getElementById("forumAuthor").value = memberProfile.username;
-      }
-      forumModal.classList.add("open");
-    });
-    document.getElementById("closeForumModalBtn")?.addEventListener("click", () => forumModal.classList.remove("open"));
-    document.getElementById("cancelForumBtn")?.addEventListener("click", () => forumModal.classList.remove("open"));
-    forumModal?.addEventListener("click", (e) => {
-      if (e.target === forumModal) forumModal.classList.remove("open");
-    });
-    document.getElementById("forumForm")?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const typedAuthor = document.getElementById("forumAuthor").value.trim();
-      const authorName = typedAuthor || memberProfile?.username || "Neighbor";
-      forumThreadsData.unshift({
-        id: Date.now(),
-        title: document.getElementById("forumTopic").value.trim(),
-        author: authorName,
-        message: document.getElementById("forumMessage").value.trim()
-      });
-      renderForumThreads();
-      forumModal.classList.remove("open");
-    });
-
-    /* Admin Modal */
-    const adminModal = document.getElementById("adminModal");
-    function openAdminModal() {
-      document.getElementById("adminPasscodeInput").value = "";
-      adminModal.classList.add("open");
-    }
-    function closeAdminModal() {
-      adminModal.classList.remove("open");
-    }
-
-    document.getElementById("adminToggleBtn")?.addEventListener("click", () => {
-      if (isAuthorizedAdmin()) {
-        currentAdmin = "";
-        sessionStorage.removeItem("albufeira_admin_user");
-        updateAdminUI();
-      } else {
-        openAdminModal();
-      }
-    });
-
-    document.getElementById("closeAdminModalBtn")?.addEventListener("click", closeAdminModal);
-    document.getElementById("cancelAdminBtn")?.addEventListener("click", closeAdminModal);
-    adminModal?.addEventListener("click", (e) => {
-      if (e.target === adminModal) closeAdminModal();
-    });
-
-    document.getElementById("adminLoginForm")?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const selectedAdmin = document.getElementById("adminNameSelect").value;
-      const enteredCode = document.getElementById("adminPasscodeInput").value;
-      if (enteredCode !== ADMIN_PASSCODE) {
-        alert("Invalid admin passcode.");
-        return;
-      }
-      currentAdmin = selectedAdmin;
-      sessionStorage.setItem("albufeira_admin_user", currentAdmin);
-      updateAdminUI();
-      closeAdminModal();
-    });
-
-    /* Navigation, Filters, Date Controls & Klaus Tips */
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
-      btn.addEventListener("click", () => switchToTab(btn.dataset.tab));
-    });
-
-    document.getElementById("openImpressumTabBtn")?.addEventListener("click", () => switchToTab("impressum"));
-
-    document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeCategory = btn.dataset.category || "ALL";
-        renderEvents();
-      });
-    });
-
-    document.querySelectorAll("#eventSpotlightBar .spotlight-chip").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        document.querySelectorAll("#eventSpotlightBar .spotlight-chip").forEach((c) => c.classList.remove("active"));
-        chip.classList.add("active");
-        activeSpotlight = chip.dataset.spotlight || "SOON";
-        renderEvents();
-      });
-    });
-
-    document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        activeZone = btn.dataset.zone || "ALL";
-        syncMapDateInputs();
-        renderVenues();
-      });
-    });
-
-    document.getElementById("eventMapDateInput")?.addEventListener("change", (e) => {
-      activeMapDate = e.target.value ? normalizeDateKey(e.target.value) : "ALL";
-      syncMapDateInputs();
-      initHomeMap();
-      initOrUpdateMap();
-      renderVenues();
-    });
-
-    document.getElementById("venueMapDateInput")?.addEventListener("change", (e) => {
-      activeMapDate = e.target.value ? normalizeDateKey(e.target.value) : "ALL";
-      syncMapDateInputs();
-      initHomeMap();
-      initOrUpdateMap();
-      renderVenues();
-    });
-
-    function setMapDateToToday() {
-      activeMapDate = getLocalTodayIso();
-      syncMapDateInputs();
-      initHomeMap();
-      initOrUpdateMap();
-      renderVenues();
-    }
-
-    function setMapDateToAllDays() {
-      activeMapDate = "ALL";
-      syncMapDateInputs();
-      initHomeMap();
-      initOrUpdateMap();
-      renderVenues();
-    }
-
-    document.getElementById("eventMapTodayBtn")?.addEventListener("click", setMapDateToToday);
-    document.getElementById("venueMapTodayBtn")?.addEventListener("click", setMapDateToToday);
-    document.getElementById("eventMapAllDaysBtn")?.addEventListener("click", setMapDateToAllDays);
-    document.getElementById("venueMapAllDaysBtn")?.addEventListener("click", setMapDateToAllDays);
-
-    /* QR Popover */
-    const qrPopover = document.getElementById("logoQrPopover");
-    const qrUrlLabel = document.getElementById("logoQrUrlLabel");
-    if (qrUrlLabel) qrUrlLabel.textContent = window.location.href || "https://kristinakinder.github.io/Albufeira-pulse/";
-
-    document.getElementById("logoQrToggleBtn")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = qrPopover.classList.toggle("open");
-      e.currentTarget.setAttribute("aria-expanded", String(isOpen));
-    });
-    document.getElementById("closeLogoQrBtn")?.addEventListener("click", () => {
-      qrPopover.classList.remove("open");
-    });
-    document.addEventListener("click", (e) => {
-      if (qrPopover && !qrPopover.contains(e.target) && e.target.id !== "logoQrToggleBtn") {
-        qrPopover.classList.remove("open");
-      }
-    });
-
-    /* Klaus Speech Bubble */
-    const klausTips = [
-      "Cold beer & hot tips in Albufeira! Tap me anytime.",
-      "Old Town has live music & karaoke nights — check the Events tab!",
-      "Tap any venue pin on the map to open Google Maps directions.",
-      "Sign up with email and pick your username once to join the community!"
-    ];
-    let klausTipIdx = 0;
-
-    brandMascotImg?.addEventListener("click", () => {
-      brandMascotImg.classList.remove("waving");
-      void brandMascotImg.offsetWidth;
-      brandMascotImg.classList.add("waving");
-
-      const bubble = document.getElementById("klausSpeechBubble");
-      const textEl = document.getElementById("klausSpeechText");
-      if (bubble && textEl) {
-        textEl.textContent = klausTips[klausTipIdx % klausTips.length];
-        klausTipIdx += 1;
-        bubble.classList.add("visible");
-      }
-    });
-
-    document.getElementById("klausBubbleCloseBtn")?.addEventListener("click", () => {
-      document.getElementById("klausSpeechBubble")?.classList.remove("visible");
-    });
-
-    applyLanguage(currentLang);
-    initMemberAuthSession().then(() => {
-      loadInitialData();
-    });
-  </script>
-</body>
-</html>
+              const eventBadges = v.events
+                .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title
