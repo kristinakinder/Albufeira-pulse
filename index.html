@@ -111,12 +111,16 @@
       position: relative;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
       flex-shrink: 0;
     }
 
     .brand-mascot {
-      width: 62px;
-      height: 62px;
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
@@ -149,7 +153,7 @@
 
     .klaus-speech-bubble {
       position: fixed;
-      top: 72px;
+      top: 76px;
       left: 16px;
       z-index: 2300;
       max-width: min(310px, calc(100vw - 32px));
@@ -179,7 +183,7 @@
       content: "";
       position: absolute;
       top: -7px;
-      left: 24px;
+      left: 22px;
       width: 12px;
       height: 12px;
       background: #1a2140;
@@ -297,34 +301,35 @@
         gap: 6px;
       }
       .brand {
-        justify-content: space-between;
+        justify-content: flex-start;
         width: 100%;
       }
+      .mascot-stage,
       .brand-mascot {
-        width: 54px;
-        height: 54px;
+        width: 48px;
+        height: 48px;
       }
       .brand-title {
         font-size: 1.12rem;
       }
       .klaus-speech-bubble {
-        top: 102px;
+        top: 106px;
         left: 12px;
       }
       .header-right {
         width: 100%;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        align-items: stretch;
         justify-content: flex-start;
         margin-left: 0;
-        gap: 0;
+        gap: 4px;
       }
       .admin-bar {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
         gap: 5px;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
       }
       .admin-bar #openAddEventBtn,
       .admin-bar #openAddVenueBtn {
@@ -411,8 +416,8 @@
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       object-fit: cover;
       background: #090b16;
@@ -1103,7 +1108,6 @@
     <div class="header-inner">
       <div class="brand">
         <div class="logo-qr-wrap">
-          <!-- Klaus: Circular ALBUFEIRA-PULSE.COM Badge (Black Ring, White Arial Text, Pink Donut, Turquoise Water, Sun & Sky) -->
           <div class="mascot-stage">
             <img
               id="brandMascotImg"
@@ -1197,19 +1201,19 @@
 
       <div id="albufeiraBeachConditionsBar" class="retro-info-strip" style="margin-bottom: 12px;">
         <div class="retro-tile" style="padding: 10px 14px;">
-          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Albufeira Weather • Thu Nov 26</div>
-          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">13°C now • High 18°C / Low 10°C</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Mostly sunny now (partly sunny today), wind 4 mph from north (7 mph daily), 0% rain chance now (10% today).</p>
+          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-amber); text-transform: uppercase;">Albufeira Weather • Fri Nov 27</div>
+          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">14°C now • High 18°C / Low 11°C</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Bright coastal sun in Albufeira with light breeze and pleasant daytime temperatures.</p>
         </div>
         <div class="retro-tile" style="padding: 10px 14px;">
           <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-cyan); text-transform: uppercase;">Sea Temperature • Late Nov</div>
           <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~17.2°C – 18.8°C along the coast</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Fresh Atlantic water (around 17.2°C near Lagoa de Albufeira and ~18.6–18.8°C on the Faro coast); wetsuit recommended for swimming/surfing.</p>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Crisp Atlantic water across the Algarve; wetsuit recommended for swimming or surfing.</p>
         </div>
         <div class="retro-tile" style="padding: 10px 14px;">
-          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">Waves &amp; Swell • Nov 26</div>
-          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~1.3m – 2.0m waves (light wind ~5.5 km/h)</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Moderate-to-lively Atlantic swell (~2.04 m modeled near Lagoa de Albufeira today, easing toward ~1.34 m tomorrow); check beach flags before entering.</p>
+          <div style="font-size: 0.7rem; font-weight: 800; color: var(--neon-pink); text-transform: uppercase;">Waves &amp; Swell • Nov 27</div>
+          <div style="font-weight: 700; font-size: 0.92rem; margin: 2px 0;">~1.3m – 1.8m Atlantic swell</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Easing swell along southern Algarve beaches; always check local conditions before heading in.</p>
         </div>
       </div>
 
@@ -1703,8 +1707,8 @@
         <div class="form-group" style="margin-bottom: 12px;">
           <label for="adminNameSelect">Select Admin</label>
           <select id="adminNameSelect" required>
-            <option value="Kris">Kris</option>
-            <option value="Lex">Lex</option>
+            <option value="Admin1">Admin1</option>
+            <option value="Admin2">Admin2</option>
           </select>
         </div>
         <div class="form-group">
@@ -1877,6 +1881,108 @@
     if (brandMascotImg) brandMascotImg.src = KLAUS_DATA_URI;
     if (qrCenterMascotImg) qrCenterMascotImg.src = KLAUS_DATA_URI;
 
+    const I18N = {
+      en: {
+        "btn.addEvent": "+ Add Event",
+        "btn.addVenue": "+ Add Venue",
+        "btn.postListing": "+ Post Listing",
+        "btn.newThread": "+ New Thread",
+        "nav.events": "Events",
+        "nav.venues": "Venues & Map",
+        "nav.classifieds": "Classifieds",
+        "nav.forum": "Forum",
+        "nav.links": "Useful Links",
+        "nav.emergency": "Emergency",
+        "cat.all": "All",
+        "cat.markets": "Markets",
+        "cat.music": "Music & Nightlife",
+        "cat.arts": "Arts & Culture",
+        "cat.family": "Family & Festivals",
+        "cat.sports": "Sports & Outdoors",
+        "zone.all": "All Zones",
+        "cls.title": "Albufeira Classifieds",
+        "cls.subtitle": "Local listings, rentals, items, and services in Albufeira.",
+        "frm.title": "Albufeira Community Forum",
+        "frm.subtitle": "Local discussions, tips, and neighborhood updates.",
+        "lnk.badge": "Albufeira Field Guide",
+        "lnk.title": "Useful Links & Local Essentials",
+        "lnk.subtitle": "Official municipal, transport, tourist offices, and practical Albufeira tips.",
+        "emg.title": "Albufeira & Portugal Emergency Directory",
+        "emg.call112": "Emergency 112",
+        "admin.activePrefix": "Admin:",
+        "admin.locked": "Admin: Locked",
+        "admin.signIn": "Admin",
+        "admin.signOut": "Lock",
+        "event.feeLabel": "Fee:",
+        "event.editBtn": "Edit",
+        "event.empty": "No events match this filter yet.",
+        "venue.empty": "No venues match this filter yet."
+      },
+      pt: {
+        "btn.addEvent": "+ Adicionar Evento",
+        "btn.addVenue": "+ Adicionar Espaço",
+        "btn.postListing": "+ Publicar Anúncio",
+        "btn.newThread": "+ Novo Tópico",
+        "nav.events": "Eventos",
+        "nav.venues": "Espaços e Mapa",
+        "nav.classifieds": "Classificados",
+        "nav.forum": "Fórum",
+        "nav.links": "Ligações Úteis",
+        "nav.emergency": "Emergência",
+        "cat.all": "Todos",
+        "cat.markets": "Mercados",
+        "cat.music": "Música e Noite",
+        "cat.arts": "Arte e Cultura",
+        "cat.family": "Família e Festas",
+        "cat.sports": "Desporto e Ar Livre",
+        "zone.all": "Todas as Zonas",
+        "cls.title": "Classificados de Albufeira",
+        "cls.subtitle": "Anúncios locais, arrendamentos, artigos e serviços em Albufeira.",
+        "frm.title": "Fórum Comunitário de Albufeira",
+        "frm.subtitle": "Conversas locais, dicas e novidades do bairro.",
+        "lnk.badge": "Guia Prático de Albufeira",
+        "lnk.title": "Ligações Úteis e Essenciais Locais",
+        "lnk.subtitle": "Câmara municipal, transportes GIRO, postos de turismo e dicas úteis.",
+        "emg.title": "Diretório de Emergência — Albufeira e Portugal",
+        "emg.call112": "Emergência 112",
+        "admin.activePrefix": "Admin:",
+        "admin.locked": "Admin: Bloqueado",
+        "admin.signIn": "Admin",
+        "admin.signOut": "Bloquear",
+        "event.feeLabel": "Preço:",
+        "event.editBtn": "Editar",
+        "event.empty": "Ainda não há eventos com este filtro.",
+        "venue.empty": "Ainda não há espaços com este filtro."
+      }
+    };
+
+    let currentLang = localStorage.getItem("albufeira_pulse_lang") || "en";
+
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang === "pt" ? "pt" : "en";
+      localStorage.setItem("albufeira_pulse_lang", currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const k = el.getAttribute("data-i18n");
+        if (k) el.textContent = t(k);
+      });
+
+      document.querySelectorAll("#langSwitcher .pill-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+      });
+
+      updateAdminUI();
+      renderVenues();
+      renderClassifieds();
+      renderForum();
+      renderUsefulLinks();
+    }
+
     function switchToTab(targetTab) {
       document.querySelectorAll(".nav-btn").forEach((b) => {
         b.classList.toggle("active", b.dataset.tab === targetTab);
@@ -1896,7 +2002,7 @@
     const SUPABASE_URL = window.SUPABASE_URL || "https://ljncrabbelxjnpvmvdau.supabase.co";
     const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "sb_publishable_hINv-8ZsFfgua8csDaTXNQ_8yBE7jb6";
     const ADMIN_PASSCODE = window.ALBUFEIRA_ADMIN_PASSCODE || "albufeira-admin";
-    const ALLOWED_ADMINS = ["kris", "lex", "admin1", "admin2"];
+    const ALLOWED_ADMINS = ["admin1", "admin2"];
 
     const supabaseClient =
       window.supabase && !SUPABASE_URL.includes("YOUR_PROJECT") && !SUPABASE_ANON_KEY.includes("YOUR_ANON_KEY")
@@ -1995,6 +2101,33 @@
       { name: "Lusagua", category: "Water Utility", phones: ["808 202 492"], accent: "cyan-accent" }
     ];
 
+    const USEFUL_LINKS = [
+      {
+        badge: "Municipality",
+        title: "Câmara Municipal de Albufeira",
+        desc: "Official municipal portal for local permits, civil protection alerts, cultural schedules, and public notices.",
+        url: "https://www.cm-albufeira.pt/"
+      },
+      {
+        badge: "Urban Transit",
+        title: "GIRO — Albufeira Urban Buses",
+        desc: "Local bus routes linking Old Town, Alto dos Caliços, The Strip, Marina, Santa Eulália, and Ferreiras.",
+        url: "https://www.cm-albufeira.pt/giro"
+      },
+      {
+        badge: "Regional Rail & Coach",
+        title: "Comboios de Portugal (CP) & Rede Expressos",
+        desc: "Train connections from Albufeira-Ferreiras station and intercity coaches across the Algarve and Portugal.",
+        url: "https://www.cp.pt/"
+      },
+      {
+        badge: "Tourism",
+        title: "Visite o Algarve / Albufeira Info",
+        desc: "Visitor guidance, beaches, coastal trails, and seasonal happenings around Albufeira and the Algarve.",
+        url: "https://www.visitalgarve.pt/"
+      }
+    ];
+
     let eventsData = [
       {
         id: 1,
@@ -2013,6 +2146,24 @@
     ];
 
     let venuesData = [...SEED_VENUES];
+    let classifiedsData = [
+      {
+        id: 1,
+        title: "Beach Cruiser Bike in Great Shape",
+        zone: "Old Town",
+        price: "€65",
+        desc: "Smooth coaster-brake cruiser with front basket. Ready for coastal rides around Albufeira."
+      }
+    ];
+    let forumData = [
+      {
+        id: 1,
+        title: "Best spots for winter sunset walks?",
+        author: "Admin",
+        message: "Sharing favorite viewpoints between Old Town, São Rafael, and Santa Eulália for late-afternoon walks."
+      }
+    ];
+
     let activeCategory = "ALL";
     let activeZone = "ALL";
     let activeSpotlight = "SOON";
@@ -2029,7 +2180,16 @@
       const y = now.getFullYear();
       const m = String(now.getMonth() + 1).padStart(2, "0");
       const d = String(now.getDate()).padStart(2, "0");
-      return `${y}-${m}-${d}`; }  function normalizeDateKey(val) { if (!val) return ""; const str = String(val).trim(); const isoMatch = str.match(/\d{4}-\d{2}-\d{2}/); if (isoMatch) return isoMatch[0]; const euMatch = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if (euMatch) return `${euMatch[3]}-${euMatch[2]}-${euMatch[1]}`;
+      return `${y}-${m}-${d}`;
+    }
+
+    function normalizeDateKey(val) {
+      if (!val) return "";
+      const str = String(val).trim();
+      const isoMatch = str.match(/\d{4}-\d{2}-\d{2}/);
+      if (isoMatch) return isoMatch[0];
+      const euMatch = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (euMatch) return `${euMatch[3]}-${euMatch[2]}-${euMatch[1]}`;
       return str;
     }
 
@@ -2037,7 +2197,7 @@
       return String(str || "")
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[̀-ͯ]/g, "")
         .replace(/[^a-z0-9]+/g, " ")
         .trim();
     }
@@ -2058,25 +2218,120 @@
           ? `${venueObj.lat},${venueObj.lng}`
           : "Albufeira, Portugal";
 
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`; }  function resolveVenueForEvent(ev) { const targetKey = normalizeNameKey(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} ""); const matched = venuesData.find((v) => { const vn = normalizeNameKey(v.name \vert{}\vert{} ""); return vn && targetKey && (vn === targetKey \vert{}\vert{} vn.includes(targetKey) \vert{}\vert{} targetKey.includes(vn)); });  const baseVenue = matched ? { ...matched, lat: Number(matched.lat) \vert{}\vert{} 37.0955, lng: Number(matched.lng) \vert{}\vert{} -8.2505 } : { id: `ev-venue-${targetKey || "albufeira"}`,
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    }
+
+    function resolveVenueForEvent(ev) {
+      const targetKey = normalizeNameKey(ev.venueName || ev.venue || "");
+      const matched = venuesData.find((v) => {
+        const vn = normalizeNameKey(v.name || "");
+        return vn && targetKey && (vn === targetKey || vn.includes(targetKey) || targetKey.includes(vn));
+      });
+
+      const baseVenue = matched
+        ? { ...matched, lat: Number(matched.lat) || 37.0955, lng: Number(matched.lng) || -8.2505 }
+        : {
+            id: `ev-venue-${targetKey || "albufeira"}`,
             name: (ev.venueName || ev.venue || "Albufeira Venue").trim(),
             zone: ev.zone || "Albufeira",
-            address: `${(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} "Albufeira").trim()}, Albufeira, Portugal`, lat: Number(ev.lat) \vert{}\vert{} 37.0955, lng: Number(ev.lng) \vert{}\vert{} -8.2505, category: ev.category \vert{}\vert{} "Venue" };  const vKey = normalizeNameKey(baseVenue.name); const venueEvents = eventsData.filter((item) => { const ik = normalizeNameKey(item.venueName \vert{}\vert{} item.venue \vert{}\vert{} ""); return ik && vKey && (ik === vKey \vert{}\vert{} ik.includes(vKey) \vert{}\vert{} vKey.includes(ik)); });  return { ...baseVenue, events: venueEvents }; }  function eventsMatchVenue(ev, venue) { const en = normalizeNameKey(ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} ""); const vn = normalizeNameKey(venue.name \vert{}\vert{} ""); if (!en \vert{}\vert{} !vn) return false; return en === vn \vert{}\vert{} vn.includes(en) \vert{}\vert{} en.includes(vn); }  function getMapVenuesForFilter(zoneFilter, dateFilter) { const normalizedTargetDate = (!dateFilter \vert{}\vert{} dateFilter === "ALL") ? "ALL" : normalizeDateKey(dateFilter);  const dayEvents = normalizedTargetDate === "ALL" ? eventsData.slice() : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizedTargetDate);  const filteredVenues = (!zoneFilter \vert{}\vert{} zoneFilter === "ALL") ? venuesData : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));  const matchedResults = []; const claimedEventIds = new Set();  filteredVenues.forEach((v) => { const matchingEvents = dayEvents.filter((ev) => eventsMatchVenue(ev, v)); if (matchingEvents.length > 0) { matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id))); matchedResults.push({ ...v, lat: Number(v.lat) \vert{}\vert{} 37.0955, lng: Number(v.lng) \vert{}\vert{} -8.2505, events: matchingEvents }); } });  const unclaimedByVenue = new Map(); dayEvents.forEach((ev) => { if (claimedEventIds.has(String(ev.id))) return; if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) { return; } const rawVenue = (ev.venueName \vert{}\vert{} ev.venue \vert{}\vert{} "Albufeira Venue").trim(); const key = normalizeNameKey(rawVenue) \vert{}\vert{} "albufeira"; if (!unclaimedByVenue.has(key)) { unclaimedByVenue.set(key, { id: `ev-venue-${key}`,
+            address: `${(ev.venueName || ev.venue || "Albufeira").trim()}, Albufeira, Portugal`,
+            lat: Number(ev.lat) || 37.0955,
+            lng: Number(ev.lng) || -8.2505,
+            category: ev.category || "Venue"
+          };
+
+      const vKey = normalizeNameKey(baseVenue.name);
+      const venueEvents = eventsData.filter((item) => {
+        const ik = normalizeNameKey(item.venueName || item.venue || "");
+        return ik && vKey && (ik === vKey || ik.includes(vKey) || vKey.includes(ik));
+      });
+
+      return { ...baseVenue, events: venueEvents };
+    }
+
+    function eventsMatchVenue(ev, venue) {
+      const en = normalizeNameKey(ev.venueName || ev.venue || "");
+      const vn = normalizeNameKey(venue.name || "");
+      if (!en || !vn) return false;
+      return en === vn || vn.includes(en) || en.includes(vn);
+    }
+
+    function getMapVenuesForFilter(zoneFilter, dateFilter) {
+      const normalizedTargetDate = (!dateFilter || dateFilter === "ALL") ? "ALL" : normalizeDateKey(dateFilter);
+
+      const dayEvents =
+        normalizedTargetDate === "ALL"
+          ? eventsData.slice()
+          : eventsData.filter((ev) => normalizeDateKey(ev.date) === normalizedTargetDate);
+
+      const filteredVenues =
+        (!zoneFilter || zoneFilter === "ALL")
+          ? venuesData
+          : venuesData.filter((v) => normalizeNameKey(v.zone) === normalizeNameKey(zoneFilter));
+
+      const matchedResults = [];
+      const claimedEventIds = new Set();
+
+      filteredVenues.forEach((v) => {
+        const matchingEvents = dayEvents.filter((ev) => eventsMatchVenue(ev, v));
+        if (matchingEvents.length > 0) {
+          matchingEvents.forEach((ev) => claimedEventIds.add(String(ev.id)));
+          matchedResults.push({
+            ...v,
+            lat: Number(v.lat) || 37.0955,
+            lng: Number(v.lng) || -8.2505,
+            events: matchingEvents
+          });
+        }
+      });
+
+      const unclaimedByVenue = new Map();
+      dayEvents.forEach((ev) => {
+        if (claimedEventIds.has(String(ev.id))) return;
+        if (zoneFilter && zoneFilter !== "ALL" && normalizeNameKey(ev.zone) !== normalizeNameKey(zoneFilter)) {
+          return;
+        }
+        const rawVenue = (ev.venueName || ev.venue || "Albufeira Venue").trim();
+        const key = normalizeNameKey(rawVenue) || "albufeira";
+        if (!unclaimedByVenue.has(key)) {
+          unclaimedByVenue.set(key, {
+            id: `ev-venue-${key}`,
             name: rawVenue,
             zone: ev.zone || "Albufeira",
-            address: `${rawVenue}, Albufeira`, lat: Number(ev.lat) \vert{}\vert{} 37.0955, lng: Number(ev.lng) \vert{}\vert{} -8.2505, category: ev.category \vert{}\vert{} "Event Venue", events: [] }); } unclaimedByVenue.get(key).events.push(ev); });  unclaimedByVenue.forEach((entry) => matchedResults.push(entry)); return matchedResults; }  function syncMapDateInputs() { const val = activeMapDate === "ALL" ? "" : activeMapDate; const homeInput = document.getElementById("eventMapDateInput"); const venueInput = document.getElementById("venueMapDateInput"); if (homeInput) homeInput.value = val; if (venueInput) venueInput.value = val;  const dayNote = activeMapDate === "ALL" ? "All event days" : `Date: ${activeMapDate}`;
+            address: `${rawVenue}, Albufeira`,
+            lat: Number(ev.lat) || 37.0955,
+            lng: Number(ev.lng) || -8.2505,
+            category: ev.category || "Event Venue",
+            events: []
+          });
+        }
+        unclaimedByVenue.get(key).events.push(ev);
+      });
+
+      unclaimedByVenue.forEach((entry) => matchedResults.push(entry));
+      return matchedResults;
+    }
+
+    function syncMapDateInputs() {
+      const val = activeMapDate === "ALL" ? "" : activeMapDate;
+      const homeInput = document.getElementById("eventMapDateInput");
+      const venueInput = document.getElementById("venueMapDateInput");
+      if (homeInput) homeInput.value = val;
+      if (venueInput) venueInput.value = val;
+
+      const dayNote = activeMapDate === "ALL" ? "All event days" : `Date: ${activeMapDate}`;
 
       const homePlaces = getMapVenuesForFilter("ALL", activeMapDate);
       const venuePlaces = getMapVenuesForFilter(activeZone, activeMapDate);
 
       const homeStatus = document.getElementById("homeMapStatus");
       if (homeStatus) {
-        homeStatus.textContent = `${homePlaces.length}${homePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
+        homeStatus.textContent = `${homePlaces.length} ${homePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
 
       const venuesStatus = document.getElementById("venuesMapStatus");
       if (venuesStatus) {
-        venuesStatus.textContent = `${venuePlaces.length}${venuePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
+        venuesStatus.textContent = `${venuePlaces.length} ${venuePlaces.length === 1 ? "venue" : "venues"} with events • ${dayNote}`;
       }
     }
 
@@ -2123,9 +2378,11 @@
 
       populateVenueDatalist();
       syncMapDateInputs();
+      applyLanguage(currentLang);
       renderEvents();
       renderVenues();
       renderEmergencyContacts();
+      initHomeMap();
     }
 
     function populateVenueDatalist() {
@@ -2165,15 +2422,51 @@
       marker.on("mouseout", () => marker.setStyle({ radius: 10, color: "#090b16" }));
 
       const eventLines = Array.isArray(venue.events) && venue.events.length
-        ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events.map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`).join("<br/>")}</span>` : "";  const gmapsUrl = buildGoogleMapsUrl(venue); marker.bindPopup( `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone \vert{}\vert{} "Albufeira")}</span>${eventLines}<br/><a href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;color:#0284c7;font-weight:700;text-decoration:underline;">Google Maps ↗</a>`
+        ? `<br/><span style="color:#d91b6c;font-weight:700;">${venue.events.map((e) => `${escapeHtml(e.title)} (${escapeHtml(e.date)})`).join("<br/>")}</span>`
+        : "";
+      const gmapsUrl = buildGoogleMapsUrl(venue);
+      marker.bindPopup(
+        `<strong>${escapeHtml(venue.name)}</strong><br/><span style="font-weight:600;">${escapeHtml(venue.zone || "Albufeira")}</span>${eventLines}<br/><a href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:6px;color:#0284c7;font-weight:700;text-decoration:underline;">Google Maps ↗</a>`
       );
 
       marker.addTo(layerGroup);
     }
 
+    function initHomeMap() {
+      const mapEl = document.getElementById("homeMap");
+      if (!mapEl || typeof L === "undefined") return;
+      if (!homeLeafletMap) {
+        homeLeafletMap = L.map("homeMap").setView([37.0915, -8.248], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(homeLeafletMap);
+        homeMarkersLayer = L.layerGroup().addTo(homeLeafletMap);
+      }
+      homeLeafletMap.invalidateSize();
+      homeMarkersLayer.clearLayers();
+      const homePlaces = getMapVenuesForFilter("ALL", activeMapDate);
+      homePlaces.forEach((v, idx) => addTurquoisePinkCircleMarker(homeMarkersLayer, v, idx));
+    }
+
+    function initOrUpdateMap() {
+      const mapEl = document.getElementById("albufeiraMap");
+      if (!mapEl || typeof L === "undefined") return;
+      if (!leafletMap) {
+        leafletMap = L.map("albufeiraMap").setView([37.0915, -8.248], 13);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(leafletMap);
+        mapMarkersLayer = L.layerGroup().addTo(leafletMap);
+      }
+      leafletMap.invalidateSize();
+      mapMarkersLayer.clearLayers();
+      const activePlaces = getMapVenuesForFilter(activeZone, activeMapDate);
+      activePlaces.forEach((v, idx) => addTurquoisePinkCircleMarker(mapMarkersLayer, v, idx));
+    }
+
     function isHolidaySeasonEvent(ev) {
       const d = normalizeDateKey(ev.date || "");
-      const hay = `${ev.title || ""} ${ev.desc \vert{}\vert{} ""} ${ev.category || ""}`.toLowerCase();
+      const hay = `${ev.title || ""} ${ev.desc || ""} ${ev.category || ""}`.toLowerCase();
       const isDecOrJan = /-12-|-01-/.test(d);
       const hasHolidayKeyword = /(christmas|natal|new year|ano novo|réveillon|reveillon|holiday|festas)/i.test(hay);
       return isDecOrJan || hasHolidayKeyword;
@@ -2258,12 +2551,12 @@
               ${imgHtml}
               <div class="card-body">
                 <div class="card-meta">
-                  <span>${escapeHtml(ev.date \vert{}\vert{} "TBA")} • ${escapeHtml(ev.time || "")}</span>
+                  <span>${escapeHtml(ev.date || "TBA")} • ${escapeHtml(ev.time || "")}</span>
                   <span class="vice-sticker sticker-pink">${escapeHtml(ev.category || "EVENT")}</span>
                 </div>
                 <h3 class="card-title">${escapeHtml(ev.title)}</h3>
                 <p style="font-size: 0.84rem; color: var(--neon-amber); font-weight: 600;">
-                  ${escapeHtml(ev.venueName)} —${escapeHtml(ev.zone || "Albufeira")}
+                  ${escapeHtml(ev.venueName)} — ${escapeHtml(ev.zone || "Albufeira")}
                 </p>
                 <p class="card-desc">${escapeHtml(ev.desc || "")}</p>
                 <div class="card-footer">
@@ -2291,7 +2584,7 @@
 
       document.getElementById("eventDetailCategory").textContent = ev.category || "EVENT";
       document.getElementById("eventDetailTitle").textContent = ev.title || "Event";
-      document.getElementById("eventDetailDateTime").textContent = `${ev.date \vert{}\vert{} "TBA"}${ev.time ? " • " + ev.time : ""}`;
+      document.getElementById("eventDetailDateTime").textContent = `${ev.date || "TBA"}${ev.time ? " • " + ev.time : ""}`;
       document.getElementById("eventDetailFee").textContent = `${t("event.feeLabel")} ${ev.fee || "Free"}`;
       document.getElementById("eventDetailVenueText").textContent = `${venueObj.name}${venueObj.zone ? " — " + venueObj.zone : ""}`;
       document.getElementById("eventDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
@@ -2301,7 +2594,65 @@
       const posterImg = document.getElementById("eventDetailPosterImg");
       if (ev.image) {
         posterImg.src = ev.image;
-        posterImg.alt = `${ev.title \vert{}\vert{} "Event"} poster`; posterWrap.style.display = "flex"; } else { posterImg.src = ""; posterWrap.style.display = "none"; }  const editBtn = document.getElementById("eventDetailEditBtn"); const deleteBtn = document.getElementById("eventDetailDeleteBtn"); if (isAuthorizedAdmin()) { editBtn.style.display = "inline-block"; editBtn.textContent = t("event.editBtn"); deleteBtn.style.display = "inline-block"; } else { editBtn.style.display = "none"; deleteBtn.style.display = "none"; }  eventDetailModal.classList.add("open"); };  function closeEventDetailModal() { eventDetailModal.classList.remove("open"); currentDetailEventId = null; }  document.getElementById("eventDetailVenueBtn").addEventListener("click", () => { const ev = eventsData.find((item) => String(item.id) === String(currentDetailEventId)); if (!ev) return; const venueObj = resolveVenueForEvent(ev); closeEventDetailModal(); openVenueDetailModal(venueObj); });  document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal); document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal); eventDetailModal.addEventListener("click", (e) => { if (e.target === eventDetailModal) closeEventDetailModal(); }); document.getElementById("eventDetailEditBtn").addEventListener("click", () => { const targetId = currentDetailEventId; closeEventDetailModal(); if (targetId !== null) window.openEditEventModal(targetId); }); document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => { const targetId = currentDetailEventId; if (targetId !== null) window.deleteEventById(targetId); });  const venueDetailModal = document.getElementById("venueDetailModal"); let currentDetailVenue = null;  window.openVenueDetailModal = function (venueObj) { if (!venueObj) return; currentDetailVenue = venueObj;  document.getElementById("venueDetailZoneBadge").textContent = venueObj.zone \vert{}\vert{} "ALBUFEIRA"; document.getElementById("venueDetailTitle").textContent = venueObj.name \vert{}\vert{} "Venue"; document.getElementById("venueDetailAddress").textContent = venueObj.address \vert{}\vert{} `${venueObj.name}, Albufeira, Portugal`;
+        posterImg.alt = `${ev.title || "Event"} poster`;
+        posterWrap.style.display = "flex";
+      } else {
+        posterImg.src = "";
+        posterWrap.style.display = "none";
+      }
+
+      const editBtn = document.getElementById("eventDetailEditBtn");
+      const deleteBtn = document.getElementById("eventDetailDeleteBtn");
+      if (isAuthorizedAdmin()) {
+        editBtn.style.display = "inline-block";
+        editBtn.textContent = t("event.editBtn");
+        deleteBtn.style.display = "inline-block";
+      } else {
+        editBtn.style.display = "none";
+        deleteBtn.style.display = "none";
+      }
+
+      eventDetailModal.classList.add("open");
+    };
+
+    function closeEventDetailModal() {
+      eventDetailModal.classList.remove("open");
+      currentDetailEventId = null;
+    }
+
+    document.getElementById("eventDetailVenueBtn").addEventListener("click", () => {
+      const ev = eventsData.find((item) => String(item.id) === String(currentDetailEventId));
+      if (!ev) return;
+      const venueObj = resolveVenueForEvent(ev);
+      closeEventDetailModal();
+      openVenueDetailModal(venueObj);
+    });
+
+    document.getElementById("closeEventDetailModalBtn").addEventListener("click", closeEventDetailModal);
+    document.getElementById("closeEventDetailBtn").addEventListener("click", closeEventDetailModal);
+    eventDetailModal.addEventListener("click", (e) => {
+      if (e.target === eventDetailModal) closeEventDetailModal();
+    });
+    document.getElementById("eventDetailEditBtn").addEventListener("click", () => {
+      const targetId = currentDetailEventId;
+      closeEventDetailModal();
+      if (targetId !== null) window.openEditEventModal(targetId);
+    });
+    document.getElementById("eventDetailDeleteBtn").addEventListener("click", () => {
+      const targetId = currentDetailEventId;
+      if (targetId !== null) window.deleteEventById(targetId);
+    });
+
+    const venueDetailModal = document.getElementById("venueDetailModal");
+    let currentDetailVenue = null;
+
+    window.openVenueDetailModal = function (venueObj) {
+      if (!venueObj) return;
+      currentDetailVenue = venueObj;
+
+      document.getElementById("venueDetailZoneBadge").textContent = venueObj.zone || "ALBUFEIRA";
+      document.getElementById("venueDetailTitle").textContent = venueObj.name || "Venue";
+      document.getElementById("venueDetailAddress").textContent = venueObj.address || `${venueObj.name}, Albufeira, Portugal`;
       document.getElementById("venueDetailGmapsLink").href = buildGoogleMapsUrl(venueObj);
 
       const eventsListEl = document.getElementById("venueDetailEventsList");
@@ -2314,7 +2665,7 @@
                    onclick="closeVenueDetailModal(); openEventDetailModal('${escapeHtml(e.id)}')">
                 <div>
                   <div style="font-weight:700; font-size:0.88rem; color:var(--text-main);">${escapeHtml(e.title)}</div>
-                  <div style="font-size:0.76rem; color:var(--neon-cyan);">${escapeHtml(e.date \vert{}\vert{} "TBA")} • ${escapeHtml(e.time || "")}</div>
+                  <div style="font-size:0.76rem; color:var(--neon-cyan);">${escapeHtml(e.date || "TBA")} • ${escapeHtml(e.time || "")}</div>
                 </div>
                 <span class="vice-sticker sticker-pink">${escapeHtml(e.category || "EVENT")}</span>
               </div>
@@ -2385,7 +2736,8 @@
       }
 
       const target = eventsData.find((item) => String(item.id) === String(eventId));
-      const label = target?.title ? `"${target.title}"` : "this event"; if (!confirm(`Delete ${label}?`)) return;
+      const label = target?.title ? `"${target.title}"` : "this event";
+      if (!confirm(`Delete ${label}?`)) return;
 
       if (supabaseClient) {
         const { error } = await supabaseClient
@@ -2403,6 +2755,8 @@
       closeEventDetailModal();
       renderEvents();
       renderVenues();
+      initHomeMap();
+      initOrUpdateMap();
     };
 
     window.openVenueCardByIndex = function (idx) {
@@ -2423,4 +2777,580 @@
           grid.innerHTML = activeVenues
             .map((v, idx) => {
               const eventBadges = v.events
-                .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title
+                .map((e) => `<span class="vice-sticker sticker-amber">${escapeHtml(e.title)}</span>`)
+                .join(" ");
+              const gmapsUrl = buildGoogleMapsUrl(v);
+              return `
+                <article class="card venue-card-clickable" onclick="openVenueCardByIndex(${idx})" title="Click to view venue card, map & events">
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span>${escapeHtml(v.zone || "Albufeira")}</span>
+                      <span class="vice-sticker sticker-cyan">${escapeHtml(v.category || "Venue")}</span>
+                    </div>
+                    <h3 class="card-title">${escapeHtml(v.name)}</h3>
+                    <p class="card-desc">${escapeHtml(v.address || "Albufeira, Portugal")}</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">${eventBadges}</div>
+                    <div class="card-footer">
+                      <span>GPS: ${Number(v.lat).toFixed(4)}, ${Number(v.lng).toFixed(4)}</span>
+                      <a class="gmaps-link-btn" href="${escapeHtml(gmapsUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Google Maps ↗</a>
+                    </div>
+                  </div>
+                </article>
+              `;
+            })
+            .join("");
+        }
+      }
+
+      initOrUpdateMap();
+      initHomeMap();
+    }
+
+    function renderClassifieds() {
+      const grid = document.getElementById("classifiedsGrid");
+      if (!grid) return;
+      if (!classifiedsData.length) {
+        grid.innerHTML = `<div class="empty-state">No classified listings yet. Tap + Post Listing to add one.</div>`;
+        return;
+      }
+      grid.innerHTML = classifiedsData
+        .map(
+          (c) => `
+          <article class="card">
+            <div class="card-body">
+              <div class="card-meta">
+                <span>${escapeHtml(c.zone || "Albufeira")}</span>
+                <span class="vice-sticker sticker-amber">${escapeHtml(c.price || "Contact")}</span>
+              </div>
+              <h3 class="card-title">${escapeHtml(c.title)}</h3>
+              <p class="card-desc">${escapeHtml(c.desc)}</p>
+            </div>
+          </article>
+        `
+        )
+        .join("");
+    }
+
+    function renderForum() {
+      const grid = document.getElementById("forumGrid");
+      if (!grid) return;
+      if (!forumData.length) {
+        grid.innerHTML = `<div class="empty-state">No forum threads yet. Start a discussion!</div>`;
+        return;
+      }
+      grid.innerHTML = forumData
+        .map(
+          (f) => `
+          <article class="card">
+            <div class="card-body">
+              <div class="card-meta">
+                <span>${escapeHtml(f.author || "Admin")}</span>
+                <span class="vice-sticker sticker-cyan">Forum</span>
+              </div>
+              <h3 class="card-title">${escapeHtml(f.title)}</h3>
+              <p class="card-desc">${escapeHtml(f.message)}</p>
+            </div>
+          </article>
+        `
+        )
+        .join("");
+    }
+
+    function renderUsefulLinks() {
+      const grid = document.getElementById("usefulLinksGrid");
+      if (!grid) return;
+      grid.innerHTML = USEFUL_LINKS.map(
+        (item) => `
+        <article class="card">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="vice-sticker sticker-cyan">${escapeHtml(item.badge)}</span>
+            </div>
+            <h3 class="card-title">${escapeHtml(item.title)}</h3>
+            <p class="card-desc">${escapeHtml(item.desc)}</p>
+            <div class="card-footer">
+              <span>Albufeira &amp; Algarve</span>
+              <a class="gmaps-link-btn" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Visit ↗</a>
+            </div>
+          </div>
+        </article>
+      `
+      ).join("");
+    }
+
+    function renderEmergencyContacts() {
+      const grid = document.getElementById("emergencyGrid");
+      if (!grid) return;
+      grid.innerHTML = EMERGENCY_CONTACTS.map(
+        (c) => `
+        <article class="emergency-card ${escapeHtml(c.accent || "")}">
+          <div class="emergency-cat">${escapeHtml(c.category)}</div>
+          <div class="emergency-name">${escapeHtml(c.name)}</div>
+          <div class="emergency-phones">
+            ${c.phones
+              .map(
+                (ph) =>
+                  `<a class="phone-link" href="tel:${escapeHtml(ph.replace(/[^+\d]/g, ""))}">${escapeHtml(ph)}</a>`
+              )
+              .join("")}
+          </div>
+        </article>
+      `
+      ).join("");
+    }
+
+    // Event Modal & Form
+    const eventModal = document.getElementById("eventModal");
+    const eventForm = document.getElementById("eventForm");
+    const repeatToggle = document.getElementById("eventRepeatToggle");
+    const repeatWrap = document.getElementById("eventRepeatOptionsWrap");
+    const eventImageFile = document.getElementById("eventImageFile");
+    const eventImageHidden = document.getElementById("eventImage");
+    const eventImagePreviewWrap = document.getElementById("eventImagePreviewWrap");
+    const eventImagePreview = document.getElementById("eventImagePreview");
+    const eventImageFileName = document.getElementById("eventImageFileName");
+
+    repeatToggle.addEventListener("change", () => {
+      repeatWrap.style.display = repeatToggle.checked ? "flex" : "none";
+    });
+
+    eventImageFile.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (file.size > 3 * 1024 * 1024) {
+        alert("Please select a JPG image under 3 MB.");
+        eventImageFile.value = "";
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        eventImageHidden.value = reader.result || "";
+        eventImagePreview.src = eventImageHidden.value;
+        eventImageFileName.textContent = file.name;
+        eventImagePreviewWrap.style.display = "flex";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("clearEventImageBtn").addEventListener("click", () => {
+      eventImageFile.value = "";
+      eventImageHidden.value = "";
+      eventImagePreview.src = "";
+      eventImageFileName.textContent = "";
+      eventImagePreviewWrap.style.display = "none";
+    });
+
+    window.openAddEventModal = function () {
+      document.getElementById("eventModalTitle").textContent = "Add Event";
+      document.getElementById("submitEventBtn").textContent = "Publish Event";
+      document.getElementById("editEventId").value = "";
+      eventForm.reset();
+      document.getElementById("eventDate").value = getLocalTodayIso();
+      repeatWrap.style.display = "none";
+      eventImageHidden.value = "";
+      eventImagePreviewWrap.style.display = "none";
+      eventModal.classList.add("open");
+    };
+
+    window.openEditEventModal = function (eventId) {
+      const ev = eventsData.find((item) => String(item.id) === String(eventId));
+      if (!ev) return;
+      document.getElementById("eventModalTitle").textContent = "Edit Event";
+      document.getElementById("submitEventBtn").textContent = "Save Changes";
+      document.getElementById("editEventId").value = ev.id;
+      document.getElementById("eventTitle").value = ev.title || "";
+      document.getElementById("eventZone").value = ev.zone || "Albufeira";
+      document.getElementById("eventVenue").value = ev.venueName || "";
+      document.getElementById("eventDate").value = normalizeDateKey(ev.date) || getLocalTodayIso();
+      document.getElementById("eventTime").value = ev.time || "14:00";
+      document.getElementById("eventFee").value = ev.fee || "Free";
+      document.getElementById("eventCategory").value = ev.category || "MARKETS";
+      document.getElementById("eventDesc").value = ev.desc || "";
+      eventImageHidden.value = ev.image || "";
+      if (ev.image) {
+        eventImagePreview.src = ev.image;
+        eventImageFileName.textContent = "Existing flyer";
+        eventImagePreviewWrap.style.display = "flex";
+      } else {
+        eventImagePreviewWrap.style.display = "none";
+      }
+      eventModal.classList.add("open");
+    };
+
+    function closeEventModal() {
+      eventModal.classList.remove("open");
+    }
+
+    document.getElementById("openAddEventBtn").addEventListener("click", openAddEventModal);
+    document.getElementById("closeEventModalBtn").addEventListener("click", closeEventModal);
+    document.getElementById("cancelEventBtn").addEventListener("click", closeEventModal);
+    eventModal.addEventListener("click", (e) => {
+      if (e.target === eventModal) closeEventModal();
+    });
+
+    eventForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById("editEventId").value;
+      const venueName = document.getElementById("eventVenue").value.trim();
+      const zone = document.getElementById("eventZone").value;
+      const matchedVenue = venuesData.find(
+        (v) => normalizeNameKey(v.name) === normalizeNameKey(venueName)
+      );
+      const lat = matchedVenue ? Number(matchedVenue.lat) : 37.0955;
+      const lng = matchedVenue ? Number(matchedVenue.lng) : -8.2505;
+
+      const payload = {
+        title: document.getElementById("eventTitle").value.trim(),
+        venueName,
+        zone,
+        town: "Albufeira",
+        date: document.getElementById("eventDate").value,
+        time: document.getElementById("eventTime").value,
+        fee: document.getElementById("eventFee").value.trim() || "Free",
+        category: document.getElementById("eventCategory").value,
+        image: document.getElementById("eventImage").value || "",
+        desc: document.getElementById("eventDesc").value.trim(),
+        lat,
+        lng,
+        author: "Admin"
+      };
+
+      if (editId) {
+        if (supabaseClient) {
+          await supabaseClient.from("events").update(payload).eq("id", editId);
+        }
+        eventsData = eventsData.map((item) =>
+          String(item.id) === String(editId) ? { ...item, ...payload, id: item.id } : item
+        );
+      } else {
+        const newId = Date.now();
+        if (supabaseClient) {
+          const { data } = await supabaseClient.from("events").insert([payload]).select().single();
+          eventsData.push(data && data.id ? { ...payload, id: data.id } : { ...payload, id: newId });
+        } else {
+          eventsData.push({ ...payload, id: newId });
+        }
+      }
+
+      closeEventModal();
+      syncMapDateInputs();
+      renderEvents();
+      renderVenues();
+    });
+
+    // Venue Modal & Form
+    const venueModal = document.getElementById("venueModal");
+    const venueForm = document.getElementById("venueForm");
+
+    function openVenueModal() {
+      venueForm.reset();
+      venueModal.classList.add("open");
+    }
+
+    function closeVenueModal() {
+      venueModal.classList.remove("open");
+    }
+
+    document.getElementById("openAddVenueBtn").addEventListener("click", openVenueModal);
+    document.getElementById("closeVenueModalBtn").addEventListener("click", closeVenueModal);
+    document.getElementById("cancelVenueBtn").addEventListener("click", closeVenueModal);
+    venueModal.addEventListener("click", (e) => {
+      if (e.target === venueModal) closeVenueModal();
+    });
+
+    document.getElementById("lookupVenueCoordsBtn").addEventListener("click", async () => {
+      const addr = document.getElementById("venueAddressInput").value.trim() || document.getElementById("venueNameInput").value.trim();
+      if (!addr) return;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(addr + ", Albufeira, Portugal")}`
+        );
+        const json = await res.json();
+        if (Array.isArray(json) && json[0]) {
+          document.getElementById("venueLatInput").value = Number(json[0].lat).toFixed(6);
+          document.getElementById("venueLngInput").value = Number(json[0].lon).toFixed(6);
+        }
+      } catch (_) {}
+    });
+
+    venueForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newVenue = {
+        id: Date.now(),
+        name: document.getElementById("venueNameInput").value.trim(),
+        zone: document.getElementById("venueZoneInput").value,
+        category: document.getElementById("venueCategoryInput").value.trim() || "Venue",
+        address: document.getElementById("venueAddressInput").value.trim() || "Albufeira, Portugal",
+        lat: Number(document.getElementById("venueLatInput").value) || 37.0955,
+        lng: Number(document.getElementById("venueLngInput").value) || -8.2505
+      };
+      if (supabaseClient) {
+        await supabaseClient.from("directory").insert([newVenue]);
+      }
+      venuesData.push(newVenue);
+      populateVenueDatalist();
+      closeVenueModal();
+      syncMapDateInputs();
+      renderVenues();
+    });
+
+    // Classifieds Modal & Form
+    const classifiedModal = document.getElementById("classifiedModal");
+    const classifiedForm = document.getElementById("classifiedForm");
+    document.getElementById("openAddClassifiedBtn").addEventListener("click", () => {
+      classifiedForm.reset();
+      classifiedModal.classList.add("open");
+    });
+    document.getElementById("closeClassifiedModalBtn").addEventListener("click", () => classifiedModal.classList.remove("open"));
+    document.getElementById("cancelClassifiedBtn").addEventListener("click", () => classifiedModal.classList.remove("open"));
+    classifiedModal.addEventListener("click", (e) => {
+      if (e.target === classifiedModal) classifiedModal.classList.remove("open");
+    });
+    classifiedForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      classifiedsData.unshift({
+        id: Date.now(),
+        title: document.getElementById("classifiedTitle").value.trim(),
+        zone: document.getElementById("classifiedZone").value,
+        price: document.getElementById("classifiedPrice").value.trim() || "Contact",
+        desc: document.getElementById("classifiedDesc").value.trim()
+      });
+      classifiedModal.classList.remove("open");
+      renderClassifieds();
+    });
+
+    // Forum Modal & Form
+    const forumModal = document.getElementById("forumModal");
+    const forumForm = document.getElementById("forumForm");
+    document.getElementById("openAddThreadBtn").addEventListener("click", () => {
+      forumForm.reset();
+      forumModal.classList.add("open");
+    });
+    document.getElementById("closeForumModalBtn").addEventListener("click", () => forumModal.classList.remove("open"));
+    document.getElementById("cancelForumBtn").addEventListener("click", () => forumModal.classList.remove("open"));
+    forumModal.addEventListener("click", (e) => {
+      if (e.target === forumModal) forumModal.classList.remove("open");
+    });
+    forumForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      forumData.unshift({
+        id: Date.now(),
+        title: document.getElementById("forumTopic").value.trim(),
+        author: document.getElementById("forumAuthor").value.trim() || "Admin",
+        message: document.getElementById("forumMessage").value.trim()
+      });
+      forumModal.classList.remove("open");
+      renderForum();
+    });
+
+    // Admin Modal & Auth
+    const adminModal = document.getElementById("adminModal");
+    const adminLoginForm = document.getElementById("adminLoginForm");
+
+    function openAdminModal() {
+      adminLoginForm.reset();
+      adminModal.classList.add("open");
+    }
+
+    document.getElementById("adminToggleBtn").addEventListener("click", () => {
+      if (isAuthorizedAdmin()) {
+        currentAdmin = "";
+        sessionStorage.removeItem("albufeira_admin_user");
+        updateAdminUI();
+      } else {
+        openAdminModal();
+      }
+    });
+
+    document.getElementById("closeAdminModalBtn").addEventListener("click", () => adminModal.classList.remove("open"));
+    document.getElementById("cancelAdminBtn").addEventListener("click", () => adminModal.classList.remove("open"));
+    adminModal.addEventListener("click", (e) => {
+      if (e.target === adminModal) adminModal.classList.remove("open");
+    });
+
+    adminLoginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const selected = document.getElementById("adminNameSelect").value;
+      const pass = document.getElementById("adminPasscodeInput").value;
+      if (pass === ADMIN_PASSCODE) {
+        currentAdmin = selected;
+        sessionStorage.setItem("albufeira_admin_user", currentAdmin);
+        adminModal.classList.remove("open");
+        updateAdminUI();
+      } else {
+        alert("Incorrect admin passcode.");
+      }
+    });
+
+    // Navigation, Filters & Mascot Interactions
+    document.querySelectorAll(".nav-btn").forEach((btn) => {
+      btn.addEventListener("click", () => switchToTab(btn.dataset.tab));
+    });
+
+    document.getElementById("openImpressumTabBtn").addEventListener("click", () => switchToTab("impressum"));
+
+    document.querySelectorAll("#langSwitcher .pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+    });
+
+    document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#eventCategoryFilters .pill-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCategory = btn.dataset.category;
+        renderEvents();
+      });
+    });
+
+    document.querySelectorAll("#eventSpotlightBar .spotlight-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll("#eventSpotlightBar .spotlight-chip").forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeSpotlight = chip.dataset.spotlight;
+        renderEvents();
+      });
+    });
+
+    document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#venueZoneFilters .pill-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeZone = btn.dataset.zone;
+        syncMapDateInputs();
+        renderVenues();
+      });
+    });
+
+    function setMapDate(dateStr) {
+      activeMapDate = dateStr || "ALL";
+      syncMapDateInputs();
+      initHomeMap();
+      initOrUpdateMap();
+      renderVenues();
+    }
+
+    document.getElementById("eventMapDateInput").addEventListener("change", (e) => setMapDate(e.target.value));
+    document.getElementById("venueMapDateInput").addEventListener("change", (e) => setMapDate(e.target.value));
+    document.getElementById("eventMapTodayBtn").addEventListener("click", () => setMapDate(getLocalTodayIso()));
+    document.getElementById("venueMapTodayBtn").addEventListener("click", () => setMapDate(getLocalTodayIso()));
+    document.getElementById("eventMapAllDaysBtn").addEventListener("click", () => setMapDate("ALL"));
+    document.getElementById("venueMapAllDaysBtn").addEventListener("click", () => setMapDate("ALL"));
+
+    // Klaus speech bubble & QR popover
+    const klausBubble = document.getElementById("klausSpeechBubble");
+    const klausSpeechText = document.getElementById("klausSpeechText");
+    const klausTips = [
+      "Cold beer & hot tips in Albufeira! Tap me anytime.",
+      "Check Christmas & New Year's highlights or filter by map day!",
+      "Tap any event card to see the full poster, venue map & Google Maps link."
+    ];
+    let klausTipIdx = 0;
+
+    function showKlausTip() {
+      if (!klausBubble || !klausSpeechText) return;
+      klausSpeechText.textContent = klausTips[klausTipIdx % klausTips.length];
+      klausTipIdx += 1;
+      klausBubble.classList.add("visible");
+      if (brandMascotImg) {
+        brandMascotImg.classList.remove("waving");
+        void brandMascotImg.offsetWidth;
+        brandMascotImg.classList.add("waving");
+      }
+    }
+
+    if (brandMascotImg) {
+      brandMascotImg.addEventListener("click", () => {
+        switchToTab("events");
+        showKlausTip();
+      });
+    }
+
+    document.getElementById("klausBubbleCloseBtn").addEventListener("click", () => {
+      klausBubble.classList.remove("visible");
+    });
+
+    const qrToggleBtn = document.getElementById("logoQrToggleBtn");
+    const qrPopover = document.getElementById("logoQrPopover");
+    const qrUrlLabel = document.getElementById("logoQrUrlLabel");
+    const qrCanvas = document.getElementById("logoQrCanvas");
+
+    function drawSimpleQrMatrix(canvas, text) {
+      if (!canvas || !canvas.getContext) return;
+      const ctx = canvas.getContext("2d");
+      const size = canvas.width;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, size, size);
+
+      const cells = 21;
+      const pad = 12;
+      const cellSize = Math.floor((size - pad * 2) / cells);
+      const offset = Math.floor((size - cellSize * cells) / 2);
+
+      let hash = 2166136261;
+      for (let i = 0; i < text.length; i++) {
+        hash ^= text.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+
+      const drawFinder = (r0, c0) => {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            const isBorder = r === 0 || r === 6 || c === 0 || c === 6;
+            const isCenter = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+            if (isBorder || isCenter) {
+              ctx.fillStyle = "#090b16";
+              ctx.fillRect(offset + (c0 + c) * cellSize, offset + (r0 + r) * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      };
+
+      drawFinder(0, 0);
+      drawFinder(0, cells - 7);
+      drawFinder(cells - 7, 0);
+
+      for (let r = 0; r < cells; r++) {
+        for (let c = 0; c < cells; c++) {
+          const inTopLeft = r < 8 && c < 8;
+          const inTopRight = r < 8 && c >= cells - 8;
+          const inBottomLeft = r >= cells - 8 && c < 8;
+          if (inTopLeft || inTopRight || inBottomLeft) continue;
+          const bit = ((hash >>> ((r * cells + c) % 24)) ^ (r * 31 + c * 17)) & 1;
+          if (bit) {
+            ctx.fillStyle = "#090b16";
+            ctx.fillRect(offset + c * cellSize, offset + r * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+
+    qrToggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !qrPopover.classList.contains("open");
+      qrPopover.classList.toggle("open", willOpen);
+      qrToggleBtn.setAttribute("aria-expanded", String(willOpen));
+      if (willOpen) {
+        const shareUrl = window.location.href && window.location.href.startsWith("http")
+          ? window.location.href
+          : "https://albufeira-pulse.com";
+        if (qrUrlLabel) qrUrlLabel.textContent = shareUrl;
+        drawSimpleQrMatrix(qrCanvas, shareUrl);
+      }
+    });
+
+    document.getElementById("closeLogoQrBtn").addEventListener("click", () => {
+      qrPopover.classList.remove("open");
+      qrToggleBtn.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!qrPopover.contains(e.target) && e.target !== qrToggleBtn) {
+        qrPopover.classList.remove("open");
+        qrToggleBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    loadInitialData();
+  </script>
+</body>
+</html>
